@@ -1,0 +1,35 @@
+{
+  "name": "my_sandvox",
+  "private": false,
+  "version": "0.0.1",
+  "description": "My sandbox",
+  "homepage": "https://github.com/colmsjo/develvm",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/colmsjo/develvm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/colmsjo/develvm/issues"
+  },
+  "author": "Jonas Colmsjö <jonas@gizur.com>",
+  "main": "./build/build.js",
+  "dependencies": {
+    "node-docker": "*",
+    "docker.io": "*",
+    "helpersjs": "*"
+  },
+  "devDependencies" : {
+    "grunt": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-nodeunit": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-uglify": "*",
+    "doccoh":"0.4.1"
+  },
+  "keywords": [
+    "Sandbox"
+  ],
+  "license": "WTFPL",
+  "preferGlobal": false
+}
