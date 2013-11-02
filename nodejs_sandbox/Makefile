@@ -6,8 +6,8 @@ BUILD = $(SRC:src/%.js=build/build.js)
 DOCSRC = $(wildcard *.js)
 DOC = $(DOCSRC:%.js=docs/%.html)
 
-# build: $(BUILD)
-build: build.js
+#build: build.js
+build: $(BUILD)
 	grunt
 
 doc: $(DOC)
