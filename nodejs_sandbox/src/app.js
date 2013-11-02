@@ -73,16 +73,18 @@
 
             // List the running containers
             function(fn){
-                
+
                 docker.containers.list(_options /* optional*/, function(err, res) {
                     if (err) { 
                         throw err;
                     }
                     this.helpers.logDebug("data returned from Docker as JS object: ", res);
                     this._containers = res;
-                }.bind(this));
 
-                fn(null, 'containers.list');
+                    // async processing can continue
+                    fn(null, 'containers.list');
+
+                }.bind(this));
             }.bind(this),
 
             // Inspect each container
@@ -99,9 +101,9 @@
                         }
                         console.log("data returned from Docker as JS object: ", res);
                     });
-
                 }.bind(this));
 
+                // async processing can continue
                 fn(null, 'containers.inspect');
             }.bind(this)
 
