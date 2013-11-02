@@ -75,7 +75,7 @@
                     }
                     this.helpers.logDebug("data returned from Docker as JS object: ", res);
                     this._containers = res;
-                });
+                }.bind(this));
 
                 fn(null, 'containers.list');
             }.bind(this),
@@ -96,7 +96,7 @@
                     });
 
                     fn(null, 'containers.inspect');
-                });
+                }.bind(this));
 
             }.bind(this),
 
