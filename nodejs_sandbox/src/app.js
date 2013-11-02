@@ -25,7 +25,9 @@
         node_docker = require('node-docker').create(),
         argv        = require('optimist')
                     .usage('Usage: $0 '+ _commands)
-                    .argv;
+                    .argv,
+        async      = require('async');
+
 
 //    helpers.logging_threshold  = helpers.logging.debug;
     helpers.logging_threshold  = helpers.logging.warning;
@@ -58,37 +60,57 @@
     this.list = function() {
 
         // all options listed in the REST documentation for Docker are supported.
-        var options = {},
-            _containerList;
+        var _options = {},
+            _containers;
 
-        docker.containers.list(options /* optional*/, function(err, res) {
-            if (err) { 
-                throw err;
-            }
-            console.log("data returned from Docker as JS object: ", res);
-            _containerList = res;
-        });
+        helpers.logDebug('Start...');
 
-        return _containerList;
+        async.series([
 
-    };
+            // List the running containers
+            function(fn){ 
+                docker.containers.list(_options /* optional*/, function(err, res) {
+                    if (err) { 
+                        throw err;
+                    }
+                    this.helpers.logDebug("data returned from Docker as JS object: ", res);
+                    this._containers = res;
+                });
+
+                fn(null, 'containers.list');
+            }.bind(this),
+
+            // Inspect each container
+            function(fn){
+
+                this._containers.forEach(function(container,index,array) {
+
+                    // all options listed in the REST documentation for Docker are supported.
+                    var options = {};
+
+                    docker.containers.inspect(container, options, function (err, res) {
+                        if (err) {
+                            throw err;
+                        }
+                        console.log("data returned from Docker as JS object: ", res);
+                    });
+
+                    fn(null, 'containers.inspect');
+                });
+
+            }.bind(this),
+
+        ],
+
+        // Manage errors
+        function(err, results){
+          this._helpers.logDebug('results of async functions - ' + results);
+          this._helpers.logDebug('errors (if any) - ' + err);
+        }.bind(this));
 
 
-    this.inspect = function(container) {
+        this._helpers.logDebug('End of function, async processing will continue');
 
-        function handler(err, res) {
-            if (err) {
-                throw err;
-            }
-            console.log("data returned from Docker as JS object: ", res);
-        }
-
-        // all options listed in the REST documentation for Docker are supported.
-        var options = {};
-
-        docker.containers.inspect(container, options, handler);
-        // OR
-        //docker.containers.inspect(container, handler);
 
     };
 

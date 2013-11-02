@@ -1,6 +1,11 @@
 #
+# Makefile
 #
+# Jonas C., 131102
 #
+# About Makefiles:
+# * http://www-personal.umich.edu/~ppannuto/writings/makefiles.html
+# * https://www.gnu.org/software/make/manual/html_node/Text-Functions.html
 
 BIN = ./node_modules/.bin
 
@@ -10,7 +15,7 @@ BUILD = $(SRC:src/%.js=build)
 DOCSRC = $(wildcard *.js)
 DOC = $(DOCSRC:%.js=docs/%.html)
 
-all: install build run
+all: install build test run
 
 #build:	./src/build.js
 build: $(BUILD)
