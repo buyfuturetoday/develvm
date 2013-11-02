@@ -20,14 +20,12 @@
     // Includes
     // ================
 
-    var docker = require('docker.io')( _dockerConnOptions ),
-        helpers = require('helpersjs').create(),
-        node_docker = require('node-docker').create();
-
-    var  argv    = require('optimist')
+    var docker      = require('docker.io')( _dockerConnOptions ),
+        helpers     = require('helpersjs').create(),
+        node_docker = require('node-docker').create(),
+        argv        = require('optimist')
                     .usage('Usage: $0 '+ _commands)
-//                    .demand(['cmd'])
-                    .arg;
+                    .argv;
 
 //    helpers.logging_threshold  = helpers.logging.debug;
     helpers.logging_threshold  = helpers.logging.warning;
@@ -100,7 +98,7 @@
     //-------------------------------------------------------------------------------------------------
     //
 
-    this._isset(this.argv._ , 'jacc requires a command - node app.js ' + _commands);
+    this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands);
 
     switch (argv._[0]) {
 
