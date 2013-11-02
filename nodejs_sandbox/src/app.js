@@ -20,7 +20,7 @@
     // Includes
     // ================
 
-    var docker = require('docker.io')( _dockerConnOptions );
+    var docker = require('docker.io')( _dockerConnOptions ),
         helpers = require('helpersjs').create(),
         argv    = require('optimist')
                     .usage('Usage: $0 '+ _commands)
