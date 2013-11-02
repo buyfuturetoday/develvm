@@ -95,7 +95,7 @@
                     // all options listed in the REST documentation for Docker are supported.
                     var options = {};
 
-                    docker.containers.inspect(container, options, function (err, res) {
+                    docker.containers.inspect(container.Id, options, function (err, res) {
                         if (err) {
                             throw err;
                         }
