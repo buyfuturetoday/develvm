@@ -7,7 +7,7 @@ DOCSRC = $(wildcard *.js)
 DOC = $(DOCSRC:%.js=docs/%.html)
 
 #build: $(BUILD)
-build: ./src/build.js
+build:	./src/build.js
 	git pull
 	grunt
 
@@ -18,7 +18,7 @@ docs/%.html: %.js
 
 # Removed dependency on build since it takes too long, do make build manually when needed
 # test: build
-test: build
+test:	build
 	grunt nodeunit
 
 clean:
@@ -33,5 +33,6 @@ run:
 	node ./src/app.js list
 
 
+.PHONY: build
 .PHONY: test
 .PHONY: doc
