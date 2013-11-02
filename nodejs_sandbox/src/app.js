@@ -20,8 +20,8 @@
     // Includes
     // ================
 
+
     var docker      = require('docker.io')( _dockerConnOptions ),
-        helpers     = require('helpersjs').create(),
         node_docker = require('node-docker').create(),
         argv        = require('optimist')
                     .usage('Usage: $0 '+ _commands)
@@ -29,7 +29,9 @@
         async      = require('async');
 
 
-    helpers.logging_threshold  = helpers.logging.debug;
+    // varaibles used within async needs to be defined like this
+    this.helpers     = require('helpersjs').create();
+    this.helpers.logging_threshold  = this.helpers.logging.debug;
 //    helpers.logging_threshold  = helpers.logging.warning;
 
 
@@ -37,18 +39,18 @@
     //======================================================================
 
     this._isset = function(a, message, dontexit){
-      helpers.logDebug('_isset: checking - ' + a + ' (exit message:'+message+')');
-      if (!helpers.isset(a)) {
+      this.helpers.logDebug('_isset: checking - ' + a + ' (exit message:'+message+')');
+      if (!this.helpers.isset(a)) {
         console.log(message);
         if(dontexit !== undefined && dontexit) {
-          helpers.logDebug('_isset: returning false ');
+          this.helpers.logDebug('_isset: returning false ');
           return false;
         } else {
-          helpers.logDebug('_isset: exiting process');
+          this.helpers.logDebug('_isset: exiting process');
           process.exit();
         }        
       }
-      helpers.logDebug('_isset: returning true ');
+      this.helpers.logDebug('_isset: returning true ');
       return true;
     };
 
@@ -63,7 +65,7 @@
         var _options = {},
             _containers;
 
-        helpers.logDebug('Start...');
+        this.helpers.logDebug('Start...');
 
         async.series([
 
@@ -106,7 +108,7 @@
         function(err, results){
           this.helpers.logDebug('results of async functions - ' + results);
           this.helpers.logDebug('errors (if any) - ' + err);
-        }.bind(this));
+        });
 
 
         this.helpers.logDebug('End of function, async processing will continue');

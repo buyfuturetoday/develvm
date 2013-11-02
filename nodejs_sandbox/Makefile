@@ -22,6 +22,11 @@ build: $(BUILD)
 	git pull
 	grunt
 
+# Not a very informative commit
+push: $(BUILD)
+	git commit -am "Fix"
+	git push
+
 doc: $(DOC)
 
 docs/%.html: %.js

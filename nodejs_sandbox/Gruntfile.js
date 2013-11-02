@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     nodeunit: {
-      all: ['test/test_*.js']
+      all: ['test/*.js']
     },
     watch: {
       files: '<config:lint.files>',
