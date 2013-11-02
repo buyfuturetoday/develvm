@@ -28,6 +28,7 @@ push: $(BUILD)
 	git push --tags
 
 # List all tags
+# Add tags like this: git tag -a "list_containers" -m "Implemented list of running containers"
 git_tags:
 	git tag -l
 
