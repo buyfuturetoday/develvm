@@ -6,8 +6,8 @@ BUILD = $(SRC:src/%.js=build)
 DOCSRC = $(wildcard *.js)
 DOC = $(DOCSRC:%.js=docs/%.html)
 
-#build: $(BUILD)
-build:	./src/build.js
+#build:	./src/build.js
+build: $(BUILD)
 	git pull
 	grunt
 
