@@ -29,8 +29,8 @@
         async      = require('async');
 
 
-//    helpers.logging_threshold  = helpers.logging.debug;
-    helpers.logging_threshold  = helpers.logging.warning;
+    helpers.logging_threshold  = helpers.logging.debug;
+//    helpers.logging_threshold  = helpers.logging.warning;
 
 
     // helpers
@@ -78,10 +78,10 @@
                 }.bind(this));
 
                 fn(null, 'containers.list');
-            }.bind(this),
+            }.bind(this)
 
             // Inspect each container
-            function(fn){
+/*            function(fn){
 
                 this._containers.forEach(function(container,index,array) {
 
@@ -98,8 +98,8 @@
                     fn(null, 'containers.inspect');
                 }.bind(this));
 
-            }.bind(this),
-
+            }.bind(this)
+*/
         ],
 
         // Manage errors
