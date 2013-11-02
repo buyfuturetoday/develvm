@@ -7,7 +7,7 @@ DOCSRC = $(wildcard *.js)
 DOC = $(DOCSRC:%.js=docs/%.html)
 
 # build: $(BUILD)
-build: ./build/build.js
+build: build.js
 	grunt
 
 doc: $(DOC)
