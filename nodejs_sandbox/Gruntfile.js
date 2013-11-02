@@ -34,7 +34,7 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: ['node-docker.js'],
+        src: ['app.js'],
         dest: 'build/<%= pkg.name %>.js'
       }
      }
