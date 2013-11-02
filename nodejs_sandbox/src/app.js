@@ -104,12 +104,12 @@
 
         // Manage errors
         function(err, results){
-          this._helpers.logDebug('results of async functions - ' + results);
-          this._helpers.logDebug('errors (if any) - ' + err);
+          this.helpers.logDebug('results of async functions - ' + results);
+          this.helpers.logDebug('errors (if any) - ' + err);
         }.bind(this));
 
 
-        this._helpers.logDebug('End of function, async processing will continue');
+        this.helpers.logDebug('End of function, async processing will continue');
 
 
     };
