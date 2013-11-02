@@ -34,6 +34,9 @@
     this.helpers.logging_threshold  = this.helpers.logging.debug;
 //    helpers.logging_threshold  = helpers.logging.warning;
 
+    this._containers = {};
+
+
 
     // helpers
     //======================================================================
@@ -62,8 +65,7 @@
     this.list = function() {
 
         // all options listed in the REST documentation for Docker are supported.
-        var _options = {},
-            _containers;
+        var _options = {};
 
         this.helpers.logDebug('Start...');
 
