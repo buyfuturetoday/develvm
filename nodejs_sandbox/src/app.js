@@ -72,7 +72,8 @@
         async.series([
 
             // List the running containers
-            function(fn){ 
+            function(fn){
+                
                 docker.containers.list(_options /* optional*/, function(err, res) {
                     if (err) { 
                         throw err;
@@ -99,9 +100,9 @@
                         console.log("data returned from Docker as JS object: ", res);
                     });
 
-                    fn(null, 'containers.inspect');
                 }.bind(this));
 
+                fn(null, 'containers.inspect');
             }.bind(this)
 
         ],
