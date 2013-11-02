@@ -100,7 +100,7 @@
     //-------------------------------------------------------------------------------------------------
     //
 
-    this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands);
+    this._isset(this.argv._ , 'jacc requires a command - node app.js ' + _commands);
 
     switch (argv._[0]) {
 
