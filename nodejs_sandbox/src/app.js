@@ -22,11 +22,12 @@
 
     var docker = require('docker.io')( _dockerConnOptions ),
         helpers = require('helpersjs').create(),
-        argv    = require('optimist')
+        node_docker = require('node-docker').create();
+
+    var  argv    = require('optimist')
                     .usage('Usage: $0 '+ _commands)
 //                    .demand(['cmd'])
-                    .arg,
-        node_docker = require('node-docker').create();
+                    .arg;
 
 //    helpers.logging_threshold  = helpers.logging.debug;
     helpers.logging_threshold  = helpers.logging.warning;
