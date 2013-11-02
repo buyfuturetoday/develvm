@@ -21,6 +21,7 @@
   },
   "devDependencies" : {
     "grunt": "*",
+    "async": "*",
     "grunt-contrib-jshint": "*",
     "grunt-contrib-nodeunit": "*",
     "grunt-contrib-watch": "*",

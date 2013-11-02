@@ -10,6 +10,8 @@ BUILD = $(SRC:src/%.js=build)
 DOCSRC = $(wildcard *.js)
 DOC = $(DOCSRC:%.js=docs/%.html)
 
+all: install build run
+
 #build:	./src/build.js
 build: $(BUILD)
 	git pull
@@ -30,7 +32,7 @@ clean:
 	@rm -f ./docs/*
 	@rm -rf ./node_modules
 
-install link:
+install link: package.json
 	@npm $@
 
 run:
