@@ -80,10 +80,10 @@
                 }.bind(this));
 
                 fn(null, 'containers.list');
-            }.bind(this)
+            }.bind(this),
 
             // Inspect each container
-/*            function(fn){
+            function(fn){
 
                 this._containers.forEach(function(container,index,array) {
 
@@ -101,7 +101,7 @@
                 }.bind(this));
 
             }.bind(this)
-*/
+
         ],
 
         // Manage errors
@@ -127,7 +127,7 @@
     switch (argv._[0]) {
 
         case "list":
-            console.log(this.list());
+            this.list();
             break;
 
         case "help":
