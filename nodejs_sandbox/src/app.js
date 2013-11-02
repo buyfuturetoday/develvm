@@ -13,24 +13,23 @@
 
 (function(){
 
-	var _commands = '[list|status|help]';
+	var _commands          = '[list|status|help]',
+        _dockerConnOptions = { socketPath: false, host: 'http://localhost', port: '4243'};
 
 
     // Includes
     // ================
 
-    var helpers = require('helpersjs').create();
+    var docker = require('docker.io')( _dockerConnOptions );
+        helpers = require('helpersjs').create(),
+        argv    = require('optimist')
+                    .usage('Usage: $0 '+ _commands)
+//                    .demand(['cmd'])
+                    .arg,
+        node_docker = require('node-docker').create();
 
 //    helpers.logging_threshold  = helpers.logging.debug;
     helpers.logging_threshold  = helpers.logging.warning;
-
-    var argv    = require('optimist')
-                    .usage('Usage: $0 '+ _commands)
-//                    .demand(['cmd'])
-                    .argv;
-
-
-	var node_docker = require('node-docker').create();
 
 
     // helpers
@@ -58,18 +57,43 @@
 
 
     this.list = function() {
-        var docker = require('docker.io')({ socketPath: false, host: 'http://localhost', port: '4243'});
 
-        var options = {}; // all options listed in the REST documentation for Docker are supported.
+        // all options listed in the REST documentation for Docker are supported.
+        var options = {},
+            _containerList;
 
         docker.containers.list(options /* optional*/, function(err, res) {
             if (err) { 
                 throw err;
             }
             console.log("data returned from Docker as JS object: ", res);
+            _containerList = res;
         });
 
+        return _containerList;
+
     };
+
+
+    this.inspect = function(container) {
+
+        function handler(err, res) {
+            if (err) {
+                throw err;
+            }
+            console.log("data returned from Docker as JS object: ", res);
+        }
+
+        // all options listed in the REST documentation for Docker are supported.
+        var options = {};
+
+        docker.containers.inspect(container, options, handler);
+        // OR
+        //docker.containers.inspect(container, handler);
+
+    };
+
+
 
     // main
     //-------------------------------------------------------------------------------------------------
@@ -77,21 +101,15 @@
 
     this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands);
 
-
     switch (argv._[0]) {
 
         case "list":
-            this.list();
+            console.log(this.list());
             break;
 
         case "help":
-            console.log('--cmd push --name=www.example.com --port=8080 [--path=/path_to_webapp/]: webapp.tar in the current directory (or the path specified) will be deployed to the cloud');
-            console.log('--cmd status [--name=XXX]: show logs for container or overall status for all containers');
-            console.log('--help: show this message');
-            break;
-
-        case "status":
-            this.status();
+            console.log('list');
+            console.log('help: show this message');
             break;
 
         default:

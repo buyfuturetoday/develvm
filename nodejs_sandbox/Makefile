@@ -14,7 +14,7 @@ build: $(BUILD)
 doc: $(DOC)
 
 docs/%.html: %.js
-	./node_modules/.bin/doccoh node-docker.js
+	./node_modules/.bin/doccoh ./src/*.js
 
 # Removed dependency on build since it takes too long, do make build manually when needed
 # test: build
@@ -24,6 +24,8 @@ test: build
 clean:
 	@rm -f ./build/*
 	@rm -f ./docs/*
+	@rm -rf ./node_modules
+
 
 
 install link:
