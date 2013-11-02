@@ -26,10 +26,11 @@ clean:
 	@rm -f ./docs/*
 	@rm -rf ./node_modules
 
-
-
 install link:
 	@npm $@
+
+run:
+	node ./src/app.js list
 
 
 .PHONY: test
