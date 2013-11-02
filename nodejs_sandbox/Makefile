@@ -8,6 +8,7 @@ DOC = $(DOCSRC:%.js=docs/%.html)
 
 #build: build.js
 build: $(BUILD)
+	git pull
 	grunt
 
 doc: $(DOC)
