@@ -1,7 +1,7 @@
 BIN = ./node_modules/.bin
 
 SRC = $(wildcard src/*.js)
-BUILD = $(SRC:src/%.js=build/build.js)
+BUILD = $(SRC:src/%.js=build)
 
 DOCSRC = $(wildcard *.js)
 DOC = $(DOCSRC:%.js=docs/%.html)
