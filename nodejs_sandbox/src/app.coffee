@@ -37,17 +37,12 @@ this._containers = {};
 # ======================================================================
 
 this._isset = (a, message, dontexit) ->
-  this.helpers.logDebug('_isset: checking - ' + a + ' (exit message:'+message+')')
   if (!this.helpers.isset(a))
     console.log(message)
     if(dontexit != undefined && dontexit)
-      this.helpers.logDebug('_isset: returning false ')
       return false
     else
-      this.helpers.logDebug('_isset: exiting process')
       process.exit()
-
-  this.helpers.logDebug('_isset: returning true ')
   return true
 
 
