@@ -140,6 +140,7 @@ this.add = (image, URL, dns_name) ->
 		redis_client.sadd("images", image, (err, res) =>
 			redis_client.quit()
 		)	
+	)
 
 	redis_client2 = redis.createClient()
 	redis_client2.on("connect", () =>
