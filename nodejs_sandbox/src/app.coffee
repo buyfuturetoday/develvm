@@ -172,6 +172,7 @@ this.update = () =>
 	this.containerList = []
 	this.onContainers( (container) =>
 		this.containerList.push(container)
+		console.log(container)
 	)
 	console.log("Jacc: list of containers:" + this.containerList)
 
