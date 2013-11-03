@@ -27,6 +27,7 @@
     "grunt-contrib-watch": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-uglify": "*",
+    "grunt-contrib-coffee": "*",
     "doccoh":"0.4.1"
   },
   "keywords": [

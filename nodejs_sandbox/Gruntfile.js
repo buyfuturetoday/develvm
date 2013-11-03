@@ -11,7 +11,7 @@ module.exports = function(grunt) {
       tasks: 'default'
     },
     jshint: {
-      files: ['./*.js', 'src/*.js', 'test/*.js'],
+      files: ['./*.js', './src/*.js', './test/*.js'],
       options: {
         curly: true,
         eqeqeq: true,
@@ -37,15 +37,23 @@ module.exports = function(grunt) {
         src: ['./src/*.js'],
         dest: 'build/<%= pkg.name %>.js'
       }
-     }
+    },
+    coffee: {
+      compile: {
+        files: {
+          './build/build.js': ['./src/*.coffee']
+        }
+      }
+    }
   });
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-contrib-coffee');
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint', 'uglify']);
+  grunt.registerTask('default', ['coffee', 'jshint', 'uglify']);
 
 };
