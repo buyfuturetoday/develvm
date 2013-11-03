@@ -165,7 +165,7 @@ this.delete = (image) ->
 
 this.containerList = []
 
-this.update = () ->
+this.update = () =>
 	console.log("Jacc: updating ")
 
 	# Get list of running containers
