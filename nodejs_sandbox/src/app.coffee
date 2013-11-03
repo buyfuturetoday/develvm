@@ -13,7 +13,7 @@
 #
 
 
-_commands          = '[add|list|status|help]'
+_commands          = '[add|delete|list|update|status|help]'
 _dockerConnOptions = { socketPath: false, host: 'http://localhost', port: '4243'}
 
 
@@ -61,7 +61,7 @@ this._isset = (a, message, dontexit) ->
 # Show running containers
 # ----------------------------------------------------------------------
 
-this.status = () ->
+this.onContainers = (func) ->
 
 	# all options listed in the REST documentation for Docker are supported.
 	_options = {}
@@ -95,7 +95,9 @@ this.status = () ->
 						throw err
 
 					#this.helpers.logDebug("data returned from Docker as JS object: ", res)
-					console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
+					#console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
+
+					func(res)
 				)
 			)
 
@@ -109,6 +111,17 @@ this.status = () ->
 			this.helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
 	)
 
+this.status = () ->
+	this.onContainers(
+		fn (res) ->
+			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
+	)
+
+this.update = () ->
+	this.onContainers(
+		fn (res) ->
+			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
+	)
 
 # Show Jacc configuration
 # ----------------------------------------------------------------------
@@ -117,23 +130,58 @@ this.list = () ->
 	redis_client = redis.createClient()
 
 	redis_client.on("connect", () =>
-		redis_client.smembers("containers", (err, res) =>
-			console.log("list of containers:" + res)
+		redis_client.smembers("images", (err, res) =>
+			console.log("Jacc: list of images:" + res)
 			redis_client.quit()
 		)	
 	)
 
 
-# Add container to Jacc configuration
+# Add image to Jacc configuration
 # ----------------------------------------------------------------------
+# 
+# TODO: Should check that the image exists (do an inspect)
 
-this.add = (container) ->
-	console.log("Jacc: adding " + container)
+this.add = (image) ->
+	console.log("Jacc: adding " + image)
 	redis_client = redis.createClient()
 
 	redis_client.on("connect", () =>
-		redis_client.sadd("containers", container, (err, res) =>
-			console.log("SADD result:" + res)
+		redis_client.sadd("images", image, (err, res) =>
+			redis_client.quit()
+		)	
+	)
+
+
+# Delete image from Jacc configuration
+# ----------------------------------------------------------------------
+# 
+# TODO: Should check that the image exists (do an inspect)
+
+this.delete = (image) ->
+	console.log("Jacc: deleting " + image)
+	redis_client = redis.createClient()
+
+	redis_client.on("connect", () =>
+		redis_client.srem("images", image, (err, res) =>
+			console.log("result - " + res)
+			redis_client.quit()
+		)	
+	)
+
+
+# Update redis-dns and hipache configuration
+# ----------------------------------------------------------------------
+
+this.update = () ->
+	console.log("Jacc: updating ")
+	redis_client = redis.createClient()
+
+	redis_client.on("connect", () =>
+		redis_client.smembers("images", (err, res) =>
+			for image in images
+				do (image) ->
+					console.log("Jacc: list of images:" + res)
 			redis_client.quit()
 		)	
 	)
@@ -146,6 +194,10 @@ this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands)
 
 switch argv._[0]
 	when "add" then this.add(argv._[1])
+
+	when "delete" then this.delete(argv._[1])
+
+	when "update" then this.update()
 
 	when "status" then this.status()
 
