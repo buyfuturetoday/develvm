@@ -76,7 +76,7 @@ this.list = () ->
 				# all options listed in the REST documentation for Docker are supported.
 				options = {}
 
-				docker.containers.inspect(container.Id, options, (err, res) ->
+				docker.containers.inspect(container.Id, options, (err, res) =>
 					if (err)
 						throw err
 
