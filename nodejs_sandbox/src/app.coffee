@@ -163,10 +163,20 @@ this.delete = (image) ->
 # Update redis-dns and hipache configuration
 # ----------------------------------------------------------------------
 
+this.containerList = []
+
 this.update = () ->
 	console.log("Jacc: updating ")
-	redis_client = redis.createClient()
 
+	# Get list of running containers
+	this.containerList = []
+	this.onContainers( (container) =>
+		this.containerList.push(container)
+	)
+	console.log("Jacc: list of containers:" + this.containerList)
+
+
+	redis_client = redis.createClient()
 	redis_client.on("connect", () =>
 		redis_client.smembers("images", (err, res) =>
 			for image in res
