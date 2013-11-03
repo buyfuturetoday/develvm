@@ -177,7 +177,7 @@ this.update = () =>
 			IP:        container.NetworkSettings.IPAddress
 		)
 
-		console.log(container)
+		console.log(this.containerList)
 	)
 	console.log("Jacc: list of containers:" + this.containerList[0])
 
