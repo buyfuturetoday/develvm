@@ -181,15 +181,16 @@ this.update = () =>
 				)
 
 				console.log(this.containerList)
+
+				# async processing can continue
+				fn(null, 'update.list containers')
 			)
 
-			# async processing can continue
-			fn(null, 'update.list containers')
 
 		# Check what's in the Jacc configuration
 		(fn) =>
 			console.log("Jacc: list of containers:" + this.containerList[0])
-			
+
 			redis_client = redis.createClient()
 			redis_client.on("connect", () =>
 				redis_client.smembers("images", (err, res) =>
@@ -197,11 +198,13 @@ this.update = () =>
 						do (image) ->
 							console.log("Jacc: list of images:" + image)
 					redis_client.quit()
+
+					# async processing can continue
+					fn(null, 'update.get configuration')
+
 				)	
 			)
 
-			# async processing can continue
-			fn(null, 'update.get configuration')
 
 		]
 
