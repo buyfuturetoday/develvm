@@ -174,9 +174,8 @@ this.update = () =>
 			# Get list of running containers
 			this.containerList = []
 			this.onContainers( (container) =>
-				this.containerList.push(
+				this.containerList[ container.Image[0..12] ]
 					container: container.ID[0..12]
-					image:     container.Image[0..12]
 					IP:        container.NetworkSettings.IPAddress
 				)
 
