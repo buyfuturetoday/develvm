@@ -201,7 +201,19 @@ this.update = () =>
 			redis_client.on("connect", () =>
 				redis_client.smembers("images", (err, res) =>
 					for image in res
-						do (image) ->
+						do (image) =>
+
+							redis_client = redis.createClient()
+							redis_client.on("connect", () =>
+								redis_client.get(image, (err, res)=>
+									this.updateHipache( this.containers[image]["container"], 
+														res["URL"] )
+									this.updateRedisDNS( this.containers[image]["container"], 
+														res["DNS"] )
+									redis_client.quit()
+
+							)
+
 							console.log("Jacc: configured image:" + image)
 					redis_client.quit()
 
@@ -226,7 +238,7 @@ this.update = () =>
 this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands)
 
 switch argv._[0]
-	when "add" then this.add(argv._[1], argv._[2], argv._[2])
+	when "add" then this.add(argv._[1], argv._[2], argv._[3])
 
 	when "delete" then this.delete(argv._[1])
 
