@@ -117,12 +117,11 @@ this.list = () ->
 	redis_client = redis.createClient()
 
 	redis_client.on("connect", () =>
-
-	  redis_client.smembers("containers", (err, res) =>
-		console.log("SMEMBERS result:" + res)
-		redis_client.quit()
-
-
+		redis_client.smembers("containers", (err, res) =>
+			console.log("SMEMBERS result:" + res)
+			redis_client.quit()
+		)	
+	)
 
 # main
 # ======================================================================
