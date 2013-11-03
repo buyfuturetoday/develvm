@@ -98,10 +98,6 @@ this.list = () ->
 	)
 
 
-
-this.helpers.logDebug('End of function, async processing will continue')
-
-
 # main
 # ======================================================================
 
