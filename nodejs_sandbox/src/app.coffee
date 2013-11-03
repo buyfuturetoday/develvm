@@ -3,6 +3,12 @@
 #
 # Jacc - simple PaaS based on docker.io, hipache, redis-dns and supervisord
 #
+# Commands:
+# + list - show list of configured apps
+# + status - show running apps
+# + add - add new app
+# + delete - delete app
+#
 # Using Google JavaScript Style Guide when applicable - http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
 #
 
@@ -23,6 +29,8 @@ argv        = require('optimist')
               .argv
 
 async      = require('async')
+
+redis      = require('redis')
 
 
 # varaibles used within async needs to be defined like this
@@ -46,13 +54,19 @@ this._isset = (a, message, dontexit) ->
   return true
 
 
-# Docker functions
+# Jacc Functions
 # ======================================================================
 
-this.list = () ->
+
+# Show running containers
+# ----------------------------------------------------------------------
+
+this.status = () ->
 
 	# all options listed in the REST documentation for Docker are supported.
 	_options = {}
+
+	console.log("Jacc: List of running containers")
 
 	async.series([
 		# List the running containers
@@ -81,7 +95,7 @@ this.list = () ->
 						throw err
 
 					#this.helpers.logDebug("data returned from Docker as JS object: ", res)
-					console.log("image:" + res.Image[0..12] + " container:" + res.ID[0..12] + " IP:" + res.NetworkSettings.IPAddress)
+					console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 				)
 			)
 
@@ -96,19 +110,35 @@ this.list = () ->
 	)
 
 
+# Show Jacc configuration
+# ----------------------------------------------------------------------
+
+this.list = () ->
+	redis_client = redis.createClient()
+
+	redis_client.on("connect", () =>
+
+	  redis_client.smembers("containers", (err, res) =>
+		console.log("SMEMBERS result:" + res)
+		redis_client.quit()
+
+
+
 # main
 # ======================================================================
 
 this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands)
 
 switch argv._[0]
+	when "status" then this.status()
+
 	when "list" then this.list()
 
 	when "help"
-		console.log('list')
+		console.log('uage: jacc ' + _commands)
 		console.log('help: show this message')
 
-	else console.log('No such command: ' + argv._)
+	else console.log('No such command: ' + argv._[0])
 
 
 
