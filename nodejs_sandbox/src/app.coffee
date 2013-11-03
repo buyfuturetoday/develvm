@@ -69,7 +69,7 @@ this.list = () ->
 					if (err)
 						throw err
 
-					this.helpers.logDebug("data returned from Docker as JS object: ", res)
+					# this.helpers.logDebug("data returned from Docker as JS object: ", res)
 					this._containers = res
 
 					# async processing can continue
@@ -87,7 +87,7 @@ this.list = () ->
 					if (err)
 						throw err
 
-					console.log("data returned from Docker as JS object: ", res)
+					console.log(res.ID[0..12] + ":" + res.NetworkSettings.IPAddress)
 				)
 			)
 
