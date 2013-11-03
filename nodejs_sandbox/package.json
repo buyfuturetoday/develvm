@@ -14,6 +14,9 @@
   "author": "Jonas Colmsjö <jonas@gizur.com>",
   "main": "./build/build.js",
   "dependencies": {
+    "hipache": "0.2.4",
+    "redis-dns": "0.0.1",
+    "redis": "0.8.4",
     "node-docker": "*",
     "docker.io": "*",
     "optimist": "*",
