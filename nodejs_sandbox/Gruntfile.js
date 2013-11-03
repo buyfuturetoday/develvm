@@ -34,14 +34,14 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: ['./src/*.js'],
-        dest: 'build/<%= pkg.name %>.js'
+        src: ['./build/jacc.js'],
+        dest: 'build/<%= pkg.name %>.min.js'
       }
     },
     coffee: {
       compile: {
         files: {
-          './build/build.js': ['./src/*.coffee']
+          './build/jacc.js': ['./src/*.coffee']
         }
       }
     }

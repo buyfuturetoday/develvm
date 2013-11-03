@@ -51,7 +51,7 @@ install link: package.json
 	@npm $@
 
 run:
-	node ./src/app.js list
+	node ./build/build.js list
 
 
 .PHONY: build
