@@ -51,7 +51,7 @@ install link: package.json
 	@npm $@
 
 run:
-	node ./build/build.js list
+	node ./build/jacc.js list
 
 
 .PHONY: build
