@@ -171,7 +171,12 @@ this.update = () =>
 	# Get list of running containers
 	this.containerList = []
 	this.onContainers( (container) =>
-		this.containerList.push(container)
+		this.containerList.push(
+			container: container.ID[0..12]
+			image:     container.Image[0..12]
+			IP:        container.NetworkSettings.IPAddress
+		)
+
 		console.log(container)
 	)
 	console.log("Jacc: list of containers:" + this.containerList)
