@@ -132,13 +132,19 @@ this.list = () ->
 # 
 # TODO: Should check that the image exists (do an inspect)
 
-this.add = (image) ->
+this.add = (image, URL, dns_name) ->
 	console.log("Jacc: adding " + image)
-	redis_client = redis.createClient()
 
+	redis_client = redis.createClient()
 	redis_client.on("connect", () =>
 		redis_client.sadd("images", image, (err, res) =>
 			redis_client.quit()
+		)	
+
+	redis_client2 = redis.createClient()
+	redis_client2.on("connect", () =>
+		redis_client2.set(image, {URL: URL; DNS: dns_name}, (err, res) =>
+			redis_client2.quit()
 		)	
 	)
 
@@ -188,7 +194,7 @@ this.update = () =>
 
 		# Check what's in the Jacc configuration
 		(fn) =>
-			console.log("Jacc: list of images:" + JSON.stringify(this.containers))
+			console.log("Jacc: list of containers:" + JSON.stringify(this.containers))
 
 			redis_client = redis.createClient()
 			redis_client.on("connect", () =>
@@ -219,7 +225,7 @@ this.update = () =>
 this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands)
 
 switch argv._[0]
-	when "add" then this.add(argv._[1])
+	when "add" then this.add(argv._[1], argv._[2], argv._[2])
 
 	when "delete" then this.delete(argv._[1])
 
@@ -230,7 +236,12 @@ switch argv._[0]
 	when "list" then this.list()
 
 	when "help"
-		console.log('uage: jacc ' + _commands)
+		console.log('usage: jacc ' + _commands)
+		console.log('jacc add image URL dns-name')
+		console.log('jacc delete image')
+		console.log('jacc update')
+		console.log('jacc list')
+		console.log('jacc status')
 		console.log('help: show this message')
 
 	else console.log('No such command: ' + argv._[0])
