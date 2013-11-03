@@ -111,13 +111,13 @@ this.onContainers = (func) ->
 			this.helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
 	)
 
-this.status = () ->
+this.status = () =>
 	this.onContainers(
 		fn (res) ->
 			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 	)
 
-this.update = () ->
+this.update = () =>
 	this.onContainers(
 		fn (res) ->
 			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
