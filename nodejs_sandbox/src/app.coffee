@@ -54,8 +54,6 @@ this.list = () ->
 	# all options listed in the REST documentation for Docker are supported.
 	_options = {}
 
-	this.helpers.logDebug('Start...')
-
 	async.series([
 		# List the running containers
 		(fn) =>
@@ -93,8 +91,7 @@ this.list = () ->
 
 		# Manage errors
 		(err, results) =>
-			this.helpers.logDebug( 'results of async functions - ' + results )
-			this.helpers.logDebug( 'errors (if any) - ' + err )
+			this.helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
 	)
 
 
