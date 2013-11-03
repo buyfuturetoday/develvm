@@ -179,7 +179,7 @@ this.update = () =>
 
 		console.log(container)
 	)
-	console.log("Jacc: list of containers:" + this.containerList)
+	console.log("Jacc: list of containers:" + this.containerList[0])
 
 
 	redis_client = redis.createClient()
