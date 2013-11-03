@@ -66,8 +66,6 @@ this.onContainers = (func) ->
 	# all options listed in the REST documentation for Docker are supported.
 	_options = {}
 
-	console.log("Jacc: List of running containers")
-
 	async.series([
 		# List the running containers
 		(fn) =>
@@ -76,7 +74,6 @@ this.onContainers = (func) ->
 					if (err)
 						throw err
 
-					# this.helpers.logDebug("data returned from Docker as JS object: ", res)
 					this._containers = res
 
 					# async processing can continue
@@ -94,9 +91,6 @@ this.onContainers = (func) ->
 					if (err)
 						throw err
 
-					#this.helpers.logDebug("data returned from Docker as JS object: ", res)
-					#console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
-
 					func(res)
 				)
 			)
@@ -112,14 +106,12 @@ this.onContainers = (func) ->
 	)
 
 this.status = () =>
-	this.onContainers( (res) ->
+	console.log("Jacc: List of running containers")
+
+	this.onContainers( (res) =>
 			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 	)
 
-this.update = () =>
-	this.onContainers( (res) ->
-			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
-	)
 
 # Show Jacc configuration
 # ----------------------------------------------------------------------
@@ -177,7 +169,7 @@ this.update = () ->
 
 	redis_client.on("connect", () =>
 		redis_client.smembers("images", (err, res) =>
-			for image in images
+			for image in res
 				do (image) ->
 					console.log("Jacc: list of images:" + res)
 			redis_client.quit()
