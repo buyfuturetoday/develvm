@@ -168,28 +168,46 @@ this.containerList = []
 this.update = () =>
 	console.log("Jacc: updating ")
 
-	# Get list of running containers
-	this.containerList = []
-	this.onContainers( (container) =>
-		this.containerList.push(
-			container: container.ID[0..12]
-			image:     container.Image[0..12]
-			IP:        container.NetworkSettings.IPAddress
-		)
+	async.series([
+		# Save running containers in list
+		(fn) =>
+			# Get list of running containers
+			this.containerList = []
+			this.onContainers( (container) =>
+				this.containerList.push(
+					container: container.ID[0..12]
+					image:     container.Image[0..12]
+					IP:        container.NetworkSettings.IPAddress
+				)
 
-		console.log(this.containerList)
-	)
-	console.log("Jacc: list of containers:" + this.containerList[0])
+				console.log(this.containerList)
+			)
 
+			# async processing can continue
+			fn(null, 'update.list containers')
 
-	redis_client = redis.createClient()
-	redis_client.on("connect", () =>
-		redis_client.smembers("images", (err, res) =>
-			for image in res
-				do (image) ->
-					console.log("Jacc: list of images:" + image)
-			redis_client.quit()
-		)	
+		# Check what's in the Jacc configuration
+		(fn) =>
+			console.log("Jacc: list of containers:" + this.containerList[0])
+			
+			redis_client = redis.createClient()
+			redis_client.on("connect", () =>
+				redis_client.smembers("images", (err, res) =>
+					for image in res
+						do (image) ->
+							console.log("Jacc: list of images:" + image)
+					redis_client.quit()
+				)	
+			)
+
+			# async processing can continue
+			fn(null, 'update.get configuration')
+
+		]
+
+		# Manage errors
+		(err, results) =>
+			this.helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
 	)
 
 
