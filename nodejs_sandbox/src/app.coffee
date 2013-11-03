@@ -94,12 +94,12 @@ this.list = () ->
 			# async processing can continue
 			fn(null, 'containers.inspect')
 
-	]
+		]
 
-	# Manage errors
-	(err, results) =>
-		this.helpers.logDebug( 'results of async functions - ' + results )
-		this.helpers.logDebug( 'errors (if any) - ' + err )
+		# Manage errors
+		(err, results) =>
+			this.helpers.logDebug( 'results of async functions - ' + results )
+			this.helpers.logDebug( 'errors (if any) - ' + err )
 	)
 
 
