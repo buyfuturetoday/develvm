@@ -13,7 +13,7 @@
 #
 
 
-_commands          = '[list|status|help]'
+_commands          = '[add|list|status|help]'
 _dockerConnOptions = { socketPath: false, host: 'http://localhost', port: '4243'}
 
 
@@ -118,10 +118,26 @@ this.list = () ->
 
 	redis_client.on("connect", () =>
 		redis_client.smembers("containers", (err, res) =>
-			console.log("SMEMBERS result:" + res)
+			console.log("list of containers:" + res)
 			redis_client.quit()
 		)	
 	)
+
+
+# Add container to Jacc configuration
+# ----------------------------------------------------------------------
+
+this.add = (container) ->
+	console.log("Jacc: adding " + container)
+	redis_client = redis.createClient()
+
+	redis_client.on("connect", () =>
+		redis_client.sadd("containers", container, (err, res) =>
+			console.log("SADD result:" + res)
+			redis_client.quit()
+		)	
+	)
+
 
 # main
 # ======================================================================
@@ -129,6 +145,8 @@ this.list = () ->
 this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands)
 
 switch argv._[0]
+	when "add" then this.add(argv._[1])
+
 	when "status" then this.status()
 
 	when "list" then this.list()
