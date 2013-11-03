@@ -163,7 +163,7 @@ this.delete = (image) ->
 # Update redis-dns and hipache configuration
 # ----------------------------------------------------------------------
 
-this.containerList = []
+this.containers = {}
 
 this.update = () =>
 	console.log("Jacc: updating ")
@@ -172,9 +172,9 @@ this.update = () =>
 		# Save running containers in list
 		(fn) =>
 			# Get list of running containers
-			this.containerList = []
+			this.containers = {}
 			this.onContainers( (container) =>
-				this.containerList[ container.Image[0..12] ] =
+				this.containers[ container.Image[0..12] ] =
 					container: container.ID[0..12]
 					IP:        container.NetworkSettings.IPAddress
 
@@ -185,7 +185,7 @@ this.update = () =>
 
 		# Check what's in the Jacc configuration
 		(fn) =>
-			console.log("Jacc: list of containers:" + JSON.stringify(this.containerList[0]))
+			console.log("Jacc: list of containers:" + JSON.stringify(this.containers))
 
 			redis_client = redis.createClient()
 			redis_client.on("connect", () =>
