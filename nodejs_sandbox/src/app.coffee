@@ -112,14 +112,12 @@ this.onContainers = (func) ->
 	)
 
 this.status = () =>
-	this.onContainers(
-		fn (res) ->
+	this.onContainers(fn (res) ->
 			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 	)
 
 this.update = () =>
-	this.onContainers(
-		fn (res) ->
+	this.onContainers(fn (res) ->
 			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 	)
 
