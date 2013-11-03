@@ -97,7 +97,7 @@ this.list = () ->
 		]
 
 		# Manage errors
-		(err, results) =>
+		(err, results) ->
 			this.helpers.logDebug( 'results of async functions - ' + results )
 			this.helpers.logDebug( 'errors (if any) - ' + err )
 	)
