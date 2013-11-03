@@ -162,8 +162,11 @@ this.delete = (image) ->
 
 # Update redis-dns and hipache configuration
 # ----------------------------------------------------------------------
+# NOTE: Only one container per image is currently supported
 
-this.images = {}
+# Associative array image->{container data}
+# To support several container per image - Associative array image->[{container data}]
+this.containers = {}
 
 this.update = () =>
 	console.log("Jacc: updating ")
@@ -172,9 +175,9 @@ this.update = () =>
 		# Save running containers in list
 		(fn) =>
 			# Get list of running containers
-			this.images = {}
+			this.containers = {}
 			this.onContainers( (container) =>
-				this.images[ container.Image[0..12] ] =
+				this.containers[ container.Image[0..12] ] =
 					container: container.ID[0..12]
 					IP:        container.NetworkSettings.IPAddress
 
@@ -185,14 +188,14 @@ this.update = () =>
 
 		# Check what's in the Jacc configuration
 		(fn) =>
-			console.log("Jacc: list of images:" + JSON.stringify(this.images))
+			console.log("Jacc: list of images:" + JSON.stringify(this.containers))
 
 			redis_client = redis.createClient()
 			redis_client.on("connect", () =>
 				redis_client.smembers("images", (err, res) =>
 					for image in res
 						do (image) ->
-							console.log("Jacc: list of images:" + image)
+							console.log("Jacc: configured image:" + image)
 					redis_client.quit()
 
 					# async processing can continue
