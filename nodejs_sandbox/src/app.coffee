@@ -80,8 +80,8 @@ this.list = () ->
 					if (err)
 						throw err
 
-					this.helpers.logDebug("data returned from Docker as JS object: ", res)
-					console.log(res.ID[0..12] + ":" + res.NetworkSettings.IPAddress)
+					#this.helpers.logDebug("data returned from Docker as JS object: ", res)
+					console.log("image:" + res.Image[0..12] + " container:" + res.ID[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 				)
 			)
 
