@@ -171,7 +171,7 @@ this.update = () ->
 		redis_client.smembers("images", (err, res) =>
 			for image in res
 				do (image) ->
-					console.log("Jacc: list of images:" + res)
+					console.log("Jacc: list of images:" + image)
 			redis_client.quit()
 		)	
 	)
