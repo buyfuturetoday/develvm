@@ -180,8 +180,6 @@ this.update = () =>
 					IP:        container.NetworkSettings.IPAddress
 				)
 
-				console.log(this.containerList)
-
 				# async processing can continue
 				fn(null, 'update.list containers')
 			)
@@ -189,7 +187,7 @@ this.update = () =>
 
 		# Check what's in the Jacc configuration
 		(fn) =>
-			console.log("Jacc: list of containers:" + this.containerList[0])
+			console.log("Jacc: list of containers:" + JSON.stringify(this.containerList[0]))
 
 			redis_client = redis.createClient()
 			redis_client.on("connect", () =>
