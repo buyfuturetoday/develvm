@@ -179,10 +179,10 @@ this.update = () ->
 	this._onJaccConfig( (image) =>
 		this._redis("get", image, (res) =>
 
-			this.helpers.logDebug("_onJaccConfig - image: " + image + " res: "+res)
+			this.helpers.logDebug("_onJaccConfig - image: " + image + " res: " + JSON.parse(res))
 
 			# decomposing, just to make sure things are ok
-			{URL, internal_port, DNS} = res
+			{URL, internal_port, DNS} = JSON.parse(res)
 
 			# Set hipache config
 			_key = "frontend:"+image
