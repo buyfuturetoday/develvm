@@ -157,13 +157,14 @@ this.update = () ->
 
 	# Build list with running images
 	# runningImages = image id->[{container id, IP}]
-	_options = {}
 	this._runningImages = {}
 	this._onContainers( (res) =>
 
+		console.log(res)
+
 		# create empty list if this image isn’t running
-		if( this. _runningImages[ res.Image[0..12] ] == undefined)
-			this. _runningImages[ res.Image[0..12] ] = []
+		if( this._runningImages[ res.Image[0..12] ] == undefined)
+			this._runningImages[ res.Image[0..12] ] = []
 
 		this._runningImages[ res.Image[0..12] ].push( { ID: res.ID[0..12], IP: res.NetworkSettings.IPAddress } )
 	)
