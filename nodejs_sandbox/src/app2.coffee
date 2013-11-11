@@ -82,6 +82,7 @@ this._redis = (operation, args, func) ->
 			when "del" then redis_client.del( args[0], (err, res) => this._f(redis_client, err, res, func) )
 			when "push" then redis_client.rpush( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
 			when "set" then redis_client.set( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
+			when "smembers" then redis_client.smembers( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
 
 	)
 
@@ -90,7 +91,7 @@ this._redis = (operation, args, func) ->
 # -------------------------------------------------------------
 # redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
 this._onJaccConfig = (func) ->
-	this._redis( "keys", ["*"], (res) =>
+	this._redis( "smembers", ["images"], (res) =>
 		_.each(res, (image) => func(image) )
 	)
 
