@@ -187,7 +187,7 @@ this.update = () ->
 			)
 
 			# Set redis-dns config, use the first IP in the list
-			_redis( "set", DNS, this._runningImages[ image ][0]["IP"] )
+			this._redis( "set", DNS, this._runningImages[ image ][0]["IP"] )
 			
 		)
 	)
