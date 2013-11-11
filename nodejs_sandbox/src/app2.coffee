@@ -172,16 +172,16 @@ this.update = () ->
 	# hipache configuration: image id ->external URL & [internal URL]
 	# redis-dns configuration: dns->IP
 	this._onJaccConfig( (image) =>
-		_redis("get", image, (res) =>
+		this._redis("get", image, (res) =>
 			# decomposing, just to make sure things are ok
 			{URL, internal_port, DNS} = res
 
 			# Set hipache config
 			_key = "frontend:"+image
-			_redis("del", [_key], () =>
-				_redis("rpush", _key, URL, () =>
+			this._redis("del", [_key], () =>
+				this._redis("rpush", _key, URL, () =>
 					_.each( this._runningImages[ image ], (res) =>
-						_redis("rpush", _key, res["IP"], null)
+						this._redis("rpush", _key, res["IP"], null)
 					)
 				)
 			)
