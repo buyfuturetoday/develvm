@@ -32,7 +32,7 @@ async      = require('async')
 
 redis      = require('redis')
 
-require('underscore')
+_ = require('underscore')
 
 
 # varaibles used within async needs to be defined like this
