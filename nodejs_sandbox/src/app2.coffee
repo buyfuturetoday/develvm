@@ -115,7 +115,7 @@ this._onContainers = (func) ->
 
 					this._containers = res
 
-					console.log(res)
+					this.helpers.logDebug("_onContainers 1"+res)
 
 					# async processing can continue
 					fn(null, 'containers.list')
@@ -123,6 +123,8 @@ this._onContainers = (func) ->
 
 		# Inspect each container
 		(fn) =>
+			this.helpers.logDebug("_onContainers 2"+this._containers)
+
 			this._containers.forEach( (container,index,array) =>
 
 				# all options listed in the REST documentation for Docker are supported.
