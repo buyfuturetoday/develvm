@@ -76,7 +76,10 @@ this._redis = (operation, args, func) ->
 			when ”keys” do redis_client.keys( args[0], (err, res) => _f(redis_client, err, res, func) )
 			when ”get” do redis_client.get( args[0], (err, res) => _f(redis_client, err, res, func) )
 			when ”del” do redis_client.del( args[0], (err, res) => _f(redis_client, err, res, func) )
-			when ”rpush” do redis_client.rpush( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
+			when ”rpush”
+				redis_client.rpush( args[0], args[1], (err, res) => 
+					_f(redis_client, err, res, func)
+				)
 			when ”set” do redis_client.set( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
 )
 
