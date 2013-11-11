@@ -178,6 +178,9 @@ this.update = () ->
 	# redis-dns configuration: dns->IP
 	this._onJaccConfig( (image) =>
 		this._redis("get", image, (res) =>
+
+			this.helpers.logDebug("_onJaccConfig: "+res)
+
 			# decomposing, just to make sure things are ok
 			{URL, internal_port, DNS} = res
 
