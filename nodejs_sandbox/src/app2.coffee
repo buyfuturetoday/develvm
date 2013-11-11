@@ -36,7 +36,7 @@ require('underscore')
 
 
 # varaibles used within async needs to be defined like this
-this.helpers     = require('helpersjs').create();
+this.helpers     				= require('helpersjs').create();
 this.helpers.logging_threshold  = this.helpers.logging.debug;
 
 this._containers = {};
@@ -56,14 +56,45 @@ this._isset = (a, message, dontexit) ->
   return true
 
 
-# Jacc Functions
-# ======================================================================
+# Redis helper
+# -------------------------------------------------------------
+# operation = ”keys” | ”get” | ”del” | ”rush” | "set"
+# args = [arg1, arg2, …, argn]
+# func = function to run on the result
+
+this._f = (rc, err, res, func) =>
+	if (err)
+		throw err
+
+	if(func != null) func(res)
+	rc.quit()
+
+this._redis = (operation, args, func) ->
+	redis_client = redis.createClient()
+	redis_client.on(”connect”,
+		switch operation
+			when ”keys” do redis_client.keys( args[0], (err, res) => _f(redis_client, err, res, func) )
+			when ”get” do redis_client.get( args[0], (err, res) => _f(redis_client, err, res, func) )
+			when ”del” do redis_client.del( args[0], (err, res) => _f(redis_client, err, res, func) )
+			when ”rpush” do redis_client.rpush( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
+			when ”set” do redis_client.set( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
+)
 
 
-# Show running containers
+# Helper for running function on each jacc image
+# -------------------------------------------------------------
+# redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
+this._onJaccConfig = (func) ->
+	_redis( ”keys”, [”*”], (image) =>
+		_.each(res, (image) => func(image) )
+	)
+
+
+
+# Run function with runing containers as input
 # ----------------------------------------------------------------------
 
-this.onContainers = (func) ->
+this._onContainers = (func) ->
 
 	# all options listed in the REST documentation for Docker are supported.
 	_options = {}
@@ -107,44 +138,66 @@ this.onContainers = (func) ->
 			this.helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
 	)
 
-this.status = () =>
-	console.log("Jacc: List of running containers")
 
-	this.onContainers( (res) =>
-			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
+# Jacc Functions
+# ======================================================================
+
+
+# Update redis-dns and hipache configuration
+# ----------------------------------------------------------------------
+# NOTE: Only one container per image is currently supported
+
+this.update = () ->
+
+	# Build list with running images
+	# runningImages = image id->[{container id, IP}]
+	_options = {}
+	this._runningImages = {}
+	this._onContainers( (res) =>
+
+		# create empty list if this image isn’t running
+		if( this. _runningImages[ res.Image[0..12] ] == undefined)
+			this. _runningImages[ res.Image[0..12] ] = []
+
+		this._runningImages[ res.Image[0..12] ].push( { ID: res.ID[0..12], IP: res.NetworkSettings.IPAddress } )
 	)
 
+	# Iterate over Jacc configuration and generate hipache and redis-dns configuration
+	# hipache configuration: image id ->external URL & [internal URL]
+	# redis-dns configuration: dns->IP
+	this._onJaccConfig( (image) =>
+		_redis(”get”, image, (res) =>
+			# decomposing, just to make sure things are ok
+			{URL, internal_port, DNS} = res
 
-# Show Jacc configuration
-# ----------------------------------------------------------------------
-
-#
-#  NOT FINISHED, SHOULD PERHAPS GO BACK TO LAST VERISON
-#
-
-this.onJaccConfiguration = (func) ->
-	redis_client = redis.createClient()
-
-	redis_client.on("connect", () =>
-		redis_client.smembers("images", (err, res) =>
-			redis_client.quit()
-
-			if(res==undefined || res== null)
-				return
-
-			this._jaccImages = {}
-
-			_.each(res, (image) =>
-				redis_client2 = redis.createClient()
-				redis_client2.on("connect", () =>
-					redis_client2.get(container, (err,res) =>
-						this._jaccImages[image] = res
+			# Set hipache config
+			_key = ”frontend:”+image
+			_redis(”del”, [_key], () =>
+				_redis(”rpush”, _key, URL, () =>
+					_.each( this._runningImages[ image ], (res) =>
+						_redis(”rpush”, _key, res[”IP”], null)
 					)
 				)
 			)
 
+			# Set redis-dns config, use the first IP in the list
+			_redis( ”set”, DNS, this._runningImages[ image ][0][”IP”] )
+			
 		)
 	)
+
+
+
+# Show running containers
+# ----------------------------------------------------------------------
+
+this.status = () =>
+	console.log("Jacc: List of running containers")
+
+	this._onContainers( (res) =>
+			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
+	)
+
 
 
 # Add image to Jacc configuration
@@ -184,71 +237,6 @@ this.delete = (image) ->
 			console.log("result - " + res)
 			redis_client.quit()
 		)	
-	)
-
-
-# Update redis-dns and hipache configuration
-# ----------------------------------------------------------------------
-# NOTE: Only one container per image is currently supported
-
-# Associative array image->{container data}
-# To support several container per image - Associative array image->[{container data}]
-this.containers = {}
-
-this.update = () =>
-	console.log("Jacc: updating ")
-
-	async.series([
-		# Save running containers in list
-		(fn) =>
-			# Get list of running containers
-			this.containers = {}
-			this.onContainers( (container) =>
-				this.containers[ container.Image[0..12] ] =
-					container: container.ID[0..12]
-					IP:        container.NetworkSettings.IPAddress
-
-				# async processing can continue
-				fn(null, 'update.list containers')
-			)
-
-
-		# Check what's in the Jacc configuration
-		(fn) =>
-			console.log("Jacc: list of containers:" + JSON.stringify(this.containers))
-
-			redis_client = redis.createClient()
-			redis_client.on("connect", () =>
-				redis_client.smembers("images", (err, res) =>
-					for image in res
-						do (image) =>
-
-							redis_client = redis.createClient()
-							redis_client.on("connect", () =>
-								redis_client.get(image, (err, res)=>
-									this.updateHipache( this.containers[image]["container"], 
-														res["URL"] )
-									this.updateRedisDNS( this.containers[image]["container"], 
-														res["DNS"] )
-									redis_client.quit()
-
-							)
-
-							console.log("Jacc: configured image:" + image)
-					redis_client.quit()
-
-					# async processing can continue
-					fn(null, 'update.get configuration')
-
-				)	
-			)
-
-
-		]
-
-		# Manage errors
-		(err, results) =>
-			this.helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
 	)
 
 
