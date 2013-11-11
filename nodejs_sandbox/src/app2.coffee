@@ -91,7 +91,7 @@ this._redis = (operation, args, func) ->
 # -------------------------------------------------------------
 # redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
 this._onJaccConfig = (func) ->
-	_redis( "keys", ["*"], (image) =>
+	this._redis( "keys", ["*"], (image) =>
 		_.each(res, (image) => func(image) )
 	)
 
