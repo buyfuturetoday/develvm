@@ -77,12 +77,11 @@ this._redis = (operation, args, func) ->
 	redis_client.on("connect", () =>
 
 		switch operation
-			when "keys" then go redis_client.keys( args[0], (err, res) => _f(redis_client, err, res, func) )
-
-			when "get" then go redis_client.get( args[0], (err, res) => _f(redis_client, err, res, func) )
-			when "del" then go redis_client.del( args[0], (err, res) => _f(redis_client, err, res, func) )
-			when "push" then go redis_client.rpush( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
-			when "set" then go redis_client.set( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
+			when "keys" then redis_client.keys( args[0], (err, res) => _f(redis_client, err, res, func) )
+			when "get" then redis_client.get( args[0], (err, res) => _f(redis_client, err, res, func) )
+			when "del" then redis_client.del( args[0], (err, res) => _f(redis_client, err, res, func) )
+			when "push" then redis_client.rpush( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
+			when "set" then redis_client.set( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
 
 	)
 
