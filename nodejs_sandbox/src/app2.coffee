@@ -115,7 +115,7 @@ this._onContainers = (func) ->
 
 					this._containers = res
 
-					this.helpers.logDebug("_onContainers 1"+res)
+					this.helpers.logDebug("_onContainers 1"+JSON.stringify(res))
 
 					# async processing can continue
 					fn(null, 'containers.list')
@@ -123,7 +123,7 @@ this._onContainers = (func) ->
 
 		# Inspect each container
 		(fn) =>
-			this.helpers.logDebug("_onContainers 2"+this._containers)
+			this.helpers.logDebug("_onContainers 2"+JSON.stringify(this._containers))
 
 			this._containers.forEach( (container,index,array) =>
 
