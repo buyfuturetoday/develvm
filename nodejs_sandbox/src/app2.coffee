@@ -66,29 +66,32 @@ this._f = (rc, err, res, func) =>
 	if (err)
 		throw err
 
-	if(func != null) func(res)
+	if(func != null)
+		func(res)
+
 	rc.quit()
 
 this._redis = (operation, args, func) ->
 	redis_client = redis.createClient()
-	redis_client.on(”connect”,
+
+	redis_client.on("connect", () =>
+
 		switch operation
-			when ”keys” do redis_client.keys( args[0], (err, res) => _f(redis_client, err, res, func) )
-			when ”get” do redis_client.get( args[0], (err, res) => _f(redis_client, err, res, func) )
-			when ”del” do redis_client.del( args[0], (err, res) => _f(redis_client, err, res, func) )
-			when ”rpush”
-				redis_client.rpush( args[0], args[1], (err, res) => 
-					_f(redis_client, err, res, func)
-				)
-			when ”set” do redis_client.set( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
-)
+			when "keys" then go redis_client.keys( args[0], (err, res) => _f(redis_client, err, res, func) )
+
+			when "get" then go redis_client.get( args[0], (err, res) => _f(redis_client, err, res, func) )
+			when "del" then go redis_client.del( args[0], (err, res) => _f(redis_client, err, res, func) )
+			when "push" then go redis_client.rpush( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
+			when "set" then go redis_client.set( args[0], args[1], (err, res) => _f(redis_client, err, res, func) )
+
+	)
 
 
 # Helper for running function on each jacc image
 # -------------------------------------------------------------
 # redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
 this._onJaccConfig = (func) ->
-	_redis( ”keys”, [”*”], (image) =>
+	_redis( "keys", ["*"], (image) =>
 		_.each(res, (image) => func(image) )
 	)
 
@@ -169,22 +172,22 @@ this.update = () ->
 	# hipache configuration: image id ->external URL & [internal URL]
 	# redis-dns configuration: dns->IP
 	this._onJaccConfig( (image) =>
-		_redis(”get”, image, (res) =>
+		_redis("get", image, (res) =>
 			# decomposing, just to make sure things are ok
 			{URL, internal_port, DNS} = res
 
 			# Set hipache config
-			_key = ”frontend:”+image
-			_redis(”del”, [_key], () =>
-				_redis(”rpush”, _key, URL, () =>
+			_key = "frontend:"+image
+			_redis("del", [_key], () =>
+				_redis("rpush", _key, URL, () =>
 					_.each( this._runningImages[ image ], (res) =>
-						_redis(”rpush”, _key, res[”IP”], null)
+						_redis("rpush", _key, res["IP"], null)
 					)
 				)
 			)
 
 			# Set redis-dns config, use the first IP in the list
-			_redis( ”set”, DNS, this._runningImages[ image ][0][”IP”] )
+			_redis( "set", DNS, this._runningImages[ image ][0]["IP"] )
 			
 		)
 	)
