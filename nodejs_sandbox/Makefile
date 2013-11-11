@@ -52,7 +52,7 @@ install link: package.json
 
 run:
 	node ./build/jacc.js status
-	node ./build/jacc.js add $DOCKER_MYLAMP app1.jacc.local app1.local
+	node ./build/jacc.js add ${DOCKER_MYLAMP} app1.jacc.local app1.local
 	node ./build/jacc.js update
 
 
