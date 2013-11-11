@@ -115,6 +115,8 @@ this._onContainers = (func) ->
 
 					this._containers = res
 
+					console.log(res)
+
 					# async processing can continue
 					fn(null, 'containers.list')
 			)
