@@ -52,6 +52,7 @@ install link: package.json
 
 run:
 	node ./build/jacc.js status
+	node ./build/jacc.js update
 
 
 .PHONY: build
