@@ -66,6 +66,9 @@ exports.create = () ->
 		rc.quit()
 
 	_redis : (operation, args, func) ->
+		if(!args instanceof Array)
+			throw new Error('_redis: argument not an array')
+
 		redis_client = this.redis.createClient()
 
 		redis_client.on("connect", () =>
@@ -174,7 +177,7 @@ exports.create = () ->
 		# hipache configuration: image id ->external URL & [internal URL]
 		# redis-dns configuration: dns->IP
 		this._onJaccConfig( (image) =>
-			this._redis("get", image, (res) =>
+			this._redis("get", [image], (res) =>
 
 				this._helpers.logDebug("_onJaccConfig - image: " + image + " res: " + JSON.parse(res))
 
@@ -184,15 +187,15 @@ exports.create = () ->
 				# Set hipache config
 				_key = "frontend:"+image
 				this._redis("del", [_key], () =>
-					this._redis("rpush", _key, URL, () =>
+					this._redis("rpush", [_key, URL], () =>
 						_.each( this._runningImages[ image ], (res) =>
-							this._redis("rpush", _key, res["IP"], null)
+							this._redis("rpush", [_key, res["IP"]], null)
 						)
 					)
 				)
 
 				# Set redis-dns config, use the first IP in the list
-				this._redis( "set", DNS, this._runningImages[ image ][0]["IP"] )
+				this._redis( "set", [DNS, this._runningImages[ image ][0]["IP"]], null )
 				
 			)
 		)
