@@ -89,7 +89,7 @@ exports['test_node_docker'] = {
                 this._helpers.logDebug('test: results of async functions - ' + results)
                 this._helpers.logDebug('test: errors (if any) - ' + err)
             )
-        this._helpers.logDebug('--------- dummay test end, async processing will continue ---------'')
+        this._helpers.logDebug('--------- dummay test end, async processing will continue ---------')
 
 }
 
