@@ -86,8 +86,7 @@ exports['test_jacc'] = {
     # This test relies on that the previous one was executed first (not ideal, should be managed with asycn etc.)
     'test_check_added': (test) =>
         # There should be X tests
-        test.expect(1)
-
+        test.expect(3)
 
         this._onJaccConfig( (image) =>
             this._redis("get", [image], (res) =>
@@ -95,11 +94,12 @@ exports['test_jacc'] = {
                 console.log('jacc config: ' +  res)
 
                 # decomposing, just to make sure things are ok
-                {URL, internal_port, _DNS} = JSON.parse(res)
+                #{URL, internal_port, _DNS} = JSON.parse(res)
 
-                test.equal(URL,  process.env.JACC_TEST_URL, 'checking URL')
-                test.equal(internal_port,  process.env.JACC_TEST_PORT, 'checking URL')
-                test.equal(_DNS,  process.env.JACC_TEST_DNS, 'checking URL')
+                test.equal(URL,             process.env.JACC_TEST_URL, 'checking URL')
+                test.equal(internal_port,   process.env.JACC_TEST_PORT, 'checking URL')
+                test.equal(_DNS,            process.env.JACC_TEST_DNS, 'checking URL')
+
                 test.done()
             )
         )
