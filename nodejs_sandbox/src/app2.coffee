@@ -12,274 +12,281 @@
 # Using Google JavaScript Style Guide when applicable - http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
 #
 
+exports.create = function() {
 
-_commands          = '[add|delete|list|update|status|help]'
-_dockerConnOptions = { socketPath: false, host: 'http://localhost', port: '4243'}
-
-
-# Includes
-# ======================================================================
-
-docker            = require('docker.io')( _dockerConnOptions )
-
-node_docker = require('node-docker').create()
-
-argv        = require('optimist')
-              .usage('Usage: $0 '+ _commands)
-              .argv
-
-async      = require('async')
-
-redis      = require('redis')
-
-_ = require('underscore')
+    return {
 
 
-# varaibles used within async needs to be defined like this
-this.helpers     				= require('helpersjs').create();
-this.helpers.logging_threshold  = this.helpers.logging.debug;
-
-this._containers = {};
+		_commands          = '[add|delete|list|update|status|help]'
+		_dockerConnOptions = { socketPath: false, host: 'http://localhost', port: '4243'}
 
 
+		# Includes
+		# ======================================================================
 
-# helpers
-# ======================================================================
+		docker            = require('docker.io')( _dockerConnOptions )
 
-this._isset = (a, message, dontexit) ->
-  if (!this.helpers.isset(a))
-    console.log(message)
-    if(dontexit != undefined && dontexit)
-      return false
-    else
-      process.exit()
-  return true
+		node_docker = require('node-docker').create()
 
+		argv        = require('optimist')
+		              .usage('Usage: $0 '+ _commands)
+		              .argv
 
-# Redis helper
-# -------------------------------------------------------------
-# operation = ”keys” | ”get” | ”del” | ”rush” | "set"
-# args = [arg1, arg2, …, argn]
-# func = function to run on the result
+		async      = require('async')
 
-this._f = (rc, err, res, func) =>
-	if (err)
-		throw err
+		redis      = require('redis')
 
-	if(func != null)
-		func(res)
-
-	rc.quit()
-
-this._redis = (operation, args, func) ->
-	redis_client = redis.createClient()
-
-	redis_client.on("connect", () =>
-
-		switch operation
-			when "keys" then redis_client.keys( args[0], (err, res) => this._f(redis_client, err, res, func) )
-			when "get" then redis_client.get( args[0], (err, res) => this._f(redis_client, err, res, func) )
-			when "del" then redis_client.del( args[0], (err, res) => this._f(redis_client, err, res, func) )
-			when "push" then redis_client.rpush( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
-			when "set" then redis_client.set( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
-			when "smembers" then redis_client.smembers( args[0], (err, res) => this._f(redis_client, err, res, func) )
-
-	)
+		_ = require('underscore')
 
 
-# Helper for running function on each jacc image
-# -------------------------------------------------------------
-# redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
-this._onJaccConfig = (func) ->
-	this._redis( "smembers", ["images"], (res) =>
-		_.each(res, (image) => func(image) )
-	)
+		# varaibles used within async needs to be defined like this
+		this.helpers     				= require('helpersjs').create();
+		this.helpers.logging_threshold  = this.helpers.logging.debug;
+
+		this._containers = {};
 
 
 
-# Run function with runing containers as input
-# ----------------------------------------------------------------------
+		# helpers
+		# ======================================================================
 
-this._onContainers = (func) ->
+		this._isset = (a, message, dontexit) ->
+		  if (!this.helpers.isset(a))
+		    console.log(message)
+		    if(dontexit != undefined && dontexit)
+		      return false
+		    else
+		      process.exit()
+		  return true
 
-	# all options listed in the REST documentation for Docker are supported.
-	_options = {}
 
-	async.series([
-		# List the running containers
-		(fn) =>
-			docker.containers.list(
-				_options, (err, res) =>
-					if (err)
-						throw err
+		# Redis helper
+		# -------------------------------------------------------------
+		# operation = ”keys” | ”get” | ”del” | ”rush” | "set"
+		# args = [arg1, arg2, …, argn]
+		# func = function to run on the result
 
-					this._containers = res
+		this._f = (rc, err, res, func) =>
+			if (err)
+				throw err
 
-					this.helpers.logDebug("_onContainers 1"+JSON.stringify(res))
+			if(func != null)
+				func(res)
+
+			rc.quit()
+
+		this._redis = (operation, args, func) ->
+			redis_client = redis.createClient()
+
+			redis_client.on("connect", () =>
+
+				switch operation
+					when "keys" then redis_client.keys( args[0], (err, res) => this._f(redis_client, err, res, func) )
+					when "get" then redis_client.get( args[0], (err, res) => this._f(redis_client, err, res, func) )
+					when "del" then redis_client.del( args[0], (err, res) => this._f(redis_client, err, res, func) )
+					when "push" then redis_client.rpush( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
+					when "set" then redis_client.set( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
+					when "smembers" then redis_client.smembers( args[0], (err, res) => this._f(redis_client, err, res, func) )
+
+			)
+
+
+		# Helper for running function on each jacc image
+		# -------------------------------------------------------------
+		# redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
+		this._onJaccConfig = (func) ->
+			this._redis( "smembers", ["images"], (res) =>
+				_.each(res, (image) => func(image) )
+			)
+
+
+
+		# Run function with runing containers as input
+		# ----------------------------------------------------------------------
+
+		this._onContainers = (func) ->
+
+			# all options listed in the REST documentation for Docker are supported.
+			_options = {}
+
+			async.series([
+				# List the running containers
+				(fn) =>
+					docker.containers.list(
+						_options, (err, res) =>
+							if (err)
+								throw err
+
+							this._containers = res
+
+							this.helpers.logDebug("_onContainers 1"+JSON.stringify(res))
+
+							# async processing can continue
+							fn(null, 'containers.list')
+					)
+
+				# Inspect each container
+				(fn) =>
+					this.helpers.logDebug("_onContainers 2"+JSON.stringify(this._containers))
+
+					this._containers.forEach( (container,index,array) =>
+
+						# all options listed in the REST documentation for Docker are supported.
+						options = {}
+
+						docker.containers.inspect(container.Id, options, (err, res) =>
+							if (err)
+								throw err
+
+							func(res)
+						)
+					)
 
 					# async processing can continue
-					fn(null, 'containers.list')
+					fn(null, 'containers.inspect')
+
+				]
+
+				# Manage errors
+				(err, results) =>
+					this.helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
 			)
 
-		# Inspect each container
-		(fn) =>
-			this.helpers.logDebug("_onContainers 2"+JSON.stringify(this._containers))
 
-			this._containers.forEach( (container,index,array) =>
+		# Jacc Functions
+		# ======================================================================
 
-				# all options listed in the REST documentation for Docker are supported.
-				options = {}
 
-				docker.containers.inspect(container.Id, options, (err, res) =>
-					if (err)
-						throw err
+		# Update redis-dns and hipache configuration
+		# ----------------------------------------------------------------------
+		# NOTE: Only one container per image is currently supported
 
-					func(res)
-				)
+		this.update = () ->
+
+			# Build list with running images
+			# runningImages = image id->[{container id, IP}]
+			this._runningImages = {}
+			this._onContainers( (res) =>
+
+				console.log(res)
+
+				# create empty list if this image isn’t running
+				if( this._runningImages[ res.Image[0..12] ] == undefined)
+					this._runningImages[ res.Image[0..12] ] = []
+
+				this._runningImages[ res.Image[0..12] ].push( { ID: res.ID[0..12], IP: res.NetworkSettings.IPAddress } )
 			)
 
-			# async processing can continue
-			fn(null, 'containers.inspect')
+			# Iterate over Jacc configuration and generate hipache and redis-dns configuration
+			# hipache configuration: image id ->external URL & [internal URL]
+			# redis-dns configuration: dns->IP
+			this._onJaccConfig( (image) =>
+				this._redis("get", image, (res) =>
 
-		]
+					this.helpers.logDebug("_onJaccConfig - image: " + image + " res: " + JSON.parse(res))
 
-		# Manage errors
-		(err, results) =>
-			this.helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
-	)
+					# decomposing, just to make sure things are ok
+					{URL, internal_port, DNS} = JSON.parse(res)
 
-
-# Jacc Functions
-# ======================================================================
-
-
-# Update redis-dns and hipache configuration
-# ----------------------------------------------------------------------
-# NOTE: Only one container per image is currently supported
-
-this.update = () ->
-
-	# Build list with running images
-	# runningImages = image id->[{container id, IP}]
-	this._runningImages = {}
-	this._onContainers( (res) =>
-
-		console.log(res)
-
-		# create empty list if this image isn’t running
-		if( this._runningImages[ res.Image[0..12] ] == undefined)
-			this._runningImages[ res.Image[0..12] ] = []
-
-		this._runningImages[ res.Image[0..12] ].push( { ID: res.ID[0..12], IP: res.NetworkSettings.IPAddress } )
-	)
-
-	# Iterate over Jacc configuration and generate hipache and redis-dns configuration
-	# hipache configuration: image id ->external URL & [internal URL]
-	# redis-dns configuration: dns->IP
-	this._onJaccConfig( (image) =>
-		this._redis("get", image, (res) =>
-
-			this.helpers.logDebug("_onJaccConfig - image: " + image + " res: " + JSON.parse(res))
-
-			# decomposing, just to make sure things are ok
-			{URL, internal_port, DNS} = JSON.parse(res)
-
-			# Set hipache config
-			_key = "frontend:"+image
-			this._redis("del", [_key], () =>
-				this._redis("rpush", _key, URL, () =>
-					_.each( this._runningImages[ image ], (res) =>
-						this._redis("rpush", _key, res["IP"], null)
+					# Set hipache config
+					_key = "frontend:"+image
+					this._redis("del", [_key], () =>
+						this._redis("rpush", _key, URL, () =>
+							_.each( this._runningImages[ image ], (res) =>
+								this._redis("rpush", _key, res["IP"], null)
+							)
+						)
 					)
+
+					# Set redis-dns config, use the first IP in the list
+					this._redis( "set", DNS, this._runningImages[ image ][0]["IP"] )
+					
 				)
 			)
 
-			# Set redis-dns config, use the first IP in the list
-			this._redis( "set", DNS, this._runningImages[ image ][0]["IP"] )
-			
-		)
-	)
+
+
+		# Show running containers
+		# ----------------------------------------------------------------------
+
+		this.status = () =>
+			console.log("Jacc: List of running containers")
+
+			this._onContainers( (res) =>
+					console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
+			)
 
 
 
-# Show running containers
-# ----------------------------------------------------------------------
+		# Add image to Jacc configuration
+		# ----------------------------------------------------------------------
+		# 
+		# TODO: Should check that the image exists (do an inspect)
 
-this.status = () =>
-	console.log("Jacc: List of running containers")
+		this.add = (image, URL, dns_name) ->
+			console.log("Jacc: adding " + image)
 
-	this._onContainers( (res) =>
-			console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
-	)
+			redis_client = redis.createClient()
+			redis_client.on("connect", () =>
+				redis_client.sadd("images", image, (err, res) =>
+					redis_client.quit()
+				)	
+			)
 
-
-
-# Add image to Jacc configuration
-# ----------------------------------------------------------------------
-# 
-# TODO: Should check that the image exists (do an inspect)
-
-this.add = (image, URL, dns_name) ->
-	console.log("Jacc: adding " + image)
-
-	redis_client = redis.createClient()
-	redis_client.on("connect", () =>
-		redis_client.sadd("images", image, (err, res) =>
-			redis_client.quit()
-		)	
-	)
-
-	redis_client2 = redis.createClient()
-	redis_client2.on("connect", () =>
-		redis_client2.set(image, JSON.stringify({URL: URL; DNS: dns_name}), (err, res) =>
-			redis_client2.quit()
-		)	
-	)
+			redis_client2 = redis.createClient()
+			redis_client2.on("connect", () =>
+				redis_client2.set(image, JSON.stringify({URL: URL; DNS: dns_name}), (err, res) =>
+					redis_client2.quit()
+				)	
+			)
 
 
-# Delete image from Jacc configuration
-# ----------------------------------------------------------------------
-# 
-# TODO: Should check that the image exists (do an inspect)
+		# Delete image from Jacc configuration
+		# ----------------------------------------------------------------------
+		# 
+		# TODO: Should check that the image exists (do an inspect)
 
-this.delete = (image) ->
-	console.log("Jacc: deleting " + image)
-	redis_client = redis.createClient()
+		this.delete = (image) ->
+			console.log("Jacc: deleting " + image)
+			redis_client = redis.createClient()
 
-	redis_client.on("connect", () =>
-		redis_client.srem("images", image, (err, res) =>
-			console.log("result - " + res)
-			redis_client.quit()
-		)	
-	)
+			redis_client.on("connect", () =>
+				redis_client.srem("images", image, (err, res) =>
+					console.log("result - " + res)
+					redis_client.quit()
+				)	
+			)
 
 
-# main
-# ======================================================================
+		# main
+		# ======================================================================
 
-this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands)
+		this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands)
 
-switch argv._[0]
-	when "add" then this.add(argv._[1], argv._[2], argv._[3])
+		switch argv._[0]
+			when "add" then this.add(argv._[1], argv._[2], argv._[3])
 
-	when "delete" then this.delete(argv._[1])
+			when "delete" then this.delete(argv._[1])
 
-	when "update" then this.update()
+			when "update" then this.update()
 
-	when "status" then this.status()
+			when "status" then this.status()
 
-	when "list" then this.list()
+			when "list" then this.list()
 
-	when "help"
-		console.log('usage: jacc ' + _commands)
-		console.log('jacc add image URL dns-name')
-		console.log('jacc delete image')
-		console.log('jacc update')
-		console.log('jacc list')
-		console.log('jacc status')
-		console.log('help: show this message')
+			when "help"
+				console.log('usage: jacc ' + _commands)
+				console.log('jacc add image URL dns-name')
+				console.log('jacc delete image')
+				console.log('jacc update')
+				console.log('jacc list')
+				console.log('jacc status')
+				console.log('help: show this message')
 
-	else console.log('No such command: ' + argv._[0])
+			else console.log('No such command: ' + argv._[0])
 
+	}
+
+}(typeof exports == 'undefined' ? this['jacc']={} : exports));
 
 
