@@ -43,6 +43,11 @@ module.exports = function(grunt) {
         files: {
           './build/jacc.js': ['./src/app2.coffee']
         }
+      },
+      compile2: {
+        files: {
+          './test/testCoffee.js': ['./test/*.coffee']
+        }
       }
     }
   });
