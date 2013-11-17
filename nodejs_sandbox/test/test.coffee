@@ -71,7 +71,7 @@ exports['test_jacc'] = {
 
     'test_add': (test) =>
         # There should be X tests
-        test.expect(1)
+        test.expect(4)
 
         test.equal(true,  true, 'jacc add')
 
@@ -79,7 +79,24 @@ exports['test_jacc'] = {
         this._j.add(process.env.JACC_TEST_CONTAINERID,
                     process.env.JACC_TEST_URL,
                     process.env.JACC_TEST_PORT,
-                    process.env.JACC_TEST_DNS)
+                    process.env.JACC_TEST_DNS,
+
+            this._j._onJaccConfig( (image) =>
+                this._j._redis("get", [image], (res) =>
+
+                    console.log('jacc config: ' +  res)
+
+                    # decomposing, just to make sure things are ok
+                    {_URL, _internal_port, _DNS} = JSON.parse(res)
+
+                    test.equal(_URL,             process.env.JACC_TEST_URL, 'checking URL')
+                    test.equal(_internal_port,   process.env.JACC_TEST_PORT, 'checking port')
+                    test.equal(_DNS,             process.env.JACC_TEST_DNS, 'checking DNS')
+
+                    test.done()
+                )
+            )
+        )
 
         test.done()
 
