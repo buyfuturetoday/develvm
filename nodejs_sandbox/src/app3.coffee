@@ -88,7 +88,7 @@ exports.create = () ->
 	# redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
 	_onJaccConfig : (func) ->
 		this._redis( "smembers", ["images"], (res) =>
-			_.each(res, (image) => func(image) )
+			this._.each(res, (image) => func(image) )
 		)
 
 
@@ -187,7 +187,7 @@ exports.create = () ->
 				_key = "frontend:"+image
 				this._redis("del", [_key], () =>
 					this._redis("rpush", [_key, URL], () =>
-						_.each( this._runningImages[ image ], (res) =>
+						this._.each( this._runningImages[ image ], (res) =>
 							this._redis("rpush", [_key, res["IP"]], null)
 						)
 					)
