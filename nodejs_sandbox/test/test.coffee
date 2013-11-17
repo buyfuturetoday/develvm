@@ -20,6 +20,7 @@ exports['test_node_docker'] = {
         this._helpers.logDebug('--------- testing testing start ---------')
 
         this._helpers.logDebug('--------- testing testing end ---------')
+        test.done()
 
 
 ###
