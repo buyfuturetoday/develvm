@@ -9,7 +9,6 @@ exports['test_jacc'] = {
     setUp: (done) =>
         # The functions to test
         this._j = require('../build/jacc.js').create()
-#        this._node_docker = require('node-docker').create()
 
         # setup here
         this._async      = require('async')
@@ -83,7 +82,7 @@ exports['test_jacc'] = {
                         this._j._onJaccConfig( (image) =>
                             this._j._redis("get", [image], (res) =>
 
-                                console.log('jacc config: ' +  res)
+                                console.log('jacc config: ' +  res + ' image: ' + image)
 
                                 # decomposing, just to make sure things are ok
                                 {_URL, _internal_port, _DNS} = JSON.parse(res)
@@ -105,9 +104,7 @@ exports['test_jacc'] = {
         test.equal(true,  true, 'jacc update')
 
         # _j.update is async so test.done will likely be executed too early
-        this._j.update(process.env.JACC_TEST_CONTAINERID,
-                    process.env.JACC_TEST_URL,
-                    process.env.JACC_TEST_DNS)
+        this._j.update()
 
         test.done()
 
