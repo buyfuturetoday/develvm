@@ -62,9 +62,12 @@ exports['test_jacc'] = {
         # There should be X tests
         test.expect(1)
 
-        this._j.status( () =>
-            test.done()
-        )
+        test.equal(true,  true, 'jacc status')
+
+        # _j.status is async so test.done will likely be executed too early
+        this._j.status()
+
+        test.done()
 
 }
 

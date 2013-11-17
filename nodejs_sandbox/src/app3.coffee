@@ -229,7 +229,7 @@ exports.create = () ->
 	# Show running containers
 	# ----------------------------------------------------------------------
 
-	status : (fn) ->
+	status : () ->
 		console.log("Jacc: List of running containers")
 
 		this._onContainers( (res) =>
