@@ -114,7 +114,7 @@ exports.create = () ->
 
 						this._containers = res
 
-						this._helpers.logDebug("_onContainers 1"+JSON.stringify(res))
+#						this._helpers.logDebug("_onContainers 1"+JSON.stringify(res))
 
 						# async processing can continue
 						fn(null, 'containers.list')
@@ -122,7 +122,7 @@ exports.create = () ->
 
 			# Inspect each container
 			(fn) =>
-				this._helpers.logDebug("_onContainers 2"+JSON.stringify(this._containers))
+#				this._helpers.logDebug("_onContainers 2"+JSON.stringify(this._containers))
 
 				this._containers.forEach( (container,index,array) =>
 
@@ -144,7 +144,7 @@ exports.create = () ->
 
 			# Manage errors
 			(err, results) =>
-				this._helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
+#				this._helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
 		)
 
 
@@ -178,7 +178,7 @@ exports.create = () ->
 		this._onJaccConfig( (image) =>
 			this._redis("get", [image], (res) =>
 
-				this._helpers.logDebug("_onJaccConfig - image: " + image + " res: " + JSON.parse(res))
+#				this._helpers.logDebug("_onJaccConfig - image: " + image + " res: " + JSON.parse(res))
 
 				# decomposing, just to make sure things are ok
 				{URL, internal_port, DNS} = JSON.parse(res)
