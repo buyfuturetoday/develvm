@@ -88,7 +88,7 @@ exports['test_jacc'] = {
         # There should be X tests
         test.expect(3)
 
-        this._onJaccConfig( (image) =>
+        this._j._onJaccConfig( (image) =>
             this._redis("get", [image], (res) =>
 
                 console.log('jacc config: ' +  res)
