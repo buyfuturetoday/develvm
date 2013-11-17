@@ -10,7 +10,7 @@
 BIN = ./node_modules/.bin
 
 SRC = $(wildcard src/*.js)
-BUILD = $(SRC:src/%.js=build)
+BUILD = $(SRC:src/%.coffee=build)
 
 DOCSRC = $(wildcard *.js)
 DOC = $(DOCSRC:%.js=docs/%.html)
@@ -23,14 +23,14 @@ build:
 	grunt
 
 # Not a very informative commit
-push: $(BUILD)
+push:
 	git commit -am "Fix"
 	git push
 	git push --tags
 
 # List all tags
 # Add tags like this: git tag -a "list_containers" -m "Implemented list of running containers"
-git_tags:
+tags:
 	git tag -l
 
 doc: $(DOC)
