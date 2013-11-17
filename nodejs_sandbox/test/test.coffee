@@ -63,9 +63,10 @@ exports['test_node_docker'] = {
         # There should be X tests
         test.expect(1)
 
-        this._j.status()
+        this._j.status( ()=>
+            test.done()
+        )
 
-        test.done()
 
 
     'dummy_test': (test) =>

@@ -204,11 +204,17 @@ exports.create = () ->
 	# Show running containers
 	# ----------------------------------------------------------------------
 
-	status : () ->
+	status : (fn) ->
 		console.log("Jacc: List of running containers")
 
 		this._onContainers( (res) =>
-				console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
+				console.log("container:" + res.ID[0..12] 
+										 + " image:" 
+										 + res.Image[0..12] 
+										 + " IP:" 
+										 + res.NetworkSettings.IPAddress)
+
+				fn() if(fn?)
 		)
 
 
