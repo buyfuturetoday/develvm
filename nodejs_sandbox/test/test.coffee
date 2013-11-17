@@ -78,6 +78,7 @@ exports['test_jacc'] = {
         # _j.add is async so test.done will likely be executed too early
         this._j.add(process.env.JACC_TEST_CONTAINERID,
                     process.env.JACC_TEST_URL,
+                    process.env.JACC_TEST_PORT,
                     process.env.JACC_TEST_DNS)
 
         test.done()
