@@ -18,7 +18,7 @@ DOC = $(DOCSRC:%.js=docs/%.html)
 all: install build test run
 
 #build:	./src/build.js
-build: $(BUILD)
+build:
 	git pull
 	grunt
 

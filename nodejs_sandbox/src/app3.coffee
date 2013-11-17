@@ -51,7 +51,7 @@ exports.create = () ->
 
 	# Redis helper
 	# -------------------------------------------------------------
-	# operation = ”keys” | ”get” | ”del” | ”rush” | "set"
+	# operation = ”keys” | ”get” | ”del” | ”push” | "set"
 	# args = [arg1, arg2, …, argn]
 	# func = function to run on the result
 

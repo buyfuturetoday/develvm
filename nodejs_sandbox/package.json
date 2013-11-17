@@ -13,6 +13,7 @@
   },
   "author": "Jonas Colmsjö <jonas@gizur.com>",
   "main": "./build/build.js",
+  "bin": "./jacc.js",
   "dependencies": {
     "hipache": "0.2.4",
     "redis-dns": "0.0.1",
