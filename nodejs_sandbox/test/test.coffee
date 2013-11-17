@@ -2,6 +2,10 @@
 #-------------------------------------------------------------------------------------------------
 # Basic tests that just calls the functions to make sure that execute ok
 
+
+# The functions to test
+require('../build/jacc.js')
+
 exports['test_node_docker'] = {
 
     setUp: (done) =>
@@ -19,8 +23,43 @@ exports['test_node_docker'] = {
     'test1': (test) =>
         this._helpers.logDebug('--------- testing testing start ---------')
 
-        this._helpers.logDebug('--------- testing testing end ---------')
-        test.done()
+        # There should be X tests
+        test.expect(1)
+
+        REDIS_KEY = "unit_test:key"
+        REDIS_VALUE = "value"
+
+        this._async.series(
+            [
+                # Dummy test
+                (fn) =>
+                    # Remove old data
+                    this._redis("del", [REDIS_KEY], () =>
+                        fn(null, '_redis.del')
+                    )
+
+                (fn) => 
+                    this._redis( "set", [REDIS_KEY, REDIS_VALUE], () =>
+                        fn(null, '_redis.set')
+                    )
+
+                (fn) => 
+                    this._redis( "get", [REDIS_KEY], (val) =>
+                        test.equal(val,  REDIS_VALUE, 'redis del, set and get')
+                        fn(null, '_redis.get')
+                )
+
+                (fn) => 
+                    # All tests performed
+                    test.done()
+                    fn(null, 'test.done')
+            ],
+            (err, results) =>
+                this._helpers.logDebug('test: results of async functions - ' + results)
+                this._helpers.logDebug('test: errors (if any) - ' + err)
+            )
+
+        this._helpers.logDebug('--------- testing testing end, async proccesing will continue ---------')
 
 
 

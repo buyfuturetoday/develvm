@@ -25,6 +25,7 @@ build: $(BUILD)
 # Not a very informative commit
 push: $(BUILD)
 	git commit -am "Fix"
+	git push
 	git push --tags
 
 # List all tags
