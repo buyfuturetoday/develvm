@@ -51,8 +51,8 @@ clean:
 install link: package.json
 	@npm $@
 
-run:
-	node -e "e=require('./build/jacc.js').create();e.main()" status
+run: build
+	node -e "e=require('./build/jacc.js').create();e.main()" null status
 	node ./build/jacc.js status
 	node ./build/jacc.js add ${DOCKER_MYLAMP} app1.jacc.local app1.local
 	node ./build/jacc.js update

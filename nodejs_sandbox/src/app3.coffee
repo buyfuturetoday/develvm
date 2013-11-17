@@ -34,7 +34,6 @@ exports.create = () ->
 
 	# varaibles used within async needs to be defined like this
 	_helpers     				: require('helpersjs').create()
-	#this._helpers.logging_threshold  : this._helpers.logging.debug
 
 
 	# helpers
@@ -102,10 +101,10 @@ exports.create = () ->
 		# all options listed in the REST documentation for Docker are supported.
 		_options 			= {}
 		this._containers 	= {};
-		docker 				= require('docker.io')( _dockerConnOptions )
+		docker 				= require('docker.io')( this._dockerConnOptions )
 
 
-		async.series([
+		this.async.series([
 			# List the running containers
 			(fn) =>
 				docker.containers.list(
@@ -205,7 +204,7 @@ exports.create = () ->
 	# Show running containers
 	# ----------------------------------------------------------------------
 
-	status : () =>
+	status : () ->
 		console.log("Jacc: List of running containers")
 
 		this._onContainers( (res) =>
@@ -259,11 +258,13 @@ exports.create = () ->
 
 	main : () ->
 
+		this._helpers.logging_threshold = this._helpers.logging.debug
+
 		argv        = require('optimist')
-		              .usage('Usage: $0 '+ _commands)
+		              .usage('Usage: $0 '+ this._commands)
 		              .argv
 
-		this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands)
+		this._isset(argv._ , 'jacc requires a command - node app.js ' + this._commands)
 
 		switch argv._[0]
 			when "add" then this.add(argv._[1], argv._[2], argv._[3])
