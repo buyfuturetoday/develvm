@@ -96,7 +96,7 @@ exports.create = () ->
 	# Run function with runing containers as input
 	# ----------------------------------------------------------------------
 
-	_onContainers : (func) ->
+	_onContainers : (func, endFunc) ->
 
 		# all options listed in the REST documentation for Docker are supported.
 		_options 			= {}
@@ -118,6 +118,8 @@ exports.create = () ->
 					func(res)
 				)
 			)
+
+			endFunc() if endFunc?
 		)
 
 
@@ -178,10 +180,10 @@ exports.create = () ->
 	# Show running containers
 	# ----------------------------------------------------------------------
 
-	status : () ->
+	status : (fn) ->
 		console.log("Jacc: List of running containers")
 
-		this._onContainers( (res) =>
+		this._onContainers( (res, fn) =>
 				console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 
 		)
