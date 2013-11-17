@@ -91,8 +91,10 @@ exports['test_jacc'] = {
 
         this._onJaccConfig( (image) =>
             this._redis("get", [image], (res) =>
-                # decomposing, just to make sure things are ok
+
                 console.log('jacc config: ' +  res)
+
+                # decomposing, just to make sure things are ok
                 {URL, internal_port, _DNS} = JSON.parse(res)
 
                 test.equal(URL,  process.env.JACC_TEST_URL, 'checking URL')
