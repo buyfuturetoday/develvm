@@ -41,6 +41,7 @@ docs/%.html: %.js
 # Removed dependency on build since it takes too long, do make build manually when needed
 # test: build
 test:	build
+	source test/setup.sh
 	grunt nodeunit
 
 clean:
