@@ -73,10 +73,9 @@ exports['test_jacc'] = {
         # There should be X tests
         test.expect(1)
 
-        test.equal(true,  true, 'jacc status')
+        test.equal(true,  true, 'jacc add')
 
         # _j.status is async so test.done will likely be executed too early
-        process.env.
         this._j.add(process.env.JACC_TEST_CONTAINERID,
                     process.env.JACC_TEST_URL,
                     process.env.JACC_TEST_DNS)
