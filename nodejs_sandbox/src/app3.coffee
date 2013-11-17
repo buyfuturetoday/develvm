@@ -103,6 +103,31 @@ exports.create = () ->
 		this._containers 	= {};
 		docker 				= require('docker.io')( this._dockerConnOptions )
 
+		# list the running containers
+		docker.containers.list( _options, (err, res) =>
+			if (err)
+				throw err
+
+			# inspect each running container
+			this._.each(res, (container) => 
+				_options = {}
+				docker.containers.inspect(container.Id, _options, (err, res) =>
+					if (err)
+						throw err
+
+					func(res)
+				)
+			)
+		)
+
+
+	_onContainers2 : (func) ->
+
+		# all options listed in the REST documentation for Docker are supported.
+		_options 			= {}
+		this._containers 	= {};
+		docker 				= require('docker.io')( this._dockerConnOptions )
+
 
 		this.async.series([
 			# List the running containers
@@ -210,8 +235,6 @@ exports.create = () ->
 		this._onContainers( (res) =>
 				console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 
-				console.log("fn?"+ fn?)
-				fn() if(fn?)
 		)
 
 
