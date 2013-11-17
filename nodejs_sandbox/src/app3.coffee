@@ -185,7 +185,7 @@ exports.create = () ->
 
 		this._onContainers( 
 			(res) =>
-				console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress),
+				console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 			fn
 
 		)
