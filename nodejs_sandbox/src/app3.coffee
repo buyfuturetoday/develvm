@@ -201,7 +201,7 @@ exports.create = () ->
 			redis_client.sadd("images", image, (err, res) =>
 				redis_client.set(image, JSON.stringify({URL: URL; internal_port: internal_port; DNS: dns_name}), (err, res) =>
 					redis_client.quit()
-					fn() if fn?
+#					fn() if fn?
 				)
 			)	
 		)
