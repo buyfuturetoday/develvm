@@ -9,7 +9,7 @@ exports['test_node_docker'] = {
     setUp: (done) =>
         # The functions to test
         this._j = require('../build/jacc.js').create()
-        this._node_docker = require('node-docker').create()
+#        this._node_docker = require('node-docker').create()
 
         # setup here
         this._async      = require('async')
@@ -57,6 +57,15 @@ exports['test_node_docker'] = {
                 this._helpers.logDebug('test: results of async functions - ' + results)
                 this._helpers.logDebug('test: errors (if any) - ' + err)
             )
+
+
+    'test_status': (test) =>
+        # There should be X tests
+        test.expect(1)
+
+        this._j.status()
+
+        test.done()
 
 
     'dummy_test': (test) =>

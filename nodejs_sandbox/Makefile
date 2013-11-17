@@ -52,7 +52,7 @@ install link: package.json
 	@npm $@
 
 run: build
-	node -e "e=require('./build/jacc.js').create();e.main()" null status
+#	node -e "e=require('./build/jacc.js').create();e.main()" null status
 	node -e "e=require('./build/jacc.js').create();e.main()" null add ${DOCKER_MYLAMP} app1.jacc.local app1.local
 	node -e "e=require('./build/jacc.js').create();e.main()" null update
 
