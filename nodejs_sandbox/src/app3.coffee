@@ -221,7 +221,7 @@ exports.create = () ->
 	add : (image, URL, dns_name) ->
 		console.log("Jacc: adding " + image)
 
-		redis_client = redis.createClient()
+		redis_client = this.redis.createClient()
 		redis_client.on("connect", () =>
 			redis_client.sadd("images", image, (err, res) =>
 				redis_client.quit()
@@ -243,7 +243,7 @@ exports.create = () ->
 
 	delete : (image) ->
 		console.log("Jacc: deleting " + image)
-		redis_client = redis.createClient()
+		redis_client = this.redis.createClient()
 
 		redis_client.on("connect", () =>
 			redis_client.srem("images", image, (err, res) =>
