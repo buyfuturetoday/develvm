@@ -54,8 +54,7 @@ exports['test_node_docker'] = {
                     fn(null, 'test.done')
             ],
             (err, results) =>
-                this._helpers.logDebug('test: results of async functions - ' + results)
-                this._helpers.logDebug('test: errors (if any) - ' + err)
+                this._helpers.logDebug('test: results of async functions - ' + results + ' errors (if any) - ' + err)
             )
 
 
@@ -89,8 +88,7 @@ exports['test_node_docker'] = {
                     fn(null, 'test.done')
             ],
             (err, results) =>
-                this._helpers.logDebug('test: results of async functions - ' + results)
-                this._helpers.logDebug('test: errors (if any) - ' + err)
+                this._helpers.logDebug('test: results of async functions - ' + results + ' errors (if any) - ' + err)
             )
 
 }
