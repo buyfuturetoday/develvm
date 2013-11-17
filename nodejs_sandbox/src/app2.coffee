@@ -14,7 +14,7 @@
 
 exports.create = () ->
 
-    return {
+    {
 
 
 		_commands          = '[add|delete|list|update|status|help]'
