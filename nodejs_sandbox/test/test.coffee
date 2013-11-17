@@ -4,7 +4,7 @@
 
 
 
-exports['test_node_docker'] = {
+exports['test_jacc'] = {
 
     setUp: (done) =>
         # The functions to test
@@ -65,31 +65,6 @@ exports['test_node_docker'] = {
         this._j.status( () =>
             test.done()
         )
-
-
-
-    'dummy_test': (test) =>
-        # There should be X tests
-        test.expect(1)
-
-        _imageID       = "test-imageID"
-        _name          = "test-name"
-        _containerID   = "test-containerID"
-
-        this._async.series(
-            [
-                # Dummy test
-                (fn) =>
-                    test.equal(true,  this._helpers.isEmptyObject({}), 'isEmptyObject')
-                    fn(null, 'isEmptyObject')
-                (fn) => 
-                    # All tests performed
-                    test.done()
-                    fn(null, 'test.done')
-            ],
-            (err, results) =>
-                this._helpers.logDebug('test: results of async functions - ' + results + ' errors (if any) - ' + err)
-            )
 
 }
 
