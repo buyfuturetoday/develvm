@@ -121,57 +121,6 @@ exports.create = () ->
 		)
 
 
-	_onContainers2 : (func) ->
-
-		# all options listed in the REST documentation for Docker are supported.
-		_options 			= {}
-		this._containers 	= {};
-		docker 				= require('docker.io')( this._dockerConnOptions )
-
-
-		this.async.series([
-			# List the running containers
-			(fn) =>
-				docker.containers.list(
-					_options, (err, res) =>
-						if (err)
-							throw err
-
-						this._containers = res
-
-#						this._helpers.logDebug("_onContainers 1"+JSON.stringify(res))
-
-						# async processing can continue
-						fn(null, 'containers.list')
-				)
-
-			# Inspect each container
-			(fn) =>
-#				this._helpers.logDebug("_onContainers 2"+JSON.stringify(this._containers))
-
-				this._containers.forEach( (container,index,array) =>
-
-					# all options listed in the REST documentation for Docker are supported.
-					options = {}
-
-					docker.containers.inspect(container.Id, options, (err, res) =>
-						if (err)
-							throw err
-
-						func(res)
-					)
-				)
-
-				# async processing can continue
-				fn(null, 'containers.inspect')
-
-			]
-
-			# Manage errors
-			(err, results) =>
-#				this._helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
-		)
-
 
 	# Jacc Functions
 	# ======================================================================
@@ -244,7 +193,7 @@ exports.create = () ->
 	# 
 	# TODO: Should check that the image exists (do an inspect)
 
-	add : (image, URL, dns_name) ->
+	add : (image, URL, internal_port, dns_name) ->
 		console.log("Jacc: adding " + image)
 
 		redis_client = this.redis.createClient()
@@ -256,7 +205,7 @@ exports.create = () ->
 
 		redis_client2 = this.redis.createClient()
 		redis_client2.on("connect", () =>
-			redis_client2.set(image, JSON.stringify({URL: URL; DNS: dns_name}), (err, res) =>
+			redis_client2.set(image, JSON.stringify({URL: URL; internal_port: internal_port; DNS: dns_name}), (err, res) =>
 				redis_client2.quit()
 			)	
 		)
@@ -293,7 +242,7 @@ exports.create = () ->
 		this._isset(argv._ , 'jacc requires a command - node app.js ' + this._commands)
 
 		switch argv._[0]
-			when "add" then this.add(argv._[1], argv._[2], argv._[3])
+			when "add" then this.add(argv._[1], argv._[2], argv._[3], argv._[4])
 
 			when "delete" then this.delete(argv._[1])
 
