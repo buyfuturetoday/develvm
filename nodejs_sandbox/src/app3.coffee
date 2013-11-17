@@ -23,33 +23,25 @@ exports.create = () ->
 	# Includes
 	# ======================================================================
 
-	docker            : require('docker.io')( _dockerConnOptions )
-
 	node_docker : require('node-docker').create()
-
-	argv        : require('optimist')
-	              .usage('Usage: $0 '+ _commands)
-	              .argv
 
 	async      : require('async')
 
 	redis      : require('redis')
 
-	_ : require('underscore')
+	_ 			: require('underscore')
 
 
 	# varaibles used within async needs to be defined like this
-	this.helpers     				: require('helpersjs').create();
-	this.helpers.logging_threshold  : this.helpers.logging.debug;
-
-
+	_helpers     				: require('helpersjs').create()
+	#this._helpers.logging_threshold  : this._helpers.logging.debug
 
 
 	# helpers
 	# ======================================================================
 
-	this._isset : (a, message, dontexit) ->
-	  if (!this.helpers.isset(a))
+	_isset : (a, message, dontexit) ->
+	  if (!this._helpers.isset(a))
 	    console.log(message)
 	    if(dontexit != undefined && dontexit)
 	      return false
@@ -64,7 +56,7 @@ exports.create = () ->
 	# args = [arg1, arg2, …, argn]
 	# func = function to run on the result
 
-	this._f : (rc, err, res, func) =>
+	_f : (rc, err, res, func) =>
 		if (err)
 			throw err
 
@@ -73,8 +65,8 @@ exports.create = () ->
 
 		rc.quit()
 
-	this._redis : (operation, args, func) ->
-		redis_client = redis.createClient()
+	_redis : (operation, args, func) ->
+		redis_client = this.redis.createClient()
 
 		redis_client.on("connect", () =>
 
@@ -92,7 +84,7 @@ exports.create = () ->
 	# Helper for running function on each jacc image
 	# -------------------------------------------------------------
 	# redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
-	this._onJaccConfig : (func) ->
+	_onJaccConfig : (func) ->
 		this._redis( "smembers", ["images"], (res) =>
 			_.each(res, (image) => func(image) )
 		)
@@ -102,11 +94,13 @@ exports.create = () ->
 	# Run function with runing containers as input
 	# ----------------------------------------------------------------------
 
-	this._onContainers : (func) ->
+	_onContainers : (func) ->
 
 		# all options listed in the REST documentation for Docker are supported.
-		_options = {}
-		this._containers = {};
+		_options 			= {}
+		this._containers 	= {};
+		docker 				= require('docker.io')( _dockerConnOptions )
+
 
 		async.series([
 			# List the running containers
@@ -118,7 +112,7 @@ exports.create = () ->
 
 						this._containers = res
 
-						this.helpers.logDebug("_onContainers 1"+JSON.stringify(res))
+						this._helpers.logDebug("_onContainers 1"+JSON.stringify(res))
 
 						# async processing can continue
 						fn(null, 'containers.list')
@@ -126,7 +120,7 @@ exports.create = () ->
 
 			# Inspect each container
 			(fn) =>
-				this.helpers.logDebug("_onContainers 2"+JSON.stringify(this._containers))
+				this._helpers.logDebug("_onContainers 2"+JSON.stringify(this._containers))
 
 				this._containers.forEach( (container,index,array) =>
 
@@ -148,7 +142,7 @@ exports.create = () ->
 
 			# Manage errors
 			(err, results) =>
-				this.helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
+				this._helpers.logDebug( 'results of async functions - ' + results + ' and errors (if any) - ' + err )
 		)
 
 
@@ -160,7 +154,7 @@ exports.create = () ->
 	# ----------------------------------------------------------------------
 	# NOTE: Only one container per image is currently supported
 
-	this.update : () ->
+	update : () ->
 
 		# Build list with running images
 		# runningImages = image id->[{container id, IP}]
@@ -182,7 +176,7 @@ exports.create = () ->
 		this._onJaccConfig( (image) =>
 			this._redis("get", image, (res) =>
 
-				this.helpers.logDebug("_onJaccConfig - image: " + image + " res: " + JSON.parse(res))
+				this._helpers.logDebug("_onJaccConfig - image: " + image + " res: " + JSON.parse(res))
 
 				# decomposing, just to make sure things are ok
 				{URL, internal_port, DNS} = JSON.parse(res)
@@ -208,7 +202,7 @@ exports.create = () ->
 	# Show running containers
 	# ----------------------------------------------------------------------
 
-	this.status : () =>
+	status : () =>
 		console.log("Jacc: List of running containers")
 
 		this._onContainers( (res) =>
@@ -222,7 +216,7 @@ exports.create = () ->
 	# 
 	# TODO: Should check that the image exists (do an inspect)
 
-	this.add : (image, URL, dns_name) ->
+	add : (image, URL, dns_name) ->
 		console.log("Jacc: adding " + image)
 
 		redis_client = redis.createClient()
@@ -245,7 +239,7 @@ exports.create = () ->
 	# 
 	# TODO: Should check that the image exists (do an inspect)
 
-	this.delete : (image) ->
+	delete : (image) ->
 		console.log("Jacc: deleting " + image)
 		redis_client = redis.createClient()
 
@@ -260,7 +254,11 @@ exports.create = () ->
 	# main
 	# ======================================================================
 
-	this.main : () ->
+	main : () ->
+
+		argv        = require('optimist')
+		              .usage('Usage: $0 '+ _commands)
+		              .argv
 
 		this._isset(argv._ , 'jacc requires a command - node app.js ' + _commands)
 
