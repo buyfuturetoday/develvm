@@ -17,6 +17,13 @@ exports['test_node_docker'] = {
         done()
 
     'test1': (test) =>
+        this._helpers.logDebug('--------- testing testing start ---------')
+
+        this._helpers.logDebug('--------- testing testing end ---------')
+
+
+###
+    'test1': (test) =>
         this._helpers.logDebug('testing testing')
 
         # There should be X tests
@@ -44,6 +51,7 @@ exports['test_node_docker'] = {
                 this._helpers.logDebug('test: errors (if any) - ' + err)
             )
         this._helpers.logDebug('test: End of function, async processing will continue')
+###
 
 }
 
