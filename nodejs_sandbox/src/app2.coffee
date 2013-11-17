@@ -15,8 +15,6 @@
 exports.create = () ->
 
     {
-
-
 		_commands          = '[add|delete|list|update|status|help]'
 		_dockerConnOptions = { socketPath: false, host: 'http://localhost', port: '4243'}
 
