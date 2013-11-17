@@ -21,8 +21,8 @@ exports['test_node_docker'] = {
         # setup finished
         done()
 
-    'test1': (test) =>
-        this._helpers.logDebug('--------- testing testing start ---------')
+    'test_helpers': (test) =>
+        this._helpers.logDebug('--------- testing helpers start ---------')
 
         # There should be X tests
         test.expect(1)
@@ -60,18 +60,15 @@ exports['test_node_docker'] = {
                 this._helpers.logDebug('test: errors (if any) - ' + err)
             )
 
-        this._helpers.logDebug('--------- testing testing end, async proccesing will continue ---------')
+        this._helpers.logDebug('--------- testing helpers end, async proccesing will continue ---------')
 
 
 
-###
-    'test1': (test) =>
-        this._helpers.logDebug('testing testing')
+    'dummy_test': (test) =>
+        this._helpers.logDebug('--------- dummy test start ---------')
 
         # There should be X tests
         test.expect(1)
-
-        this._helpers.logDebug('test: Start...')
 
         _imageID       = "test-imageID"
         _name          = "test-name"
@@ -92,8 +89,7 @@ exports['test_node_docker'] = {
                 this._helpers.logDebug('test: results of async functions - ' + results)
                 this._helpers.logDebug('test: errors (if any) - ' + err)
             )
-        this._helpers.logDebug('test: End of function, async processing will continue')
-###
+        this._helpers.logDebug('--------- dummay test end, async processing will continue ---------'')
 
 }
 
