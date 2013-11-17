@@ -193,7 +193,21 @@ exports.create = () ->
 	# 
 	# TODO: Should check that the image exists (do an inspect)
 
-	add : (image, URL, internal_port, dns_name) ->
+	add : (image, URL, internal_port, dns_name, fn) ->
+		console.log("Jacc: adding " + image)
+
+		redis_client = this.redis.createClient()
+		redis_client.on("connect", () =>
+			redis_client.sadd("images", image, (err, res) =>
+				redis_client.set(image, JSON.stringify({URL: URL; internal_port: internal_port; DNS: dns_name}), (err, res) =>
+					redis_client.quit()
+					fn() if fn?
+				)
+			)	
+		)
+
+
+	add2 : (image, URL, internal_port, dns_name) ->
 		console.log("Jacc: adding " + image)
 
 		redis_client = this.redis.createClient()
