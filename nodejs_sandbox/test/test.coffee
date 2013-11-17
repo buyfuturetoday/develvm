@@ -47,7 +47,7 @@ exports['test_node_docker'] = {
                     this._redis( "get", [REDIS_KEY], (val) =>
                         test.equal(val,  REDIS_VALUE, 'redis del, set and get')
                         fn(null, '_redis.get')
-                )
+                    )
 
                 (fn) => 
                     # All tests performed
