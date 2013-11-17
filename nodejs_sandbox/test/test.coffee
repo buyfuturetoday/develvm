@@ -95,6 +95,7 @@ exports['test_jacc'] = {
                 {URL, internal_port, DNS} = JSON.parse(res)
 
                 test.equal(URL,  process.env.JACC_TEST_URL, 'checking URL')
+                test.equal(internal_port,  process.env.JACC_TEST_PORT, 'checking URL')
                 test.equal(DNS,  process.env.JACC_TEST_DNS, 'checking URL')
                 test.done()
             )
