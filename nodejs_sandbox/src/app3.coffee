@@ -228,7 +228,7 @@ exports.create = () ->
 			)	
 		)
 
-		redis_client2 = redis.createClient()
+		redis_client2 = this.redis.createClient()
 		redis_client2.on("connect", () =>
 			redis_client2.set(image, JSON.stringify({URL: URL; DNS: dns_name}), (err, res) =>
 				redis_client2.quit()
