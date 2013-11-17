@@ -12,7 +12,7 @@
 # Using Google JavaScript Style Guide when applicable - http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
 #
 
-exports.create = function() {
+exports.create = () ->
 
     return {
 
