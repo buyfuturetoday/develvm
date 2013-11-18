@@ -73,17 +73,27 @@ exports['test_jacc'] = {
 
         test.equal(true,  true, 'jacc add')
 
-        # _j.add is async so test.done will likely be executed too early
-        this._j.add(process.env.JACC_TEST_CONTAINERID,
-                    process.env.JACC_TEST_URL,
-                    process.env.JACC_TEST_PORT,
-                    process.env.JACC_TEST_DNS
+        # First cleanup old stuff
+        this._helpers.logDebug('Deleting all images:')
+        this._j._redis( "del", ["images"], (res) =>
+            this._helpers.logDebug('Add new image:' + res)
+
+            # _j.add is async so test.done will likely be executed too early
+            this._j.add(process.env.JACC_TEST_CONTAINERID, 
+                        process.env.JACC_TEST_URL,
+                        process.env.JACC_TEST_PORT,
+                        process.env.JACC_TEST_DNS,
+
+                        () =>
+                            this._helpers.logDebug('Checking that the image is there')
+
+                            this._j._redis( "smembers", ["images"], (res) =>
+                                this._helpers.logDebug('onJaccConfig res from redis:' + res)
+                            )
+           )
         )
 
-        this._j._redis( "smembers", ["images"], (res) =>
-            this._helpers.logDebug('onJaccConfig res from redis:' + res)
-        )
-
+ 
         # just print the JaccConfig images
         this._j._onJaccConfig( 
             (image) =>
