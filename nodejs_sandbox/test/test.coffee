@@ -79,18 +79,17 @@ exports['test_jacc'] = {
             this._helpers.logDebug('Add new image:' + res)
 
             # _j.add is async so test.done will likely be executed too early
-            _id  = process.env.JACC_TEST_CONTAINERID
-            _URL = process.env.JACC_TEST_URL
+            _id   = process.env.JACC_TEST_CONTAINERID
+            _URL  = process.env.JACC_TEST_URL
             _port = process.env.JACC_TEST_PORT
-            _DNS = process.env.JACC_TEST_DNS
+            _DNS  = process.env.JACC_TEST_DNS
 
             this._j.add(_id, _URL, _port, _DNS, () =>
                 this._helpers.logDebug('Checking that the image is there')
-
                 this._j._redis( "smembers", ["images"], (res) =>
                     this._helpers.logDebug('onJaccConfig res from redis:' + res)
                 )
-           )
+            )
         )
 
  
