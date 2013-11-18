@@ -106,8 +106,10 @@ exports['test_jacc'] = {
         this._j._listImages()
 
         # Wait a while for update to complete
-        setTimeout( 
-            () => test.done()
+        setTimeout(
+            () =>
+                this._helpers.logDebug('Running images: '+JSON.stringify(this._runningImages))
+                test.done()
             1000
         )
 
