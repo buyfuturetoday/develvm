@@ -85,7 +85,7 @@ exports['test_jacc'] = {
             (image) =>
                 this._helpers.logDebug('onJaccConfig image:' + image)
 
-            () -> 
+            , () -> 
                 test.done()
         )
 
