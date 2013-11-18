@@ -122,6 +122,7 @@ exports.create = () ->
 						if (err)
 							throw err
 						func(res)
+						console.log("after func(res)")
 					)
 
 				() =>
