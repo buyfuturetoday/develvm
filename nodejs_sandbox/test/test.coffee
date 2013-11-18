@@ -88,19 +88,12 @@ exports['test_jacc'] = {
                 this._helpers.logDebug('Checking that the image is there')
                 this._j._redis( "smembers", ["images"], (res) =>
                     this._helpers.logDebug('onJaccConfig res from redis:' + res)
+                    test.done()
                 )
             )
         )
 
  
-        # just print the JaccConfig images
-        this._j._onJaccConfig( 
-            (image) =>
-                this._helpers.logDebug('onJaccConfig image:' + image)
-
-            , () -> 
-                test.done()
-        )
 
 
     'test_update': (test) =>
