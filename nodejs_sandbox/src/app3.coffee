@@ -144,10 +144,10 @@ exports.create = () ->
 		this._onContainers( (res) =>
 
 			# create empty list if this image isn’t running
-			if( this._runningImages[ res.Image[0..13] ] == undefined)
-				this._runningImages[ res.Image[0..13] ] = []
+			if( this._runningImages[ res.Image[0..11] ] == undefined)
+				this._runningImages[ res.Image[0..11] ] = []
 
-			this._runningImages[ res.Image[0..13] ].push( { ID: res.ID[0..13], IP: res.NetworkSettings.IPAddress } )
+			this._runningImages[ res.Image[0..11] ].push( { ID: res.ID[0..11], IP: res.NetworkSettings.IPAddress } )
 
 		)
 
