@@ -105,7 +105,7 @@ exports['test_jacc'] = {
         # Wait a while for update to complete
         setTimeout( 
             () -> test.done()
-            , 1000
+            1000
         )
 
 }
