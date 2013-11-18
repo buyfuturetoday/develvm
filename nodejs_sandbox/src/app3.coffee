@@ -90,9 +90,10 @@ exports.create = () ->
 	# redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
 	_onJaccConfig : (func, endFunc) ->
 		this._redis( "smembers", ["images"], (res) =>
-			this._.each(res, (image) => func(image) )
-
-			endFunc() if endFunc?
+#			this._.each(res, (image) => func(image) )
+			this.async.each(res, func, () =>
+				endFunc() if endFunc?
+			)
 		)
 
 
@@ -113,18 +114,18 @@ exports.create = () ->
 				throw err
 
 			# inspect each running container
-			this._.each(res, (container) => 
+#			this._.each(res, (container) => 
+			this.async.each(res, (container) => 
 				_options = {}
 				docker.containers.inspect(container.Id, _options, (err, res) =>
 					if (err)
 						throw err
-
 					func(res)
 				)
+				, () => endFunc() if endFunc?
 			)
 
-			# This not really the end, inspect is still running
-			endFunc() if endFunc?
+			
 		)
 
 
@@ -180,8 +181,10 @@ exports.create = () ->
 		)
 
 	update : () ->
-		this._listImages()
-		this._buildHipacheConfig()
+		this._listImages( ()=>
+			this._buildHipacheConfig()
+		)
+		
 
 
 	# Show running containers
