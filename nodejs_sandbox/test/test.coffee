@@ -103,10 +103,12 @@ exports['test_jacc'] = {
         this._j.update()
 
         # Wait a while for update to complete
+###
         setTimeout( 
             () => test.done()
             1000
         )
+###
 
 }
 
