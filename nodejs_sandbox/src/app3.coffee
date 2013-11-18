@@ -175,6 +175,7 @@ exports.create = () ->
 					_key = "frontend:"+image
 					this._redis("del", [_key], () =>
 						this._redis("rpush", [_key, URL], () =>
+							console.log('this._runningImages[ image ]:' + this._runningImages[ image ])
 							this._.each( this._runningImages[ image ], (res) =>
 								this._redis("rpush", [ _key, res["IP"] ], null)
 								fn() if(fn?)
