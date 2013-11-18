@@ -90,12 +90,11 @@ exports.create = () ->
 	# redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
 	_onJaccConfig : (func, endFunc) ->
 		this._redis( "smembers", ["images"], (res) =>
-#			this._.each(res, (image) => func(image) )
 			this.async.each(
 				res
 				(item, fn) => 
-					func(item)
-					fn()
+					func(item, fn)
+
 				() =>
 					endFunc() if endFunc?
 			)
@@ -119,7 +118,6 @@ exports.create = () ->
 				throw err
 
 			# inspect each running container
-#			this._.each(res, (container) => 
 			this.async.each(res, 
 				(container, fn) => 
 					_options = {}
@@ -127,12 +125,10 @@ exports.create = () ->
 						if (err)
 							throw err
 						func(res)
-						console.log("after func(res)")
 						fn()
 					)
 
 				() =>
-					console.log("END onContainers")
 					endFunc() if endFunc?
 			)
 		)
@@ -147,46 +143,51 @@ exports.create = () ->
 	# ----------------------------------------------------------------------
 	# NOTE: Only one container per image is currently supported
 
-	_listImages : () ->
+	_listImages : (endFunc) ->
 		# Build list with running images
 		# runningImages = image id->[{container id, IP}]
 		this._runningImages = {}
-		this._onContainers( (res) =>
+		this._onContainers( 
+			(res) =>
+				# create empty list if this image isn’t running
+				if( this._runningImages[ res.Image[0..11] ] == undefined)
+					this._runningImages[ res.Image[0..11] ] = []
 
-			# create empty list if this image isn’t running
-			if( this._runningImages[ res.Image[0..11] ] == undefined)
-				this._runningImages[ res.Image[0..11] ] = []
+				this._runningImages[ res.Image[0..11] ].push( { ID: res.ID[0..11], IP: res.NetworkSettings.IPAddress } )
 
-			this._runningImages[ res.Image[0..11] ].push( { ID: res.ID[0..11], IP: res.NetworkSettings.IPAddress } )
-
+			endFunc
 		)
 
-	_buildHipacheConfig : () ->
+	_buildHipacheConfig : (endFunc) ->
 		# Iterate over Jacc configuration and generate hipache and redis-dns configuration
 		# hipache configuration: image id ->external URL & [internal URL]
 		# redis-dns configuration: dns->IP
-		this._onJaccConfig( (image) =>
-			this._redis("get", [image], (res) =>
+		this._onJaccConfig( 
+			(image, fn) =>
+				this._redis("get", [image], (res) =>
 
-				console.log('_buildHipacheConfig image: '+image + ' res:'+res)
+					console.log('_buildHipacheConfig image: '+image + ' res:'+res)
 
-				# decomposing, just to make sure things are ok
-				{URL, internal_port, DNS} = JSON.parse(res)
+					# decomposing, just to make sure things are ok
+					{URL, internal_port, DNS} = JSON.parse(res)
 
-				# Set hipache config
-				_key = "frontend:"+image
-				this._redis("del", [_key], () =>
-					this._redis("rpush", [_key, URL], () =>
-						this._.each( this._runningImages[ image ], (res) =>
-							this._redis("rpush", [ _key, res["IP"] ], null)
+					# Set hipache config
+					_key = "frontend:"+image
+					this._redis("del", [_key], () =>
+						this._redis("rpush", [_key, URL], () =>
+							this._.each( this._runningImages[ image ], (res) =>
+								this._redis("rpush", [ _key, res["IP"] ], null)
+								fn() if(fn?)
+							)
 						)
 					)
+
+					# Set redis-dns config, use the first IP in the list
+					this._redis( "set", [ DNS, this._runningImages[ image ][0]["IP"] ], null )
+					
 				)
 
-				# Set redis-dns config, use the first IP in the list
-				this._redis( "set", [ DNS, this._runningImages[ image ][0]["IP"] ], null )
-				
-			)
+			endFunc
 		)
 
 	update : () ->

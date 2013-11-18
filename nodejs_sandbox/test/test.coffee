@@ -103,14 +103,10 @@ exports['test_jacc'] = {
         test.equal(true,  true, 'jacc update')
 
         this._helpers.logDebug('test_listImages')
-        this._j._listImages()
-
-        # Wait a while for update to complete
-        setTimeout(
+        this._j._listImages(
             () =>
                 this._helpers.logDebug('Running images: '+JSON.stringify(this._j._runningImages))
                 test.done()
-            1000
         )
 
 
@@ -121,12 +117,8 @@ exports['test_jacc'] = {
         test.equal(true,  true, 'jacc update')
 
         this._helpers.logDebug('test_buildHipacheConfig')
-        this._j._buildHipacheConfig()
-
-        # Wait a while for update to complete
-        setTimeout( 
+        this._j._buildHipacheConfig(
             () => test.done()
-            1000
         )
 
 }
