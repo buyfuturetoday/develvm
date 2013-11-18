@@ -158,7 +158,7 @@ exports.create = () ->
 		this._onJaccConfig( (image) =>
 			this._redis("get", [image], (res) =>
 
-				console.log('_buildHipacheConfig: '+res)
+				console.log('_buildHipacheConfig image: '+image + ' res:'+res)
 
 				# decomposing, just to make sure things are ok
 				{URL, internal_port, DNS} = JSON.parse(res)
@@ -168,13 +168,13 @@ exports.create = () ->
 				this._redis("del", [_key], () =>
 					this._redis("rpush", [_key, URL], () =>
 						this._.each( this._runningImages[ image ], (res) =>
-							this._redis("rpush", [_key, res["IP"]], null)
+							this._redis("rpush", [ _key, res["IP"] ], null)
 						)
 					)
 				)
 
 				# Set redis-dns config, use the first IP in the list
-				this._redis( "set", [DNS, this._runningImages[ image ][0]["IP"]], null )
+				this._redis( "set", [ DNS, this._runningImages[ image ][0]["IP"] ], null )
 				
 			)
 		)
