@@ -181,8 +181,8 @@ exports.create = () ->
 		)
 
 	update : () ->
-		_listImages()
-		_buildHipacheConfig()
+		this._listImages()
+		this._buildHipacheConfig()
 
 
 	# Show running containers
