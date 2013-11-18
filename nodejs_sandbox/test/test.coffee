@@ -17,10 +17,14 @@ exports['test_jacc'] = {
         this._helpers     = require('helpersjs').create()
         this._helpers.logging_threshold = this._helpers.logging.debug
 
-        this._helpers.logDebug('WARNING: CURRENT JACC CONFIGHURATION WILL BE DELETED!')
-
         # setup finished
         done()
+
+
+    'print_warning': (test) =>
+        this._helpers.logDebug('WARNING: CURRENT JACC CONFIGHURATION WILL BE DELETED!')
+        test.done()
+
 
     'test_redis_helpers': (test) =>
         # There should be X tests
