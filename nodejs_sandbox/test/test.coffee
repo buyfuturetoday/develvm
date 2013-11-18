@@ -7,6 +7,9 @@
 exports['test_jacc'] = {
 
     setUp: (done) =>
+        this._helpers.logDebug('WARNING: CURRENT JACC CONFIGHURATION WILL BE DELETED!')
+
+
         # The functions to test
         this._j = require('../build/jacc.js').create()
 
@@ -72,9 +75,7 @@ exports['test_jacc'] = {
         test.expect(1)
 
         # First cleanup old stuff
-        this._helpers.logDebug('Deleting all images:')
         this._j._redis( "del", ["images"], (res) =>
-            this._helpers.logDebug('Add new image')
 
             # _j.add is async so test.done will likely be executed too early
             _id   = process.env.JACC_TEST_CONTAINERID
@@ -83,7 +84,6 @@ exports['test_jacc'] = {
             _DNS  = process.env.JACC_TEST_DNS
 
             this._j.add(_id, _URL, _port, _DNS, () =>
-                this._helpers.logDebug('Checking that the image is there')
                 this._j._redis( "smembers", ["images"], (res) =>
                     this._helpers.logDebug('onJaccConfig res from redis:' + res)
                     test.equal(res,  _id, 'jacc add and check that image was added')
@@ -93,8 +93,6 @@ exports['test_jacc'] = {
         )
 
  
-
-
     'test_update': (test) =>
         # There should be X tests
         test.expect(1)
@@ -104,7 +102,8 @@ exports['test_jacc'] = {
         # _j.update is async so test.done will likely be executed too early
         this._j.update()
 
-        test.done()
+        # Wait a while for update to complete
+        setTimeout( () -> test.done(), 1000)
 
 }
 
