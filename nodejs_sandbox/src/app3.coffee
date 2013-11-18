@@ -143,17 +143,11 @@ exports.create = () ->
 		this._runningImages = {}
 		this._onContainers( (res) =>
 
-			console.log('_listImages: '+JSON.stringify(res))
-
 			# create empty list if this image isn’t running
 			if( this._runningImages[ res.Image[0..12] ] == undefined)
 				this._runningImages[ res.Image[0..12] ] = []
 
-			console.log('_listImages: '+JSON.stringify(this._runningImages[ res.Image[0..12] ]))
-
 			this._runningImages[ res.Image[0..12] ].push( { ID: res.ID[0..12], IP: res.NetworkSettings.IPAddress } )
-
-			console.log('_listImages: '+JSON.stringify(this._runningImages[ res.Image[0..12] ]))
 
 		)
 
@@ -163,6 +157,8 @@ exports.create = () ->
 		# redis-dns configuration: dns->IP
 		this._onJaccConfig( (image) =>
 			this._redis("get", [image], (res) =>
+
+				console.log('_buildHipacheConfig: '+res)
 
 				# decomposing, just to make sure things are ok
 				{URL, internal_port, DNS} = JSON.parse(res)
