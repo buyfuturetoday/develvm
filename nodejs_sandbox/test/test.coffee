@@ -117,8 +117,11 @@ exports['test_jacc'] = {
         test.equal(true,  true, 'jacc update')
 
         this._helpers.logDebug('test_buildHipacheConfig')
-        this._j._buildHipacheConfig(
-            () => test.done()
+        this._j._listImages(
+            () =>
+                this._j._buildHipacheConfig(
+                    () => test.done()
+                )
         )
 
 }
