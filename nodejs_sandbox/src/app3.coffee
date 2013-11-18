@@ -91,8 +91,13 @@ exports.create = () ->
 	_onJaccConfig : (func, endFunc) ->
 		this._redis( "smembers", ["images"], (res) =>
 #			this._.each(res, (image) => func(image) )
-			this.async.each(res, func, () =>
-				endFunc() if endFunc?
+			this.async.each(
+				res
+				(item, fn) => 
+					func(item)
+					fn()
+				() =>
+					endFunc() if endFunc?
 			)
 		)
 
@@ -116,13 +121,14 @@ exports.create = () ->
 			# inspect each running container
 #			this._.each(res, (container) => 
 			this.async.each(res, 
-				(container) => 
+				(container, fn) => 
 					_options = {}
 					docker.containers.inspect(container.Id, _options, (err, res) =>
 						if (err)
 							throw err
 						func(res)
 						console.log("after func(res)")
+						fn()
 					)
 
 				() =>
