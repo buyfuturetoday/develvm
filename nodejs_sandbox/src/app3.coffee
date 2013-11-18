@@ -124,7 +124,9 @@ exports.create = () ->
 						func(res)
 					)
 
-				() => endFunc() if endFunc?
+				() =>
+					console.log("END onContainers")
+					endFunc() if endFunc?
 			)
 		)
 
@@ -197,8 +199,7 @@ exports.create = () ->
 			(res) =>
 				console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 			
-			, () =>
-				fn()
+			fn
 
 		)
 

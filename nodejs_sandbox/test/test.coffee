@@ -59,7 +59,7 @@ exports['test_jacc'] = {
                     fn(null, 'test.done')
             ],
             (err, results) =>
-                this._helpers.logDebug('test: results of async functions - ' + results + ' errors (if any) - ' + err)
+                this._helpers.logDebug('test_redis_helpers: results of async functions - ' + results + ' errors (if any) - ' + err)
             )
 
 
