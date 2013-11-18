@@ -89,32 +89,6 @@ exports['test_jacc'] = {
                 test.done()
         )
 
-        
-
-###
-        # Wait for the operation above
-        setTimeout(
-            () =>
-                this._j._onJaccConfig( (image) =>
-                    this._j._redis("get", [image], (res) =>
-
-                        console.log('jacc config: ' +  res + ' image: ' + image)
-
-                        # decomposing, just to make sure things are ok
-                        {_URL, _internal_port, _DNS} = JSON.parse(res)
-
-                        test.equal(_URL,             process.env.JACC_TEST_URL, 'checking URL')
-                        test.equal(_internal_port,   process.env.JACC_TEST_PORT, 'checking port')
-                        test.equal(_DNS,             process.env.JACC_TEST_DNS, 'checking DNS')
-
-                        test.done()
-                    )
-                )
-
-            1000
-        )
-###
-
 
     'test_update': (test) =>
         # There should be X tests
