@@ -79,6 +79,8 @@ exports.create = () ->
 				when "push" then redis_client.rpush( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
 				when "set" then redis_client.set( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
 				when "smembers" then redis_client.smembers( args[0], (err, res) => this._f(redis_client, err, res, func) )
+				when "sadd" then redis_client.sadd( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
+				else throw Error('_redis: unsuported operation')
 
 		)
 
@@ -205,15 +207,12 @@ exports.create = () ->
 	add : (image, URL, internal_port, dns_name, fn) ->
 		console.log("Jacc: adding " + image)
 
-		redis_client = this.redis.createClient()
-		redis_client.on("connect", () =>
-			redis_client.sadd("images", image, (err, res) =>
-				redis_client.set(image, JSON.stringify({URL: URL; internal_port: internal_port; DNS: dns_name}), (err, res) =>
-					redis_client.quit()
-					fn() if fn?
-				)
-			)	
-		)
+		this._redis( "sadd", ["images", image], (res) =>
+			_args = [image, JSON.stringify({URL: URL; internal_port: internal_port; DNS: dns_name})]
+			this._redis("set", _args, (res) =>
+				fn() if fn?
+			)
+		)	
 
 
 	add2 : (image, URL, internal_port, dns_name) ->

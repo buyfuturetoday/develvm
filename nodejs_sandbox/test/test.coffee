@@ -76,7 +76,7 @@ exports['test_jacc'] = {
         # First cleanup old stuff
         this._helpers.logDebug('Deleting all images:')
         this._j._redis( "del", ["images"], (res) =>
-            this._helpers.logDebug('Add new image:' + res)
+            this._helpers.logDebug('Add new image')
 
             # _j.add is async so test.done will likely be executed too early
             _id   = process.env.JACC_TEST_CONTAINERID
