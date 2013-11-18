@@ -80,7 +80,7 @@ exports['test_jacc'] = {
                     process.env.JACC_TEST_DNS
         )
 
-        this._redis( "smembers", ["images"], (res) =>
+        this._j._redis( "smembers", ["images"], (res) =>
             this._helpers.logDebug('onJaccConfig res from redis:' + res)
         )
 
