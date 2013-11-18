@@ -111,13 +111,13 @@ exports['test_jacc'] = {
         )
 
 
-    'test_buildHipacheCondig': (test) =>
+    'test_buildHipacheConfig': (test) =>
         # There should be X tests
         test.expect(1)
 
         test.equal(true,  true, 'jacc update')
 
-        this._j._buildHipacheCondig()
+        this._j._buildHipacheConfig()
 
         # Wait a while for update to complete
         setTimeout( 
