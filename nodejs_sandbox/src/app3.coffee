@@ -167,6 +167,7 @@ exports.create = () ->
 				this._redis("get", [image], (res) =>
 
 					console.log('_buildHipacheConfig image: '+image + ' res:'+res)
+					console.log('this._runningImages[ image ]:' + this._runningImages[ image ])
 
 					# decomposing, just to make sure things are ok
 					{URL, internal_port, DNS} = JSON.parse(res)
@@ -174,6 +175,7 @@ exports.create = () ->
 					# Set hipache config
 					_key = "frontend:"+image
 					this._redis("del", [_key], () =>
+						console.log('this._runningImages[ image ]:' + this._runningImages[ image ])
 						this._redis("rpush", [_key, URL], () =>
 							console.log('this._runningImages[ image ]:' + this._runningImages[ image ])
 							this._.each( this._runningImages[ image ], (res) =>
