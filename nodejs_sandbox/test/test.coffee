@@ -102,6 +102,7 @@ exports['test_jacc'] = {
 
         test.equal(true,  true, 'jacc update')
 
+        this._helpers.logDebug('test_listImages')
         this._j._listImages()
 
         # Wait a while for update to complete
@@ -117,6 +118,7 @@ exports['test_jacc'] = {
 
         test.equal(true,  true, 'jacc update')
 
+        this._helpers.logDebug('test_buildHipacheConfig')
         this._j._buildHipacheConfig()
 
         # Wait a while for update to complete
