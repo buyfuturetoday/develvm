@@ -189,7 +189,9 @@ exports.create = () ->
 			(res) =>
 				console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 			
-			() => fn()
+			, () =>
+				console.log("END OF STATUS")
+				fn()
 
 		)
 
