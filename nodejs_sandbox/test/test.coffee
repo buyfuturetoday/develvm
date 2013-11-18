@@ -69,7 +69,7 @@ exports['test_jacc'] = {
 
     'test_add': (test) =>
         # There should be X tests
-        test.expect(4)
+        test.expect(1)
 
         test.equal(true,  true, 'jacc add')
 
@@ -78,6 +78,10 @@ exports['test_jacc'] = {
                     process.env.JACC_TEST_URL,
                     process.env.JACC_TEST_PORT,
                     process.env.JACC_TEST_DNS
+        )
+
+        this._redis( "smembers", ["images"], (res) =>
+            this._helpers.logDebug('onJaccConfig res from redis:' + res)
         )
 
         # just print the JaccConfig images

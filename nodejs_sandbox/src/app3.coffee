@@ -121,6 +121,7 @@ exports.create = () ->
 				)
 			)
 
+			# This not really the end, inspect is still running
 			endFunc() if endFunc?
 		)
 
@@ -190,7 +191,6 @@ exports.create = () ->
 				console.log("container:" + res.ID[0..12] + " image:" + res.Image[0..12] + " IP:" + res.NetworkSettings.IPAddress)
 			
 			, () =>
-				console.log("END OF STATUS")
 				fn()
 
 		)
