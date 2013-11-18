@@ -53,7 +53,7 @@ exports['test_jacc'] = {
                     fn(null, 'test.done')
             ],
             (err, results) =>
-                this._helpers.logDebug('test: results of async functions - ' + results + ' errors (if any) - ' + err)
+                this._helpers.logDebug('\ntest: results of async functions - ' + results + ' errors (if any) - ' + err)
             )
 
 
@@ -71,8 +71,6 @@ exports['test_jacc'] = {
         # There should be X tests
         test.expect(1)
 
-        test.equal(true,  true, 'jacc add')
-
         # First cleanup old stuff
         this._helpers.logDebug('Deleting all images:')
         this._j._redis( "del", ["images"], (res) =>
@@ -88,6 +86,7 @@ exports['test_jacc'] = {
                 this._helpers.logDebug('Checking that the image is there')
                 this._j._redis( "smembers", ["images"], (res) =>
                     this._helpers.logDebug('onJaccConfig res from redis:' + res)
+                    test.equal(res,  _id, 'jacc add and check that image was added')
                     test.done()
                 )
             )

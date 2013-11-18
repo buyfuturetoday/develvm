@@ -210,7 +210,6 @@ exports.create = () ->
 		this._redis( "sadd", ["images", image], (res) =>
 			_args = [image, JSON.stringify({URL: URL; internal_port: internal_port; DNS: dns_name})]
 			this._redis("set", _args, (res) =>
-				console.log("add: END")
 				fn() if fn?
 			)
 		)	
