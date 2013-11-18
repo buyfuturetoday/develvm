@@ -152,6 +152,9 @@ exports.create = () ->
 			console.log('_listImages: '+JSON.stringify(this._runningImages[ res.Image[0..12] ]))
 
 			this._runningImages[ res.Image[0..12] ].push( { ID: res.ID[0..12], IP: res.NetworkSettings.IPAddress } )
+
+			console.log('_listImages: '+JSON.stringify(this._runningImages[ res.Image[0..12] ]))
+
 		)
 
 	_buildHipacheConfig : () ->
