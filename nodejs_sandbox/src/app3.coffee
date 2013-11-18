@@ -162,6 +162,9 @@ exports.create = () ->
 		# Iterate over Jacc configuration and generate hipache and redis-dns configuration
 		# hipache configuration: image id ->external URL & [internal URL]
 		# redis-dns configuration: dns->IP
+
+		console.log('this._runningImages[ image ]:' + this._runningImages[ image ])
+
 		this._onJaccConfig( 
 			(image, fn) =>
 				this._redis("get", [image], (res) =>
