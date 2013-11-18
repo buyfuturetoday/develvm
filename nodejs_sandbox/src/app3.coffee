@@ -163,10 +163,10 @@ exports.create = () ->
 		# hipache configuration: image id ->external URL & [internal URL]
 		# redis-dns configuration: dns->IP
 
-		console.log('this._runningImages[ image ]:' + this._runningImages[ image ])
-
 		this._onJaccConfig( 
 			(image, fn) =>
+				console.log('this._runningImages[ image ]:' + this._runningImages[ image ])
+
 				this._redis("get", [image], (res) =>
 
 					console.log('_buildHipacheConfig image: '+image + ' res:'+res)
