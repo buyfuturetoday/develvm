@@ -7,9 +7,6 @@
 exports['test_jacc'] = {
 
     setUp: (done) =>
-        this._helpers.logDebug('WARNING: CURRENT JACC CONFIGHURATION WILL BE DELETED!')
-
-
         # The functions to test
         this._j = require('../build/jacc.js').create()
 
@@ -19,6 +16,8 @@ exports['test_jacc'] = {
 
         this._helpers     = require('helpersjs').create()
         this._helpers.logging_threshold = this._helpers.logging.debug
+
+        this._helpers.logDebug('WARNING: CURRENT JACC CONFIGHURATION WILL BE DELETED!')
 
         # setup finished
         done()
@@ -103,12 +102,10 @@ exports['test_jacc'] = {
         this._j.update()
 
         # Wait a while for update to complete
-###
         setTimeout( 
             () => test.done()
             1000
         )
-###
 
 }
 
