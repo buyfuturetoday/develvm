@@ -80,6 +80,18 @@ exports['test_jacc'] = {
                     process.env.JACC_TEST_DNS
         )
 
+        # just print the JaccConfig images
+        this._j._onJaccConfig( 
+            (image) =>
+                this._helpers.logDebug('onJaccConfig image:' + image)
+
+            () -> 
+                test.done()
+        )
+
+        
+
+###
         # Wait for the operation above
         setTimeout(
             () =>
@@ -101,7 +113,7 @@ exports['test_jacc'] = {
 
             1000
         )
-
+###
 
 
     'test_update': (test) =>

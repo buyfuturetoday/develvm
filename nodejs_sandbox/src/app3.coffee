@@ -86,9 +86,11 @@ exports.create = () ->
 	# Helper for running function on each jacc image
 	# -------------------------------------------------------------
 	# redis jacc config: jacc_images:”012345678912” -> {URL, internal_port, DNS}
-	_onJaccConfig : (func) ->
+	_onJaccConfig : (func, endFunc) ->
 		this._redis( "smembers", ["images"], (res) =>
 			this._.each(res, (image) => func(image) )
+
+			endFunc() if endFunc?
 		)
 
 
