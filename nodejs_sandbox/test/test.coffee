@@ -88,7 +88,7 @@ exports['test_jacc'] = {
 
             this._j.add(_id, _URL, _port, _DNS, () =>
                 this._j._redis( "smembers", ["images"], (res) =>
-                    this._helpers.logDebug('onJaccConfig res from redis:' + res)
+                    this._helpers.logDebug('test_add: onJaccConfig res from redis:' + res)
                     test.equal(res,  _id, 'jacc add and check that image was added')
                     test.done()
                 )
@@ -105,7 +105,7 @@ exports['test_jacc'] = {
         this._helpers.logDebug('test_listImages')
         this._j._listImages(
             () =>
-                this._helpers.logDebug('Running images: '+JSON.stringify(this._j._runningImages))
+                this._helpers.logDebug('test_listImages: Running images: '+JSON.stringify(this._j._runningImages))
                 test.done()
         )
 
