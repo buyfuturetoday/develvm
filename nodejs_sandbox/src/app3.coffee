@@ -143,8 +143,6 @@ exports.create = () ->
 		this._runningImages = {}
 		this._onContainers( (res) =>
 
-			console.log(res)
-
 			# create empty list if this image isn’t running
 			if( this._runningImages[ res.Image[0..12] ] == undefined)
 				this._runningImages[ res.Image[0..12] ] = []
@@ -158,8 +156,6 @@ exports.create = () ->
 		# redis-dns configuration: dns->IP
 		this._onJaccConfig( (image) =>
 			this._redis("get", [image], (res) =>
-
-#				this._helpers.logDebug("_onJaccConfig - image: " + image + " res: " + JSON.parse(res))
 
 				# decomposing, just to make sure things are ok
 				{URL, internal_port, DNS} = JSON.parse(res)

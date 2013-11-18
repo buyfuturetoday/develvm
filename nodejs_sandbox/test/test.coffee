@@ -96,14 +96,28 @@ exports['test_jacc'] = {
         )
 
  
-    'test_update': (test) =>
+    'test_listImages': (test) =>
         # There should be X tests
         test.expect(1)
 
         test.equal(true,  true, 'jacc update')
 
-        # _j.update is async so test.done will likely be executed too early
-        this._j.update()
+        this._j._listImages()
+
+        # Wait a while for update to complete
+        setTimeout( 
+            () => test.done()
+            1000
+        )
+
+
+    'test_buildHipacheCondig': (test) =>
+        # There should be X tests
+        test.expect(1)
+
+        test.equal(true,  true, 'jacc update')
+
+        this._j._buildHipacheCondig()
 
         # Wait a while for update to complete
         setTimeout( 
