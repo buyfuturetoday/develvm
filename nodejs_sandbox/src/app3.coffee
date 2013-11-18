@@ -137,8 +137,7 @@ exports.create = () ->
 	# ----------------------------------------------------------------------
 	# NOTE: Only one container per image is currently supported
 
-	update : () ->
-
+	_listImages : () ->
 		# Build list with running images
 		# runningImages = image id->[{container id, IP}]
 		this._runningImages = {}
@@ -153,6 +152,7 @@ exports.create = () ->
 			this._runningImages[ res.Image[0..12] ].push( { ID: res.ID[0..12], IP: res.NetworkSettings.IPAddress } )
 		)
 
+	_buildHipacheConfig : () ->
 		# Iterate over Jacc configuration and generate hipache and redis-dns configuration
 		# hipache configuration: image id ->external URL & [internal URL]
 		# redis-dns configuration: dns->IP
@@ -180,6 +180,9 @@ exports.create = () ->
 			)
 		)
 
+	update : () ->
+		_listImages()
+		_buildHipacheConfig()
 
 
 	# Show running containers

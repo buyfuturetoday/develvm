@@ -22,7 +22,7 @@ exports['test_jacc'] = {
 
 
     'print_warning': (test) =>
-        this._helpers.logDebug('WARNING: CURRENT JACC CONFIGHURATION WILL BE DELETED!')
+        this._helpers.logDebug('\nWARNING: CURRENT JACC CONFIGHURATION WILL BE DELETED!')
         test.done()
 
 
