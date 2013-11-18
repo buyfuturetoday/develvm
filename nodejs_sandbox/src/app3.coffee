@@ -143,6 +143,8 @@ exports.create = () ->
 		this._runningImages = {}
 		this._onContainers( (res) =>
 
+			console.log('_listImages: '+res)
+
 			# create empty list if this image isn’t running
 			if( this._runningImages[ res.Image[0..12] ] == undefined)
 				this._runningImages[ res.Image[0..12] ] = []
