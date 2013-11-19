@@ -178,7 +178,7 @@ exports.create = () ->
 					this._redis("del", [_key], () =>
 						this._redis("rpush", [_key, image], () =>
 							this._.each( this._runningImages[ image ], (res) =>
-								this._redis("rpush", [ _key, res["IP"] ], null)
+								this._redis("rpush", [ _key, 'http://'+res["IP"]+':'+internal_port ], null)
 								fn() if(fn?)
 							)
 						)

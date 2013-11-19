@@ -130,9 +130,9 @@ exports['test_jacc'] = {
                     # Check that the hipache configuraiton is there
                     _key = "frontend:" + this._URL
                     this._j._redis("lrange", [_key, 0, -1], (res) =>
-                        this._helpers.logDebug('test_buildHipacheConfig hipache configuration for key '+_key+':'+JSON.stringify(res))
+                        this._helpers.logDebug('test_buildHipacheConfig hipache configuration for key '+_key+'='+JSON.stringify(res))
                         test.equal(res[0],  this._id, 'test_buildHipacheConfig: image id')
-                        test.equal(res[1],  this._URL+':'+this.port, 'test_buildHipacheConfig: URL and port')
+                        test.equal(res[1],  this._URL+':'+this._port, 'test_buildHipacheConfig: URL and port')
                         test.done()
                     )
                 )
