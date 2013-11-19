@@ -126,8 +126,8 @@ exports['test_jacc'] = {
                     _key = "frontend:" + this._id
                     this._j._redis("lrange", [_key, 0, -1], (res) =>
                         this._helpers.logDebug('test_buildHipacheConfig hipache configuration:'+JSON.stringify(res))
+                        () => test.done()
                     )
-                    () => test.done()
                 )
         )
 
