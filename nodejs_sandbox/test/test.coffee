@@ -120,9 +120,7 @@ exports['test_jacc'] = {
 
 
         # There should be X tests
-        test.expect(1)
-
-        test.equal(true,  true, 'jacc update')
+        test.expect(2)
 
         this._helpers.logDebug('test_buildHipacheConfig')
         this._j._listImages(
@@ -132,7 +130,9 @@ exports['test_jacc'] = {
                     # Check that the hipache configuraiton is there
                     _key = "frontend:" + this._URL
                     this._j._redis("lrange", [_key, 0, -1], (res) =>
-                        this._helpers.logDebug('test_buildHipacheConfig hipache configuration:'+JSON.stringify(res))
+                        this._helpers.logDebug('test_buildHipacheConfig hipache configuration for key '+_key+':'+JSON.stringify(res))
+                        test.equal(res[0],  this._id, 'test_buildHipacheConfig: image id')
+                        test.equal(res[1],  this._URL+':'+this.port, 'test_buildHipacheConfig: URL and port')
                         test.done()
                     )
                 )
