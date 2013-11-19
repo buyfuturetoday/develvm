@@ -17,7 +17,7 @@ exports['test_jacc'] = {
         this._helpers     = require('helpersjs').create()
         this._helpers.logging_threshold = this._helpers.logging.debug
 
-        this._id   = process.env.JACC_TEST_CONTAINERID
+        this._id   = process.env.JACC_TEST_IMAGE
         this._URL  = process.env.JACC_TEST_URL
         this._port = process.env.JACC_TEST_PORT
         this._DNS  = process.env.JACC_TEST_DNS
