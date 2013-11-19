@@ -124,7 +124,7 @@ exports['test_jacc'] = {
 
                     # Check that the hipache configuraiton is there
                     _key = "frontend:"+this._id
-                    this._redis("lrange", [_key], 0, -1, (res) =>
+                    this._j_redis("lrange", [_key], 0, -1, (res) =>
                         this._helpers.logDebug('test_buildHipacheConfig hipache configuration:'+JSON.stringify(res))
                     )
                     () => test.done()
