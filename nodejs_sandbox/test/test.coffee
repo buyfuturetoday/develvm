@@ -120,7 +120,7 @@ exports['test_jacc'] = {
         this._helpers.logDebug('test_buildHipacheConfig')
         this._j._listImages(
             () =>
-                this._j._buildHipacheConfig(
+                this._j._buildHipacheConfig( () =>
 
                     this._helpers.logDebug(this._id)
                     # Check that the hipache configuraiton is there
