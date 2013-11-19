@@ -174,9 +174,9 @@ exports.create = () ->
 					{URL, internal_port, DNS} = JSON.parse(res)
 
 					# Set hipache config
-					_key = "frontend:"+image
+					_key = "frontend:"+URL
 					this._redis("del", [_key], () =>
-						this._redis("rpush", [_key, URL], () =>
+						this._redis("rpush", [_key, image], () =>
 							this._.each( this._runningImages[ image ], (res) =>
 								this._redis("rpush", [ _key, res["IP"] ], null)
 								fn() if(fn?)
@@ -229,24 +229,6 @@ exports.create = () ->
 				fn() if fn?
 			)
 		)	
-
-
-	add2 : (image, URL, internal_port, dns_name) ->
-		console.log("Jacc: adding " + image)
-
-		redis_client = this.redis.createClient()
-		redis_client.on("connect", () =>
-			redis_client.sadd("images", image, (err, res) =>
-				redis_client.quit()
-			)	
-		)
-
-		redis_client2 = this.redis.createClient()
-		redis_client2.on("connect", () =>
-			redis_client2.set(image, JSON.stringify({URL: URL; internal_port: internal_port; DNS: dns_name}), (err, res) =>
-				redis_client2.quit()
-			)	
-		)
 
 
 	# Delete image from Jacc configuration

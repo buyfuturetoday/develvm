@@ -112,6 +112,13 @@ exports['test_jacc'] = {
 
 
     'test_buildHipacheConfig': (test) =>
+
+        # The hipache configuration (in redis) should look something like this
+        # $ redis-cli lrange frontend:app.jacc.local 0 -1
+        # 1) "abcdefhikjl"
+        # 2) "http://192.168.0.42:80"
+
+
         # There should be X tests
         test.expect(1)
 
@@ -123,7 +130,7 @@ exports['test_jacc'] = {
                 this._j._buildHipacheConfig( () =>
 
                     # Check that the hipache configuraiton is there
-                    _key = "frontend:" + this._id
+                    _key = "frontend:" + this._URL
                     this._j._redis("lrange", [_key, 0, -1], (res) =>
                         this._helpers.logDebug('test_buildHipacheConfig hipache configuration:'+JSON.stringify(res))
                         test.done()
