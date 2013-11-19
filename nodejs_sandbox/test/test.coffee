@@ -90,7 +90,7 @@ exports['test_jacc'] = {
             this._j.add(this._id, this._URL, this._port, this._DNS, () =>
                 this._j._redis( "smembers", ["images"], (res) =>
                     this._helpers.logDebug('test_add: onJaccConfig res from redis:' + res)
-                    test.equal(res,  _id, 'jacc add and check that image was added')
+                    test.equal(res,  this._id, 'jacc add and check that image was added')
                     test.done()
                 )
             )
@@ -125,7 +125,7 @@ exports['test_jacc'] = {
                     # Check that the hipache configuraiton is there
                     _key = "frontend:"+image
                     this._redis("lrange", [_key], 0, -1, (res) =>
-                        this._helpers.logDebug('test_buildHipacheConfig hipache configuration:'+JSON+stringify(res))
+                        this._helpers.logDebug('test_buildHipacheConfig hipache configuration:'+JSON.stringify(res))
                     )
                     () => test.done()
                 )
