@@ -120,7 +120,7 @@ exports['test_jacc'] = {
 
 
         # There should be X tests
-        test.expect(2)
+        test.expect(1)
 
         this._helpers.logDebug('test_buildHipacheConfig')
         this._j._listImages(
