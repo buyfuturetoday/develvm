@@ -80,6 +80,7 @@ exports.create = () ->
 				when "set" then redis_client.set( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
 				when "smembers" then redis_client.smembers( args[0], (err, res) => this._f(redis_client, err, res, func) )
 				when "sadd" then redis_client.sadd( args[0], args[1], (err, res) => this._f(redis_client, err, res, func) )
+				when "lrange" then redis_client.lrange( args[0], args[1], args[2], (err, res) => this._f(redis_client, err, res, func) )
 				else throw Error('_redis: unsuported operation')
 
 		)

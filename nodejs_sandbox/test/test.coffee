@@ -17,6 +17,12 @@ exports['test_jacc'] = {
         this._helpers     = require('helpersjs').create()
         this._helpers.logging_threshold = this._helpers.logging.debug
 
+        this._id   = process.env.JACC_TEST_CONTAINERID
+        this._URL  = process.env.JACC_TEST_URL
+        this._port = process.env.JACC_TEST_PORT
+        this._DNS  = process.env.JACC_TEST_DNS
+
+
         # setup finished
         done()
 
@@ -81,12 +87,7 @@ exports['test_jacc'] = {
         this._j._redis( "del", ["images"], (res) =>
 
             # _j.add is async so test.done will likely be executed too early
-            _id   = process.env.JACC_TEST_CONTAINERID
-            _URL  = process.env.JACC_TEST_URL
-            _port = process.env.JACC_TEST_PORT
-            _DNS  = process.env.JACC_TEST_DNS
-
-            this._j.add(_id, _URL, _port, _DNS, () =>
+            this._j.add(this._id, this._URL, this._port, this._DNS, () =>
                 this._j._redis( "smembers", ["images"], (res) =>
                     this._helpers.logDebug('test_add: onJaccConfig res from redis:' + res)
                     test.equal(res,  _id, 'jacc add and check that image was added')
@@ -120,6 +121,12 @@ exports['test_jacc'] = {
         this._j._listImages(
             () =>
                 this._j._buildHipacheConfig(
+
+                    # Check that the hipache configuraiton is there
+                    _key = "frontend:"+image
+                    this._redis("lrange", [_key], 0, -1, (res) =>
+                        this._helpers.logDebug('test_buildHipacheConfig hipache configuration:'+JSON+stringify(res))
+                    )
                     () => test.done()
                 )
         )
