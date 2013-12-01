@@ -15,7 +15,7 @@ BUILD = $(SRC:src/%.coffee=build)
 DOCSRC = $(wildcard *.js)
 DOC = $(DOCSRC:%.js=docs/%.html)
 
-all: install build test run
+all: install build test
 
 #build:	./src/build.js
 build:
@@ -50,12 +50,6 @@ clean:
 
 install link: package.json
 	@npm $@
-
-run: build
-#	node -e "e=require('./build/jacc.js').create();e.main()" null status
-#	node -e "e=require('./build/jacc.js').create();e.main()" null add ${DOCKER_MYLAMP} app1.jacc.local app1.local
-#	node -e "e=require('./build/jacc.js').create();e.main()" null update
-
 
 .PHONY: build
 .PHONY: test

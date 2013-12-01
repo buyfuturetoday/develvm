@@ -1,0 +1,9 @@
+WEB
+1
+http://moneycentral.msn.com/investor/external/excel/quotes.asp?SYMBOL=["QUOTE","Ange aktie-, fond- eller andra MSN MoneyCentral Investor-symboler separerade med komman."]
+
+Selection=EntirePage
+Formatting=All
+PreFormattedTextToColumns=True
+ConsecutiveDelimitersAsOne=True
+SingleBlockTextImport=False

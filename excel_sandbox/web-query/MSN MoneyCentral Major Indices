@@ -1,0 +1,9 @@
+WEB
+1
+http://moneycentral.msn.com/investor/external/excel/quotes.asp?symbol=$INDU,$COMP,$TRAN,$UTIL,$DE:DAX,$GB:UKX,$HSI,$IIX.X,$COMPX,$N225,$PARI,$SOX.X,$IUX,$OEX,$INX,$STI,$AOI,$CA:OSPTX
+
+Selection=EntirePage
+Formatting=All
+PreFormattedTextToColumns=True
+ConsecutiveDelimitersAsOne=True
+SingleBlockTextImport=False

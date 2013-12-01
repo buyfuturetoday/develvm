@@ -1,0 +1,9 @@
+WEB
+1
+http://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&sensor=true
+
+Selection=EntirePage
+Formatting=All
+PreFormattedTextToColumns=False
+ConsecutiveDelimitersAsOne=False
+SingleBlockTextImport=False
