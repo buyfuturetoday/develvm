@@ -1,0 +1,11 @@
+'
+' http://msdn.microsoft.com/en-us/library/ms973814.aspx
+'
+
+Public Class CEmployee
+
+	Public Shared Sub Main()
+		MsgBox("Hello, World!") ' Display message on computer screen.
+	End Sub
+
+End Class
