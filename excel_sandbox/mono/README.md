@@ -2,6 +2,17 @@ Mono
 ====
 
 
+Installation
+-----------
+
+OpenSUSE is supported according to the mono homepage.
+
+ * Download package - `wget http://download.mono-project.com/archive/3.2.3/linux/x64/mono-complete-3.2.3-0.x86_64.rpm`
+ * Download nuget - `wget http://nuget.org/nuget.exe`
+ * Install SignalR - `mono nuget.exe install Microsoft.AspNet.SignalR`
+
+
+
 Hello World
 ===========
 
