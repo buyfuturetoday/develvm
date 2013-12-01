@@ -1,6 +1,8 @@
 '
 ' http://msdn.microsoft.com/en-us/library/ms973814.aspx
 '
+' Compile with: `vbnc Hello` and run with `mono Hello.exe`
+'
 
 Public Class CEmployee
 

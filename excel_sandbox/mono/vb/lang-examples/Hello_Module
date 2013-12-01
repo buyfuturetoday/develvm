@@ -1,4 +1,6 @@
 ' A "Hello, World!" program in Visual Basic. 
+' Compile with: `vbnc Hello` and run with `mono Hello.exe`
+'
 Module Hello
   Sub Main()
       MsgBox("Hello, World!") ' Display message on computer screen.
