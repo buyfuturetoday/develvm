@@ -37,4 +37,18 @@ RUN apt-get install -y ruby1.9.3
 # Install Jekyll
 #
 
-RUN gem install jekyll
+# RUN gem install jekyll
+
+RUN gem install bundler
+
+ADD . /
+
+RUN bundle install
+
+
+#
+# Start web server
+#
+
+EXPOSE 4000
+CMD ["bundle exec jekyll serve"]
