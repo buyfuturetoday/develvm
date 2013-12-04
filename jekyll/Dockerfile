@@ -1,10 +1,9 @@
 #
 # Dockerfile that builds container with ruby and Jekyll
-# When not using vagrant, run it manually with: docker build - < Dockerfile.nodejs
 #
 
 
-# Image: NodeJS & Python
+# Image: Jekyll
 #
 # VERSION               0.0.1
 
@@ -31,10 +30,11 @@ RUN apt-get install -y git wget
 #
 
 RUN apt-get update -y
-RUN apt-get install ...
+RUN apt-get install ruby1.9.3
+
 
 #
 # Install Jekyll
 #
 
-gem install jekyll
+RUN gem install jekyll
