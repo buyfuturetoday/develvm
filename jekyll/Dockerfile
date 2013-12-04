@@ -30,7 +30,7 @@ RUN apt-get install -y git wget
 #
 
 RUN apt-get update -y
-RUN apt-get install ruby1.9.3
+RUN apt-get install -y ruby1.9.3
 
 
 #
