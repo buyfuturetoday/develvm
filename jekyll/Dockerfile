@@ -22,7 +22,7 @@ RUN apt-get update -y
 # Install some nice tools
 #
 
-RUN apt-get install -y git wget make
+RUN apt-get install -y git wget make python
 
 
 #
@@ -37,7 +37,6 @@ RUN apt-get install -y ruby1.9.3
 # Install Jekyll
 #
 
-# RUN gem install jekyll
 
 RUN gem install bundler
 
@@ -51,4 +50,4 @@ RUN bundle install
 #
 
 EXPOSE 4000
-CMD ["bundle exec jekyll serve"]
+CMD ["cd /sites/gizur.com && bundle exec jekyll serve"]
