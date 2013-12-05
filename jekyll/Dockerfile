@@ -50,4 +50,4 @@ RUN bundle install
 #
 
 EXPOSE 4000
-CMD ["cd /sites/gizur.com && bundle exec jekyll serve"]
+CMD ["cd /sites/test1 && bundle exec jekyll serve"]
