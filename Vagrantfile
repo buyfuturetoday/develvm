@@ -156,14 +156,31 @@ Vagrant.configure("2") do |config|
   #
   # OpenSUSE
   #
+  # Network don't work
 
   config.vm.define :suse do |vb_config|
 
 #    vb_config.vm.network :public_network
-    vb_config.vm.box = "suse"
+    vb_config.vm.box = "suse123"
 
 #    vb_config.vm.box_url = "http://bit.ly/openSUSE-12-3-virtualbox-box"
     vb_config.vm.box_url = "http://sourceforge.net/projects/opensusevagrant/files/12.3/opensuse-12.3-64.box/download"
+
+  end
+
+
+
+  #
+  # OpenSUSE
+  # 
+  # Network don't work
+
+  config.vm.define :centos do |vb_config|
+
+#    vb_config.vm.network :public_network
+    vb_config.vm.box = "centos64"
+
+    vb_config.vm.box_url = "https://github.com/2creatives/vagrant-centos/releases/download/v0.1.0/centos64-x86_64-20131030.box"
 
   end
 
