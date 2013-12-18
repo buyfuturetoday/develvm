@@ -1,43 +1,56 @@
 {
-  "name": "my_sandbox",
-  "private": false,
-  "version": "0.0.1",
-  "description": "My sandbox",
-  "homepage": "https://github.com/colmsjo/develvm",
+  "name"        : "nodejs_sandbox",
+  "description" : "Sandbox for Node development",
+  "version"     : "0.0.1",
+  "author": {
+    "name": "Jonas Colmsjö",
+    "email": "jonas.colmsjo@gizur.com"
+  },
   "repository": {
-    "type": "git",
-    "url": "https://github.com/colmsjo/develvm.git"
+    "type" : "git",
+    "url"  : "git://github.com/colmsjo/nodejs_sandbox.git"
   },
   "bugs": {
-    "url": "https://github.com/colmsjo/develvm/issues"
+    "url": "https://github.com/colmsjo/nodejs_sandbox/issues"
   },
-  "author": "Jonas Colmsjö <jonas@gizur.com>",
-  "main": "./build/build.js",
-  "bin": "./jacc.js",
-  "dependencies": {
-    "hipache": "0.2.4",
-    "redis-dns": "0.0.1",
-    "redis": "0.8.4",
-    "node-docker": "*",
-    "docker.io": "*",
-    "optimist": "*",
-    "underscore": "*",
-    "helpersjs": "*"
-  },
-  "devDependencies" : {
-    "grunt": "*",
-    "async": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-nodeunit": "*",
-    "grunt-contrib-watch": "*",
-    "grunt-contrib-concat": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-contrib-coffee": "*",
-    "doccoh":"0.4.1"
-  },
-  "keywords": [
-    "Sandbox"
+  "licenses": [
+    {
+      "type" : "MIT",
+      "url"  : "http://opensource.org/licenses/MIT"
+    }
   ],
-  "license": "WTFPL",
-  "preferGlobal": false
+  "main": "app.js",
+  "dependencies": {
+    "express"      : ">=2.5.x",
+    "request"      : "*",
+    "fmt"          : "0.4.0",
+    "grunt-exec"   : "~0.3.0",
+    "nodeunit"     : "0.7.4",
+    "grunt-doccoh" : "0.1.3",
+    "grunt-clean"  : "0.3.0",
+    "underscore"  : "*",
+    "forever-monitor"  : "*",
+    "daemon"  : "*",
+    "async"  : "*"
+  },
+  "engines": {
+    "node" : "0.8.x",
+    "npm"  : "1.1.x"
+  },
+   "bin": {
+    "server": "foreman"
+  },
+  "scripts": {
+    "test"       : "grunt test",
+    "start"      : "node --debug-brk app.js",
+    "predeploy"  : "echo Starting to deploy app...",
+    "postdeploy" : "echo Application deployed."
+  },
+  "devDependencies": {
+    "grunt"          : "~0.3.16"
+  },
+  "bundleDependencies": [
+    "helpers"
+  ], 
+  "keywords": ["cron", "logging"]
 }

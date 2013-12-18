@@ -1,0 +1,146 @@
+<!--
+  --
+  -- test-logger.html
+  --
+  -- This web app simply tests the centralized logger. 
+  --
+  -- NOTE: In order to avoid browser errors when running from file:// start with security disabled
+  --       for instance, on OS: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --disable-web-security
+  --
+  -->
+
+
+<html>
+<head>
+	<title>Test centralized logger</title>
+
+	<!-- My unit test and logging functions -->
+	<script src="lib/helpers.js"></script>
+
+	<!-- Used for the views -->
+	<script src="lib/underscore-min.js"></script>
+	<script src="lib/jquery.min.js"></script>
+	
+	<script>
+
+	window.onload = function(){
+
+		// Includes
+		// ================
+
+		/*var $       = require('jQuery');
+		var helpers = require('./lib/helpers.js');
+		var argv    = require('optimist')
+		                .usage('Usage: ./test-logger.js --message [message-to-log] --local')
+		                .demand(['message'])
+		                .argv;*/
+
+
+		// set logging level
+		logging.threshold  = logging.debug;
+
+
+		// Globals
+		//==============
+
+		var localURL    = 'http://localhost:5000/',
+		    remoteURL   = 'http://gizur-cron-and-logs.herokuapp.com/',
+		    clientID    = 'TEST_CLIENT';
+
+
+		//
+		// Log a message
+		//-----------------------------
+
+		function logMessage(msg, local){
+
+		    logDebug('logMessage: ' + msg + ' at:' + ((local===undefined) ? remoteURL : localURL) );
+
+		    var request = $.ajax({
+
+		        // REST function to use
+		        url:      (local===undefined) ? remoteURL : localURL,
+		        type:     'POST',
+		        dataType: 'json',
+		        //headers:  {'Accept':'text','Content-Type':'application/json'},
+		        data:     {
+		            "client"    : clientID,
+		            "timestamp" : new Date(),
+		            "message"   : msg 
+		        },
+
+		        success: function(data){
+		            logDebug('logMessage: Yea, it worked...' + JSON.stringify(data) );
+		        },
+
+		        error: function(data){
+		            logErr('logMessage: Shit hit the fan...' + JSON.stringify(data) );
+
+		        }
+
+		    });
+
+		    return request;
+
+		}
+
+		// Cache the template function 
+		var tmpl = _.template($('#item-template').html());
+		
+		// Manage the event when add is clicked
+		$('#add').on('click', function() {			
+			var _todo = $('#new-todo')[0];
+			logMessage('logging: '+_todo.value +'...');
+			log('logging: '+_todo.value +'...');
+			$('#todos')[0].innerHTML = tmpl( {title: _todo.value} );
+		});
+		
+		test("Testing Centralized Logger...", function(){	
+			// Doing nothing right now
+		});
+  
+	};
+	</script>
+
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+
+
+</head>
+<body>
+
+	<div id="myapp">
+	
+		<header>
+			<h1>My App</h1>
+		</header>
+		
+		<section id="input-section">
+			<input id="new-todo" type="text" placeholder="What needs to be logged?"/>
+			<a id="add">Log</a>
+		</section>
+
+		<div id="todos">
+		</div>
+		
+		<footer>
+			2012 by Gizur AB
+		</footer>
+	  
+	</div>
+	
+	<ul id="results"></ul>
+
+	<!-- Templates -->
+	
+	<script type="text/template" id="item-template">
+	  <div>
+	    <br/><label><%= title %></label><br/><br/>
+	  </div>
+	</script>
+
+
+</body>
+</html>

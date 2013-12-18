@@ -1,40 +1,43 @@
-Jacc - Just Another Cloud in the Cloud
-======================================
+My NodeJS sandbox
+=================
 
-Jacc is a private cloud built from standard components such as docker.io, hipache and redis-dns. Docker is a linux containers architecture and hipache a high perforamnce web proxy. redis-dns provides an internal DNS between containers. Docker and hipache are provided by the team behind the dotCloud service.
+Actions:
 
-The goal is to provide an architecture suitable for hosting a variety of components on a limited amount of server. Examples of components could be web applications build in PHP/Java/NodeJS/Ruby/Python etc. It could also include databases, caching systems, queue management etc. The limit is really only what's runs on the Linux flavours that docker supports.
+ * install locally with `npm install`
+ * then start server with `grunt exec:run`
+ * compile with `grunt lint min`
+ * generate documentation with `grunt doccoh`
+ * run tests with `grunt test`
+ 
+ 
+Credentials that can't be saved to files stored in git should be managed as environment
+variables.  
 
-
-Installation
-------------
-
-Pre-requiresites:
-
- * docker
- * redis
- * NodeJS (preferabley managed with nvm)
- * make - for development only
-
-
-Development
-------------
-
-An easy way to get started quickly is to create a virtual machine using Vagrant. This repo has everything you need: https://github.com/colmsjo/docker. You can of course setup docker and the other required modules yourself.
-
-Run `make install` to install everything in the current directory.
-
-Jacc comes with a test suite. The first step when developing is to make sure that the test runs without any erros. 
-
-A number of environment vaiables needs to be set. You can for instance update the `./test/setenv` file showed below:
+When running locally on the developers laptop etc:
 
 ```
-export JACC_TEST_CONTAINERID=$abcdefghijkl
-export JACC_TEST_URL="app1.jacc.local"
-export JACC_TEST_PORT="80"
-export JACC_TEST_DNS="app1.local"
+echo AWS_TOKEN=xxx-xxxx-xxx-xxxx > .env 
+echo AWS_SECRET=xxx-xxxx-xxx-xxxx >> .env 
+
+# Run with foreman and the env variables are set
+foreman
+``` 
+
+For deployment on Heroku:
+
+``
+heroku config:set AWS_TOKEN=xxx-xxxx-xxx-xxxx
+heroku config:set AWS_SECRET=xxx-xxxx-xxx-xxxx
 ```
+ 
+ 
+ 
+Also the node environment should be set:
+ 
+ * `heroku config:set NODE_ENV=development`
+ * `heroku config:set NODE_ENV=qa`
+ * `heroku config:set NODE_ENV=production` 
 
-Then do `source ./test/setenv` followed by `make` to kickoff the test suite.
 
+Configuration that depends on development/qa/production is placed in config.js
 
