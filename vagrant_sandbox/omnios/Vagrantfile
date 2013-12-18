@@ -1,0 +1,13 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+
+#Vagrant.configure("2") do |config|
+
+Vagrant::Config.run do |config|
+
+  config.vm.box = "OmniOS-latest"
+  config.vm.box_url = "http://omnios.omniti.com/media/OmniOS_r151006c-r1.box"
+
+end
