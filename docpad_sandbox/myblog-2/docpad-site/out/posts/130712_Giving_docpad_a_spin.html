@@ -1,0 +1,67 @@
+<html>
+<head>
+    <title>Giving docpad a spin</title>
+    <meta http-equiv="X-Powered-By" content="DocPad v6.45.0"/>
+    
+</head>
+<body>
+    <h1>Giving docpad a spin</h1>
+<div><p>Giving docpad a spin</p>
+<p>docpad as a new content management system based on static files. This removes the need for a databse and makes it possible to store the content in git (or any version control system tou prefer).</p>
+<p>Links:</p>
+<ul>
+<li><a href="http://docpad.org/">http://docpad.org/</a></li>
+</ul>
+<h2>Hello world in docpad</h2>
+<p>First install NodeJS and npm if you haven&#39;t already. </p>
+<p>Latest version when this is written is installed like this: <code>npm install -g docpad@6.45</code>.</p>
+<p>Copied from here: <a href="http://docpad.org/docs/start">http://docpad.org/docs/start</a></p>
+<pre><code>mkdir docpad-site &amp;&amp; cd docpad-site
+
+docpad init
+
+npm install --save docpad-plugin-eco docpad-plugin-marked
+
+mkdir -p src/documents/posts/</code></pre>
+<p>src/layouts/default.html.eco:</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;&lt;%= @document.title %&gt;&lt;/title&gt;
+    &lt;%- @getBlock(&quot;meta&quot;).toHTML() %&gt;
+    &lt;%- @getBlock(&quot;styles&quot;).toHTML() %&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;%- @content %&gt;
+    &lt;%- @getBlock(&quot;scripts&quot;).toHTML() %&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>src/layouts/post.html.eco:</p>
+<pre><code>---
+layout: default
+---
+&lt;h1&gt;&lt;%= @document.title %&gt;&lt;/h1&gt;
+&lt;div&gt;&lt;%- @content %&gt;&lt;/div&gt;</code></pre>
+<p>src/documents/posts/hello.html.md:</p>
+<pre><code>---
+layout: post
+title: Hello World!
+---
+**Hello** World!</code></pre>
+<p>src/documents/index.html.eco:</p>
+<pre><code>&lt;% for post in @getFilesAtPath(&quot;posts&quot;).toJSON(): %&gt;
+    &lt;a href=&quot;&lt;%= post.url %&gt;&quot;&gt;&lt;%= post.title %&gt;&lt;/a&gt;&lt;br/&gt;
+&lt;% end %&gt;</code></pre>
+<p>Generate the site</p>
+<pre><code>docpad run</code></pre>
+<p>open <a href="http://localhost:9778/">http://localhost:9778/</a></p>
+<p>Add one more post:</p>
+<p>src/documents/posts/world.html.md:</p>
+<pre><code>---
+layout: post
+title: Hello World!
+---
+Hello **World!**</code></pre>
+</div>
+    
+</body>
+</html>

@@ -1,0 +1,28 @@
+
+---
+layout: post
+title: Copy data between S
+date: 2013-03-04
+author: Jonas Colmsjo
+---
+
+Copy data between S3 buckets
+
+
+
+
+
+Links:
+
+ * http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/UsingEMR_s3distcp.html
+
+
+AWS Pipiline seams to be a nice tool coming up. It is currently only available in US regions but I'm sure it will come in more regions.
+One thing I don't see that it does handle thputh is copying data between buckets in different accounts. There is a Hadoop that handles
+this, s3distcp.
+
+I'll give this tool a go.
+
+
+After checking the documentation I realized that  this tool only can work within one account. This is not what I need so I guess I'll have
+to write a small script myself.

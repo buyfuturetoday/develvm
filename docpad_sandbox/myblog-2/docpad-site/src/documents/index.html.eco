@@ -1,0 +1,6 @@
+<% posts = @getFilesAtPath("posts").toJSON() %>
+<% posts.sort( (a,b) -> if a.date < b.date then 1 else -1 ) %>
+
+<% for post in posts: %>
+    <a href="<%= post.url %>"><%= post.title %></a><br/>
+<% end %>

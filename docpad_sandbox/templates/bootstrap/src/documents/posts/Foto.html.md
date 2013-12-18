@@ -1,0 +1,93 @@
+
+---
+layout: post
+title: Foto
+date: 2012-01-01
+author: Jonas Colmsjo
+---
+
+Yet another post
+
+
+
+
+
+[[Fritid]]
+
+
+# Siter
+
+* http://www.magnumphotos.com/
+* http://lens.blogs.nytimes.com/
+* http://www.outdoorphotographer.com/
+
+# Rengöring
+
+* http://www.cleaningdigitalcameras.com/
+* http://www.photosol.com/store/pc/viewCategories.asp?idCategory=2
+
+
+# Montering
+
+* http://www.photax.se/
+* http://www.fotografiska.org/2009/05/artikel-montering-av-bilder/
+* http://commons.wikimedia.org/wiki/File:A_size_illustration.svg
+* http://www.tavelram.se/ramar
+* http://www.crimoram.se/dept/Tavelramar-tomma-ramar_84639/SWE/SEK
+
+
+# Kameror
+
+Funktioner:
+* AE bracketing (Gaffling) - 3 bilder 2EV eller 5 bilder 1EV
+* RGB histogram
+
+
+Köp till:
+* Extra batteri
+* Fjärrutlösare
+* Väska
+* UV-filter
+
+
+Nikon D3100:
+* Autofocus 11 punkter
+* Ingen AEB
+
+
+Nikon D5100:
+* AEB - tre bilder 1EV 
+* samma autofocus som D3100
+
+
+D7000:
+* samma som D5100 - ej 2EV!!
+* Avancerad autofocus med 38 punkter
+
+
+Fuji X-Pro1:
+* Bra bildkvalitet
+* Kompatibel med Leica M-objektiv
+* bracketing ?
+* ej RGB histogram
+* långsam autofocus
+
+
+# Photo editing
+
+[[Black and White]]
+
+
+# HDR
+
+## Teknik
+
+* http://digitalfoto.fpgroup.se/default.asp?id=419&sida=1035
+
+
+## Program 
+
+* http://wiki.panotools.org/HDR_Software_overview
+* http://photography-on-the.net/forum/showthread.php?t=563543
+* http://forums.dpreview.com/forums/read.asp?forum=1017&message=37227996
+* http://forums.dpreview.com/forums/read.asp?forum=1017&message=32655110

@@ -1,0 +1,828 @@
+---
+standalone: true
+---
+
+// Coded in Stylus: http://learnboost.github.com/stylus/
+
+// ====================================
+// Imports
+
+// nib: http://visionmedia.github.com/nib/
+@import 'nib'
+
+// fonts
+@import url("http://fonts.googleapis.com/css?family=Source+Code+Pro:200,300,400,600,700,900")
+
+// vendor
+@import '/vendor/highlight.css'
+@import '/vendor/normalize.css'
+@import '/vendor/h5bp.css'
+@import '/vendor/bootstrap/button.css'
+
+
+// ====================================
+// Responsive Layout Awesomeness
+// https://gist.github.com/1549029
+// Published under the "public domain" using the Creative Commons Zero - http://creativecommons.org/publicdomain/zero/1.0/
+
+// Everything
+*
+	// Make paddings be included within the width
+	box-sizing border-box
+
+// Provide our wrapper mixin
+// Contains our resize transition
+wrapper($site-width = 70%)
+	$site-margin = ((100% - $site-width) / 2)
+	margin-left: $site-margin
+	margin-right: $site-margin
+	transition: margin 0.3s ease-out
+	clearfix()
+
+// Provide our column mixin
+column($columns)
+	display: inline
+	float: left
+	overflow: hidden
+	width: (100/$columns)%
+
+
+// ====================================
+// Configuration
+
+// Variables
+theme = "gray"
+
+// Text
+colorHeading = #3F3931
+colorSubheading = #999992
+colorMenu = #403931
+colorNav = colorHeading
+colorSubnav = colorMenu
+colorBlockHeading = colorSubheading
+colorAccent = hsl(11, 90%, 55%)
+colorActive = colorAccent
+colorLink = hsl(195, 85%, 34%) // hsl(195, 100%, 35%)
+colorContent = #4C4439
+
+// Fonts
+fontMyraid = "Myriad Pro", "Segoe WP", "Segoe UI", Segoe, Calibri, Helvetica, Arial
+fontMyraidBoldest = 700
+fontMyraidBold = 600
+fontMyraidNormal = 500
+fontMyraidLight = 500
+fontMyraidLightest = 500
+
+
+// ====================================
+// Mixins
+
+// Heading
+mixinHeading()
+	font-family: fontMyraid
+	font-weight: fontMyraidBold
+	color: colorHeading
+
+// Subheading
+mixinSubheading()
+	font-family: fontMyraid
+	font-weight: fontMyraidNormal
+	color: colorSubheading
+
+// Nav
+mixinNav()
+	font-family: fontMyraid
+	font-weight: fontMyraidBoldest
+	color: colorNav
+
+// Menu
+mixinMenu()
+	font-family: fontMyraid
+	font-weight: fontMyraidBoldest
+	color: colorMenu
+
+// Icons
+mixinIconPageUp()
+	&:before
+		content: '↑'
+mixinIconPageDown()
+	&:before
+		content: '↓'
+mixinIconPagePrev()
+	&:before
+		content: '←'
+mixinIconPageNext()
+	&:before
+		content: '→'
+mixinIconSectionUp()
+	&:before
+		content: '⇧'
+mixinIconSectionDown()
+	display: inline-block
+	transform: rotate(-180deg)
+	&:before
+		content: '⇧'
+mixinIconAccountPointer()
+	display: inline-block
+	transform: rotate(-180deg)
+	transition: all 0.5s
+	&:before
+		content: '▴'
+
+
+
+// ====================================
+// Themes
+
+// Light
+if theme is "light"
+	mixinBody()
+		background: hsl(40, 21%, 99%)
+
+	.topbar
+		.subheading
+			color: hsl(60, 0%, 82%)
+
+	.sidebar
+		li
+			opacity: 0.8
+
+	mixinBlock()
+		box-shadow: inset 0 0 9px hsla(0, 0%, 0%, 0.01), 0 0 70px hsla(37, 25%, 25%, 0.09)
+		border: 1px solid hsl(0, 0%, 78%)
+		background: white
+
+	mixinSubblock()
+		box-shadow: inset 0 0 9px hsla(0, 0%, 0%, 0.01), 0 0 70px hsla(37, 25%, 25%, 0.09)
+		border: 1px solid hsl(42, 19%, 80%)
+		background: hsl(37, 70%, 94%)
+
+else if theme is "gray"
+	mixinBody()
+		background: hsl(36, 17%, 97%)
+
+	mixinBlock()
+		box-shadow: 0 0 9px hsla(0, 0%, 0%, 0.12)
+		border: 1px solid hsl(53, 19%, 80%)
+		background: white
+
+	mixinSubblock()
+		box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1)
+		border: 1px solid hsl(42, 19%, 80%)
+		background: hsl(37, 60%, 94%)
+
+	mixinWell()
+		box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.3)
+		border: 1px solid hsl(53, 19%, 58%)
+
+else if theme is "cream"
+	mixinBody()
+		background: #FDFBF1 url(/images/bg.gif) repeat
+
+	mixinBlock()
+		box-shadow: 0 0 9px hsla(0, 0%, 0%, 0.12)
+		border: 1px solid hsl(53, 19%, 80%) // hsl(48, 15%, 87%)
+		background: hsl(60, 25%, 98%)
+
+	mixinSubblock()
+		box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1)
+		border: 1px solid hsl(42, 19%, 80%)
+		background: hsl(42, 37%, 93%)
+
+else if theme is "expiremental"
+	mixinBody()
+		background: #FDFBF1 url(/images/bg.gif) repeat
+
+	mixinBlock()
+		box-shadow: 0 0 9px hsla(0, 0%, 0%, 0.12)
+		border: 1px solid hsl(53, 19%, 80%) // hsl(48, 15%, 87%)
+		background: hsl(60, 25%, 98%)
+
+	mixinSubblock()
+		box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1)
+		border: 1px solid hsl(42, 19%, 80%)
+		background: hsl(42, 37%, 93%)
+
+
+
+
+
+// ====================================
+// Styles
+
+body
+	mixinBody()
+	cursor: default
+	color: colorContent
+	font-family: fontMyraid
+
+	font-smooth: always
+	-webkit-font-smoothing: antialiased
+    color-profile: sRGB
+    rendering-intent: auto
+	text-rendering: optimizeLegibility
+
+em
+	color: colorAccent
+	font-style: normal
+
+code
+pre code
+	font-family: Consolas, Monaco, 'Source Code Pro', 'courier new', monospace, serif
+	border-radius: 0.5em
+	background: hsl(0, 0%, 99%)
+	border: 1px solid hsl(186, 8%, 88%)
+	color: hsl(186, 8%, 15%)
+
+code
+	font-size: 0.75em
+	font-weight: 500
+	padding: 0.05em 0.5em 0em
+	white-space: pre
+	display: inline-block
+	margin: 0.4em 0.2em 0.2em 0
+
+pre code
+	font-size: 0.7em
+	font-family: Monaco, Consolas, 'Source Code Pro', 'courier new', monospace, serif
+	display: block
+	margin: 2.5em 0
+	padding: 1em 1.5em
+	line-height: 1.5em
+	// border: 1px solid hsl(186, 8%, 80%)
+	border: 1px solid hsl(192, 8%, 84%)
+	// border: 1px solid hsl(192, 8%, 80%)
+	// box-shadow: 0 0 2px hsl(192, 8%, 97%)
+
+nav
+nav li
+	list-style: none
+
+blockquote
+	margin: 3em
+	color: hsl(11, 90%, 55%)
+	em
+		font-style: italic
+
+.label
+	padding: 0.1em 0.4em
+	border-radius: 3px
+	font-size: 0.75em
+	font-weight: bold
+	line-height: 14px
+	color: white
+	text-shadow: 0 -1px 0 hsla(0, 0%, 0%, 0.25)
+	white-space: nowrap
+	vertical-align: baseline
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif
+	margin-left: 0.5em
+	&.label-success, &.label-training
+		background: hsl(121, 32%, 40%)
+	&.label-info, &.label-pro
+		background: hsl(200, 50%, 45%)
+	&.label-warning
+		background: hsl(35, 95%, 50%)
+	&.label-important
+		background: hsl(1, 45%, 50%)
+
+a:not(.hover-link),.link
+	cursor: pointer
+	text-decoration: none
+	color: colorLink
+	font-weight: fontMyraidBold
+.hover-link
+	cursor: pointer
+	text-decoration: none
+	color: inherit
+a:hover,.hover-link:hover
+	text-decoration: underline
+
+div.container
+	margin: 2em 4%
+	position: relative
+
+.sidebar
+	position: absolute
+	width: 10%
+	max-width: 135px
+	left: 0
+
+.mainbar
+	width: 90%
+	max-width: 1100px
+	left: 135px
+	position: absolute
+
+.topbar
+	position: relative
+	margin-bottom: 1.5em
+	.heading
+		mixinHeading()
+		font-size: 48px
+		display: inline
+	.subheading
+		mixinSubheading()
+		font-size: 24px
+		display: inline
+
+.accountbar
+	mixinMenu()
+	font-size: 14px
+	position: absolute
+	right: 0
+	top: 1em
+	width: 100%
+	<%- if 'development' in @getEnvironments() then 'display: block' else 'display: none' %>
+
+	.heading
+		.icon
+			mixinIconAccountPointer()
+		.title
+			padding-right: 0.2em
+
+	.heading-background
+	.heading
+	.content
+		display: block
+		position: absolute
+		right: 0
+	.heading-background
+	.heading
+		top: 0
+		height: 3em
+		padding: 1em
+		width: 120px
+		text-align: center
+		z-index: 501
+		cursor: pointer
+	.heading-background
+	.content
+		top: -5000px
+		transition: opacity 0.2s ease-out
+	.content
+		box-shadow: 0 0 9px hsla(0, 0%, 0%, 0.12)
+		z-index: 500
+		margin-top: -7px
+		padding: 2.5em 2.5em 1.5em 2.5em
+		width: 45%
+		opacity: 0
+		text-align: center
+		font-weight: fontMyraidNormal
+		font-size: 16px
+		.stuff
+			text-align: left
+			.name
+				text-align: center
+		.avatar
+			position: absolute
+			top: -30px
+			left: 5%
+			width: 82px
+			height: 82px
+			border-radius: 41px
+			box-shadow:
+				0 3px 3px hsla(0, 0%, 0%, .15),
+				0 2px 0 hsla(0, 0%, 0%, .5) inset,
+				0 -2px 0 hsla(0, 0%, 0%, .5) inset,
+				-2px 0 0 hsla(0, 0%, 0%, .5) inset,
+				2px 0 0 hsla(0, 0%, 0%, .5) inset,
+				0 3px 2px hsla(0, 100%, 100%, .6) inset,
+				0 -3px 2px hsla(0, 0%, 0%, .5) inset
+			/* the above is borrowed, will need to change this */
+			.avatar-image
+				width: 80px
+				height: 80px
+				border-radius: 40px
+		.well
+			display: block
+			box-sizing: content-box
+			width: 100%
+			padding: 0.75em 2.5em
+			margin: 1em 0 2em -2.5em
+			border: 1px solid hsl(42, 19%, 80%)
+			border-left: none
+			border-right: none
+			background: hsl(37, 60%, 94%)
+		h2
+			font-size: 18px
+			color: colorAccent
+			font-weight: fontMyraidNormal
+			margin-bottom: -1em
+
+	&:hover
+		.heading-background
+		.content
+			border: 1px solid #BBBBBB
+			background: hsl(36, 17%, 97%)
+			opacity: 1
+		.heading-background
+			top: 0
+			border-bottom: none
+		.content
+			top: 3em
+		.icon
+			transform: rotate(-90deg)
+
+.sidebar
+	font-size: 18px
+	z-index: 200
+
+	li
+		margin: 0 0 0.5em
+	li.active
+		> a
+			color: colorActive
+	a
+		text-decoration: none
+		mixinNav()
+		&:hover
+			text-decoration: underline
+
+	&:hover .promos .promo
+		opacity: 1
+		border: 1px solid hsla(53, 19%, 58%, 0.2)
+
+	.promos
+		margin-top: 1.5em
+		overflow-y: auto
+		margin-left: -1em
+		padding-right: 0.5em
+
+		.promo
+			display: block
+			padding: 1.3em 1em 1em 1em
+			margin-bottom: 1.5em
+			width: 100%
+			max-width: 150px
+			font-size: 12px
+			transition: opacity 1s ease-out, border 1s ease-out
+			opacity: 0.5
+			background: hsl(40, 20%, 96%)
+			border: 1px solid hsl(40, 20%, 96%)
+
+			cursor: pointer
+			line-height: 1.2em
+
+			span,a
+				display: block
+
+			.title
+				font-weight: bold
+			.description
+				font-style: italic
+				font-size: 10px
+				font-weight: normal
+
+			&:hover
+				span
+					text-decoration: underline
+
+
+.mainbar
+	z-index: 201
+	padding-bottom: 1em
+
+	.block
+		mixinBlock()
+		border-radius: 8px
+		color: colorContent
+		padding: 2em 4% 1em
+
+		.block-header
+			position: relative
+			margin-bottom: -2em
+
+			&:hover
+				.up
+					opacity: 1
+
+			h1
+				margin-top: 0
+
+		.block-content
+			margin-top: 4em
+
+			nav,nav li
+				list-style: none
+
+			.reference
+				h3
+					margin: 1em 0
+				h4
+					margin: 1.5em 0
+				.project
+					clear: both
+					margin-bottom: 4em
+				.categories
+					wrapper(100%)
+					.category
+						column(4)
+					&.columns-3 .category
+						column(3)
+					&.columns-2 .category
+						column(2)
+					&.columns-1 .category
+						column(1)
+				h2
+					margin-top: 0
+				.subblock
+					padding: 3em 3em 2em
+
+		.block-footer
+			.comments
+				border-top: 1px dotted hsla(0, 0%, 0%, 0.2)  !important
+				margin-top: 4em
+				padding-top: 2em
+
+			.prev-next
+				position: relative
+				height: 80px
+
+				.prev
+				.next
+				.up
+					display: block
+					position: absolute
+					bottom: 0
+					height: 65px
+					padding-top: 1em
+					width: 33%
+					transition: opacity 0.2s ease-out
+					opacity: 0.3
+					text-decoration: none
+					&:hover
+						opacity: 1
+						.title
+							text-decoration: underline
+					.icon
+						display: block
+						height: auto
+						width: auto
+
+				.prev
+					left: 0
+					text-align: left
+					.icon
+						mixinIconPagePrev()
+				.next
+					right: 0
+					text-align: right
+					.icon
+						mixinIconPageNext()
+				.up
+					left: 33%
+					text-align: center
+					.icon
+						mixinIconPageUp()
+
+
+
+		.section-wrapper
+			display:none
+			&.active
+				display:block
+
+		.list-sponsors
+		.list-users
+			list-style: none
+			li
+				display: inline
+				a:hover
+					text-decoration: none
+		.list-sponsors
+			li
+				img
+					max-width: 28%
+					max-height: 100px
+					margin-right: 8%
+					margin-bottom: 2em
+		.list-users
+			li
+				img
+					max-width: 20%
+					max-height: 65px
+					margin-right: 6%
+					margin-bottom: 3em
+
+		.contributors
+			.contributor
+				.contributor-repos
+					display: none
+				&:hover
+					.contributor-repos
+						display: inline
+				.contributor-repo
+					&:after
+						content: ', '
+					&:last-child:after
+						content: ''
+
+		h1
+			margin-bottom: 0
+			font-size: 32px
+
+		h2
+			font-weight: fontMyraidBoldest
+			color: colorAccent
+			font-size: 20px
+			margin-top: 4em
+
+		h3
+			font-size: 18px
+			margin-top: 3em
+
+		h4
+			margin-top: 2.5em
+
+	.subblock
+		mixinSubblock()
+		border-radius: 8px
+		color: colorContent
+		padding: 2em 2em 1em
+		margin: 1.5em 0
+		position: relative
+
+		&.subblock-yesavatar
+			.avatar
+				width: 128px*.85
+				margin-top: 0.5em
+				position: absolute
+				left: 0
+				text-align: center
+				.avatar-image
+					max-width: 96px*.7
+			.main
+				padding-left: 96px*.8
+
+		.heading
+			position: relative
+			h1,h2
+				display: inline
+				margin: 0
+				padding: 0
+				color: colorAccent
+			h1
+				font-weight: fontMyraidBoldest
+				font-size: 18px
+			h2
+				font-weight: fontMyraidLightest
+				font-size: 16px
+				position: absolute
+				top: 0
+				right: 0
+
+		.content
+			margin: 1em 0
+
+		footer
+			margin: 1.5em 0 0.5em
+
+			.links li
+				margin: 0
+				margin-right: 1.5em
+				display: inline
+
+
+
+.bottombar
+	font-size: 14px
+	color: colorSubheading
+	position: relative
+	margin-top: 2em
+	height: 3em
+	margin-bottom: 2em
+
+	.poweredby
+	.copyright
+		position: absolute
+		width: 50%
+		opacity: 0.5
+		transition: opacity 1s ease-out
+		&:hover
+			opacity: 1
+
+	.poweredby
+		top: 0
+		left: 0
+		text-align: left
+
+	.mixpanel-badge
+		display: inline
+
+	.copyright
+		top: 0
+		right: 0
+		text-align: right
+
+.btn-im
+.btn-phone
+.btn-email
+	margin: 0em 0.5em 0 0
+
+.clear
+	clear: both
+
+
+
+// ====================================
+// Layout: Responsive
+// Write your responsive layout styles here
+// Below is merely an example of how this should work
+
+// Small Screen
+@media screen and (max-width: 960px)
+	*
+		opacity: 1 !important
+
+	body
+		padding-bottom: 4em
+
+	div.container
+		margin: 0
+
+	.topbar
+		margin-bottom: 1em
+		text-align: center
+		.heading
+		.subheading
+			display: block
+			margin: 0
+			padding: 0
+
+	.accountbar
+		display: none
+
+	.sidebar
+		width: 100%
+		max-width: none
+		position: relative
+		text-align: center
+		line-height: 2em
+		li
+			display: inline
+			margin: 0 0.5em
+		.promos
+			display: none
+
+	.mainbar
+		width: 100%
+		position: relative
+		padding: 0
+		left: 0
+		right: 0
+		margin-top: 1em
+
+		.contact-links
+			line-height: 3em
+
+		.block
+			border-radius: 0
+			.block-content
+				.reference
+					.categories
+						.category
+							column(2)
+
+		.subblock
+			.main
+				.heading
+					h2
+						position: static
+						display: block
+
+	.bottombar
+		padding: 1em 1% 0
+
+
+// Small Screen
+@media screen and (max-width: 480px)
+	body
+		padding-bottom: 1em
+
+	.mainbar
+		.contact-links
+			a
+				display: block
+				margin: 2em 0
+
+		.block
+			text-align: justify
+			text-justify: newspaper
+			.block-content
+				.reference
+					.categories
+						.category
+							column(1)
+
+		.subblock
+			.avatar
+				display: none
+			.main
+				padding-left: 0 !important
+
+	.bottombar
+		.poweredby
+		.copyright
+			display: block
+			float: none
+			text-align: center

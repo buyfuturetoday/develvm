@@ -1,0 +1,17 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Guy Vider -- Chief tinkerer -- @TravelTechGuy
+
+# THANKS
+
+    hakimel, balupton
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    jQuery, Modernizr
+    CoffeeScript, Grunt
+

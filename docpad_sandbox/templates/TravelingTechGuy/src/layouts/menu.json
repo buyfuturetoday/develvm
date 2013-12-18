@@ -1,0 +1,35 @@
+{
+	"title": "Menu title",
+	"items": [
+		{
+			"name": "item 1",
+			"class": "",
+			"url": "#",
+			"newPage": false
+		},
+		{
+			"name": "item 2",
+			"class": "",
+			"url": "#",
+			"newPage": false
+		},
+		{
+			"name": "CNN",
+			"class": "",
+			"url": "http://www.cnn.com",
+			"newPage": true
+		},
+		{
+			"name": "Traveling Tech Guy",
+			"class": "big",
+			"url": "http://www.TravelingTechGuy.com",
+			"newPage": true
+		},
+		{
+			"name": "item 5",
+			"class": "",
+			"url": "#",
+			"newPage": false
+		}
+	]
+}

@@ -1,0 +1,269 @@
+
+---
+layout: post
+title: Aws
+date: 2012-01-01
+author: Jonas Colmsjo
+---
+
+Yet another post
+
+
+
+
+
+[[Main_Page]] > [[Gizur server admin]]
+
+
+= Docs =
+
+Getting started:
+* AWS Console: http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/
+* CLI: http://docs.amazonwebservices.com/AmazonEC2/gsg/2006-06-26/
+* Documentation: https://developer.amazonwebservices.com/connect/kbcategory.jspa?categoryID=84
+
+Ec2 Tools:
+* AWS: http://developer.amazonwebservices.com/connect/kbcategory.jspa?categoryID=88
+* EC2 API Tools: http://developer.amazonwebservices.com/connect/entry.jspa?externalID=351&categoryID=88
+* AMI tools: http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368
+
+Setup of ec2 tools
+* http://linuxsysadminblog.com/2009/06/howto-get-started-with-amazon-ec2-api-tools/
+* Also add EC2_URL=https://ec2.eu-west-1.amazonaws.com
+* Check some ELB tools (installed on s1.gizur.com, not sure what it is)
+
+Create new AMIs:
+* http://alestic.com/2010/01/ec2-ebs-boot-ubuntu
+* http://www.philchen.com/2009/02/14/how-to-create-an-amazon-elastic-compute-cloud-ec2-machine-image-ami
+* http://www.elastician.com/2009/12/creating-ebs-backed-ami-from-s3-backed.html
+* http://www.ioncannon.net/system-administration/894/fedora-12-bootable-root-ebs-on-ec2/
+
+Pre-configured images:
+* http://stacklet.com/downloads/images/lister/CentOS/5.5/x86 - $10 subscription gives access to all images
+* http://www.rightscale.com/library - costs money
+* http://support.rightscale.com/18-Release_Notes/02-AMI/RightImages_Release_Notes
+
+
+= Guides =
+
+== Lauch instance with specific kernel ==
+
+* http://aws.amazon.com/articles/1345?_encoding=UTF8&jiveRedirect=1
+* http://ec2-downloads.s3.amazonaws.com/user_specified_kernels.pdf
+
+<pre>Amazon EC2 has introduced two new kernels: aki-9b00e5f2 (32 bit) and aki-9800e5f1 (64 bit). They are the 2.6.18 Xen kernels (vmlinuz-2.6.18-xenU-ec2-v1.0)
+
+ec2-describe-images -a | grep 2.6.18
+
+alt.
+ec2-describe-images -o self -o amazon | grep 2.6.18
+
+</pre>
+
+== Shrink an image ==
+
+http://www.howtoforge.com/linux_resizing_ext3_partitions
+<pre>
+tune2fs -l /vm/linux_server-v1.4.img
+fsck -n /vm/linux_server1.4.img
+tune2fs -O ^has_journal /vm/linux_server1.4.img
+e2fsck -f /vm/linux_server1.4.img
+resize2fs /vm/linux_server1.4.img 9G
+fsck -n /dev/sda1
+tune2fs -j /vm/linux_server1.4.img
+</pre>
+
+== Setup Ec2 tools ==
+
+Install java and tools:
+<pre>
+yum install java-openjdk
+
+wget http://s3.amazonaws.com/ec2-downloads/ec2-api-tools.zip
+unzip ec2-api-tools.zip
+mv ec2-api-tools-1.3-53907 /usr/share
+ln -s /usr/share/ec2-api-tools-1.3-53907 /usr/share/ec2-api-tools
+
+</pre>
+
+Create key files. Check Google docs for the content:
+<pre>
+mkdir /etc/ec2
+cd /etc/ec2
+vi cert.pem
+vi gswin1.pem
+vi private-key.pem
+</pre>
+
+Setup environment variables:
+<pre>
+vi ~/.bashrc
+export EC2_HOME=/usr/share/ec2-api-tools
+export PATH=$PATH:$EC2_HOME/bin
+export EC2_PRIVATE_KEY=/etc/ec2/private-key.pem
+export EC2_CERT=/etc/ec2/cert.pem
+
+export JAVA_HOME=/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/
+
+export EC2_URL=https://ec2.eu-west-1.amazonaws.com
+</pre>
+
+Test the certificate and private key:
+<pre>
+openssl x509 -in cert.pem -text 
+openssl rsa -in private-key.pem -text 
+</pre>
+
+Run some commands just to test
+<pre>
+ec2-describe-instances
+</pre>
+
+Setup AMI-tools:
+<pre>
+yum install ruby
+wget http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.noarch.rpm
+rpm -i ec2-ami-tools.noarch.rpm
+</pre>
+
+
+== Create ec2 image ==
+
+Mount the image as loopback device:
+<pre>
+cd /var/stacklet
+mount -o loop centos.5-4.x86.img /mnt/loop
+</pre>
+
+
+Copy the private key to the image:
+<pre>
+cp private-key.pem /mnt/loop/root/
+</pre>
+
+* http://docs.amazonwebservices.com/AmazonEC2/dg/2006-10-01/CLTRG-ami-bundle-image.html
+
+Create bundle from a Xen image file:
+<pre>
+ec2-bundle-image -u 4290-9734-6310 -c $EC2_CERT -k $EC2_PRIVATE_KEY -i centos.5-4.x86.img -d bundled/
+</pre>
+
+Upload bundle to S3-bucket (the bucket is created if it doesn't exist):
+<pre>
+ ec2-upload-bundle -b centos.5-4.x86-eu -a $(cat /etc/ec2/access_key) -s $(cat /etc/ec2/secret_access_key) -m bundled2/centos.5-4.x86.img.manifest.xml --location EU
+</pre>
+
+Register the image:
+<pre>
+ec2-register -n centos.5-4.x86 centos.5-4.x86-eu/centos.5-4.x86.img.manifest.xml
+IMAGE   ami-cea18bba
+</pre>
+
+Test to start the image:
+<pre>
+ec2-run-instances ami-cea18bba
+</pre>
+
+Wait for the instance to start and then get the IP:
+<pre>
+ec2-describe-instances
+INSTANCE        i-65ec9d12      ami-cea18bba    ec2-79-125-57-16.eu-west-1.compute.amazonaws.com        ip-10-48-98-153.eu-west-1.compute.internal    running         0               m1.small        2010-08-20T10:17:49+0000        eu-west-1a                              monitoring-disabled   79.125.57.16    10.48.98.153                    instance-store
+</pre>
+
+Connect to the instance:
+<pre>
+ssh -i /etc/ec2/gswin1.pem root@ec2-79-125-57-16.eu-west-1.compute.amazonaws.com 
+</pre>
+
+Shutdown the instance:
+<pre>
+ec2-terminate-instances i-65ec9d12
+</pre>
+
+Can use the Stacklet Stackbundler application (but I did not det the beta working on CentOs). Ubuntu also has vmbuilder tool but it doens't seam to exist for CentOS .
+
+
+== Download EC2 image ==
+
+<pre>
+ec2-download-bundle -b gizur/openbravo250-ubuntu -a $(cat /etc/ec2/access_key) -s $(cat /etc/ec2/secret_access_key) -m image.manifest.xml --privatekey /etc/ec2/private-key.pem
+</pre>
+
+ec2-unbundle -m manifest -k private_key [-d destination_directory] [-s source_directory]
+<pre>
+ec2-unbundle -m image.manifest.xml -k /etc/ec2/private-key.pem
+
+</pre>
+
+== Manage EBS bootable instances ==
+
+EBS snapshots are used when a EBS bootable iamge is created. Up/downloading EBS-snapshots would make it possible to customize these in the same way as S3 backed instances.
+
+There is no simple way to do this:
+* http://developer.amazonwebservices.com/connect/message.jspa?messageID=151353
+
+
+== Save Ec2 image on AWS to S3 and download to local server ==
+
+* http://docs.amazonwebservices.com/AmazonEC2/dg/2006-10-01/CLTRG-ami-bundle-vol.html
+* http://docs.amazonwebservices.com/AmazonEC2/dg/2007-01-03/CLTRG-ami-download-bundle.html
+* http://docs.amazonwebservices.com/AmazonEC2/dg/2006-10-01/CLTRG-ami-unbundle.html
+
+<pre>
+ec2-describe-instances
+ssh -i /etc/ec2/gswin1.pem root@...
+
+from blixten:
+scp -i /etc/ec2/gswin1.pem /etc/ec2/cert.pem /etc/ec2/private-key.pem root@79.125.98.101:/mnt
+
+Check the upload on aws:
+ls /mnt
+
+Bundle på filsystemets root, från aws:
+ec2-bundle-vol -k /mnt/private-key.pem -c /mnt/cert.pem -u 4290-9734-6310
+
+Ladda upp bundle till S3, från aws
+ec2-upload-bundle -b centos.5-4.x86.v2-eu -m /tmp/image.manifest.xml -a AKIAJWRED4WYJS43ELWQ -s XP2sGuZwJEVseJjajflz1r5kFyfJ5jxY9MchgVsd --location EU
+
+Registrera image för att den ska gå att använda
+ec2-register -n centos.5-4.x86.v2-eu -K /mnt/private-key.pem -C /mnt/cert.pem -U https://ec2.eu-west-1.amazonaws.com  centos.5-4.x86.v2-eu/image.manifest.xml
+
+Lista alla images som ägs av mig
+ec2-describe-images -K private-key.pem -C cert.pem -U https://ec2.eu-west-1.amazonaws.com -o self
+
+På blixten:
+ec2-download-bundle -b centos.5-4.x86.v2-eu --privatekey /etc/ec2/private-key.pem -a AKIAJWRED4WYJS43ELWQ -s XP2sGuZwJEVseJjajflz1r5kFyfJ5jxY9MchgVsd
+
+På blixten:
+ec2-unbundle -m bundle/image.manifest.xml -s bundle -d unbundle --privatekey /etc/ec2/private-key.pem
+
+cd unbudle
+dd if=image of=/dev/VolGroup00/linux_server1
+</pre>
+
+Create a xen config file:
+<pre>
+Copy an existing linux config file
+
+Generate random MAC adress:
+2>/dev/null dd if=/dev/urandom bs=1 count=6 | od -t x1 | sed '2d;s/^0\+ //;s/ /:/g'
+
+Update config file with MAC adress
+</pre>
+
+== Install windows from scratch ==
+
+Need to install with paravirualizwed drivers in order to be able to use with Amazon ec2.
+* http://wiki.xensource.com/xenwiki/XenWindowsGplPv/Installing
+
+
+== Use S3 images with database on EBS ==
+
+An alternative to using EBS bootable instances is to have files with data on a EBS device and the bootable instance on a S3 device.
+
+* http://www.kablambda.org/blog/2007/12/22/ec2-confluence-s3-and-postgresql/
+
+
+== Use VNC Server ==
+
+* http://developer.amazonwebservices.com/connect/message.jspa?messageID=86036

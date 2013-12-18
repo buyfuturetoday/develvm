@@ -1,0 +1,31 @@
+
+---
+layout: post
+title: Cmdb
+date: 2012-01-01
+author: Jonas Colmsjo
+---
+
+Yet another post
+
+
+
+
+
+[[Main_Page]]
+
+
+Undersök TeamLab  verkar intresant!!
+
+== DAM & CMDB ==
+
+* http://digitalassetmanagement.com/
+
+* http://www.resourcespace.org/get.php
+** http://demo.resourcespace.org/login.php
+** Username: jcolmsj / Password: efkJgak
+
+* Installations:
+** [[OneCMDB]]
+** [[Itop]]
+** [[I-doit]]
