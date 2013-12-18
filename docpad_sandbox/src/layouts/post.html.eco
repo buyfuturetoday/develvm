@@ -1,0 +1,7 @@
+---
+layout: default
+---
+<h1><%= @document.title %></h1>
+<h3>Author: <%= @document.author %></h3>
+<h3>Date: <%= @document.date %></h3>
+<div><%- @content %></div>

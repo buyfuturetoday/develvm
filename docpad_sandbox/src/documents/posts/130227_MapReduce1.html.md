@@ -1,0 +1,176 @@
+
+---
+layout: post
+title: First Shot at Map
+date: 2013-02-27
+author: Jonas Colmsjo
+tags: ['post']
+---
+
+First shot at Map/Reduce on EMR
+
+
+
+
+Links:
+
+ * http://aws.amazon.com/documentation/elasticmapreduce/
+ * http://www.bytemining.com/2011/08/hadoop-fatigue-alternatives-to-hadoop/
+ * http://aws.amazon.com/articles/Elastic-MapReduce/4926593393724923
+ * http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-what-is-emr.html
+ * http://wiki.apache.org/hadoop/AmazonS3
+ 
+
+## Introduction
+
+Big data soltuions are becoming ever more relevant for many companies. There are some 
+open source alterntives out there and more solutions are being released all the time.
+It seams as though open source actually is ahead of the propriatary solutions in this 
+area thanks to companies as Google, Facebook, Twitter and Yahoo.
+
+Hadoop is the pre-dominant file system used so this seams like a logical point to start
+the learning at. There are different query languages such as Hive and Pig etc.
+
+There are also in-memory as Druid, Spark, and GridGain (not open source) which gives
+a speed not possible to achieve before.
+
+
+## Gettings started with AWS Elastic Map Reduce
+
+EMR is Hadoop hosted at Amazon.
+ 
+First download the Command Line tools here: http://aws.amazon.com/developertools/2264
+
+Unzip and follow the instructions in the README file. There is also a getting started guide:
+https://www.google.se/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0CC8QFjAA&url=http%3A%2F%2Fs3.amazonaws.com%2Fawsdocs%2FElasticMapReduce%2Flatest%2Femr-gsg.pdf&ei=aPYtUY_0K-eG4gSf4ICYAQ&usg=AFQjCNFro5b-u-O0eJhbsRZKuNxJYWvRvA&bvm=bv.42965579,d.bGE
+
+
+1. Create a S3 bucket using the AWS console.
+1. I'm assuming that you have SSH setup for access to ec2 insances (see the EMR Gettings 
+Started guide otherwise)
+
+
+A credentials file needs to be created:
+
+```
+Gizur-Laptop-5:MapReduce jonas$ cat credentials.json 
+  {
+    "access-id": "xxx",
+    "private-key": "yyy",
+    "key-pair": "keypair1",
+    "key-pair-file": "keypair1.pem",
+    "log_uri": "s3n://gc4-emr-sbx/",
+    "region": "eu-west-1"
+  }
+
+```
+
+1. Run a simple test after the credentials.json has been created. The output is empty
+
+```
+elastic-mapreduce -c credentials.json --list
+```
+
+
+## Develop a first job
+
+Jobs can be developed in Hive and Pig and also Cascading, Java, Ruby, Perl, Python, PHP, R, or C++´
+
+Start, list and terminate a job:
+
+```
+# Start a new job
+Gizur-Laptop-5:MapReduce jonas$ elastic-mapreduce --create --alive
+Created job flow j-2MAR9VAHZNCHC
+
+# List running jobs
+Gizur-Laptop-5:MapReduce jonas$ elastic-mapreduce --list
+j-3JNIPPAJX24ZG     STARTING                                                         Development Job Flow (requires manual termination)
+
+# Terminate job
+Gizur-Laptop-5:MapReduce jonas$ elastic-mapreduce --terminate j-2MAR9VAHZNCHC
+Terminated job flow j-2MAR9VAHZNCHC
+```
+
+Information about a job:
+
+```
+Gizur-Laptop-5:MapReduce jonas$ elastic-mapreduce --create --alive
+Created job flow j-1KGNP3UVZKL2E
+
+Gizur-Laptop-5:MapReduce jonas$ elastic-mapreduce --describe --jobflow j-1KGNP3UVZKL2E
+{
+  "JobFlows": [
+    {
+      "LogUri": null,
+      "ExecutionStatusDetail": {
+        "CreationDateTime": 1361970253.0,
+        "EndDateTime": null,
+        "LastStateChangeReason": "Starting instances",
+        "ReadyDateTime": null,
+        "State": "STARTING",
+        "StartDateTime": null
+      },
+      "JobFlowRole": null,
+      "VisibleToAllUsers": false,
+      "SupportedProducts": [],
+      "JobFlowId": "j-1KGNP3UVZKL2E",
+      "Steps": [],
+      "Name": "Development Job Flow (requires manual termination)",
+      "Instances": {
+        "MasterPublicDnsName": null,
+        "KeepJobFlowAliveWhenNoSteps": true,
+        "Ec2KeyName": "gc4-keypair1",
+        "HadoopVersion": "1.0.3",
+        "SlaveInstanceType": null,
+        "MasterInstanceType": "m1.small",
+        "MasterInstanceId": null,
+        "InstanceGroups": [
+          {
+            "InstanceType": "m1.small",
+            "CreationDateTime": 1361970253.0,
+            "LaunchGroup": null,
+            "InstanceGroupId": "ig-1GZBXVKU4V8Q1",
+            "EndDateTime": null,
+            "LastStateChangeReason": "",
+            "ReadyDateTime": null,
+            "InstanceRunningCount": 0,
+            "State": "PROVISIONING",
+            "StartDateTime": null,
+            "Market": "ON_DEMAND",
+            "InstanceRequestCount": 1,
+            "InstanceRole": "MASTER",
+            "Name": "Master Instance Group",
+            "BidPrice": null
+          }
+        ],
+        "TerminationProtected": false,
+        "Placement": {
+          "AvailabilityZone": "eu-west-1a"
+        },
+        "NormalizedInstanceHours": 0,
+        "Ec2SubnetId": null,
+        "InstanceCount": 1
+      },
+      "BootstrapActions": [],
+      "AmiVersion": "2.3.2"
+    }
+  ]
+}
+```
+
+
+Add a step tp the running job:
+
+```
+elastic-mapreduce -j JobFlowID --stream \
+                  --mapper s3://elasticmapreduce/samples/wordcount/wordSplitter.py \ 
+                  --input s3://elasticmapreduce/samples/wordcount/input \
+                  --output s3n://myawsbucket/output \
+                  --reducer aggregate
+```
+
+
+
+
+
