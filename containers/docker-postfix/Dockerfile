@@ -42,7 +42,7 @@ run apt-get install -q -y syslog-ng
 #
 # Jonas C. - good for debugging
 #
-apt-get -y install mutt vim dnsutils
+run apt-get -y install mutt vim dnsutils
 
 
 expose 25
