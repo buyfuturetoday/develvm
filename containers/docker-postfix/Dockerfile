@@ -6,9 +6,9 @@ run apt-get update
 run apt-get install -q -y language-pack-en
 run update-locale LANG=en_US.UTF-8
 
-run echo mail > /etc/hostname
+#run echo mail > /etc/hostname
 add etc-hosts.txt /etc/hosts
-run chown root:root /etc/hosts
+#run chown root:root /etc/hosts
 
 run apt-get install -q -y vim
 
@@ -31,12 +31,19 @@ run mkdir /var/spool/mail/someone
 run chown someone:mail /var/spool/mail/someone
 
 add etc-aliases.txt /etc/aliases
-run chown root:root /etc/aliases
-run newaliases
+#run chown root:root /etc/aliases
+#run newaliases
 
 # Use syslog-ng to get Postfix logs (rsyslog uses upstart which does not seem
 # to run within Docker).
 run apt-get install -q -y syslog-ng
+
+
+#
+# Jonas C. - good for debugging
+#
+apt-get -y install mutt vim dnsutils
+
 
 expose 25
 cmd ["sh", "-c", "service syslog-ng start ; service postfix start ; tail -F /var/log/mail.log"]
