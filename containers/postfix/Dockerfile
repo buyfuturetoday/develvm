@@ -1,56 +1,59 @@
-#
-# Dockerfile that builds container with Postgres
-# When not using vagrant, run it manually with: docker build .
-#
+from ubuntu:12.04
+maintainer Vo Minh Thu <noteed@gmail.com>
 
+run echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list # 20103-08-24
+run apt-get update
+run apt-get install -q -y language-pack-en
+run update-locale LANG=en_US.UTF-8
 
-# Image: Postgres
-#
-# VERSION               0.0.1
+#run echo mail > /etc/hostname
+add etc-hosts.txt /etc/hosts
+#run chown root:root /etc/hosts
 
-FROM     ubuntu
-MAINTAINER Jonas Colmsjö "jonas@gizur.com"
+run apt-get install -q -y vim
 
+# Install Postfix.
+run echo "postfix postfix/main_mailer_type string Internet site" > preseed.txt
+run echo "postfix postfix/mailname string mail.example.com" >> preseed.txt
+# Use Mailbox format.
+run debconf-set-selections preseed.txt
+run DEBIAN_FRONTEND=noninteractive apt-get install -q -y postfix
 
-# make sure the package repository is up to date
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
-RUN apt-get update -y
+run postconf -e myhostname=mail.example.com
+run postconf -e mydestination="mail.example.com, example.com, localhost.localdomain, localhost"
+run postconf -e mail_spool_directory="/var/spool/mail/"
+run postconf -e mailbox_command=""
 
+# Add a local user to receive mail at someone@example.com, with a delivery directory
+# (for the Mailbox format).
+run useradd -s /bin/bash someone
+run mkdir /var/spool/mail/someone
+run chown someone:mail /var/spool/mail/someone
 
-#
-# Install Postfix
-#
+add etc-aliases.txt /etc/aliases
+#run chown root:root /etc/aliases
+#run newaliases
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install postfix mutt vim dnsutils rsyslog
-
-echo admin@gizur.com > /root/.forward
-
-mkdir -p /var/mail/root
-mkdir /sent
-
-echo Europe/Stockholm > /etc/timezone
-/usr/sbin/dpkg-reconfigure -f noninteractive tzdata
-
-
-echo ypdomainname gizurcloud.com. > /etc/rc.local
-
-#
-# Add configuration changes
-#
-
-ADD ./etc/postgresql/9.1/main /etc/postgresql/9.1/main
-
-
-# Create postgres user for OpenERP
-ADD . /src
-RUN chown -R postgres:root /src
-RUN /src/init.sh
+# Use syslog-ng to get Postfix logs (rsyslog uses upstart which does not seem
+# to run within Docker).
+run apt-get install -q -y syslog-ng
 
 
 #
-# Start Postgres
+# Jonas C.
 #
 
-EXPOSE 5432
+# Good foor debugging
+run apt-get -y install mutt vim dnsutils
 
-CMD ["/bin/su","postgres","-c","/usr/lib/postgresql/9.1/bin/postgres -D /var/lib/postgresql/9.1/main -c config_file=/etc/postgresql/9.1/main/postgresql.conf"]
+# Need to use smarthost when running in docker (since these IP-adresses often are blocked for spam purposes)
+# See: http://www.inboxs.com/index.php/linux-os/mail-server/52-configure-postfix-to-use-smart-host-gmail
+
+run echo smtp.gmail.com USERNAME:PASSWORD > /etc/postfix/relay_passwd
+run chmod 600 /etc/postfix/relay_passwd
+run postmap /etc/postfix/relay_passwd
+add etc-postfix-main.cf /etc-postfix-main.cf
+run cat /etc-postfix-main.cf >> /etc/postfix/main.cf
+
+expose 25
+cmd ["sh", "-c", "service syslog-ng start ; service postfix start ; tail -F /var/log/mail.log"]
