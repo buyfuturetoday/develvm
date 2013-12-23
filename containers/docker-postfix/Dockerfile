@@ -40,10 +40,19 @@ run apt-get install -q -y syslog-ng
 
 
 #
-# Jonas C. - good for debugging
+# Jonas C.
 #
+
+# Good foor debugging
 run apt-get -y install mutt vim dnsutils
 
+# Need to use smarthost when running in docker (since these IP-adresses often are blocked for spam purposes)
+# See: http://www.inboxs.com/index.php/linux-os/mail-server/52-configure-postfix-to-use-smart-host-gmail
+
+run echo smtp.gmail.com USERNAME:PASSWORD > /etc/postfix/relay_passwd
+run chmod 600 /etc/postfix/relay_passwd
+run postmap /etc/postfix/relay_passwd
+run cat etc-postfix-main.cf >> /etc/postfix/main.cf
 
 expose 25
 cmd ["sh", "-c", "service syslog-ng start ; service postfix start ; tail -F /var/log/mail.log"]
