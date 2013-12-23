@@ -52,7 +52,8 @@ run apt-get -y install mutt vim dnsutils
 run echo smtp.gmail.com USERNAME:PASSWORD > /etc/postfix/relay_passwd
 run chmod 600 /etc/postfix/relay_passwd
 run postmap /etc/postfix/relay_passwd
-run cat etc-postfix-main.cf >> /etc/postfix/main.cf
+add etc-postfix-main.cf /etc-postfix-main.cf
+run cat /etc-postfix-main.cf >> /etc/postfix/main.cf
 
 expose 25
 cmd ["sh", "-c", "service syslog-ng start ; service postfix start ; tail -F /var/log/mail.log"]
