@@ -23,4 +23,4 @@ ADD . /src
 RUN /bin/bash -c "source /.profile && cd /src && nvm use v0.10.24 && npm install"
 
 EXPOSE  9778
-CMD ["/bin/bash -c 'source /.profile && nvm use v0.10.24 && /src/bin/docpad-server'", ""]
+CMD ["/src/run.sh",""]
