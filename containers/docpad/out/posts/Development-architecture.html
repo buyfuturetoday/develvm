@@ -1,0 +1,125 @@
+<html>
+<head>
+    <title>Development</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Development</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[wiki]] &gt; [[Technical Architecture]]</p>
+<p>h1. Development Architecture</p>
+<p>h2. Overview</p>
+<p>The development architecture consists of the following tools:
+<em> This Redmine portal
+<strong> Issues
+</strong> Wiki
+** Functional and Technical Design Documents
+</em> DokuWiki - for system documentation
+<em> Testlink - for documentation of tests
+</em> Source Code Management system (SCM) based on Subversion and shell scripts
+<em> PHP/MySQL environments for vTiger etc.
+<strong> Sandbox
+</strong> Development
+<strong> Test
+</strong> QA
+*</em> Production environments</p>
+<p>h2. Coding standards</p>
+<p>phpdoc is used to create documentation:
+<em> <a href="http://www.phpdoc.org/docs/latest/for-users/anatomy-of-a-docblock.html">http://www.phpdoc.org/docs/latest/for-users/anatomy-of-a-docblock.html</a>
+</em> <a href="http://phpmaster.com/introduction-to-phpdoc/">http://phpmaster.com/introduction-to-phpdoc/</a></p>
+<p>These coding standards should be followed:
+* <a href="http://pear.php.net/manual/en/standards.php">http://pear.php.net/manual/en/standards.php</a></p>
+<p>h3. phpdoc</p>
+<p>phpdoc is automatically executed on the vtigertest repository. The documentation can be found here:
+* <a href="http://phpdoc.gizurcloud.com/">http://phpdoc.gizurcloud.com/</a></p>
+<p>h3. About PHPUnit</p>
+<p>Unit testing is “is a method of testing that verifies the individual units of source code are working properly”
+Unit Testing in short is a 
+1.    unit: the smallest testable code of an app
+-    procedural: function or procedure
+-    OOP: a method
+2.    Test: code that checks code on
+-    functional behavior
+-    expected results
+-    unexpected failures</p>
+<p>PHPUnit is a set of tools to test PHP pages for errors.. The difference is between testing, that is, checking that program behaves as expected, and performing a battery of tests, runnable code-fragments that automatically test the correctness of parts (units) of the software. These runnable code-fragments are called unit tests</p>
+<p>See PHPUnit.docx below for more details.</p>
+<p>h2. SCM</p>
+<p>Subversion is used for configuration management. Code that is commited to subversion is automatically deployed on the application servers. There are separate subversion repositories for development, test and producttion. Access to the reposirotiers are controlled via the subversion configuration file (s2.gizur.com:/etc/svn-access-control)</p>
+<p>If you&#39;re new to subversion, check-out some introduction like this (or just Google):
+<em> Short - <a href="http://www.froihofer.net/en/students/svn-intro.html">http://www.froihofer.net/en/students/svn-intro.html</a>
+</em> In depth - <a href="http://svnbook.red-bean.com/">http://svnbook.red-bean.com/</a></p>
+<p>Subversion can be used from the prompt and there are also GUI:s
+<em> For windows Tortoise is commonly used - <a href="http://tortoisesvn.tigris.org/">http://tortoisesvn.tigris.org/</a>
+</em> For Linux there is not single given GUI, Google or give this a try <a href="http://rabbitvcs.org/">http://rabbitvcs.org/</a></p>
+<p>Repositories:
+<em> Development - <a href="https://s2.gizur.com/svn/gom-dev">https://s2.gizur.com/svn/gom-dev</a>
+</em> Test - <a href="https://s2.gizur.com/svn/gom-test">https://s2.gizur.com/svn/gom-test</a>
+* Production - <a href="https://s2.gizur.com/svn/gom-prod">https://s2.gizur.com/svn/gom-prod</a></p>
+<p>The structure of the root-dir directory in the repositories is the same as the dicrectory structure of the linux application servers. </p>
+<p>Directory structure of the gom-dev repository:
+<em> root-dir
+<strong> etc
+</strong> root
+**</em> scripts
+<strong> var
+*</strong> www
+<strong><strong> html
+*</strong></strong> vtigersbx
+<strong>**</strong> The vTigerCRM structure
+<strong>*</strong> vtigerdev
+<strong>**</strong> The vTigerCRM structure
+<em> setup
+</em> tests
+<em> developers
+<strong> jonas
+</strong> essindia
+*</em> ...</p>
+<p>Directory structure of the gom-test repository:
+<em> root-dir
+<strong> etc
+</strong> root
+**</em> scripts
+<strong> var
+*</strong> www
+<strong><strong> html
+*</strong></strong> vtigertest
+<strong>**</strong> The vTigerCRM structure
+* setup</p>
+<p>Directory structure of the gom-prod repository:
+<em> root-dir
+<strong> etc
+</strong> root
+**</em> scripts
+<strong> var
+*</strong> www
+<strong><strong> html
+*</strong></strong> vitger<client>
+<strong>**</strong> The vTigerCRM structure
+<strong>*</strong> vtigerbase
+<strong>**</strong> The vTigerCRM structure
+* setup</p>
+<p>h2. Deployment of code</p>
+<p>h3. Development and Sandbox environments</p>
+<p>The directory /root-dir/var/www/html/vtigerdev is used for deploying in the development environment. This environment is used during development and unit testing.
+The directory /root-dir/var/www/html/vtigersbx is used for &quot;playing around&quot;. This environment is &quot;reset&quot; periodically by copying the contents of vtigerdev. </p>
+<p>h3. Test environment</p>
+<p>Deployment from the development environment to test is performed using a shell script. This script simply copies file by file from vtigerdev to vtigertest.
+Each Change Request must contain a list of the files that have been modified. The deployment script is developed by the Configuration Manager (currently at Gizur).</p>
+<p>Deployment to test:</p>
+<h1>Copy the file gom-test/setup/issues/template-deployment-descriptor to gom-test/setup/issues/deployment-descriptor-issue<NUMBER></h1>
+<h1>Edit the new file</h1>
+<h2>Enter the files to de be deployed in the template (make sure the spelling is correct, file names are case sensitive)</h2>
+<h2>Also enter the directories that need to be created in the template</h2>
+<h1>Test the deployment descriptor running: deploy-issues-to-test.sh deployment-descriptor-issue<NUMBER></h1>
+<h1>NOW, check that the files have been copied from the gom-dev repository ti gom-test as expected</h1>
+<h1>This deployment descriptor should be attached to the issue</h1>
+<p>h3. Production environment</p>
+<p>Deployment to the production environment is performed in the same way as to the test environment. The same deployment script is used.</p>
+</div>
+    
+</body>
+</html>

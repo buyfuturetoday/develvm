@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>Sparkleshare</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Sparkleshare</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>Gick inte att installera pga. gammal intltool i centos</p>
+<pre>
+wget --no-check-certificate https://github.com/downloads/hbons/SparkleShare/sparkleshare-0.2.5.tar.gz
+gunzip sparkleshare-0.2.5.tar.gz 
+tar -xf sparkleshare-0.2.5.tar
+cd sparkleshare-0.2.5
+yum install intltool
+./configure
+
+checking for intltool >= 0.40.6... 0.35.0 found
+configure: error: Your intltool is too old.  You need intltool 0.40.6 or later.
+</pre></div>
+    
+</body>
+</html>

@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>Git and ssh</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Git and ssh</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Wed Sep 19 2012 02:00:00 GMT+0200 (CEST)</h3>
+<div><p>Time to understand a little of how git and SSH works?</p>
+<p>I have repositories at github, bitbucket and assembla. SSH keys needs to be setup in order to avoid having to enter username and pasword all the time.</p>
+<h1>Git, SSH and Identity files</h1>
+<p>First create a workspace with a git repository.</p>
+<p>Make sure that the SSH keys are setup properly. I&#39;ve create directories in ~/.ssh for the different git hosts. My ~/.ssh/config file looks like this</p>
+<pre><code>IdentityFile ~/.ssh/%h/id_rsa
+IdentityFile ~/.ssh/%h/id_dsa
+IdentityFile ~/.ssh/id_rsa
+IdentityFile ~/.ssh/id_dsa</code></pre>
+<p>More about Identityfiles:
+ * <a href="http://www.kelvinwong.ca/2011/03/30/multiple-ssh-private-keys-identityfile/">http://www.kelvinwong.ca/2011/03/30/multiple-ssh-private-keys-identityfile/</a></p>
+<p>Then add Assembla as an origin for the repository that should be pushed (intern in this example):</p>
+<pre><code>git remote add assembla git@git.assembla.com:gizur-intern.git</code></pre>
+<p>Push the repository to the new server:</p>
+<pre><code>git push assembla master</code></pre>
+<p>More about git remotes:
+ * <a href="http://gitref.org/remotes/">http://gitref.org/remotes/</a></p>
+</div>
+    
+</body>
+</html>

@@ -1,0 +1,105 @@
+<html>
+<head>
+    <title>Nodejs on heroku</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Nodejs on heroku</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Thu Oct 18 2012 02:00:00 GMT+0200 (CEST)</h3>
+<div><p>Get started with NodeJS on Heroku</p>
+<ol>
+<li>Register for an account on heroku.com</li>
+<li>Install heroku toolbelt - <a href="https://toolbelt.heroku.com/">https://toolbelt.heroku.com/</a></li>
+<li>Login running <code>heroku login</code> - your SSH key will be uploaded</li>
+<li>Develop a first app</li>
+</ol>
+<p>Save this as web.js:</p>
+<pre><code>var express = require(&#39;express&#39;);
+
+var app = express.createServer(express.logger());
+
+app.get(&#39;/&#39;, function(request, response) {
+  response.send(&#39;Hello World!&#39;);
+});
+
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
+  console.log(&quot;Listening on &quot; + port);
+});</code></pre>
+<p>Save this as package.json:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;heroku-node-example&quot;,
+  &quot;version&quot;: &quot;0.0.1&quot;,
+  &quot;dependencies&quot;: {
+    &quot;express&quot;: &quot;2.5.x&quot;
+  },
+  &quot;engines&quot;: {
+    &quot;node&quot;: &quot;0.8.x&quot;,
+    &quot;npm&quot;: &quot;1.1.x&quot;
+  }
+}</code></pre>
+<p>Install the application locally (I always install globally)</p>
+<pre><code># Run in same folder as web.js and package.json are in
+npm install -g</code></pre>
+<p>Check that the install is ok:</p>
+<pre><code>npm ls 
+
+# for more details
+npm ll</code></pre>
+<p>Install using foreman:</p>
+<pre><code># I need to cd to the installation path (since it is installed globally)
+cd /usr/local/lib/node_modules/heroku-node-example/
+
+foreman start</code></pre>
+<p>Test that it is working in a separate terminal:</p>
+<pre><code>curl -j localhost:5000</code></pre>
+<h1>Upload to heroku</h1>
+<p>Create Procfile containing this:</p>
+<pre><code>web: node web.js</code></pre>
+<p>Create a git repo:</p>
+<pre><code># cd back to the source
+cd ~/.../heroku-test1/
+git init
+git add *
+git commit -a -m &quot;Initial commit&quot;</code></pre>
+<p>Create the app:</p>
+<pre><code># create app
+heroku create
+Creating agile-oasis-4317... done, stack is cedar
+http://agile-oasis-4317.herokuapp.com/ | git@heroku.com:agile-oasis-4317.git
+Git remote heroku added
+
+# push to heroku
+git push heroku master
+...
+http://agile-oasis-4317.herokuapp.com deployed to Heroku</code></pre>
+<p>Start a dyno</p>
+<pre><code>heroku ps:scale web=1
+
+# Check that everything is ok:
+heroku ps</code></pre>
+<h1>Test</h1>
+<p>Test the app, I got this URL, see above:</p>
+<ul>
+<li><a href="http://agile-oasis-4317.herokuapp.com/">http://agile-oasis-4317.herokuapp.com/</a></li>
+</ul>
+<p>The app can also be run like this:</p>
+<pre><code>heroku open</code></pre>
+<h1>Logs and finetuning</h1>
+<pre><code>heroku logs</code></pre>
+<p>Set envionment vairables:</p>
+<pre><code>heroku config:add NODE_ENV=production</code></pre>
+<p>Connect to remote heroku node from terminal (in order to experiment):</p>
+<pre><code>heroku run node</code></pre>
+<h1>Add ons</h1>
+<p>There is a large number of addons</p>
+<p>One example:</p>
+<ul>
+<li><a href="https://addons.heroku.com/scheduler">https://addons.heroku.com/scheduler</a></li>
+</ul>
+</div>
+    
+</body>
+</html>

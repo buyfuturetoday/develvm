@@ -1,0 +1,58 @@
+<html>
+<head>
+    <title>Inmemory</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Inmemory</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Main_Page]]</p>
+<p>Det verkar finns en uppsjö olika InMemory / NopSQL databaser. För mina syften är det nog key/value stores som är mest aktuella. Här verkar Redis vara en någorlunda bra och enkel lösing.</p>
+<p>Solutions:
+<em> <a href="http://redis.io/">http://redis.io/</a> - Key/Value store
+<strong> C API är en parser för textsträngar som skickas och tas emot- Finns <a href="http://code.google.com/p/credis/">http://code.google.com/p/credis/</a>
+</strong> Körs på en nod, Finns master-slave funktionalitet
+</em> BSD license</p>
+<ul>
+<li><p><a href="http://cassandra.apache.org/">http://cassandra.apache.org/</a> - Key/Value store
+<strong> Utvecklat i Java
+</strong> Thrift API - <a href="http://thrift.apache.org/">http://thrift.apache.org/</a>
+<strong> Går att distribuera på många noder
+</strong> Apache license, också tillåtande som BSD är</p>
+</li>
+<li><p><a href="http://www.couchbase.org/">http://www.couchbase.org/</a> - Document database, JSON objects
+<strong> <a href="http://docs.couchbase.org/couchbase-manual-2.0/index.html">http://docs.couchbase.org/couchbase-manual-2.0/index.html</a>
+</strong> Key/Value store
+<strong> Innehåller även memcached
+</strong> Verkar vara &quot;fetare&quot; än Redis
+** C API genom <a href="http://libmemcached.org/libMemcached.html">http://libmemcached.org/libMemcached.html</a></p>
+</li>
+</ul>
+<p>Tutorials:
+<em> <a href="http://www.slideshare.net/tim.lossen.de/cassandra-vs-redis">http://www.slideshare.net/tim.lossen.de/cassandra-vs-redis</a>
+</em> <a href="http://www.scribd.com/doc/33531219/Redis-Presentation">http://www.scribd.com/doc/33531219/Redis-Presentation</a>
+* <a href="http://simonwillison.net/static/2010/redis-tutorial/">http://simonwillison.net/static/2010/redis-tutorial/</a></p>
+<p>Articles:
+<em> <a href="http://spyced.blogspot.com/2008/12/couchdb-not-drinking-kool-aid.html">http://spyced.blogspot.com/2008/12/couchdb-not-drinking-kool-aid.html</a>
+</em> <a href="http://natishalom.typepad.com/nati_shaloms_blog/2010/03/memory-is-the-new-disk-for-the-enterprise.html">http://natishalom.typepad.com/nati_shaloms_blog/2010/03/memory-is-the-new-disk-for-the-enterprise.html</a>
+<em> <a href="http://www.stanford.edu/~ouster/cgi-bin/papers/ramcloud.pdf">http://www.stanford.edu/~ouster/cgi-bin/papers/ramcloud.pdf</a>
+</em> <a href="http://nosql-database.org/">http://nosql-database.org/</a>
+<em> LevelDB is not a database server like other other key-value stores like Redis or Membase.
+</em> <a href="http://www.readwriteweb.com/hack/2011/07/google-open-sources-nosql-data.php">http://www.readwriteweb.com/hack/2011/07/google-open-sources-nosql-data.php</a>
+<em> <a href="http://www.basho.com/products_open_source.php">http://www.basho.com/products_open_source.php</a>
+</em> <a href="http://research.yahoo.com/Web_Information_Management/YCSB">http://research.yahoo.com/Web_Information_Management/YCSB</a></p>
+<p>NoSQL databases with Python support:
+<em>Most of the nosql databases have python clients which are actively supported. Pick your database based on your usage needs. Using it from python shouldn&#39;t be a problem.
+</em>To name a few:
+<strong> Cassandra: <a href="https://github.com/pycassa/pycassa">https://github.com/pycassa/pycassa</a>
+</strong> Riak: <a href="https://github.com/basho/riak-python-client">https://github.com/basho/riak-python-client</a>
+<strong> MongoDB: <a href="http://api.mongodb.org/python/current/">http://api.mongodb.org/python/current/</a>
+</strong> CouchDB: <a href="http://wiki.apache.org/couchdb/Getting_started_with_Python">http://wiki.apache.org/couchdb/Getting_started_with_Python</a>
+** Redis: <a href="https://github.com/andymccurdy/redis-py">https://github.com/andymccurdy/redis-py</a></p>
+</div>
+    
+</body>
+</html>

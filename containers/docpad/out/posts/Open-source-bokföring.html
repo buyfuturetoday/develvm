@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>Open</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Open</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[IT resources]]</p>
+<h1>= Links =</h1>
+<ul>
+<li><a href="http://www.start-base.se/bokfoumlringsprogram.html">http://www.start-base.se/bokfoumlringsprogram.html</a></li>
+<li><a href="http://www.idg.se/2.1085/1.275921/del-1-kom-igang-samt-import-och-export">http://www.idg.se/2.1085/1.275921/del-1-kom-igang-samt-import-och-export</a></li>
+</ul>
+<h1>= Lösningar =</h1>
+<ul>
+<li>DoFree</li>
+<li>Fortnox - inte open source men billigt</li>
+</ul>
+<h1>= Lazy8 =</h1>
+<pre>
+yum install php-xml
+wget http://www.cross-connect.se/lazy8/download/lazy8web_02.03.zip
+
+# Login to webmin and change Others > PHP Configuration > Other Settings > Change Timezone to Stockholm (PHP will crash otherwise)
+# Login to phpMyAdmin and create database
+
+chown -R apache.apache lazy8
+chown -R apache.apache yii
+mv lazy8 yii /var/www/html/
+
+# http://<IP>/lazy8
+# Login with admin:amin
+
+</pre></div>
+    
+</body>
+</html>

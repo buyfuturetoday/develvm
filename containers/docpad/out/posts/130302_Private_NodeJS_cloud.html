@@ -1,0 +1,80 @@
+<html>
+<head>
+    <title>Private NodeJS cloud and What</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Private NodeJS cloud and What</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sat Mar 02 2013 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Private NodeJS cloud and what&#39;s wrong with cfengine</p>
+<h1>Links</h1>
+<ul>
+<li><a href="https://github.com/nodejitsu/haibu">https://github.com/nodejitsu/haibu</a></li>
+<li><a href="http://blog.nodejitsu.com/keep-a-nodejs-server-up-with-forever">http://blog.nodejitsu.com/keep-a-nodejs-server-up-with-forever</a></li>
+</ul>
+<h1>Introduction</h1>
+<p>With hosted app on Heroku, Nodejitsu, Elastic Beanstalk etc. is the need for CM tools far smaller.
+Still, I&#39;d like to have a private NodeJS cloud in AWS since I&#39;m using many other AWS services (and
+Amazon don&#39;t support NodeJS).</p>
+<p>Cfengine is a configuration management tool. I am using cfengie but the code becomes bloated and 
+diffcult to debug. The declarative, with so called promises, approach of cfengine if good in theory but it does not really work that well in practice. The different cfengine sections (files, commands, classes etc.) are evalutated in a given order which makes a big difference.</p>
+<h1>Alternative approach</h1>
+<p>Can we skip CM tools like cfengine, Pupper and Chef? Let&#39;s try...</p>
+<p>The framework used by Nodejitsu, Haidu, is open sourced:</p>
+<ul>
+<li><a href="https://github.com/nodejitsu/haibu">https://github.com/nodejitsu/haibu</a></li>
+<li><a href="https://github.com/nodejitsu/forever-monitor">https://github.com/nodejitsu/forever-monitor</a></li>
+</ul>
+<p>This make is easy to deploy apps to a private NodeJS server.</p>
+<p>There is a nice tool that keeps NodeJS applications up and running. forever monitors apps and restarts them
+if they die for some reason. This is also part of haibu.</p>
+<pre><code>npm install -g haibu
+haibu</code></pre>
+<p>Deployment of new apps to haibu us easy:</p>
+<pre><code>cd path/to/your/app
+tar -cz . | curl -XPOST -sSNT- localhost:9002/deploy/username/appname
+
+# Example output
+Gizur-Laptop-5:tmp2 jonas$ tar -cz . | curl -XPOST -sSNT- localhost:9002/deploy/jonas/testapp
+{&quot;drone&quot;:{&quot;ctime&quot;:1362342842765,&quot;command&quot;:&quot;node&quot;,&quot;file&quot;:&quot;/usr/local/lib/node_modules/haibu/node_modules/haibu-carapace/bin/carapace&quot;,&quot;foreverPid&quot;:79920,&quot;options&quot;:[&quot;--plugin&quot;,&quot;net&quot;,&quot;/usr/local/lib/node_modules/haibu/local/jonas/testapp/jonas-testapp-1362342837949/app.js&quot;],&quot;pid&quot;:79959,&quot;silent&quot;:true,&quot;uid&quot;:&quot;RdRe&quot;,&quot;spawnWith&quot;:{&quot;cwd&quot;:&quot;/usr/local/lib/node_modules/haibu/local/jonas/testapp/jonas-testapp-1362342837949&quot;,&quot;env&quot;:{&quot;TERM_PROGRAM&quot;:&quot;Apple_Terminal&quot;,&quot;SHELL&quot;:&quot;/bin/bash&quot;,&quot;TERM&quot;:&quot;xterm-256color&quot;,&quot;TMPDIR&quot;:&quot;/var/folders/vn/5vzjp5bs21j0d82r53qzcvj00000gn/T/&quot;,&quot;Apple_PubSub_Socket_Render&quot;:&quot;/tmp/launch-U5yItD/Render&quot;,&quot;AWS_API_KEY&quot;:&quot;AKIAJWRED4WYJS43ELWQ&quot;,&quot;TERM_PROGRAM_VERSION&quot;:&quot;309&quot;,&quot;TERM_SESSION_ID&quot;:&quot;1B3A56BF-EC48-4044-8B00-F01A8554BB14&quot;,&quot;NVM_DIR&quot;:&quot;/Users/jonas/git/local/nvm&quot;,&quot;USER&quot;:&quot;jonas&quot;,&quot;COMMAND_MODE&quot;:&quot;unix2003&quot;,&quot;GIZUR_CRASHLOGIO_SECRET&quot;:&quot;aKt1khPsLUbvYCjDmESqfPz8zNAFeHYRiGVupub5vPAr&quot;,&quot;AWS_CREDENTIAL_FILE&quot;:&quot;/Users/jonas/local/AWS-ElasticBeanstalk-CLI-2.0/credentials&quot;,&quot;SSH_AUTH_SOCK&quot;:&quot;/tmp/launch-YfnyEQ/Listeners&quot;,&quot;Apple_Ubiquity_Message&quot;:&quot;/tmp/launch-LZai6f/Apple_Ubiquity_Message&quot;,&quot;__CF_USER_TEXT_ENCODING&quot;:&quot;0x1F5:0:7\n&quot;,&quot;ROS_OS_OVERRIDE&quot;:&quot;osx:homebrew&quot;,&quot;PATH&quot;:&quot;/Users/jonas/local2/adt-bundle-mac/sdk/tools:/Users/jonas/local2/adt-bundle-mac/sdk/platform-tools:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/bin:/Users/jonas/scripts:/Users/jonas/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/Users/jonas/pear/bin:/Users/jonas/local/AWS-ElasticBeanstalk-CLI-2.0/eb/macosx/python2.7:/Users/jonas/local/elastic-mapreduce-ruby&quot;,&quot;PWD&quot;:&quot;/Users/jonas&quot;,&quot;JAVA_HOME&quot;:&quot;/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home&quot;,&quot;LANG&quot;:&quot;sv_SE.UTF-8&quot;,&quot;AWS_API_SECRET&quot;:&quot;XP2sGuZwJEVseJjajflz1r5kFyfJ5jxY9MchgVsd&quot;,&quot;NODE_PATH&quot;:&quot;/usr/local/lib/node_modules:/Users/jonas/node_modules:.&quot;,&quot;AWS_REGION&quot;:&quot;EU_Ireland&quot;,&quot;HOME&quot;:&quot;/Users/jonas&quot;,&quot;SHLVL&quot;:&quot;1&quot;,&quot;LOGNAME&quot;:&quot;jonas&quot;,&quot;DISPLAY&quot;:&quot;/tmp/launch-4bwerA/org.macosforge.xquartz:0&quot;,&quot;GIZUR_CRASHLOGIO_TOKEN&quot;:&quot;caa9f960-5afc-46b0-a4f1-2076c02f82c0&quot;,&quot;SECURITYSESSIONID&quot;:&quot;186a4&quot;,&quot;ELASTICBEANSTALK_URL&quot;:&quot;https://elasticbeanstalk.eu-west-1.amazonaws.com&quot;,&quot;OLDPWD&quot;:&quot;/Users/jonas/.npm/haibu/0.9.9/package&quot;,&quot;_&quot;:&quot;/usr/local/bin/haibu&quot;},&quot;stdio&quot;:[&quot;ipc&quot;,&quot;pipe&quot;,&quot;pipe&quot;]},&quot;env&quot;:&quot;development&quot;,&quot;cwd&quot;:&quot;/usr/local/lib/node_modules/haibu/local/jonas/testapp/jonas-testapp-1362342837949&quot;,&quot;repository&quot;:null,&quot;port&quot;:8000,&quot;host&quot;:&quot;dynamic&quot;,&quot;hash&quot;:&quot;4995e7d77e00a28c5610f1a4b0fc6a78aa84f1db&quot;,&quot;name&quot;:&quot;testapp&quot;,&quot;user&quot;:&quot;jonas&quot;}}</code></pre>
+<h2>Monitoring and load balancing</h2>
+<p>In addition, we can add monitoring that sends mails etc. if an app don&#39;t send it&#39;s hearbeat. This can be
+managed in godot:</p>
+<ul>
+<li><a href="https://github.com/nodejitsu/godot">https://github.com/nodejitsu/godot</a></li>
+</ul>
+<p>We also need a way to make sure that our servers don&#39;t die on us. We should probably have a cluster that
+is load balanced. The easiest way to achive this is to use Elastic Load Balancers (ELB). These are fault
+tolerant so we don&#39;t need to worry abput that (several LB:s are used behind the scenes).</p>
+<p>The old school way of doing this would be to use HAProxy and keepalived. This would requre some CM tool
+to automate the installation though.</p>
+<h2>Create cloud server</h2>
+<p>Links:</p>
+<ul>
+<li><a href="http://blog.nodejitsu.com/nodejs-cloud-server-in-three-minutes">http://blog.nodejitsu.com/nodejs-cloud-server-in-three-minutes</a></li>
+</ul>
+<p>Nodejitsu also provides tools for managing clouds like Rackspace etc:</p>
+<ul>
+<li><a href="https://github.com/nodejitsu/pkgcloud">https://github.com/nodejitsu/pkgcloud</a></li>
+</ul>
+<p>The article above has a script that creates a new server, logs into it and installs node.</p>
+<h2>Summary</h2>
+<p>This is how the architecutre looks:</p>
+<pre><code>DNS-&gt;ELB--&gt;Node JS server 1 running haibu
+        |-&gt;Node JS server 2 running haibu</code></pre>
+<p>The NodeJS apps should have forever-monitor and if required godot.</p>
+<h1>More things to consider</h1>
+<p>With this approach, we need to keep track of which port that each app should use. Configuration like ports etc. that always change from installation to should preferably be handled in environment variables.</p>
+<ul>
+<li><a href="http://www.12factor.net/">http://www.12factor.net/</a></li>
+</ul>
+<p>Other configuration can be handled using config files etc:</p>
+<ul>
+<li><a href="http://docs.nodejitsu.com/articles/file-system/how-to-store-local-config-data">http://docs.nodejitsu.com/articles/file-system/how-to-store-local-config-data</a></li>
+</ul>
+</div>
+    
+</body>
+</html>

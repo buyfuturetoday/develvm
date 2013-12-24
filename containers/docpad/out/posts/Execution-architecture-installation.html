@@ -1,0 +1,105 @@
+<html>
+<head>
+    <title>Execution</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Execution</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[wiki]] &gt; [[Technical Architecture]] &gt; [[Execution Architecture]]</p>
+<p>h1. Execution Architecture Installation</p>
+<p>h3. All environments but production</p>
+<p>The vTiger CRM archives that contains the installation resides in the repository: <a href="http://s2.gizur.com:81/projects/cikab1/repository/show/setup">http://s2.gizur.com:81/projects/cikab1/repository/show/setup</a>.
+The repository must be checkout to this path: /root/svn/gom-dev</p>
+<p>Each vTiger environment (baseline, sandbox, development, test, prod etc.) has a setup script. The scripts are also found here:
+* <a href="http://s2.gizur.com:81/projects/cikab1/repository/show/setup">http://s2.gizur.com:81/projects/cikab1/repository/show/setup</a></p>
+<p>There are two configuration files that also needs to be managed manually on the application server. The files should be copied to subversion after the initial installation. Updates are then automatically deployed from subversion in the same way as all other php files. </p>
+<h1>config.inc.php - example for the baseline environment - <a href="http://s2.gizur.com:81/projects/cikab1/repository/show/root-dir/var/www/html/vtigerbase">http://s2.gizur.com:81/projects/cikab1/repository/show/root-dir/var/www/html/vtigerbase</a></h1>
+<h1>portal/PortalConfig.php - example for the baseline environment - <a href="http://s2.gizur.com:81/projects/cikab1/repository/show/root-dir/var/www/html/vtigerbase/portal">http://s2.gizur.com:81/projects/cikab1/repository/show/root-dir/var/www/html/vtigerbase/portal</a></h1>
+<p>The database also needs to be initialized when a new database is installed. This needs to be performed before the config.inc.php file is deployed. Open the page http://<server>/<environment> and follow the instructions.</p>
+<p>h3. Setup of production environment</p>
+<p>Everything related to deployment to the production server is managed by the subversion repository:
+<em> <a href="https://s2.gizur.com/svn/gom-prod">https://s2.gizur.com/svn/gom-prod</a>
+</em> The repository must be checkout to this path: /root/svn/gom-prod</p>
+<p>The structure of the repository is the same as the development repository. Setup on the production server is performed by first checking out the repository.
+<em> Edit the setup script and make changes according to the OS that vTiger is installed on
+</em> Then execute the setup script.</p>
+<p>There are two configuration files that also needs to be managed manually on the application server. The files should be copied to subversion after the initial installation. Updates are then automatically deployed from subversion in the same way as all other php files. </p>
+<h1>config.inc.php</h1>
+<h1>portal/PortalConfig.php</h1>
+<p>The usual vTiger installation procedure should then be followed:
+<em> <a href="http://wiki.vtiger.com/index.php/Vtiger_CRM_5.3_Installation">http://wiki.vtiger.com/index.php/Vtiger_CRM_5.3_Installation</a>
+</em> <a href="http://wiki.vtiger.com/index.php/Customer_Portal">http://wiki.vtiger.com/index.php/Customer_Portal</a></p>
+<p>h4. Workaround</p>
+<p>In case the Settings &gt; Customer Portal meny show &#39;CustomerPortal not active&#39;: try to uncheck and then re-check the CustomerPortal module.</p>
+<p>h2. Application server installation routine</p>
+<p>Installation routine:
+<em> Ubuntu (now used in all environments) - [[ubuntu installation of app server]]
+</em> Centos - [[Server installation instructions]]</p>
+<p>h2. phpMyAdmin installation</p>
+<ul>
+<li>phpmyadmin.gizurcloud.com has been setup in the DNS with a virtual host pointing to /var/www/html/phpmyadmin</li>
+<li>There is a setup script in svn/gom-dev/setup</li>
+</ul>
+<p>Dependencies needs to be installed:</p>
+<pre>
+root@ec2-46-137-62-95:~# apt-cache depends phpmyadmin
+phpmyadmin
+ |Depends: libapache2-mod-php5
+ |Depends: php5-cgi
+  Depends: php5
+ |Depends: php5-mysql
+  Depends: <php5-mysqli>
+  Depends: php5-mcrypt
+  Depends: perl
+ |Depends: debconf
+  Depends: <debconf-2.0>
+    cdebconf
+    debconf
+  Depends: dbconfig-common
+  Depends: ucf
+  Depends: libjs-mootools
+  Suggests: mysql-server
+    mysql-cluster-server-5.1
+    mysql-server-5.1
+ |Recommends: apache2
+    apache2-mpm-itk
+    apache2-mpm-event
+    apache2-mpm-prefork
+    apache2-mpm-worker
+ |Recommends: lighttpd
+  Recommends: <httpd>
+    apache2-mpm-itk
+    bozohttpd
+    monkey
+    tntnet
+    aolserver4-core
+    aolserver4-daemon
+    apache2-mpm-event
+    apache2-mpm-prefork
+    apache2-mpm-worker
+    boa
+    cherokee
+    dhttpd
+    ebhttpd
+    fnord
+    lighttpd
+    mathopd
+    micro-httpd
+    mini-httpd
+    nginx
+    ocsigen
+    thttpd
+    webfs
+    yaws
+  Recommends: php5-gd
+  Recommends: mysql-client
+    mysql-client-5.1
+    mysql-cluster-client-5.1
+</pre></div>
+    
+</body>
+</html>

@@ -1,0 +1,28 @@
+<html>
+<head>
+    <title>Accountlab</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Accountlab</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[IT resources]]</p>
+<ul>
+<li><a href="https://netenberg.com/accountlabplus.php#accountlabplus.html">https://netenberg.com/accountlabplus.php#accountlabplus.html</a></li>
+</ul>
+<p>DID NOT MANAGE TO GET IT WORKING!</p>
+<pre>
+wget http://downloads.sourceforge.net/project/accountlabplus/accountlab_plus.tgz?r=&ts=1303234049&use_mirror=sunet
+tar -xzpf accountlab_plus.tgz
+mv accountlab_plus /var/www/html/
+chmod 666 /var/www/html/accountlab_plus/elements/default/sysvar/db.php
+chown -R apache.apache accountlab_plus/
+
+http://.../accountlab_plus/install.php
+</pre></div>
+    
+</body>
+</html>

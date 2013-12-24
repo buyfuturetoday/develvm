@@ -1,0 +1,187 @@
+<html>
+<head>
+    <title>Hive and Excel on Elastic Map Reduce</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Hive and Excel on Elastic Map Reduce</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Thu Mar 14 2013 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Hive and Excel on Elastic Map Reduce</p>
+<p>I&#39;VE NOT MANAGED TO GET THIS TO WORK...</p>
+<p>Links:</p>
+<ul>
+<li><a href="https://cwiki.apache.org/Hive/hiveawsemr.html">https://cwiki.apache.org/Hive/hiveawsemr.html</a></li>
+<li><a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-cli-commands.html">http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-cli-commands.html</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/Hive/GettingStarted">https://cwiki.apache.org/confluence/display/Hive/GettingStarted</a></li>
+<li><a href="http://blog.mustardgrain.com/2010/09/30/using-hive-with-existing-files-on-s3/">http://blog.mustardgrain.com/2010/09/30/using-hive-with-existing-files-on-s3/</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/Hive/HiveAws">https://cwiki.apache.org/confluence/display/Hive/HiveAws</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/Hive/HiveAws+HivingS3nRemotely">https://cwiki.apache.org/confluence/display/Hive/HiveAws+HivingS3nRemotely</a></li>
+</ul>
+<p>ODBC:</p>
+<ul>
+<li><a href="http://www.mapr.com/doc/display/MapR/Hive+ODBC+Connector">http://www.mapr.com/doc/display/MapR/Hive+ODBC+Connector</a></li>
+<li><a href="http://social.technet.microsoft.com/wiki/contents/articles/6226.how-to-connect-excel-to-hadoop-on-azure-via-hiveodbc.aspx">http://social.technet.microsoft.com/wiki/contents/articles/6226.how-to-connect-excel-to-hadoop-on-azure-via-hiveodbc.aspx</a></li>
+<li><a href="http://oakleafblog.blogspot.se/2012/04/using-excel-2010-and-hive-odbc-driver.html">http://oakleafblog.blogspot.se/2012/04/using-excel-2010-and-hive-odbc-driver.html</a></li>
+</ul>
+<h2>Introduction</h2>
+<p>Excel can fetch data from external data sources using ODBC connections. There are ODBC drivers for Hive.</p>
+<p>These have ODBC drivers for Hive:</p>
+<ul>
+<li>MapR </li>
+<li>Hadooponazure</li>
+<li>Hortonworks</li>
+<li>Simba</li>
+<li>DataDirect</li>
+</ul>
+<p>The MapR Hadoop distribution (which contains Hive) can be used from Elastic Map Reduce soo I&#39;ll go for 
+this one. </p>
+<h2>Step 1 - start an EMR Hive cluster</h2>
+<p>I&#39;m using some helper scripts that are available here <a href="https://github.com/colmsjo/emr-scripts">https://github.com/colmsjo/emr-scripts</a></p>
+<p>You need to follow the instruction in the README to do the setup of AWS credentials etc.
+I&#39;ll assume that the fab alias has been setup, see the README file.</p>
+<pre><code>fab create_hive_job
+
+# or, do this
+elastic-mapreduce --create --instance-type m1.large --alive num-instances 1 --with-supported-products mapr-m3</code></pre>
+<p>View progress of startup</p>
+<pre><code>fab list_jobs
+
+# or, do this
+elastic-mapreduce --list --active</code></pre>
+<p>Login to the server with ssh. Make sure that </p>
+<pre><code>fab ssh
+
+# or, do this
+elastic-mapreduce --ssh --jobflow &lt;JOBFLOWID&gt;
+
+# Start an interactive session
+bin/hive
+
+# List all Hive properties
+hive&gt;set -v
+datanucleus.autoCreateSchema=true
+datanucleus.autoStartMechanismMode=checked
+datanucleus.cache.level2=false
+...
+
+# List the tables, empty of course
+hive&gt; show tables;
+OK
+Time taken: 3.141 seconds
+
+# Show all available functions
+hive&gt; show functions;
+OK
+!
+!=
+%
+&amp;
+*
+...</code></pre>
+<h2>Step 2 - Load some data into Hive</h2>
+<p>I&#39;ve stolen this example from Kirk True&#39;s Mustard Grain Blog, see link at the top.</p>
+<p>You need a S3 bucket to place the data in. All data in a bucket should be formated the 
+same way. Folders should not be used.</p>
+<pre><code># List available buckets, s3cmd mb &lt;name&gt; will create a new bucket 
+./python-env/bin/s3cmd ls</code></pre>
+<p>Create a file on S3 containing this content:</p>
+<pre><code>echo -e &quot;jim=89347\ndave=313925\nnoddy=21516\ndon=6771&quot; &gt; data.txt
+
+./python-env/bin/s3cmd put data.txt s3://&lt;bucket&gt;
+
+# Check that the file is there
+./python-env/bin/s3cmd ls s3://&lt;bucket&gt;</code></pre>
+<p>Login to the cluster and start hive cli again. </p>
+<pre><code>fab ssh
+bin/hive
+
+hive&gt; CREATE EXTERNAL TABLE mydata1 (key STRING, value INT)
+    ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;=&#39;
+    LOCATION &#39;s3n://emr-sbx/&#39;;
+OK
+Time taken: 4.264 seconds
+
+
+hive&gt;select * from mydata;</code></pre>
+<p>You can create several tables of the same raw data. This exmaple shows howto create tabels 
+with more and less options:</p>
+<pre><code>hive&gt; CREATE EXTERNAL TABLE mydata2 (key STRING, value INT) LOCATION &#39;s3n://emr-sbx/&#39;;
+OK
+Time taken: 4.264 seconds
+
+hive&gt;CREATE EXTERNAL TABLE mydata3 (key STRING, value INT)
+            ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;=&#39;
+            LINES TERMINATED BY &#39;\n&#39; 
+            STORED AS TEXTFILE
+            LOCATION &#39;s3n://emr-sbx/&#39;;</code></pre>
+<p>Drop a table like this. The data is still there since it is external to the table:</p>
+<pre><code>hive&gt;drop table mydata3;s</code></pre>
+<h2>Connect from Excel</h2>
+<p>The ODBC connector is only available for windows. There is both a 32-bit and a 64-bit version.
+I&#39;m running windows in a Virtual Box machine on my Mac.</p>
+<p>Download the driver: </p>
+<ul>
+<li>32-bit: <a href="http://package.mapr.com/tools/MapR-ODBC/MapR_odbc_2.0.0_x86.exe">http://package.mapr.com/tools/MapR-ODBC/MapR_odbc_2.0.0_x86.exe</a></li>
+<li>64-bit: <a href="http://package.mapr.com/tools/MapR-ODBC/MapR_odbc_2.0.0_x64.exe">http://package.mapr.com/tools/MapR-ODBC/MapR_odbc_2.0.0_x64.exe</a></li>
+</ul>
+<p>You also need Windows C++ 2010 Runtimes:</p>
+<ul>
+<li><a href="http://www.microsoft.com/en-us/download/details.aspx?id=5555">http://www.microsoft.com/en-us/download/details.aspx?id=5555</a></li>
+</ul>
+<p>You need the name of the hive server (master node) below:</p>
+<pre><code>fab list_jobs
+Gizur-Laptop-5:emr-scripts jonas$ fab list_jobs
+[localhost] local: elastic-mapreduce --list --active
+j-JP4N7YPN4DW1      WAITING        ec2-54-246-35-239.eu-west-1.compute.amazonaws.com Development Job Flow (requires manual termination)</code></pre>
+<p>You also need to open up port 10000 in the security groups that EMR uses (ElasticMapReduce-master by default). Login with the AWS Console and open 10000 for 0.0.0.0 (everyone).</p>
+<p>Steps:</p>
+<ol>
+<li>Install both C++ runtimes and MapR-ODBC drivers</li>
+<li>Create a Data Source Name (Start-&gt;MapR..-&gt;ODBC Driver Manager)</li>
+<li>Create a new User DSN<ul>
+<li>Select: Hive Server 2</li>
+<li>Authentication: User name with User name set to mapr</li>
+</ul>
+</li>
+<li>Hit the test button</li>
+</ol>
+<h2>Troubleshooting</h2>
+<p>Open SSH tunnel to master node:</p>
+<pre><code>ssh -o ServerAliveInterval=10 -o StrictHostKeyChecking=no -i ~/keys/gc4-keypair1.pem hadoop@ec2-46-137-34-113.eu-west-1.compute.amazonaws.com -N -L 1234:localhost:10000</code></pre>
+<h3>Check ODBC setup</h3>
+<ul>
+<li><a href="https://cwiki.apache.org/confluence/display/Hive/HiveODBC">https://cwiki.apache.org/confluence/display/Hive/HiveODBC</a></li>
+</ul>
+<pre><code>odbcinst -j</code></pre>
+<p>Add to odbc.ini</p>
+<pre><code>[Hive]
+ Driver = &lt;path_to_libodbchive.so&gt;
+ Description = Hive Driver v1
+ DATABASE = default
+ HOST = &lt;Hive_server_address&gt;
+ PORT = &lt;Hive_server_port&gt;
+ FRAMED = 0</code></pre>
+<p>Test and see if it works:</p>
+<pre><code>isql -v Hive</code></pre>
+<h2>Misc</h2>
+<p>Good to know...</p>
+<p>The hive configuration file is located here: .versions/hive-0.8.1/conf/hive-default.xml in the master node</p>
+<p>maprcli:</p>
+<pre><code>maprcli
+
+maprcli service list
+
+maprcli dashboard info
+
+maprcli entity list</code></pre>
+<p>jps:</p>
+<pre><code>hadoop@ip-10-36-129-22:~/conf$ jps
+2132 instance-controller.jar
+25922 Jps
+2757 RolesController</code></pre>
+</div>
+    
+</body>
+</html>

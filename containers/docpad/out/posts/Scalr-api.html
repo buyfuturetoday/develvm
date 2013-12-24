@@ -1,0 +1,74 @@
+<html>
+<head>
+    <title>Scalr</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Scalr</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Wiki]]</p>
+<p>h1. Scalr API</p>
+<ul>
+<li><a href="http://wiki.scalr.net/display/docs/API">http://wiki.scalr.net/display/docs/API</a></li>
+</ul>
+<p>h2. PHP</p>
+<ul>
+<li>PHP Example - <a href="http://wiki.scalr.net/download/attachments/327715/ScalrAPI.example.php?version=2&amp;modificationDate=1335371895000">http://wiki.scalr.net/download/attachments/327715/ScalrAPI.example.php?version=2&amp;modificationDate=1335371895000</a></li>
+</ul>
+<pre>
+
+<? php
+
+    // Define constants
+    define("SCALR_API_KEY", "xxxxxxxxxxxxxxxx");
+    define("SCALR_SECRET_KEY", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+    define("API_URL", "https://api.scalr.net/");    
+    define("API_VERSION", "2009-05-07");
+
+    // Build query arguments list
+    $params = array(
+        'Action'    => 'ListFarms',
+        'Version'    => API_VERSION,
+        'Timestamp'    => date("c"),
+        'KeyID'        => SCALR_API_KEY
+    );
+
+    // Sorg arguments
+    ksort($params);
+
+    // Generate string for sign
+    $string_to_sign = "";
+    foreach ($params as $k => $v)
+        $string_to_sign .= "{$k}{$v}";
+
+    // Generate signature
+    $params['Signature'] = base64_encode(hash_hmac('SHA256', $string_to_sign, SCALR_SECRET_KEY, 1));
+
+    // Build query
+    $query = http_build_query($params);
+
+    // Execute query
+    $c = file_get_contents(API_URL."?{$query}");
+
+    // Print result
+    print " pre ";
+    print htmlspecialchars($c);
+
+?>
+
+
+</pre>
+
+
+
+<p>h2. Joomla and PHP</p>
+<ul>
+<li><a href="http://extensions.joomla.org/extensions/core-enhancements/coding-a-scripts-integration/custom-code-in-content/4470">http://extensions.joomla.org/extensions/core-enhancements/coding-a-scripts-integration/custom-code-in-content/4470</a></li>
+</ul>
+</div>
+    
+</body>
+</html>

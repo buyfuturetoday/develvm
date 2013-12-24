@@ -1,0 +1,49 @@
+<html>
+<head>
+    <title>Opentaps and ofbiz on</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Opentaps and ofbiz on</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Wed May 01 2013 02:00:00 GMT+0200 (CEST)</h3>
+<div><p>Opentaps and ofbiz on OSX</p>
+<h2>Ofbiz</h2>
+<p>Ofbiz was wasy to start:</p>
+<pre><code>ant load-demo
+ant start</code></pre>
+<p>Open:</p>
+<ul>
+<li><a href="http://localhost:8080/ecommerce">http://localhost:8080/ecommerce</a></li>
+<li><a href="https://localhost:8443/webtools">https://localhost:8443/webtools</a></li>
+</ul>
+<pre><code>ant stop</code></pre>
+<h2>Opentaps</h2>
+<p><a href="http://www.opentaps.org/docs/index.php/Opentaps_Installation_Manual">http://www.opentaps.org/docs/index.php/Opentaps_Installation_Manual</a></p>
+<p>Show available commands:</p>
+<pre><code>ant -p
+
+ant</code></pre>
+<pre><code>ant run-install
+
+# without demo data
+ant run-install-seed
+
+# reset admin password
+# skip this: ant create-admin-user-login
+
+chmod u+x startofbiz.sh
+chmod u+x stopofbiz.sh
+./startofbiz.sh 
+tail -f runtime/logs/console.log</code></pre>
+<p><a href="http://localhost:8080/opentaps">http://localhost:8080/opentaps</a></p>
+<pre><code>For the back end web applications, use the username &quot;admin&quot; and the password &quot;opentaps&quot;.
+
+For the ecommerce online store application, use username &quot;DemoCustomer&quot; and password &quot;ofbiz&quot;.
+
+For the Point Of Sales application, use username &quot;1&quot; and password &quot;1&quot; for a manager and username &quot;2&quot; and password &quot;2&quot; for a cashier.</code></pre>
+</div>
+    
+</body>
+</html>

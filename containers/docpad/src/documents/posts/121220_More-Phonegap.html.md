@@ -1,0 +1,144 @@
+
+---
+layout: post
+title: More Phonegap Apps
+date: 2012-12-20
+author: Jonas Colmsjo
+tags: ['post']
+---
+
+More Phonegap Apps
+
+
+
+
+
+Having created a basic Phonegap app in [Getting started with Phonegap](/121212_Phonegap),
+I now what do develop a simple real application.
+
+It will probably do us good to use some JavaScript frameworks in order keep things structured.
+
+I'll start with these:
+
+ * stapes MVC framework - http://hay.github.com/stapes/
+ * jQuery Mobile CSS - http://jquerymobile.com/test/docs/pages/phonegap.html
+ 
+
+I saw an article regarding problems with Phonegap and Bootstrap, so we're going for jQuery Mobile instead:
+
+ * http://www.eschrade.com/page/phonegap-and-bootstrap-not-lovers/
+
+It would be good with some grid system like 960.gs. I found this: http://jeromeetienne.github.com/jquery-mobile-960/
+
+
+
+```
+<!DOCTYPE html> 
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+	<title>Simple Phonegap App</title>
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+	<link rel="stylesheet" href="http://jeromeetienne.github.com/jquery-mobile-960/css/jquery-mobile-960.min.css" />
+
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+
+</head> 
+
+<body> 
+
+	<div data-role="page">
+
+		<div data-role="header">
+			<h1>Phonegap App</h1>
+		</div><!-- /header -->
+
+		<div data-role="content">
+			<p>Yet to be converted into Phonegap app</p>
+
+			<p>Using 12 column grid. Should use a smaller grid for phones</p>
+
+			<p>Open the Console Log to see what's going on...</p>
+
+			<form name="frm1" onsubmit="send()" method="post">
+
+				<div class="container_12">
+					<div class="grid_6"><br/>First name:</div>
+					<div class="grid_6"><input type="text"     name="firstname"></div>
+
+					<div class="grid_6"><br/>Last name:</div>
+					<div class="grid_6"><input type="text"     name="lastname"></div>
+
+					<div class="grid_6"><br/>Password:</div>
+					<div class="grid_6"><input type="password" name="pwd"></div>
+
+					<div class="grid_12"><input type="submit"  value="Submit Button" /></div>
+			    </div>
+				
+
+			</form>
+
+			<ul id="results"></ul>
+
+		</div><!-- /content -->
+
+		
+		<div data-role="footer">
+			<h4>Footer content</h4>
+		</div><!-- /footer -->
+		
+	</div><!-- /page -->
+
+	<!-- Scripts at the end for better performance -->
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+
+	<script type="text/javascript" src="https://raw.github.com/colmsjo/helpersjs/master/lib/js/stapes.min.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/colmsjo/helpersjs/master/helpers.js"></script>
+
+	<script>
+
+	var h = helpers.create();
+	var Module = Stapes.create();
+
+	function send() {
+	    Module.send(); // 'woot! ready!'
+	}
+
+	window.onload = function(){
+
+
+		h.test("Testing to use the stapes library.", function(){
+			
+		    Module.extend({
+		        "send" : function() {
+		            this.emit('send');
+		        }
+		    });
+
+			Module.on('send', function() {
+				h.log("Welcome " + document.forms["frm1"]["firstname"].value + " " + 
+					document.forms["frm1"]["lastname"].value + " with password " + 
+					document.forms["frm1"]["pwd"].value+ "!")
+		    });
+		});
+  
+	};
+	
+	
+	</script>
+
+</body>
+
+```
+
+
+

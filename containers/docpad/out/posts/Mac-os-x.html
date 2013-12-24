@@ -1,0 +1,77 @@
+<html>
+<head>
+    <title>Mac</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Mac</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Main_Page]]</p>
+<h1>= ODBC / MySQL connection =</h1>
+<p>Need ODBC to JDBC link?
+* <a href="http://uda.openlinksw.com/odbc-jdbc-st/">http://uda.openlinksw.com/odbc-jdbc-st/</a></p>
+<ul>
+<li><a href="http://support.apple.com/kb/DL895">http://support.apple.com/kb/DL895</a></li>
+</ul>
+<h1>= Encryption =</h1>
+<p>GPGTools</p>
+<h1>= Users =</h1>
+<ul>
+<li>Add user from command line - <a href="http://osxdaily.com/2007/10/29/how-to-add-a-user-from-the-os-x-command-line-works-with-leopard/">http://osxdaily.com/2007/10/29/how-to-add-a-user-from-the-os-x-command-line-works-with-leopard/</a></li>
+<li><a href="http://docstore.mik.ua/orelly/unix3/mac/ch03_08.htm">http://docstore.mik.ua/orelly/unix3/mac/ch03_08.htm</a></li>
+<li><a href="http://www.99.se/unix/48128-adduser-i-osx.html">http://www.99.se/unix/48128-adduser-i-osx.html</a></li>
+</ul>
+<h1>= Macports =</h1>
+<p>Make sure that Xcode is installed:
+* <a href="https://connect.apple.com/cgi-bin/WebObjects/MemberSite.woa/wa/getSoftware?bundleID=20792">https://connect.apple.com/cgi-bin/WebObjects/MemberSite.woa/wa/getSoftware?bundleID=20792</a></p>
+<p>Install using the .dmg file:
+* <a href="http://www.macports.org/install.php">http://www.macports.org/install.php</a></p>
+<h1>== TeX ==</h1>
+<pre>
+sudo /opt/local/bin/port install texlive
+</pre>
+
+
+<h1>= Time Machine =</h1>
+<pre>
+defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1
+</pre>
+
+<p>Doesn&#39;t work. It seams as though TimeMAchine tries to use a smb drive with the name used + _1.</p>
+<h1>= Hackintosh =</h1>
+<ul>
+<li><a href="http://www.hackintosh.com/">http://www.hackintosh.com/</a></li>
+<li><a href="http://lifehacker.com/5672051/how-to-build-a-hackintosh-mac-and-install-os-x-in-eight-easy-steps">http://lifehacker.com/5672051/how-to-build-a-hackintosh-mac-and-install-os-x-in-eight-easy-steps</a></li>
+<li><a href="http://www.taranfx.com/install-snow-leopard-virtualbox">http://www.taranfx.com/install-snow-leopard-virtualbox</a></li>
+<li><a href="http://www.taranfx.com/install-mac-os-in-virtualbox">http://www.taranfx.com/install-mac-os-in-virtualbox</a></li>
+</ul>
+<p>*<a href="http://www.taranfx.com/install-mac-os-x-leopard-osx86-on-pc-dual-boot-windows-7-vista-in-9-easy-steps">http://www.taranfx.com/install-mac-os-x-leopard-osx86-on-pc-dual-boot-windows-7-vista-in-9-easy-steps</a></p>
+<h1>= OS X Server =</h1>
+<p>Install OSX Server within a Virtualbox machine:
+* <a href="http://geeknizer.com/install-snow-leopard-virtualbox/">http://geeknizer.com/install-snow-leopard-virtualbox/</a></p>
+<h1>Create a new disk within a existing OSX machine</h1>
+<h1>Mount the retail OSX server media</h1>
+<h1>Mount the utils.iso file</h1>
+<h1>Start the old machine and format the new disk</h1>
+<h1>Open the retail installation media - just double click</h1>
+<h1>Run the unHide app on the utils disk - <a href="http://www.mediafire.com/?mmtm2z0huwk">http://www.mediafire.com/?mmtm2z0huwk</a></h1>
+<h1>Browse to /System/Installation/Packages( inside Retail disc) and run OSInstall.mpkg</h1>
+<h1>Not sure if a special boot loader, such as Chamelaon, is needed when runing on Mac hardware - <a href="http://geeknizer.com/download-install-chameleon-bootloader/">http://geeknizer.com/download-install-chameleon-bootloader/</a></h1>
+<h1>Did not get Chamelon to work, used Empire EFI instead, make sure that EFI is DISABLED in the setting and mount the cdrom as the primary slave</h1>
+<h2>also make sure that osx server.dmg is mounted as the secondary slave, the countries in the list box will now shoe otherwise</h2>
+<h1>Open the Empire CD and goto postinstallation and tun myHack. This should make it possible to boot without the CD mounted - <a href="http://prasys.info/tag/empire-efi/">http://prasys.info/tag/empire-efi/</a></h1>
+<ul>
+<li><p><a href="http://www.tech-recipes.com/rx/2628/install_os_x_from_dmg_file/">http://www.tech-recipes.com/rx/2628/install_os_x_from_dmg_file/</a></p>
+</li>
+<li><p>Convert DMG to ISO - <a href="http://www.magiciso.com/FAQ/FAQ0011.htm">http://www.magiciso.com/FAQ/FAQ0011.htm</a></p>
+</li>
+<li><p><a href="http://hints.macworld.com/article.php?story=20040121135301830">http://hints.macworld.com/article.php?story=20040121135301830</a></p>
+</li>
+</ul>
+</div>
+    
+</body>
+</html>

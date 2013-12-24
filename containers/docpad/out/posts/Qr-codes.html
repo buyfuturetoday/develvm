@@ -1,0 +1,94 @@
+<html>
+<head>
+    <title>Qr</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Qr</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Main_Page]]</p>
+<ul>
+<li><p><a href="https://developers.google.com/chart/?hl=sv-SE">https://developers.google.com/chart/?hl=sv-SE</a>
+** With unicode data</p>
+</li>
+<li><p><a href="http://goqr.me/">http://goqr.me/</a></p>
+</li>
+<li><p><a href="http://www.qrstuff.com/">http://www.qrstuff.com/</a>
+** Fungerar inte med min QR reader</p>
+</li>
+<li><p><a href="http://www.moongate.ro/en/products/qr_code-vcard/">http://www.moongate.ro/en/products/qr_code-vcard/</a>
+** Fungerar men åäö verkar inte fungera</p>
+</li>
+<li><p><a href="http://qrcode.kaywa.com/">http://qrcode.kaywa.com/</a>
+** Klarar åäö men gör inte hela vCards</p>
+</li>
+</ul>
+<h1>vCard</h1>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/VCard">http://en.wikipedia.org/wiki/VCard</a></li>
+</ul>
+<pre>
+BEGIN:VCARD
+VERSION:4.0
+N:Colmsjö;Jonas;;;
+FN: Jonas Colmsjö
+ORG:Gizur AB
+TITLE:CEO
+TEL;TYPE="work,voice";VALUE=uri:tel:+46-303-719130
+ADR;TYPE=work;LABEL="P/O Box 84\n44421 Stenungsund\nSWEDEN"
+ :;;P/O Box 84.;Stenungsund;;44421;SWEDEN
+EMAIL:jonas.colmsjo@gizur.com
+REV:20120423T000000Z
+END:VCARD
+</pre>
+
+<p>Same as above without newlines</p>
+<pre>
+BEGIN:VCARD\nVERSION:4.0\nN:Colmsjö;Jonas;;;\nFN: Jonas Colmsjö\nORG:Gizur AB\nTITLE:CEO\nTEL;TYPE="work,voice";VALUE=uri:tel:+46-303-719130\nADR;TYPE=work;LABEL="P/O Box 84\n44421 Stenungsund\nSWEDEN"\n :;;P/O Box 84.;Stenungsund;;44421;SWEDEN\nEMAIL:jonas.colmsjo@gizur.com\nREV:20120423T000000Z\nEND:VCARD
+</pre>
+
+
+
+
+<pre>
+BEGIN:VCARD
+VERSION:4.0
+N:Colmsjö;Jonas;;;
+FN: Jonas Colmsjö
+ORG:Gizur AB
+TITLE:CEO
+PHOTO:http://www.example.com/dir_photos/my_photo.gif
+TEL;TYPE="work,voice";VALUE=uri:tel:+1-111-555-1212
+TEL;TYPE="home,voice";VALUE=uri:tel:+1-404-555-1212
+ADR;TYPE=work;LABEL="42 Plantation St.\nBaytown, LA 30314\nUnited States of America"
+ :;;42 Plantation St.;Baytown;LA;30314;United States of America
+EMAIL:forrestgump@example.com
+REV:20080424T195243Z
+END:VCARD
+</pre>
+
+
+<pre>
+BEGIN:VCARD
+N:Colmsjö;Jonas
+ORG:Gizur AB
+TITLE:CEO
+TEL:+46 303 719130
+EMAIL:jonas.colmsjo@gizur.com
+URL:www.gizur.com
+ADR:;;P/O Box 84;Stenungsund;;44421;SWEDEN
+END:VCARD
+</pre>
+
+
+<h1>Misc</h1>
+<ul>
+<li><a href="http://www.web-source.net/symbols.htm">http://www.web-source.net/symbols.htm</a></li>
+</ul>
+</div>
+    
+</body>
+</html>

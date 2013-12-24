@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>Mediawiki</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Mediawiki</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Wiki]]</p>
+<p>h1. Mediawiki installation</p>
+<ul>
+<li><a href="http://www.mediawiki.org/wiki/Manual:Installing_MediaWiki">http://www.mediawiki.org/wiki/Manual:Installing_MediaWiki</a></li>
+</ul>
+<pre>
+
+wget http://download.wikimedia.org/mediawiki/1.18/mediawiki-1.18.2.tar.gz
+
+</pre>
+
+
+
+<p>h1. Export and import wiki</p>
+<ul>
+<li><a href="http://www.mediawiki.org/wiki/Manual:Importing_XML_dumps">http://www.mediawiki.org/wiki/Manual:Importing_XML_dumps</a></li>
+<li><a href="http://meta.wikimedia.org/wiki/Help:Export">http://meta.wikimedia.org/wiki/Help:Export</a></li>
+</ul>
+<pre>
+# Export
+/usr/bin/php /var/www/html/mediawiki/maintenance/dumpBackup.php  --full > /backups/mediawik.dmp
+
+#import
+cd /var/www/html/mediawiki/maintenance
+php importDump.php ~/tmp/mediawiki-120403.dmp
+
+</pre></div>
+    
+</body>
+</html>

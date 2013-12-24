@@ -1,0 +1,121 @@
+<html>
+<head>
+    <title>Setup</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Setup</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[Gizur server admin]] &gt; [[OpenQRM]]</p>
+<h1>= Resources =</h1>
+<ul>
+<li><a href="http://www.openqrm.com/?q=node/174">http://www.openqrm.com/?q=node/174</a> -KVM on Ubuntu Howto</li>
+<li><a href="http://www.openqrm.com/?q=node/112">http://www.openqrm.com/?q=node/112</a> - Cloud Computing Howto</li>
+<li><a href="http://www.openqrm.com/?q=node/125">http://www.openqrm.com/?q=node/125</a> - LinuxCOE</li>
+<li><a href="http://www.openqrm-enterprise.com/news/details/article/in-depth-documentation-of-openqrm-available.html">http://www.openqrm-enterprise.com/news/details/article/in-depth-documentation-of-openqrm-available.html</a> - In Depth docs</li>
+<li><a href="http://www.openqrm-enterprise.com/news/details/article/howto-setup-openqrm-cloud-deploying-physical-windows-systems-on-centos-55.html">http://www.openqrm-enterprise.com/news/details/article/howto-setup-openqrm-cloud-deploying-physical-windows-systems-on-centos-55.html</a> - Physical Windows Node</li>
+<li><a href="http://sourceforge.net/projects/openqrm/forums/forum/513343/topic/2838525">http://sourceforge.net/projects/openqrm/forums/forum/513343/topic/2838525</a> - forum discussion</li>
+<li><a href="http://www.giis.co.in/openQRM.pdf">http://www.giis.co.in/openQRM.pdf</a></li>
+</ul>
+<h1>= 1. Plugins =</h1>
+<p>Enable and start plugins in this order:
+<em> dhcpd
+</em> tftpd
+<em> lvm-storage
+</em> dns
+<em> image-shelf
+</em> xen (says vmware-server2 in the guide)
+<em> xen-storage
+</em> cloud
+* linuxcoe</p>
+<p>I&#39;m also using:
+* nfs-storage</p>
+<p>Not using these at the moment
+<em> local-server
+</em> local-storage</p>
+<h1>== Problems with dns ==</h1>
+<ul>
+<li>the named deamon was not started</li>
+<li>when trying to start I got an error</li>
+<li>I changed /etc/resolv.conf<pre>
+search gizur
+nameserver 127.0.0.1
+nameserver 192.168.1.1
+</pre>
+
+</li>
+</ul>
+<h1>= 2. Xen plugin configuration =</h1>
+<p><a href="http://www.openqrm.com/?q=node/116">http://www.openqrm.com/?q=node/116</a></p>
+<ul>
+<li>edit /usr/share/openqrm/plugins/xen/etc
+** OPENQRM_PLUGIN_XEN_INTERNAL_BRIDGE=xenbr0</li>
+<li>reboot</li>
+</ul>
+<h1>= 3. Storage, Resources etc =</h1>
+<ul>
+<li>Components -&gt; Create -&gt; Storage
+<strong> Deployment: LVM-NFS
+</strong> Name: hubert_storage</li>
+<li>Components -&gt; Storage -&gt; Mgmt -&gt; VolGroup00 -&gt; Add LUN -&gt; CentOS, 5000 MB</li>
+</ul>
+<h1>= 4. Images =</h1>
+<ul>
+<li>Components -&gt; Create -&gt; Image
+<strong> Root device: /dev/VolGroup00/CentOS
+</strong> Name: centos_54_x86_64</li>
+<li>Deployment -&gt; Image shelf -&gt; Import -&gt; openqrm-enterprise -&gt; CentOs-x86-64
+** Choose centos_54_x86_64 image in LVM-NFS storage</li>
+<li>Check event list</li>
+</ul>
+<h1>= 5. Create Xen-storage host =</h1>
+<ul>
+<li><p>Storage -&gt; Create 
+<strong> Name: xen_storage
+</strong> Deployment: Xen LVM storage </p>
+</li>
+<li><p>Appliance -&gt; Create 
+<strong> Name: Hubert_xen_storage_host
+</strong> Resource: Xen storage host</p>
+</li>
+</ul>
+<h1>= 6. Create Xen VM =</h1>
+<p>From Virtualization -&gt; Xen storage -&gt; About</p>
+<pre>
+1. Xen Storage Management : 
+* Create a new storage from type "xen-storage"
+* Create a new logical volume on this storage
+* Use the "local-storage" plugin to populate the new logical volume
+or use the "linuxcoe-plugin" to automatically install a Linux distribution on it.
+* Another option is to connect to the VMs VNC console and install an OS in the regular way.
+Create an Image using the new created logical volume as root-device
+Result is an openQRM Image (server-template) which can be deployed to a Xen-Storage VM (on the same system) via an Appliance
+</pre>
+
+
+<ul>
+<li><p>Virtualization -&gt; Xen-storage -&gt; Xen VMs -&gt; hubert.gizur
+** VMs</p>
+</li>
+<li><p>Appliance -&gt; Create -&gt; Idle1
+<strong> Name: <em>_</em>
+</strong> Resource: Xen VM</p>
+</li>
+<li><p>Goto resources and see the new machine</p>
+</li>
+</ul>
+<h1>= 7. LinuxCOE =</h1>
+<p>Did not manage to install.</p>
+<h1>= 8. VNC =</h1>
+<p>Try to connect to VM using VNC once it has been created</p>
+<pre>
+yum install vnc
+
+
+</pre></div>
+    
+</body>
+</html>

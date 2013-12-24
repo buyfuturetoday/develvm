@@ -1,0 +1,231 @@
+<html>
+<head>
+    <title>Offline Web Apps</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Offline Web Apps</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sat Feb 09 2013 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Webapps that are possible to run offline</p>
+<h3>Web apps in traditional browsers</h3>
+<p>Links:</p>
+<ul>
+<li><a href="http://diveintohtml5.info/offline.html">http://diveintohtml5.info/offline.html</a></li>
+<li><a href="http://www.html5rocks.com/en/tutorials/appcache/beginner/">http://www.html5rocks.com/en/tutorials/appcache/beginner/</a></li>
+<li><a href="http://diveintohtml5.info/storage.html">http://diveintohtml5.info/storage.html</a></li>
+</ul>
+<p>Old style offline web applications.</p>
+<p>The manifest makes it possible to user web apps also without network connectivity. It is 
+also possible to store data locally in the browser. Both for a session and between sessions.</p>
+<h3>Web apps in Firefox OS</h3>
+<p>Links:</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Apps/Getting_Started">https://developer.mozilla.org/en-US/docs/Apps/Getting_Started</a></li>
+<li><a href="http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser">http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser</a></li>
+</ul>
+<p>The Firefox browser will support offline web apps in the future. Is is currently available
+in the beta version of Firefox. Here I&#39;ll do a small test of the API. This will also be the
+way apps are installed in Firefox OS which is a new OS for mobile devices.</p>
+<p>A Manifest is needed in order to publish the app on Firefox OS Market.</p>
+<p>The manifest must be hosted from the same domain as your website, 
+and must be served with a Content-Type of application/x-web-app-manifest+json`</p>
+<p>Small Offline Web App Example:</p>
+<pre><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Offline webapp&lt;/title&gt;
+
+
+    &lt;!-- Bootstrap --&gt;
+    &lt;link href=&quot;http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+
+    &lt;!-- HTML5 shim, for IE6-8 support of HTML5 elements --&gt;
+    &lt;!--[if lt IE 9]&gt;
+      &lt;script src=&quot;http://html5shim.googlecode.com/svn/trunk/html5.js&quot;&gt;&lt;/script&gt;
+    &lt;![endif]--&gt;
+
+  &lt;/head&gt;
+
+  &lt;body&gt;
+
+    &lt;div class=&quot;container&quot;&gt;
+
+      &lt;!-- The menu used to show different templates --&gt;
+     &lt;div id=&quot;test1&quot;&gt;
+        Menu:
+        &lt;a href=&quot;#route1&quot;&gt;#screen1&lt;/a&gt; 
+        &lt;a href=&quot;#route2&quot;&gt;#screen2&lt;/a&gt; 
+        &lt;a href=&quot;#route3&quot;&gt;#screen3&lt;/a&gt;
+      &lt;/div&gt;
+
+
+      &lt;!-- Templates are rendered here --&gt;
+      &lt;div id=&quot;ui&quot;&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt; &lt;!-- /container --&gt;
+
+
+    &lt;!-- Show test results --&gt;
+    &lt;ul id=&quot;results&quot;&gt;&lt;/ul&gt;
+
+
+    &lt;!-- Templates --&gt;
+
+    &lt;script type=&quot;text/template&quot; id=&quot;template1&quot;&gt;
+      &lt;h3&gt;This is screen 1&lt;/h3&gt;
+    &lt;/script&gt;
+
+    &lt;script type=&quot;text/template&quot; id=&quot;template2&quot;&gt;
+      &lt;h3&gt;This is screen 2&lt;/h3&gt;
+    &lt;/script&gt;
+
+    &lt;script type=&quot;text/template&quot; id=&quot;template3&quot;&gt;
+      &lt;h3&gt;This is screen 3&lt;/h3&gt;
+    &lt;/script&gt;
+
+
+
+    &lt;!-- Scripts at the end for better performance --&gt;
+
+    &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://raw.github.com/colmsjo/helpersjs/master/lib/js/helpers-1.0.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://login.persona.org/include.js&quot;&gt;&lt;/script&gt;
+
+    &lt;script src=&quot;https://raw.github.com/colmsjo/helpersjs/master/lib/js/signals.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://raw.github.com/colmsjo/helpersjs/master/lib/js/crossroads.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://raw.github.com/colmsjo/helpersjs/master/lib/js/hasher.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://raw.github.com/colmsjo/helpersjs/master/lib/js/plates.js&quot;&gt;&lt;/script&gt;
+
+
+    &lt;script type=&quot;text/javascript&quot;&gt;
+
+    // Make sure the page is loading
+    // -----------------------------
+
+    window.onload = function(){
+
+
+      // Define some functions
+      // ---------------------
+
+      (function(){
+
+        // Check if the web apps has been installed and install otherwise
+        // --------------------------------------------------------------
+
+        this.installApp = function installApp() {
+
+          var request = navigator.mozApps.getSelf();
+
+          request.onsuccess = function() {
+            if (request.result) {
+              // we&#39;re installed
+              logDebug(&#39;App has already been installed&#39;);
+            } else {
+              // not installed
+              logDebug(&#39;App has not been installed&#39;);
+
+              var request2 = navigator.mozApps.install(&quot;http://path.to/my/example.webapp&quot;);
+              request2.onsuccess = function() {
+                // great - display a message, or redirect to a launch page
+                logDebug(&#39;App was successfully installed: Name: &#39; + request2.result.manifest.name);
+              };
+              request2.onerror = function() {
+                // whoops - this.error.name has details
+                logErr(&#39;ERROR: Could not install app! Error: &#39; + request2.error.name);
+
+              };
+            }
+          };
+
+          request.onerror = function() {
+            logError(&#39;Error checking installation status: &#39; + this.error.message);
+          };
+
+
+        };
+
+      }());
+
+
+      // Some general setup
+      // -------------------------------
+
+      logging.threshold  = logging.debug;
+      logDebug(&#39;Loading page...&#39;);
+
+      if(checkBrowser() != &quot;firefox&quot;) {
+        logErr(&#39;ERROR: only firefox supports offline webapps! You are running &#39; + checkBrowser() + &#39;.&#39;);
+        logErr(&quot;Continuing but you&#39;ll most likely get a bunch of erorrs!&quot;);
+      }
+
+      // Install the app
+      installApp();
+
+      // Setup routing
+      // -------------------------------
+
+      // Screen 1
+      crossroads.addRoute(&#39;route1&#39;, function() { 
+        var html = $(&#39;#template1&#39;).html();
+        var output = Plates.bind(html, null, null);
+        $(&#39;#ui&#39;).html(output);
+        logDebug(&#39;logging static route1...&#39;);} 
+      );
+
+
+       // Screen 2
+       crossroads.addRoute(&#39;route2&#39;, function() {
+       var html = $(&#39;#template2&#39;).html();
+        var output = Plates.bind(html, null, null);
+        $(&#39;#ui&#39;).html(output);
+        logDebug(&#39;logging static route2...&#39;);} 
+      ); 
+
+     // Screen 3      
+      crossroads.addRoute(&#39;route3&#39;, function() {
+        var html = $(&#39;#template3&#39;).html();
+        var output = Plates.bind(html, null, null);
+        $(&#39;#ui&#39;).html(output);
+        logDebug(&#39;logging static route3...&#39;);} 
+      ); 
+
+
+      // Also log routes that did not match anything (useful for debugging)
+      crossroads.bypassed.add(function(request){
+        logDebug(&quot;A route that wasn&#39;t matched:&quot;+request); 
+      });
+
+
+      // Setup hasher
+      // -------------------------------
+
+      function parseHash(newHash, oldHash){
+        crossroads.parse(newHash); 
+      }
+
+      // parse initial hash 
+      hasher.initialized.add(parseHash);
+
+      // parse hash changes
+      hasher.changed.add(parseHash);
+
+      // start listening for history change
+      hasher.init();
+
+      //update URL fragment generating new history record 
+      hasher.setHash(&#39;route1&#39;);
+
+
+    } // window.onload
+
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+    
+</body>
+</html>

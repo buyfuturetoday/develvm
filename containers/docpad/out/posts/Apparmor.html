@@ -1,0 +1,38 @@
+<html>
+<head>
+    <title>Apparmor</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Apparmor</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[wiki]]</p>
+<p>h1. Apparmor</p>
+<ul>
+<li><a href="https://wiki.ubuntu.com/AppArmor">https://wiki.ubuntu.com/AppArmor</a></li>
+<li><a href="http://doc.opensuse.org/products/draft/SLES/SLES-security_sd_draft/pre.apparm.html">http://doc.opensuse.org/products/draft/SLES/SLES-security_sd_draft/pre.apparm.html</a></li>
+<li><a href="http://forums.opensuse.org/english/get-technical-help-here/applications/455941-apparmor-email-alerting.html">http://forums.opensuse.org/english/get-technical-help-here/applications/455941-apparmor-email-alerting.html</a></li>
+</ul>
+<pre>
+sudo apt-get install apparmor-profiles apparmor-utils
+
+sudo apparmor_status
+service apparmor status
+
+sudo aa-complain /etc/cron*
+
+</pre>
+
+
+
+<p>h2. Immunizing executables</p>
+<ul>
+<li><a href="http://doc.opensuse.org/documentation/html/openSUSE/opensuse-security/cha.apparmor.concept.html#sec.apparmor.concept.cron">http://doc.opensuse.org/documentation/html/openSUSE/opensuse-security/cha.apparmor.concept.html#sec.apparmor.concept.cron</a></li>
+</ul>
+</div>
+    
+</body>
+</html>

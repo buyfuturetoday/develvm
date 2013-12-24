@@ -1,0 +1,81 @@
+<html>
+<head>
+    <title>Shrinking CodeIgniter Details</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Shrinking CodeIgniter Details</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Fri Aug 10 2012 02:00:00 GMT+0200 (CEST)</h3>
+<div><p>Time to understand what&#39;s going on in the PHP frameworks</p>
+<p>STATUS: This is still work in progress</p>
+<p>The code for this article can be found here: <a href="https://github.com/colmsjo/wip/tree/master/Shrinking_CodeIgniter">https://github.com/colmsjo/wip/tree/master/Shrinking_CodeIgniter</a></p>
+<p>I like to understand the detais in what&#39;s going on when developing new stuff. PHP is excellent in itself but some framework is handy in most cases. All frameworks have a learning curve though and I havent&#39;t found any good alternative where you just do a simple include (like in the old good C coding days). When for instance using Yii and CodeIgniter you are assumed to put your code in in some directory inheriting some class and you don&#39;t have control of how this code actualluy get&#39;s executed.</p>
+<p>Here I&#39;ll try to only pull the files actually used out of the CodeIgniter framework. The purpose is to make sure I have a good understanding of what&#39;s going on.</p>
+<p>This is the license of CodeIgniter: <a href="http://codeigniter.com/user_guide/license.html">http://codeigniter.com/user_guide/license.html</a></p>
+<p>Steps for example 1 (See the result in the directory example1):
+<em> Create a directory for the new PHP application, I&#39;ll call it example1 here
+</em> Start with downloading the latest version of CodeIgniter - <a href="http://codeigniter.com/downloads/">http://codeigniter.com/downloads/</a> (or clone from github <a href="https://github.com/EllisLab/CodeIgniter">https://github.com/EllisLab/CodeIgniter</a>)
+<em> Copy index.php from the root CodeIgniter directory to exmaple1
+</em> Open the index.php file and have a look. Spend a little time and make sure you understand what&#39;s going on (it&#39;s fairly straightforward). At the end there&#39;s a include of CodeIgniter.php
+<em> Create the folder structure system/code and copy CodeIgniter.php into it
+</em> Open the file CodeIgniter.php and have a look. This one is more complicated. My plan is to clean it up and only use the parts I really need.
+<em> Line 51 (in version 2.1.2) of CodeIgniter.php has the following include, require(BASEPATH.&#39;core/Common.php&#39;). We&#39;ll take Common.php since has functions for error management and logging. 
+</em> Copy core/Common.php and also core/Exceptions.php
+<em> Open core/Common.php and have a look. On line 349 is the function log_message defined. CI_Log in libraries/Log.php is loaded using the function load_class. Let&#39;s take this file as well, it will probably come in hande sooner or later.
+</em> Create the directory libraries in system, e.g. example1/system/libraries. Copy Log.php into this new directory.
+* There is the file Unit_test.php in libraries. We need a good unit testing tool so let&#39;s take this file also.</p>
+<p>Try to run index.php from command line:</p>
+<pre><code>php index.php</code></pre>
+<p>You&#39;ll get an error complaining about the paths.</p>
+<p>Next steps. You can try to run index.php after each step to see what&#39;s going on:</p>
+<ul>
+<li>Change $application_folder to &#39;.&#39; in index.php </li>
+<li>create the folder config and copy the file application/config/constants.php into it</li>
+<li>copy the file application/config/config.php into the folder config</li>
+<li>Copy the folder application/errors with contents to ./errors</li>
+<li>Copy application/config/routes.php to config</li>
+</ul>
+<p>CodeIgniter loads a bunch of classes using the function load_class defined in system/core/Common.php</p>
+<pre><code>$ grep -nr load_class *
+system/core/CodeIgniter.php:115:    $BM =&amp; load_class(&#39;Benchmark&#39;, &#39;core&#39;);
+system/core/CodeIgniter.php:124:    $EXT =&amp; load_class(&#39;Hooks&#39;, &#39;core&#39;);
+system/core/CodeIgniter.php:138:    $CFG =&amp; load_class(&#39;Config&#39;, &#39;core&#39;);
+system/core/CodeIgniter.php:158:    $UNI =&amp; load_class(&#39;Utf8&#39;, &#39;core&#39;);
+system/core/CodeIgniter.php:165:    $URI =&amp; load_class(&#39;URI&#39;, &#39;core&#39;);
+system/core/CodeIgniter.php:172:    $RTR =&amp; load_class(&#39;Router&#39;, &#39;core&#39;);
+system/core/CodeIgniter.php:186:    $OUT =&amp; load_class(&#39;Output&#39;, &#39;core&#39;);
+system/core/CodeIgniter.php:206:    $SEC =&amp; load_class(&#39;Security&#39;, &#39;core&#39;);
+system/core/CodeIgniter.php:213:    $IN    =&amp; load_class(&#39;Input&#39;, &#39;core&#39;);
+system/core/CodeIgniter.php:220:    $LANG =&amp; load_class(&#39;Lang&#39;, &#39;core&#39;);
+system/core/Common.php:121:if ( ! function_exists(&#39;load_class&#39;))
+system/core/Common.php:123:    function &amp;load_class($class, $directory = &#39;libraries&#39;, $prefix = &#39;CI_&#39;)
+system/core/Common.php:183:* called by the load_class() function above
+system/core/Common.php:308:        $_error =&amp; load_class(&#39;Exceptions&#39;, &#39;core&#39;);
+system/core/Common.php:330:        $_error =&amp; load_class(&#39;Exceptions&#39;, &#39;core&#39;);
+system/core/Common.php:358:        $_log =&amp; load_class(&#39;Log&#39;);
+system/core/Common.php:481:        $_error =&amp; load_class(&#39;Exceptions&#39;, &#39;core&#39;);</code></pre>
+<p>Remove some classes:</p>
+<ul>
+<li>Let&#39;s keep Benchmark on row 115. Copy the file system/core/Benchmark.php into your system/core folder</li>
+<li>Comment out Hooks on row 124</li>
+<li>Comment out row 131</li>
+<li>Keep Config on row 138. Copy the file system/core/Config.php into your system/core folder</li>
+<li>Comment out Utf8 on row 158</li>
+<li>Keep URI on row 165. Copy the file system/core/Uri.php into your system/core folder</li>
+<li>Keep Router on row 182. Copy the file system/core/Router.php into your system/core folder</li>
+<li>Keep Output on row 186. Copy the file system/core/Output.oho into your system/core folder</li>
+<li>Comment out Security on row 206</li>
+<li>Comment out Input on row 213</li>
+<li>Comment out Lang on row 220</li>
+</ul>
+<p>Try to run index.php again. You should now get some valid HTML output with a error saying the default route haven&#39;t been configured.</p>
+<pre><code>php index.php
+        &lt;p&gt;Unable to determine what should be displayed. A default route has not been specified in the routing file.&lt;/p&gt;    &lt;/div&gt;
+...</code></pre>
+<p>Now we have a basic framework that can be used as the starting point for new applications. Additional components of CodeIgniter can be added when needed.</p>
+</div>
+    
+</body>
+</html>

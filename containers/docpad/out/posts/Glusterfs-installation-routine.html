@@ -1,0 +1,134 @@
+<html>
+<head>
+    <title>Glusterfs</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Glusterfs</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[wiki]] &gt; [[Technical Architecture]] &gt; [[Execution Architecture]]</p>
+<p>h1. Notes</p>
+<ul>
+<li>Should stop mounting Gluster drives. Should use rsync instead. I think some ports are missing below for the mount to work</li>
+<li>Scaling of Gluster servers do not work</li>
+</ul>
+<p>h1. Build SCM Tree</p>
+<p>On both</p>
+<pre>
+crontab -e
+
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /root/scripts/gluster-main.sh
+</pre>
+
+<p>On gluster2</p>
+<pre>
+crontab -e
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /root/scripts/scm-build-tree.sh
+</pre>
+
+
+<p>h1. GlusterFS installation routine</p>
+<ul>
+<li><a href="http://download.gluster.com/pub/gluster/glusterfs/3.2/Documentation/IG/html/sect-Installation_Guide-Installing-Debian.html">http://download.gluster.com/pub/gluster/glusterfs/3.2/Documentation/IG/html/sect-Installation_Guide-Installing-Debian.html</a></li>
+</ul>
+<pre>
+cd dwnl
+wget http://download.gluster.com/pub/gluster/glusterfs/LATEST/Ubuntu/10.10/glusterfs_3.2.6-1_amd64.deb
+
+s3cmd get s3://gizur-install/glusterfs_3.2.5-1_amd64.deb
+
+sudo apt-get install openssh-server wget nfs-common
+sudo dpkg -i glusterfs_3.2.5-1_amd64.deb
+
+service glusterd start
+gluster peer status
+
+# start at boot
+update-rc.d glusterd defaults
+</pre>
+
+<p>Ensure that TCP ports 111, 24007, 24008, 24009-(24009 + number of bricks across all volumes) are open on all Gluster servers. If you will be using NFS, open additional ports 38465 to 38467</p>
+<p>Start a second server (here using Scalr MySQL Master/Slave setup)</p>
+<pre>
+gluster peer probe int-mysql-slave.fs.gizurcloud.com
+</pre>
+
+
+<p>Create a volume:</p>
+<pre>
+# gluster volume create vol1 replica 2 transport tcp int-mysql-master.fs.gizurcloud.com:/mnt/dbstorage/exp1 int-mysql-slave.fs.gizurcloud.com:/mnt/dbstorage/exp2
+
+gluster volume create vol1 replica 2 transport tcp int-custom-glusterfs1.fs1.gizurcloud.com:/mnt/storage/exp1 int-custom-glusterfs2.fs2.gizurcloud.com:/mnt/storage/exp2
+
+gluster volume start vol1
+</pre>
+
+
+<p>h3. Scaling Gluster - DOES NOT WORK</p>
+<p>There is a script that automatically adds new slaves to the cluster (looking at the domain).
+The script also creates a directory in the slave and adds this to the volume.</p>
+<pre>
+
+crontab -e
+
+@hourly /root/scripts/gluster-main.sh
+
+
+sudo apt-get install libnet-dns-perl libuuid-tiny-perl
+
+</pre>
+
+
+<p>h3. Security</p>
+<pre>
+sudo apt-get install ufw
+
+sudo ufw default deny
+chmod g-w /etc
+
+sudo ufw allow ssh
+sudo ufw allow 8014/udp
+sudo ufw allow 8013/tcp
+
+sudo ufw allow 111/tcp
+sudo ufw allow 111/udp
+
+sudo ufw allow 24007/tcp
+sudo ufw allow 24008/tcp
+sudo ufw allow 24009/tcp
+sudo ufw allow 24010/tcp
+sudo ufw allow 24011/tcp
+sudo ufw allow 24012/tcp
+
+
+sudo ufw allow 38465/tcp
+sudo ufw allow 38466/tcp
+sudo ufw allow 38467/tcp
+sudo ufw allow 38468/tcp
+
+sudo ufw allow 10000/tcp
+
+sudo ufw enable
+
+sudo ufw status
+
+sudo ufw logging on
+
+</pre>
+
+<p>h2. Mount the drive</p>
+<pre>
+vi /etc/fstab
+
+localhost:/vol1 /mnt/vol1 glusterfs defaults,_netdev,log-level=ERROR,log-file=/var/log/gluster.log,nobootwait 0 0
+
+mkdir /mnt/storage/vol1
+mount /mnt/storage/vol1 
+
+</pre></div>
+    
+</body>
+</html>

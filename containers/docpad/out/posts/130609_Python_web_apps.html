@@ -1,0 +1,44 @@
+<html>
+<head>
+    <title>Python web apps</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Python web apps</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jun 09 2013 02:00:00 GMT+0200 (CEST)</h3>
+<div><p>Python web apps</p>
+<p>Virtualenv is used here, have a look at: <a href="http://wip.herokuapp.com/130227_Update_Pyhton_Skills">http://wip.herokuapp.com/130227_Update_Pyhton_Skills</a> if you&#39;re unfamiliair with it.</p>
+<p>Links:</p>
+<ul>
+<li><a href="http://werkzeug.pocoo.org/">http://werkzeug.pocoo.org/</a></li>
+<li><a href="http://gunicorn.org/">http://gunicorn.org/</a></li>
+</ul>
+<h2>Hello world in werkzeug</h2>
+<p>Create a virtual env:</p>
+<pre><code>virtualenv venv --distribute
+source venv/bin/activate</code></pre>
+<p>Now pip, python etc. will refer to the virtual env:</p>
+<pre><code>(venv)Gizur-MacBook-ca00510e:werkzeug jonas$ which pip
+/Users/jonas/git/colmsjo/python_sandbox/werkzeug/venv/bin/pip</code></pre>
+<p>hello.py:</p>
+<pre><code>from werkzeug.wrappers import Request, Response
+
+@Request.application
+def application(request):
+    return Response(&#39;Hello World!&#39;)
+
+if __name__ == &#39;__main__&#39;:
+    from werkzeug.serving import run_simple
+    run_simple(&#39;localhost&#39;, 4000, application)</code></pre>
+<p>requirements.txt:</p>
+<pre><code>werkzeug</code></pre>
+<pre><code>pip install -r requirements.txt</code></pre>
+<p>Run the web app</p>
+<pre><code>python hello.py</code></pre>
+<p>open <a href="http://localhost:4000/">http://localhost:4000/</a></p>
+</div>
+    
+</body>
+</html>

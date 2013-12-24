@@ -1,0 +1,519 @@
+<html>
+<head>
+    <title>OpenBravo on OSX</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>OpenBravo on OSX</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Apr 14 2013 02:00:00 GMT+0200 (CEST)</h3>
+<div><p>OpenBravo on OSX</p>
+<h1>Introduction</h1>
+<p>OpenBravo is a open source ERP. The first major ERP that was open sourced is Compiere from US. Adempiere is
+a european fork of Compiere. To my knowledge is OpenBravo and OpenERP currently the the open source ERP:s
+i Europe that are getting most traction. Apache OfBiz (which also goes under the name OpenTAPS) is another 
+alternative. xTuple and ERP5 are yet to more alternatives.</p>
+<p>OpenBravo has Retail support so I&#39;m going to try this out. </p>
+<h1>Installation</h1>
+<p>Links:</p>
+<ul>
+<li><a href="http://wiki.openbravo.com/wiki/System_Administration_Guide">http://wiki.openbravo.com/wiki/System_Administration_Guide</a></li>
+</ul>
+<p>Summary:</p>
+<pre><code># Install postgres, see below
+pg_ctl -D /usr/local/var/postgres9 -l /usr/local/var/postgres9/server.log start
+
+# Make sure it started
+pg_ctl -D /usr/local/var/postgres9 -l /usr/local/var/postgres9/server.log status
+
+createdb openbravo
+createuser openbravo
+# Connect to db jonas as user jonas
+psql -U openbravo
+\password
+
+# Try to connect to localhost on port 5432
+psql -h localhost -p 5432 -U openbravo
+
+# Create config/Openbravo.properties, use the Openbravo.properties.template or the content below (from ubuntu)
+ant install.source</code></pre>
+<p>Increase shared memory:</p>
+<pre><code>sysctl kern.sysv.shmmax
+kern.sysv.shmmax: 4194304
+
+sudo sysctl -w kern.sysv.shmmax=1073741824</code></pre>
+<p>Increase Java Heap size</p>
+<pre><code>export JAVA_OPTS=&quot;-Xms128m -Xmx1024m&quot;
+
+export ANT_OPTS=&quot;-Xms128m -Xmx1024m&quot;</code></pre>
+<p>Install pgAdmin:</p>
+<ul>
+<li><a href="http://www.pgadmin.org/download/macosx.php">http://www.pgadmin.org/download/macosx.php</a></li>
+</ul>
+<h2>Dump database</h2>
+<pre><code>pg_dump -U openbravo -C -f openbravo.pg_dump openbravo</code></pre>
+<h2>Install Tomcat</h2>
+<p>Links:</p>
+<ul>
+<li><a href="http://www.malisphoto.com/tips/tomcatonosx.html">http://www.malisphoto.com/tips/tomcatonosx.html</a></li>
+<li><a href="http://tomcat.apache.org/tomcat-6.0-doc/introduction.html">http://tomcat.apache.org/tomcat-6.0-doc/introduction.html</a></li>
+</ul>
+<p>Installation using brew:</p>
+<pre><code>brew install tomcat6
+brew link tomcat6 --force</code></pre>
+<pre><code>ls -al /usr/local/bin/startup.sh 
+ls -al /usr/local/Cellar/tomcat6/6.0.36/
+
+nano /usr/local/Cellar/tomcat6/6.0.36/libexec/conf/tomcat-users.xml
+
+...
+  &lt;role rolename=&quot;manager&quot;/&gt;
+  &lt;role rolename=&quot;admin&quot;/&gt;
+  &lt;user username=&quot;admin&quot; password=&quot;admin&quot; roles=&quot;admin,manager&quot;/&gt;
+
+
+shutdown.sh
+startup.sh</code></pre>
+<h2>Configure Apache</h2>
+<p>Links:</p>
+<ul>
+<li><a href="http://wiki.openbravo.com/wiki/Installation/Custom/Apache">http://wiki.openbravo.com/wiki/Installation/Custom/Apache</a></li>
+<li><a href="http://www.bartbusschots.ie/blog/?p=1347">http://www.bartbusschots.ie/blog/?p=1347</a></li>
+<li><a href="http://httpd.apache.org/docs/2.2/programs/apxs.html">http://httpd.apache.org/docs/2.2/programs/apxs.html</a></li>
+</ul>
+<p>mod_jk needs to be installed</p>
+<ul>
+<li><a href="http://wiki.apache.org/tomcat/FAQ/Connectors">http://wiki.apache.org/tomcat/FAQ/Connectors</a></li>
+</ul>
+<pre><code># Available modules
+ls -al /usr/libexec/apache2/
+
+# Download mod_jk
+wget http://apache.mirror3.ip-only.net//tomcat/tomcat-connectors/jk/tomcat-connectors-1.2.37-src.tar.gz
+tar -xzf tomcat-connectors-1.2.37-src.tar.gz
+
+cd native
+./configure CFLAGS=&#39;-arch x86_64&#39; APXSLDFLAGS=&#39;-arch x86_64&#39; --with-apxs=/usr/sbin/apxs
+make
+sudo make install</code></pre>
+<h2>Use of mod_jk in Elastic Beanstalk</h2>
+<ul>
+<li><a href="http://stackoverflow.com/questions/10933608/tomcat-mod-cluster-and-amazon-ec2">http://stackoverflow.com/questions/10933608/tomcat-mod-cluster-and-amazon-ec2</a></li>
+</ul>
+<h2>Install phpPgAdmin</h2>
+<pre><code>wget http://downloads.sourceforge.net/project/phppgadmin/phpPgAdmin%20%5Bstable%5D/phpPgAdmin-5.1/phpPgAdmin-5.1.tar.bz2?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fphppgadmin%2F%3Fsource%3Ddlp&amp;ts=1367783807&amp;use_mirror=freefr</code></pre>
+<h2>Install database</h2>
+<p>Postgres:</p>
+<pre><code>Gizur-Laptop-5:config jonas$ brew install postgresql9
+==&gt; Installing postgresql9 dependency: ossp-uuid
+dyld: DYLD_ environment variables being ignored because main executable (/usr/bin/sudo) is setuid or setgid
+==&gt; Downloading ftp://ftp.ossp.org/pkg/lib/uuid/uuid-1.6.2.tar.gz
+######################################################################## 100,0%
+######################################################################## 100,0%==&gt; ./configure --prefix=/usr/local/Cellar/ossp-uuid/1.6.2 --without-perl --without-php --without-pgsql
+==&gt; make
+==&gt; make install
+==&gt; Caveats
+This formula is keg-only: so it was not symlinked into /usr/local.
+
+OS X provides a uuid.h which conflicts with ossp-uuid&#39;s header.
+
+Generally there are no consequences of this for you. If you build your
+own software and it requires this formula, you&#39;ll need to add to your
+build variables:
+
+    LDFLAGS:  -L/usr/local/opt/ossp-uuid/lib
+    CPPFLAGS: -I/usr/local/opt/ossp-uuid/include
+
+==&gt; Summary
+🍺  /usr/local/Cellar/ossp-uuid/1.6.2: 15 files, 232K, built in 15 seconds
+==&gt; Installing postgresql9
+dyld: DYLD_ environment variables being ignored because main executable (/usr/bin/sudo) is setuid or setgid
+==&gt; Downloading http://ftp.postgresql.org/pub/source/v9.0.13/postgresql-9.0.13.tar.bz2
+######################################################################## 100,0%
+==&gt; Patching
+patching file contrib/uuid-ossp/uuid-ossp.c
+==&gt; ./configure --prefix=/usr/local/Cellar/postgresql9/9.0.13 --enable-thread-safety --with-bonjour --with-gssapi --with-krb5 --with-openssl --with-libxml --with-libxslt --with-ossp
+==&gt; make install
+==&gt; make install-docs
+==&gt; cd contrib/adminpack; make install
+==&gt; cd contrib/auto_explain; make install
+==&gt; cd contrib/btree_gin; make install
+==&gt; cd contrib/btree_gist; make install
+==&gt; cd contrib/chkpass; make install
+==&gt; cd contrib/citext; make install
+==&gt; cd contrib/cube; make install
+==&gt; cd contrib/dblink; make install
+==&gt; cd contrib/dict_int; make install
+==&gt; cd contrib/dict_xsyn; make install
+==&gt; cd contrib/earthdistance; make install
+==&gt; cd contrib/fuzzystrmatch; make install
+==&gt; cd contrib/hstore; make install
+==&gt; cd contrib/intagg; make install
+==&gt; cd contrib/intarray; make install
+==&gt; cd contrib/isn; make install
+==&gt; cd contrib/lo; make install
+==&gt; cd contrib/ltree; make install
+==&gt; cd contrib/oid2name; make install
+==&gt; cd contrib/pageinspect; make install
+==&gt; cd contrib/passwordcheck; make install
+==&gt; cd contrib/pg_archivecleanup; make install
+==&gt; cd contrib/pg_buffercache; make install
+==&gt; cd contrib/pg_freespacemap; make install
+==&gt; cd contrib/pg_standby; make install
+==&gt; cd contrib/pg_stat_statements; make install
+==&gt; cd contrib/pg_trgm; make install
+==&gt; cd contrib/pg_upgrade; make install
+==&gt; cd contrib/pg_upgrade_support; make install
+==&gt; cd contrib/pgbench; make install
+==&gt; cd contrib/pgcrypto; make install
+==&gt; cd contrib/pgrowlocks; make install
+==&gt; cd contrib/pgstattuple; make install
+==&gt; cd contrib/seg; make install
+==&gt; cd contrib/spi; make install
+==&gt; cd contrib/sslinfo; make install
+==&gt; cd contrib/tablefunc; make install
+==&gt; cd contrib/test_parser; make install
+==&gt; cd contrib/tsearch2; make install
+==&gt; cd contrib/unaccent; make install
+==&gt; cd contrib/uuid-ossp; make install
+==&gt; cd contrib/vacuumlo; make install
+==&gt; cd contrib/xml2; make install
+==&gt; Caveats
+If builds of PostgreSQL 9 are failing and you have version 8.x installed,
+you may need to remove the previous version first. See:
+  https://github.com/mxcl/homebrew/issues/issue/2510
+
+To build plpython against a specific Python, set PYTHON prior to brewing:
+  PYTHON=/usr/local/bin/python  brew install postgresql
+See:
+  http://www.postgresql.org/docs/9.0/static/install-procedure.html
+
+
+If this is your first install, create a database with:
+  initdb /usr/local/var/postgres9
+
+If this is your first install, automatically load on login with:
+  mkdir -p ~/Library/LaunchAgents
+  cp /usr/local/Cellar/postgresql9/9.0.13/org.postgresql.postgres.plist ~/Library/LaunchAgents/
+  launchctl load -w ~/Library/LaunchAgents/org.postgresql.postgres.plist
+
+If this is an upgrade and you already have the org.postgresql.postgres.plist loaded:
+  launchctl unload -w ~/Library/LaunchAgents/org.postgresql.postgres.plist
+  cp /usr/local/Cellar/postgresql9/9.0.13/org.postgresql.postgres.plist ~/Library/LaunchAgents/
+  launchctl load -w ~/Library/LaunchAgents/org.postgresql.postgres.plist
+
+Or start manually with:
+  pg_ctl -D /usr/local/var/postgres9 -l /usr/local/var/postgres9/server.log start
+
+And stop with:
+  pg_ctl -D /usr/local/var/postgres9 stop -s -m fast
+
+
+Some machines may require provisioning of shared memory:
+  http://www.postgresql.org/docs/current/static/kernel-resources.html#SYSVIPC
+
+If you want to install the postgres gem, including ARCHFLAGS is recommended:
+    env ARCHFLAGS=&quot;-arch x86_64&quot; gem install pg
+
+To install gems without sudo, see the Homebrew wiki.
+
+To have launchd start postgresql9 at login:
+    ln -sfv /usr/local/opt/postgresql9/*.plist ~/Library/LaunchAgents
+Then to load postgresql9 now:
+    launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql9.plist
+==&gt; Summary
+🍺  /usr/local/Cellar/postgresql9/9.0.13: 2615 files, 35M, built in 3.4 minutes</code></pre>
+<p>INITDB</p>
+<pre><code>Gizur-Laptop-5:config jonas$ initdb /usr/local/var/postgres9
+The files belonging to this database system will be owned by user &quot;jonas&quot;.
+This user must also own the server process.
+
+The database cluster will be initialized with locale sv_SE.UTF-8.
+The default database encoding has accordingly been set to UTF8.
+The default text search configuration will be set to &quot;swedish&quot;.
+
+creating directory /usr/local/var/postgres9 ... ok
+creating subdirectories ... ok
+selecting default max_connections ... 20
+selecting default shared_buffers ... 2400kB
+creating configuration files ... ok
+creating template1 database in /usr/local/var/postgres9/base/1 ... ok
+initializing pg_authid ... ok
+initializing dependencies ... ok
+creating system views ... ok
+loading system objects&#39; descriptions ... ok
+creating conversions ... ok
+creating dictionaries ... ok
+setting privileges on built-in objects ... ok
+creating information schema ... ok
+loading PL/pgSQL server-side language ... ok
+vacuuming database template1 ... ok
+copying template1 to template0 ... ok
+copying template1 to postgres ... ok
+
+WARNING: enabling &quot;trust&quot; authentication for local connections
+You can change this by editing pg_hba.conf or using the -A option the
+next time you run initdb.
+
+Success. You can now start the database server using:
+
+    postgres -D /usr/local/var/postgres9
+or
+    pg_ctl -D /usr/local/var/postgres9 -l logfile start</code></pre>
+<p>START DB</p>
+<pre><code>Gizur-Laptop-5:config jonas$ pg_ctl -D /usr/local/var/postgres9 -l /usr/local/var/postgres9/server.log start
+server starting</code></pre>
+<h2>Troubleshooting Postgres</h2>
+<pre><code>cat /usr/local/var/postgres9/server.log 
+...
+FATAL:  could not create shared memory segment: Cannot allocate memory
+DETAIL:  Failed system call was shmget(key=5432001, size=4063232, 03600).
+HINT:  This error usually means that PostgreSQL&#39;s request for a shared memory segment exceeded available memory or swap space, or exceeded your kernel&#39;s SHMALL parameter.  You can either reduce the request size or reconfigure the kernel with larger SHMALL.  To reduce the request size (currently 4063232 bytes), reduce PostgreSQL&#39;s shared_buffers parameter (currently 300) and/or its max_connections parameter (currently 24).
+  The PostgreSQL documentation contains more information about shared memory configuration.
+g
+
+cat /usr/local/var/postgres9/postgresql.conf
+
+nano /usr/local/var/postgres9/postgresql.conf
+...
+listen_addresses = &#39;localhost&#39;
+port = 5432
+
+pg_ctl -D /usr/local/var/postgres9 -l /usr/local/var/postgres9/server.log restart</code></pre>
+<h1>Install source</h1>
+<ul>
+<li><a href="http://code.openbravo.com/">http://code.openbravo.com/</a></li>
+</ul>
+<p>Create a local clone</p>
+<pre><code>hg clone https://code.openbravo.com/erp/devel/pi</code></pre>
+<pre><code>ant setup
+
+ls config</code></pre>
+<p>Run <code>setup-properties-osx.app</code> from the finder.</p>
+<p>I got the error <code>No origin file found that matched / Openbravo.properties.template</code></p>
+<p>I&#39;ve registered an issue about this: <a href="https://issues.openbravo.com/view.php?id=23703">https://issues.openbravo.com/view.php?id=23703</a></p>
+<h1>Ubuntu</h1>
+<p>Testing the same thing on ubuntu</p>
+<p>Install Postgres</p>
+<pre><code>sudo apt-get install postgresql
+sudo -u postgres psql postgres
+\password postgres
+sudo -u postgres createdb openbravo</code></pre>
+<pre><code>hg clone https://code.openbravo.com/erp/devel/pi
+cd pi
+ant setup
+sudo ./setup-properties-linux-x64.bin 
+ant install.source</code></pre>
+<p>This Openbravo.properties file was created using setup-properties-linux-x64.bin </p>
+<pre><code># *************************************************************************
+# * The contents of this file are subject to the Openbravo  Public  License
+# * Version  1.1  (the  &quot;License&quot;),  being   the  Mozilla   Public  License
+# * Version 1.1  with a permitted attribution clause; you may not  use this
+# * file except in compliance with the License. You  may  obtain  a copy of
+# * the License at http://www.openbravo.com/legal/license.html 
+# * Software distributed under the License  is  distributed  on  an &quot;AS IS&quot;
+# * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+# * License for the specific  language  governing  rights  and  limitations
+# * under the License. 
+# * The Original Code is Openbravo ERP. 
+# * The Initial Developer of the Original Code is Openbravo SLU 
+# * All portions are Copyright (C) 2007-2012 Openbravo SLU 
+# * All Rights Reserved. 
+# * Contributor(s):  ______________________________________.
+# ************************************************************************
+#
+# Documentation at http://wiki.openbravo.com/wiki/Openbravo.properties
+
+####################
+# Date/time format #
+####################
+
+dateFormat.js=%Y-%m-%d
+dateFormat.sql=YYYY-MM-DD
+dateFormat.java=yyyy-MM-dd
+dateTimeFormat.java=yyyy-MM-dd HH:mm:ss
+dateTimeFormat.sql=DD-MM-YYYY HH24:MI:SS
+
+###########
+# General #
+###########
+
+# Static content URL. Use the default value to make it dynamic.
+# Don&#39;t change this unless you know what you are doing
+web.url=@actual_url_context@/web
+
+# Full URL of the context, *only* used by the Web Services installation 
+# and diagnostic task
+context.url=http://localhost:8080/openbravo
+
+# Absolute path to the attachments directory
+attach.path=/opt/openbravo/attachments
+
+# Context name, used in the final war file
+context.name=openbravo
+
+# Root sources directory, used by modularity
+source.path=/home/ubuntu/pi
+
+#Deploy mode: valid values [class, war, none]
+deploy.mode=class
+
+############
+# Database #
+############
+
+# Oracle example:
+#
+# bbdd.rdbms=ORACLE
+# bbdd.driver=oracle.jdbc.driver.OracleDriver
+# bbdd.url=jdbc:oracle:thin:@localhost:1521:xe
+# bbdd.sid=xe
+# bbdd.systemUser=SYSTEM
+# bbdd.systemPassword=SYSTEM
+# bbdd.user=TAD
+# bbdd.password=TAD
+# bbdd.sessionConfig=ALTER SESSION SET NLS_DATE_FORMAT=&#39;DD-MM-YYYY&#39; NLS_NUMERIC_CHARACTERS=&#39;.,&#39;
+
+# Oracle instances in linux, can delay on getting DB connection (issue #12683). 
+# In these cases this property can be set to solve the problem
+# java.security.egd=file:///dev/urandom
+
+bbdd.rdbms=POSTGRE
+bbdd.driver=org.postgresql.Driver
+bbdd.url=jdbc:postgresql://localhost:5432
+bbdd.sid=openbravo
+bbdd.systemUser=postgres
+bbdd.systemPassword=syspass
+bbdd.user=tad
+bbdd.password=tad
+bbdd.sessionConfig=select update_dateFormat(&#39;YYYY-MM-DD&#39;)
+
+##################
+# Tomcat manager #
+##################
+
+# From Tomcat 7 manager url is host/manager/text. In previous versions it is
+# host/manager
+tomcat.manager.url=http://localhost:8080/manager
+
+# From Tomcat 7 this user must have manager-script role access. In previous
+# versions. In previous versions it must have manager role access.
+tomcat.manager.username=admin
+tomcat.manager.password=admin
+
+##########################
+# Development parameters #
+##########################
+
+bbdd.outputscript=databasescript.sql
+bbdd.verbosity=INFO
+
+# use js/css minimization (in local-context and war-file)
+minimizeJSandCSS=yes
+
+# How sqlc should execute the queries embedded in xsql file at compilation time
+# traditional: only uses the base query ignoring all optional parameters
+# optimized: includes most optional parameter to achieve better performance
+# If optimized fails for some xsql files, downgrade level to traditional
+sqlc.queryExecutionStrategy=optimized
+
+##################
+# Authentication #
+##################
+
+# Leave this empty to use the default login handler.
+# Examples:
+# - org.openbravo.authentication.basic.AutologonAuthenticationManager (included)
+# - org.openbravo.authentication.lam.LamAuthenticationManager (in external &#39;LAM Authentication Manager&#39; module)
+authentication.class=
+
+###########
+# Add-ons #
+###########
+
+# External Pentaho Services
+pentahoServer=
+
+##############
+# Validation #
+##############
+
+validate.model=true
+isMinorVersion=false
+
+##############
+# Safe mode  #
+##############
+
+# This property is used to activate/deactivate the safe mode of Openbravo ERP
+# When this property is activated, if the last build wasn&#39;t succesful, or Tomcat
+# wasn&#39;t restarted, users will only be able to login in the application 
+# with role System Administrator
+
+safe.mode=true
+
+################################
+# Strict Template Application  #
+################################
+
+# This property is used to set the configuration script application mode.
+# If the template application mode is strict, then inconsistencies in the template
+# (such as the value to be changed being different from the value in a column
+# data change of a configuration script) will make the process fail.
+# If it&#39;s not strict the process will show a warning, but otherwise continue
+
+# For production environments, this property should be false.
+# For development environments, specially those working with
+# Industry templates and configuration scripts, it is advisable to set this property to true
+
+strict.template.application=false
+
+##############
+# Hibernate #
+##############
+
+# if this property is set then the mapping will be written to the file
+# defined by this property, note the value should be the complete path 
+# including the file name and extension.
+# hibernate.hbm.file=/tmp/hibernate.hbm.xml
+
+
+###################
+# Log in security #
+###################
+
+# If these properties are set, after a failed login the response time 
+# will be delayed, and the user account can be blocked.
+login.trial.delay.increment=0
+login.trial.delay.max=0
+login.trial.user.lock=0
+
+# Prevents concurrent sessions for same user.
+login.limit.user.session=false
+
+##########
+# Others #
+##########
+
+# You are not allowed to run ant commands with the root user.
+# Set allow.root to true to override this.
+allow.root=false
+
+# Specifies if the current instance is used for automated tests.
+# Setting this to true will enable extra (hidden) functionality used 
+# automated test scripts.
+test.environment=false
+
+# allows to compile classic 2.50 windows for all available tab
+# By default those all not generated anymore for tabs for which they are not needed
+#wad.generateAllClassic250Windows=true
+
+# background.policy property defines whether background processes should be
+# executed in this context or not. To prevent process execution this property must
+# be set to no-execute
+background.policy=default</code></pre>
+</div>
+    
+</body>
+</html>

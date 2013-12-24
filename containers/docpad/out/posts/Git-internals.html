@@ -1,0 +1,71 @@
+<html>
+<head>
+    <title>Git internals</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Git internals</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Tue Oct 16 2012 02:00:00 GMT+0200 (CEST)</h3>
+<div><p>Time to learn a bit more than the bare basics of git?</p>
+<p>Some notes taken when reading: <a href="http://git-scm.com/book/en/Git-Internals">http://git-scm.com/book/en/Git-Internals</a></p>
+<p>Git is a simple key-value data store.</p>
+<p>Create empty git repo:</p>
+<pre><code>mkdir git-test
+cd git-test
+git init
+Initialized empty Git repository in /tmp/test/.git/
+
+# List all files and folders etc.
+find .git/objects
+.git/objects
+.git/objects/info
+.git/objects/pack
+
+# Search for regular files
+find .git/objects -type f</code></pre>
+<p>Store some content:</p>
+<pre><code>echo &#39;test content&#39; | git hash-object -w --stdin
+d670460b4b4aece5915caf5c68d12f560a9fe3e4</code></pre>
+<p>Git returns the key for the object created, the so called checksum hash.</p>
+<p>The object has been stored in a file:</p>
+<pre><code>find .git/objects -type f 
+.git/objects/d6/70460b4b4aece5915caf5c68d12f560a9fe3e4</code></pre>
+<p>Cat the contents of the file:</p>
+<pre><code>git cat-file -p d670460b4b4aece5915caf5c68d12f560a9fe3e4
+test content</code></pre>
+<p>Store content i a ordinary file:</p>
+<pre><code>echo &#39;version 1&#39; &gt; test.txt
+git hash-object -w test.txt 
+83baae61804e65cc73a7201a7252750c76066a30</code></pre>
+<p>Update with new version:</p>
+<pre><code>echo &#39;version 2&#39; &gt; test.txt
+git hash-object -w test.txt 
+1f7a7a472abf3dd9643fd615f6da379c4acb3e3a</code></pre>
+<p>List the files:</p>
+<pre><code>find .git/objects -type f 
+.git/objects/1f/7a7a472abf3dd9643fd615f6da379c4acb3e3a
+.git/objects/83/baae61804e65cc73a7201a7252750c76066a30
+.git/objects/d6/70460b4b4aece5915caf5c68d12f560a9fe3e4</code></pre>
+<p>Revert to old version:</p>
+<pre><code>git cat-file -p 83baae61804e65cc73a7201a7252750c76066a30 &gt; test.txt 
+cat test.txt 
+version 1</code></pre>
+<p>Go back to new version:</p>
+<pre><code>git cat-file -p 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a &gt; test.txt 
+cat test.txt 
+version 2</code></pre>
+<p>Show the object type using the hash:</p>
+<pre><code>git cat-file -t 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a
+blob</code></pre>
+<p>Add a file and show the tree</p>
+<pre><code>git add *
+git commit -a -m &quot;initial commit&quot;
+
+git cat-file -p master^{tree}
+100644 blob 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a    test.txt</code></pre>
+</div>
+    
+</body>
+</html>

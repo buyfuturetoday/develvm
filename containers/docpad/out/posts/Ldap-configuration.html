@@ -1,0 +1,375 @@
+<html>
+<head>
+    <title>Ldap</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Ldap</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Wiki]]</p>
+<p>h1. LDAP configuration</p>
+<p>h2. Introduction</p>
+<h1>Intall LDAP</h1>
+<h1>Install LAM</h1>
+<h1>Start webmin and setup ldap - NOT NEEDED?</h1>
+<p>h2. Ubuntu</p>
+<ul>
+<li><a href="https://help.ubuntu.com/community/OpenLDAPServer">https://help.ubuntu.com/community/OpenLDAPServer</a></li>
+<li><p><a href="https://help.ubuntu.com/11.04/serverguide/C/openldap-server.html">https://help.ubuntu.com/11.04/serverguide/C/openldap-server.html</a></p>
+</li>
+<li><p><a href="http://www.zytrax.com/books/ldap/ape/cosine.html">http://www.zytrax.com/books/ldap/ape/cosine.html</a></p>
+</li>
+<li><a href="http://www.zytrax.com/books/ldap/ape/nis.html">http://www.zytrax.com/books/ldap/ape/nis.html</a></li>
+<li><a href="http://www.zytrax.com/books/ldap/ape/inetorgperson.html">http://www.zytrax.com/books/ldap/ape/inetorgperson.html</a></li>
+</ul>
+<pre>
+sudo apt-get install slapd ldap-utils
+
+sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/cosine.ldif && sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/nis.ldif && sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/inetorgperson.ldif
+
+
+# Or one command at the time
+sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/cosine.ldif
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry "cn=cosine,cn=schema,cn=config"
+
+
+sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/nis.ldif
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry "cn=nis,cn=schema,cn=config"
+
+
+sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/inetorgperson.ldif
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry "cn=inetorgperson,cn=schema,cn=config"
+
+
+nano backend.gizur.com.ldif
+
+# Load dynamic backend modules
+dn: cn=module,cn=config
+objectClass: olcModuleList
+cn: module
+olcModulepath: /usr/lib/ldap
+olcModuleload: back_hdb.la
+
+# Database settings
+dn: olcDatabase=hdb,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: {1}hdb
+olcSuffix: dc=gizur,dc=com
+olcDbDirectory: /var/lib/ldap
+olcRootDN: cn=admin,dc=gizur,dc=com
+olcRootPW: 2RExa3avuTUP
+olcDbConfig: set_cachesize 0 2097152 0
+olcDbConfig: set_lk_max_objects 1500
+olcDbConfig: set_lk_max_locks 1500
+olcDbConfig: set_lk_max_lockers 1500
+olcDbIndex: objectClass eq
+olcLastMod: TRUE
+olcDbCheckpoint: 512 30
+olcAccess: to attrs=userPassword by dn="cn=admin,dc=gizur,dc=com" write by anonymous auth by self write by * none
+olcAccess: to attrs=shadowLastChange by self write by * read
+olcAccess: to dn.base="" by * read
+olcAccess: to * by dn="cn=admin,dc=gizur,dc=com" write by * read
+
+sudo ldapadd -Y EXTERNAL -H ldapi:/// -f backend.gizur.com.ldif
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry "cn=module,cn=config"
+
+adding new entry "olcDatabase=hdb,cn=config"
+
+
+nano frontend.gizur.com.ldif
+
+# Create top-level object in domain
+dn: dc=gizur,dc=com
+objectClass: top
+objectClass: dcObject
+objectclass: organization
+o: Gizur Organization
+dc: Gizur
+description: LDAP Gizur 
+
+# Admin user.
+dn: cn=admin,dc=gizur,dc=com
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: admin
+description: LDAP administrator
+userPassword: 2RExa3avuTUP
+
+dn: ou=people,dc=gizur,dc=com
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=gizur,dc=com
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=john,ou=people,dc=gizur,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: john
+sn: Doe
+givenName: John
+cn: John Doe
+displayName: John Doe
+uidNumber: 1000
+gidNumber: 10000
+userPassword: password
+gecos: John Doe
+loginShell: /bin/bash
+homeDirectory: /home/john
+shadowExpire: -1
+shadowFlag: 0
+shadowWarning: 7
+shadowMin: 8
+shadowMax: 999999
+shadowLastChange: 10877
+mail: admin@gizur.com
+postalCode: 31000
+l: Toulouse
+o: Gizur
+mobile: +33 (0)6 xx xx xx xx
+homePhone: +33 (0)5 xx xx xx xx
+title: System Administrator
+postalAddress: 
+initials: JD
+
+dn: cn=gizur,ou=groups,dc=gizur,dc=com
+objectClass: posixGroup
+cn: gizur
+gidNumber: 10000
+
+
+# Use password 'secret'
+sudo ldapadd -x -D cn=admin,dc=gizur,dc=com -W -f frontend.gizur.com.ldif
+adding new entry "dc=example,dc=com"
+
+adding new entry "cn=admin,dc=example,dc=com"
+
+adding new entry "ou=people,dc=example,dc=com"
+
+adding new entry "ou=groups,dc=example,dc=com"
+
+adding new entry "uid=john,ou=people,dc=example,dc=com"
+
+adding new entry "cn=example,ou=groups,dc=example,dc=com"
+
+
+ldapsearch -xLLL -b "dc=gizur,dc=com" uid=john sn givenName cn
+dn: uid=john,ou=people,dc=example,dc=com
+sn: Doe
+givenName: John
+cn: John Doe
+
+</pre>
+
+<p>Some more testing:</p>
+<pre>
+sudo ldapsearch -LLL -Y EXTERNAL -H ldapi:/// -b cn=config dn
+
+# Backend
+sudo ldapsearch -c -Y EXTERNAL -H ldapi:///  -LLL -b cn=config olcDatabase=config olcAccess
+
+# Frontend tree
+sudo ldapsearch -c -Y EXTERNAL -H ldapi:///  -LLL -b cn=config olcDatabase={1}hdb olcAccess
+</pre>
+
+<p>h3. SSL</p>
+<pre>
+sudo apt-get install gnutls-bin
+
+sudo sh -c "certtool --generate-privkey > /etc/ssl/private/cakey.pem"
+
+sudo nano /etc/ssl/ca.info 
+cn = GizurCloud LDAP Server
+ca
+cert_signing_key
+
+
+sudo certtool --generate-self-signed --load-privkey /etc/ssl/private/cakey.pem --template  /etc/ssl/ca.info --outfile /etc/ssl/certs/cacert.pem
+
+sudo sh -c "certtool --generate-privkey > /etc/ssl/private/ldap01_slapd_key.pem"
+
+sudo nano /etc/ssl/ldap01.info 
+organization = GizurCloud LDAP Server
+cn = ldap01.gizurcloud.com
+tls_www_server
+encryption_key
+signing_key
+
+
+sudo certtool --generate-certificate --load-privkey /etc/ssl/private/ldap01_slapd_key.pem --load-ca-certificate /etc/ssl/certs/cacert.pem --load-ca-privkey /etc/ssl/private/cakey.pem  --template /etc/ssl/ldap01.info --outfile /etc/ssl/certs/ldap01_slapd_cert.pem
+
+
+sudo ldapmodify -Y EXTERNAL -H ldapi:///
+
+# uncomment the SLAPD_SERVICES option:
+sudo nano /etc/default/slapd
+SLAPD_SERVICES="ldap:/// ldapi:/// ldaps:///"
+
+sudo adduser openldap ssl-cert
+sudo chgrp ssl-cert /etc/ssl/private/ldap01_slapd_key.pem
+sudo chmod g+r /etc/ssl/private/ldap01_slapd_key.pem
+
+sudo /etc/init.d/slapd restart
+</pre>
+
+<p>h2. LAM - install from repository</p>
+<pre>
+sudo apt-get install ldap-account-manager
+
+# remove apache configuration (re-create in Scalr below)
+mv /etc/apache2/conf.d/ldap-account-manager ~/
+
+service apache2 restart
+
+</pre>
+
+
+<p>Create DNS and virtual host:
+Alias / /usr/share/ldap-account-manager</p>
+<pre>
+<Directory {$document_root}>
+  Options +FollowSymLinks
+  AllowOverride All
+  Order allow,deny
+  Allow from all
+  DirectoryIndex index.html
+</Directory>
+
+<Directory {$document_root}/tmp>
+  Options -Indexes
+</Directory>
+
+<Directory {$document_root}/sess>
+  Options -Indexes
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory {$document_root}/config>
+  Options -Indexes
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory {$document_root}/lib>
+  Options -Indexes
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory {$document_root}/help>
+  Options -Indexes
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory {$document_root}/locale>
+  Options -Indexes
+  Order allow,deny
+  Deny from all
+</Directory>
+
+</pre>
+
+<p>Config lam.gizurcloud.com:</p>
+<h1>LAM Configuration -&gt; Edit General Settings</h1>
+<h1>LAM Configuration -&gt; Edit Server Profiles -&gt; Enter profiles</h1>
+<h1>LAM Configuration -&gt; Edit Server Profiles -&gt; Change dc=gizur in General settings</h1>
+<h1>LAM Configuration -&gt; Edit Server Profiles -&gt; Change dc=gizur in Account settings</h1>
+<p>Login on with admin/password:</p>
+<h1>The following suffix(es) are missing in LDAP. LAM can create them for you.</h1>
+<h2>Click on create</h2>
+<h1>Choose unix group -&gt; create</h1>
+<h2>Ignore the Samba domain warning</h2>
+<h1>Choose</h1>
+<p>Search for users that have been added:</p>
+<pre>
+sudo ldapsearch -c -Y EXTERNAL -H ldapi:///  -LLL -bdc=gizur,dc=com
+</pre>
+
+
+<p>h2. Webmin</p>
+<h1>LDAP -&gt; Browse Database</h1>
+<h2>Can&#39;t locate Net/LDAP.pm in @INC ...You can have the Net::LDAP Perl module automatically installed from CPAN.</h2>
+<h1>OpenLDAP Server Configuration</h1>
+<h2>Root DN for LDAP database: dc=gizur,dc=com</h2>
+<h2>Administration login DN: admin</h2>
+<h2>New administration password: XXX</h2>
+<p>h2. Redmine</p>
+<ul>
+<li><a href="http://www.redmine.org/projects/redmine/wiki/RedmineLDAP">http://www.redmine.org/projects/redmine/wiki/RedmineLDAP</a></li>
+</ul>
+<h1>Administration -&gt; LDAP Authentacation</h1>
+<h1>Leave user and password blank - Anonymous read is allowed</h1>
+<p>h2. LAM configuration - source install - DID NOT MANAGE TO GET THIS TO WORK</p>
+<ul>
+<li><a href="http://www.ldap-account-manager.org/">http://www.ldap-account-manager.org/</a></li>
+</ul>
+<p>Configure: <a href="http://lam.sbx.gizurcloud.com/templates/config/mainlogin.php">http://lam.sbx.gizurcloud.com/templates/config/mainlogin.php</a> to use LDAP server on SVN server.</p>
+<pre>
+sudo apt-get install php5-ldap 
+service apache2 restart
+
+wget http://downloads.sourceforge.net/project/lam/LAM/3.7/ldap-account-manager-3.7.tar.gz?r=http%3A%2F%2Fwww.ldap-account-manager.org%2Flamcms%2Freleases&ts=1333555419&use_mirror=freefr
+mv ldap-account-manager-3.7.tar.gz?r=http:%2F%2Fwww.ldap-account-manager.org%2Flamcms%2Freleases ldap-account-manager-3.7.tar.gz
+gunzip ldap-account-manager-3.7.tar.gz 
+tar -xvf ldap-account-manager-3.7.tar 
+
+mv ldap-account-manager-3.7   /var/www/lam
+
+cd /var/www/lam/config
+cp config.cfg_sample config.cfg
+
+chmod ug+w /var/www/lam/sess
+chmod ug+w /var/www/lam/tmp
+
+
+chown -R www-data:www-data /var/www/lam/
+
+</pre>
+
+<p>Config:</p>
+<h1>LAM Configuration -&gt; Edit General Settings</h1>
+<h1>LAM Configuration -&gt; Edit Server Profiles -&gt; Manage Server Profiles -&gt; Add Profile</h1>
+<h1>LAM Configuration -&gt; Edit Server Profiles -&gt; Select profile just created and password</h1>
+<h1>Login with admin</h1>
+<h2>Create missing ou</h2>
+<p>h2. CentOS</p>
+<pre>
+yum install openldap-clients
+
+ldapsearch -LLL -h s2.gizur.com -W -v -x -D dc=gizur,dc=com
+
+ldapsearch -LLL -h s2.gizur.com -W -v -D dc=gizur,dc=com
+</pre>
+
+<p>Guides:
+* <a href="http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-ldap-quickstart.html">http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-ldap-quickstart.html</a></p>
+<pre>
+slappasswd
+
+nano /etc/openldap/slapd.conf 
+
+/sbin/service ldap restart
+</pre></div>
+    
+</body>
+</html>

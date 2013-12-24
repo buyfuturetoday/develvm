@@ -1,0 +1,67 @@
+<html>
+<head>
+    <title>Stacklet</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Stacklet</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[Gizur server admin]]</p>
+<h1>= Stacklet images =</h1>
+<p>Install vi:</p>
+<pre>
+yum install vim-common vim-minimal
+</pre>
+
+
+<p>Install VNC:
+* See CentOs guide.</p>
+<p>Install gnome:</p>
+<pre>
+yum groypinstall "GNOME Desktop Environment"
+yum groupinstall "X Window System"
+</pre>
+
+<p>Tried yum install gnome-desktop first - I don&#39;t this install everything needed though.</p>
+<h1>= Stackbundler =</h1>
+<pre>
+rpm -q python
+rpm -q libxml2-python
+rpm -q python-devel
+yum install python-devel
+
+rpm -q xulrunner
+
+wget http://stacklet.com/sites/default/files/release/stacklet.beta_release_20100411
+
+
+chmod +x stacklet.beta_release_20100411
+sudo ./stacklet.beta_release_20100411
+
+Self Extracting Installer
+
+./installer
+./stacklet.alpha_release_20100411.tar.bz2
+Running Installer
+
+The following command can be used to run the application:
+/usr/lib/stacklet/stackbundler/stackbundler
+</pre>
+
+<p>Files are installed to /usr/lib/stacklet/</p>
+<p>Config:
+<em> AMI User: Amazon account numer without dashes (-)
+</em> Private key: /etc/ec2/private-key.pem
+<em> Certificate:/etc/ec2/cert.pem
+</em> EC2 certificate: /etc/ec2/amitools/cert-ec2.pem</p>
+<ul>
+<li>Need to setup sudo: <a href="http://edipage.wordpress.com/2008/09/30/quickly-secure-centos-5-by-enabling-sudo-disabling-root-and-limiting-access/">http://edipage.wordpress.com/2008/09/30/quickly-secure-centos-5-by-enabling-sudo-disabling-root-and-limiting-access/</a></li>
+</ul>
+<p>/usr/lib/stacklet/stackbundler/stackbundler &amp;</p>
+</div>
+    
+</body>
+</html>

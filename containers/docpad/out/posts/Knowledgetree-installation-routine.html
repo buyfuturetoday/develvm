@@ -1,0 +1,76 @@
+<html>
+<head>
+    <title>Knowledgetree</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Knowledgetree</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>h1. KnowledgeTree installation routine</p>
+<ul>
+<li>Pre-requisites: <a href="http://wiki.knowledgetree.org/Version_3.7">http://wiki.knowledgetree.org/Version_3.7</a></li>
+<li>Installation: <a href="http://wiki.knowledgetree.org/KnowledgeTree_Installation_and_Upgrade_Guide">http://wiki.knowledgetree.org/KnowledgeTree_Installation_and_Upgrade_Guide</a></li>
+</ul>
+<pre>
+yum install wget
+yum -y install php-mysql php-xmlrpc php-ldap php-mbstring php-pecl-apc php-pecl-json
+service httpd restart
+
+wget --no-check-certificate http://repos.knowledgetree.com/downloads/ktdms-ce-linux-latest
+wget --no-check-certificate http://repos.knowledgetree.com/downloads/ktdms-ce-linux-src-latest
+
+tar -xvzf kt-src-oss-3.7.0.2.tgz 
+mv ktgit-knowledgetree-c389d34 knowledgetree
+mv knowledgetree /var/www/html/
+chown -R apache:apache /var/www/html/knowledgetree/
+
+
+
+
+</pre>
+
+
+<p>h2. Testing</p>
+<p>DID NOT WORK, GOT 5.3:
+* <a href="http://serverfault.com/questions/354895/upgrading-to-php-5-2-in-centos-5-7-64-bit-how-easiest">http://serverfault.com/questions/354895/upgrading-to-php-5-2-in-centos-5-7-64-bit-how-easiest</a></p>
+<pre>
+yum install wget
+wget http://rpms.famillecollet.com/enterprise/remi.repo
+yum remove php-\*
+yum --enablerepo=remi install php-pdo php-xml php-pear php-mhash php-mcrypt php-gd php-mysql
+
+</pre>
+
+
+
+<p>DID NOT WORK:
+* PHP 5.2.x for instance -  <a href="http://wiki.centos.org/HowTos/PHP_5.1_To_5.2">http://wiki.centos.org/HowTos/PHP_5.1_To_5.2</a></p>
+<pre>
+vi /etc/yum.repos.d/CentOS-Testing.repo
+
+# CentOS-Testing:
+# !!!! CAUTION !!!!
+# This repository is a proving grounds for packages on their way to CentOSPlus and CentOS Extras.
+# They may or may not replace core CentOS packages, and are not guaranteed to function properly.
+# These packages build and install, but are waiting for feedback from testers as to
+# functionality and stability. Packages in this repository will come and go during the
+# development period, so it should not be left enabled or used on production systems without due
+# consideration.
+[c5-testing]
+name=CentOS-5 Testing
+baseurl=http://dev.centos.org/centos/5/testing/x86_64/
+enabled=1
+gpgcheck=1
+gpgkey=http://dev.centos.org/centos/RPM-GPG-KEY-CentOS-testing
+includepkgs=php*
+
+
+
+rpm -qa |grep php
+</pre></div>
+    
+</body>
+</html>

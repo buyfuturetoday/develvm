@@ -1,0 +1,261 @@
+<html>
+<head>
+    <title>Hive on OSX</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Hive on OSX</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Tue Mar 19 2013 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Hive on OSX</p>
+<p>Pre-requistes:</p>
+<ul>
+<li>Hadoop needs to be installed</li>
+</ul>
+<p>Links:</p>
+<ul>
+<li><a href="http://blog.zhengdong.me/2012/02/22/hive-external-table-with-partitions/">http://blog.zhengdong.me/2012/02/22/hive-external-table-with-partitions/</a></li>
+<li><a href="https://cwiki.apache.org/Hive/hiveodbc.html">https://cwiki.apache.org/Hive/hiveodbc.html</a></li>
+</ul>
+<h2>Introduction</h2>
+<p>Make sure that hadoop is upa and runnig</p>
+<pre><code># Check if hadoop is running
+hadoop fs -ls ~/hadoop-store/
+
+# If not, start hadoop
+/usr/local/Cellar/hadoop/1.1.1/bin/start-all.sh</code></pre>
+<h2>Install Hive</h2>
+<p>Just do this:</p>
+<pre><code>brew install hive
+
+# check where hive is located
+which hive
+/usr/local/bin/hive
+
+# Simple check that things are up
+ps ax | grep hadoop | wc -l
+# expected output is 7</code></pre>
+<p>Start a hive Thrift server:</p>
+<pre><code>hive --service hiveserver</code></pre>
+<h2>Simple Hive table</h2>
+<pre><code># Create a Hadoop folder
+hadoop fs -mkdir ~/hadoop-store/mapred/hive-example
+
+# Create a data file
+echo -e &quot;jim=89347\ndave=313925\nnoddy=21516\ndon=6771&quot; &gt; data.txt
+
+# Copy the input file to Hadoop
+hadoop fs -copyFromLocal data.txt ~/hadoop-store/mapred/hive-example
+
+# check that is there
+hadoop fs -ls ~/hadoop-store/mapred/hive-example
+
+# show the contents using the same URI as Hive
+hadoop fs -cat hdfs://localhost/Users/jonas/hadoop-store/mapred/hive-example/data.txt</code></pre>
+<p>Start a hive session. Test the thrift network connection using <code>hive -h localhost</code></p>
+<pre><code>hive
+
+hive&gt; show tables;
+OK
+Time taken: 4.734 seconds
+hive&gt; show functions;
+OK
+!
+!=
+%
+...</code></pre>
+<p>Create an external table:</p>
+<pre><code> CREATE EXTERNAL TABLE mydata1 (key STRING, value INT)
+    ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;=&#39;
+    LOCATION &#39;hdfs://localhost/Users/jonas/hadoop-store/mapred/hive-example/&#39;;
+
+hive&gt; select * from mydata1;
+OK
+jim 89347
+dave    313925
+noddy   21516
+don 6771
+Time taken: 0.279 seconds</code></pre>
+<h2>Check ODBC setup</h2>
+<p>I have unixodbc installed (do <code>brew install unixodbc</code> if you don&#39;t):</p>
+<pre><code>Gizur-Laptop-5:node jonas$ brew info unixodbc
+unixodbc: stable 2.3.1
+http://www.unixodbc.org/
+/usr/local/Cellar/unixodbc/2.3.1 (26 files, 920K) *
+https://github.com/mxcl/homebrew/commits/master/Library/Formula/unixodbc.rb</code></pre>
+<pre><code>Gizur-Laptop-5:node jonas$ odbcinst
+
+**********************************************
+* unixODBC - odbcinst                        *
+**********************************************
+*                                            *
+* Purpose:                                   *
+*                                            *
+*      An ODBC Installer and Uninstaller.    *
+*      Updates system files, and             *
+*      increases/decreases usage counts but  *
+*      does not actually copy or remove any  *
+*      files.                                *
+*                                            *
+* Syntax:                                    *
+*                                            *
+*      odbcinst Action Object Options        *
+*                                            *
+* Action:                                    *
+*                                            *
+*      -i         install                    *
+*      -u         uninstall                  *
+*      -q         query                      *
+*      -j         print config info          *
+*      -c         call SQLCreateDataSource   *
+*      -m         call SQLManageDataSources  *
+*      --version  version                    *
+*                                            *
+* Object:                                    *
+*                                            *
+*      -d driver                             *
+*      -s data source                        *
+*                                            *
+* Options:                                   *
+*                                            *
+*      -f file name of template.ini follows  *
+*         this (valid for -i)                *
+*      -r get template.ini from stdin, not   *
+*         a template file                    *
+*      -n Driver or Data Source Name follows *
+*      -v turn verbose off (no info, warning *
+*         or error msgs)                     *
+*      -l system dsn                         *
+*      -h user dsn                           *
+*                                            *
+* Returns:                                   *
+*                                            *
+*      0   Success                           *
+*     !0   Failed                            *
+*                                            *
+* Please visit;                              *
+*                                            *
+*      http://www.unixodbc.org               *
+*      pharvey@codebydesign.com              *
+**********************************************</code></pre>
+<pre><code>Gizur-Laptop-5:node jonas$ odbcinst -j
+unixODBC 2.3.1
+DRIVERS............: /usr/local/Cellar/unixodbc/2.3.1/etc/odbcinst.ini
+SYSTEM DATA SOURCES: /usr/local/Cellar/unixodbc/2.3.1/etc/odbc.ini
+FILE DATA SOURCES..: /usr/local/Cellar/unixodbc/2.3.1/etc/ODBCDataSources
+USER DATA SOURCES..: /Users/jonas/.odbc.ini
+SQLULEN Size.......: 8
+SQLLEN Size........: 8
+SQLSETPOSIROW Size.: 8</code></pre>
+<p>NOTE: I can&#39;t find libodbchive.so anywhere. I think I have to build hive and ODBC myself...</p>
+<h2>Build hive</h2>
+<p>Check version of hadoop:</p>
+<pre><code>Gizur-Laptop-5:2.3.1 jonas$ brew info hadoop
+hadoop: stable 1.1.1
+http://hadoop.apache.org/
+/usr/local/Cellar/hadoop/1.1.1 (416 files, 81M) *
+https://github.com/mxcl/homebrew/commits/master/Library/Formula/hadoop.rb
+==&gt; Caveats
+In Hadoop&#39;s config file:
+  /usr/local/Cellar/hadoop/1.1.1/libexec/conf/hadoop-env.sh
+$JAVA_HOME has been set to be the output of:
+  /usr/libexec/java_home</code></pre>
+<p>From Hive 0.10 Release notes:</p>
+<ul>
+<li>This release is the latest release of Hive and it works with Hadoop 0.20.x, 0.23.x.y, 1.x.y, 2.x.y</li>
+</ul>
+<p>Tried to download binaries but could not find libodbchive.so:</p>
+<pre><code>wget http://apache.mirrors.spacedump.net/hive/hive-0.10.0/hive-0.10.0-bin.tar.gz
+
+tar -xzf hive-0.10.0-bin.tar.gz 
+
+export HIVE_HOME=`pwd`
+export PATH=$HIVE_HOME/bin:$PATH</code></pre>
+<p>Let&#39;s try to build from source:</p>
+<pre><code>svn co http://svn.apache.org/repos/asf/hive/trunk hive
+cd hive
+ant clean package
+cd build/dist
+ls</code></pre>
+<p>Set HIVE_HOME and PATH to this new installation:</p>
+<pre><code>cd ../..
+export HIVE_HOME=`pwd`
+export PATH=$HIVE_HOME/bin:$PATH</code></pre>
+<p>Also tmp and the hive warehouse folders needs to be created:</p>
+<pre><code>hadoop fs -mkdir       /tmp
+hadoop fs -mkdir       /user/hive/warehouse
+hadoop fs -chmod g+w   /tmp
+hadoop fs -chmod g+w   /user/hive/warehouse</code></pre>
+<p>Thrift is needed in order to build the hive client.</p>
+<h2>Install thrift</h2>
+<p>The ODBC wrapper is built on top of the thrift client.</p>
+<p>I&#39;m installing with brew. Information on building from source is found here:</p>
+<ul>
+<li><a href="http://thrift.apache.org/">http://thrift.apache.org/</a></li>
+<li><a href="http://wiki.apache.org/thrift/ThriftInstallation">http://wiki.apache.org/thrift/ThriftInstallation</a></li>
+</ul>
+<pre><code>brew info thrift
+
+brew install thrift --with-java</code></pre>
+<p>An alternative is to install from source (need to install boost and libevent first). I&#39;ll skip this...</p>
+<pre><code>wget https://dist.apache.org/repos/dist/release/thrift/0.9.0/thrift-0.9.0.tar.gz</code></pre>
+<h2>Build Hive client</h2>
+<p>Check thrift home:</p>
+<pre><code>Gizur-Laptop-5:thrift-0.9.0 jonas$ brew info thrift
+thrift: stable 0.9.0, HEAD
+http://thrift.apache.org
+Depends on: boost
+/usr/local/Cellar/thrift/0.9.0 (244 files, 9,2M) *
+  Installed with: --with-java</code></pre>
+<pre><code>cd hive
+
+ant compile-cpp -Dthrift.home=/usr/local/Cellar/thrift/0.9.0</code></pre>
+<p>Build failed. I&#39;m giving up for now...</p>
+<h2>Hortonworks ODBC driver</h2>
+<p>The Hortonworks Hadoop distribution contains a number of ODBC drivers (also OSX).</p>
+<p>An ODBC driver manager is needed, for instance:</p>
+<ul>
+<li><a href="http://www.iodbc.org/">http://www.iodbc.org/</a></li>
+</ul>
+<p>Run the installation and the Hortonworks ODBC driver is installed here:</p>
+<ul>
+<li>/usr/lib/hive/lib/native/hiveodbc</li>
+</ul>
+<p>Documentation:</p>
+<ul>
+<li><a href="https://www.google.se/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC8QFjAA&amp;url=http%3A%2F%2Fhortonworks.com%2Fwp-content%2Fuploads%2F2012%2F10%2FHortonworks-Hive-ODBC-Driver-User-Guide.pdf&amp;ei=P7hJUbO_OcqJtAa1kYCYCA&amp;usg=AFQjCNFpZCPYkfkNPkcq1COXrs9yGTp4bQ&amp;bvm=bv.44011176,d.Yms">https://www.google.se/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC8QFjAA&amp;url=http%3A%2F%2Fhortonworks.com%2Fwp-content%2Fuploads%2F2012%2F10%2FHortonworks-Hive-ODBC-Driver-User-Guide.pdf&amp;ei=P7hJUbO_OcqJtAa1kYCYCA&amp;usg=AFQjCNFpZCPYkfkNPkcq1COXrs9yGTp4bQ&amp;bvm=bv.44011176,d.Yms</a></li>
+</ul>
+<p>Put this in your .bash_profile etc.</p>
+<pre><code># check where your ODBC driver manager is installed and correct accordingly, I&#39;m using iODBC
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/lib/hive/lib/native/universal:/usr/local/iODBC/lib</code></pre>
+<h3>Setup odbc.ini</h3>
+<pre><code>cat ~/.odbc.ini
+
+cat Setup/odbc.ini
+
+nano ~/.odbc.ini
+
+
+[ODBC]
+InstallDir=/usr/local/iODBC
+
+[ODBC Data Sources]
+Sample Hortonworks Hive DSN=Hortonworks Hive ODBC Driver 32-bit
+
+[Sample Hortonworks Hive DSN]
+Driver=/usr/lib/hive/lib/native/universal/llibhortonworkshiveodbc.dylib
+HOST=localhost
+PORT=10000</code></pre>
+<h3>Setup hortonworks.hiveodbc.ini</h3>
+<pre><code>cat Setup/hortonworks.hiveodbc.ini
+
+cp Setup/hortonworks.hiveodbc.ini ~/.hortonworks.hiveodbc.ini
+
+nano ~/.hortonworks.hiveodbc.ini</code></pre>
+<h4>Setup .odbcinst.ini</h4>
+<pre><code>cp Setup/odbcinst.ini ~/.odbcinst.ini</code></pre>
+</div>
+    
+</body>
+</html>

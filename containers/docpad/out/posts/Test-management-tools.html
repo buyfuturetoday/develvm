@@ -1,0 +1,38 @@
+<html>
+<head>
+    <title>Test</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Test</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Main_Page]]</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Test_management_tools">http://en.wikipedia.org/wiki/Test_management_tools</a></li>
+</ul>
+<h1>= Test Link =</h1>
+<p>Nytt försök:
+* <a href="http://www.teamst.org/">http://www.teamst.org/</a></p>
+<p>see setup script</p>
+<p>LADDADE NER EN GAMMAL VERSION!</p>
+<pre>
+wget http://downloads.sourceforge.net/project/testlink/TestLink%201.9/TestLink%201.9.2/testlink-1.9.2.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Ftestlink%2Ffiles%2F&ts=1323175588&use_mirror=freefr
+gunzip testlink-1.9.2.tar.gz 
+tar -xvf testlink-1.9.2.tar
+mv testlink-1.9.2 /var/www/html/testlink
+chown -R apache.apache /var/www/html/testlink
+
+
+# After successful installation
+cp custom_config.inc.php.example custom_config.inc
+chown apache.apache custom_config.inc
+vi custom_config.inc.php   # Fix mai settings
+mv install install.remove
+
+</pre></div>
+    
+</body>
+</html>

@@ -1,0 +1,46 @@
+<html>
+<head>
+    <title>Setup NodeJS on OSX</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Setup NodeJS on OSX</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Oct 07 2012 02:00:00 GMT+0200 (CEST)</h3>
+<div><p>Get started with NodeJS on Mac OSX</p>
+<p>I had an old installation of node.js but got all kinds of erros. I tried to download a new version from <a href="http://nodejs.org/">http://nodejs.org/</a> but it did not solve the problem.</p>
+<p>Then I tested with brew and that did seam to work. I did some cleaning up before I started.</p>
+<pre><code># Remove global modules
+sudo rm -rf /usr/local/lib/node_modules
+
+# Remove local modules
+rm -rf ~/node_modules
+
+# Saw a tip that making /usr/local mine makes this easier (not having to sudo all the time)
+sudo chown -R $USER /usr/local</code></pre>
+<p>Then I installed nodejs with brew</p>
+<pre><code>brew install nodejs
+
+# There were som old files that needed cleaning
+brew link node
+
+# Delete what brew complains about and run again until it&#39;s done
+
+# Run the npm (node package manager) installation
+wget http://npmjs.org/install.sh
+chmod +x install.sh 
+./install.sh</code></pre>
+<p>npm has global and local modules. I decided to only use global (to avoid the confusion not remebering where things were installed)</p>
+<pre><code>npm config ls -l
+npm config set global true</code></pre>
+<p>NOTE: I&#39;ve learned that this isn&#39;t such a good idea when developing node applications of your own...</p>
+<p>Try to do an update, make sure there are no erros</p>
+<pre><code>npm update</code></pre>
+<p>Set NODE_PATH so that require finds the installed modules:</p>
+<pre><code>cd &amp;&amp; nano .bash_profile
+export NODE_PATH=/usr/local/lib/node_modules:~/node_modules:.</code></pre>
+</div>
+    
+</body>
+</html>

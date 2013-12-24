@@ -1,0 +1,92 @@
+<html>
+<head>
+    <title>JavaScript Routing</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>JavaScript Routing</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Fri Aug 10 2012 02:00:00 GMT+0200 (CEST)</h3>
+<div><p>Client side routing in JavaScript</p>
+<p>JavaScript Routing</p>
+<h1>================</h1>
+<p>We need a solid way of managing navigation between different parts (pages etc.) in the application that is easy to understand and maintain. Using different routing techniques has become common in web applications and there are JavaScript libraries for this.</p>
+<p>We&#39;ll take a look at crossroads.js and Hasher. </p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Module Example&lt;/title&gt;
+    &lt;script src=&quot;lib/basic.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;lib/signals.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;lib/crossroads.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;lib/hasher.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+
+    window.onload = function(){
+        test(&quot;Testing Crossroads.js and Hasher.&quot;, function(){
+
+            // setup crossroads, using the global object. 
+            // It is also possible to have several independent Routers
+            crossroads.addRoute(&#39;route1&#39;, function() { 
+                log(&#39;logging static route1...&#39;);} 
+            );
+
+            crossroads.addRoute(&#39;route2&#39;, function() {
+                log(&#39;logging static route2...&#39;);} 
+            ); 
+
+            crossroads.addRoute(&#39;/{route}/{param1}/{param2}&#39;, function(route, param1, param2){
+                log(&#39;logging dynamic route:&#39;+route+&#39;, param1:&#39;+param1+&#39;, param2:&#39;+param2+&#39;...&#39;);} 
+            ); 
+
+            // default listener, log all routes that has been matched
+            crossroads.routed.add(console.log, console); 
+
+            // Also log routes that did not match anything (useful for debugging)
+            crossroads.bypassed.add(function(request){
+                log(&quot;A route that wasn&#39;t matched:&quot;+request); 
+            });
+
+            //setup hasher
+            function parseHash(newHash, oldHash){
+                crossroads.parse(newHash); 
+            }
+
+            hasher.initialized.add(parseHash); // parse initial hash 
+            hasher.changed.add(parseHash);     // parse hash changes 
+            hasher.init();                     // start listening for history change
+
+            //update URL fragment generating new history record 
+            hasher.setHash(&#39;route1&#39;);
+
+        });
+
+    };
+
+
+    &lt;/script&gt;
+    &lt;style&gt;
+        #results li.pass { color: green; }
+        #results li.fail { color: red; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;ul id=&quot;results&quot;&gt;&lt;/ul&gt;
+
+
+    &lt;div id=&quot;test1&quot;&gt;
+        Some links:&lt;br/&gt;
+        &lt;a href=&quot;#route1&quot;&gt;#route1&lt;/a&gt;&lt;br/&gt;
+        &lt;a href=&quot;#route2&quot;&gt;#route2&lt;/a&gt;&lt;br/&gt;
+        &lt;a href=&quot;#/route3/i_love/this&quot;&gt;#route3&lt;/a&gt;&lt;br/&gt;
+        &lt;a href=&quot;#route4&quot;&gt;#route4&lt;/a&gt;&lt;br/&gt;
+    &lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>crossroads associates a route with a callback functions. Callbaks are very common in modern JavaScript so just get used to them (if you&#39;re not already). For instance will clikcing on the link <code>&lt;a href=&quot;#route1&quot;&gt;#route1&lt;/a&gt;</code> trigger a call to the function <code>function() { log(&#39;logging static route1...&#39;);} );</code>. This function was associated with the event using <code>crossroads.addRoute</code>.</p>
+<p>The statement <code>hasher.changed.add(parseHash)</code> will make sure that Hasher calls the function <code>parseHash</code> each time the URL in the application changes. This is so called hash navigation.</p>
+</div>
+    
+</body>
+</html>

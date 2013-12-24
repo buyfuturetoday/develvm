@@ -1,0 +1,690 @@
+<html>
+<head>
+    <title>Checking out Robot Operating System</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Checking out Robot Operating System</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Mon Dec 31 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Checking out Robot Operating System - ros.org </p>
+<h1>Ubuntu</h1>
+<pre><code># Ubuntu 12.04
+sudo sh -c &#39;echo &quot;deb http://packages.ros.org/ros/ubuntu precise main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#39;
+
+# Ubuntu 11.10
+sudo sh -c &#39;echo &quot;deb http://packages.ros.org/ros/ubuntu oneiric main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#39;
+
+# Ubuntu 10.10
+sudo sh -c &#39;echo &quot;deb http://packages.ros.org/ros/ubuntu lucid main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#39;
+
+# All Ubuntus
+wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+
+sudo apt-get update
+
+sudo apt-get install ros-fuerte-desktop-full</code></pre>
+<pre><code>echo &quot;source /opt/ros/fuerte/setup.bash&quot; &gt;&gt; ~/.bashrc
+. ~/.bashrc</code></pre>
+<pre><code>sudo apt-get install python-rosinstall python-rosdep</code></pre>
+<h1>OSX</h1>
+<p>DID NOT GET THIS TO WORK</p>
+<p>First install on OSX using brew.</p>
+<ul>
+<li><a href="http://www.ros.org/wiki/fuerte/Installation/OSX/Homebrew/Source">http://www.ros.org/wiki/fuerte/Installation/OSX/Homebrew/Source</a></li>
+</ul>
+<pre><code>Gizur-Laptop-5:~ jonas$ brew tap ros/fuerte
+Cloning into &#39;/usr/local/Library/Taps/ros-fuerte&#39;...
+remote: Counting objects: 266, done.
+remote: Compressing objects: 100% (117/117), done.
+remote: Total 266 (delta 159), reused 243 (delta 139)
+Receiving objects: 100% (266/266), 49.43 KiB, done.
+Resolving deltas: 100% (159/159), done.
+Warning: Could not tap ros/fuerte/flann over mxcl/master/flann
+Tapped 33 formula</code></pre>
+<p>The warning isn&#39;t a problem according to: <a href="http://answers.ros.org/question/38756/could-not-tap-rosfuerteflann-over-mxclmasterflann/">http://answers.ros.org/question/38756/could-not-tap-rosfuerteflann-over-mxclmasterflann/</a></p>
+<pre><code>nano ~/.bash_profile
+...
+#
+# ROS
+#
+export ROS_OS_OVERRIDE=osx:homebrew
+
+
+bash</code></pre>
+<h2>Python dependencies</h2>
+<pre><code># Change the permissions of your Python, Ruby, and Perl library directories to prevent the need for sudo when running pip.
+bash-3.2$ sudo chown -R $USER /Library/Ruby /Library/Perl /Library/Python
+
+bash-3.2$ easy_install pip
+Searching for pip
+Reading http://pypi.python.org/simple/pip/
+Reading http://www.pip-installer.org
+Reading http://pip.openplans.org
+Best match: pip 1.2.1
+Downloading http://pypi.python.org/packages/source/p/pip/pip-1.2.1.tar.gz#md5=db8a6d8a4564d3dc7f337ebed67b1a85
+Processing pip-1.2.1.tar.gz
+Running pip-1.2.1/setup.py -q bdist_egg --dist-dir /var/folders/vn/5vzjp5bs21j0d82r53qzcvj00000gn/T/easy_install-kvWCpi/pip-1.2.1/egg-dist-tmp-UJGZkG
+warning: no files found matching &#39;*.html&#39; under directory &#39;docs&#39;
+warning: no previously-included files matching &#39;*.txt&#39; found under directory &#39;docs/_build&#39;
+no previously-included directories found matching &#39;docs/_build/_sources&#39;
+Adding pip 1.2.1 to easy-install.pth file
+Installing pip script to /usr/local/bin
+Installing pip-2.7 script to /usr/local/bin
+
+Installed /Library/Python/2.7/site-packages/pip-1.2.1-py2.7.egg
+Processing dependencies for pip
+Finished processing dependencies for pip</code></pre>
+<pre><code>bash-3.2$ easy_install setuptools
+Searching for setuptools
+Best match: setuptools 0.6c12dev-r88846
+Adding setuptools 0.6c12dev-r88846 to easy-install.pth file
+Installing easy_install script to /usr/local/bin
+Installing easy_install-2.7 script to /usr/local/bin
+
+Using /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python
+Processing dependencies for setuptools
+Finished processing dependencies for setuptools
+
+
+bash-3.2$ brew install libyaml
+==&gt; Downloading http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz
+######################################################################## 100,0%
+==&gt; ./configure --prefix=/usr/local/Cellar/libyaml/0.1.4
+==&gt; make install
+/usr/local/Cellar/libyaml/0.1.4: 7 files, 336K, built in 14 seconds</code></pre>
+<pre><code>pip install -U PyYAML
+Downloading/unpacking PyYAML
+  Downloading PyYAML-3.10.tar.gz (241kB): 241kB downloaded
+  Running setup.py egg_info for package PyYAML
+
+Installing collected packages: PyYAML
+  Running setup.py install for PyYAML
+    checking if libyaml is compilable
+    clang -fno-strict-aliasing -fno-common -dynamic -g -Os -pipe -fno-common -fno-strict-aliasing -fwrapv -mno-fused-madd -DENABLE_DTRACE -DMACOSX -DNDEBUG -Wall -Wstrict-prototypes -Wshorten-64-to-32 -DNDEBUG -g -Os -Wall -Wstrict-prototypes -DENABLE_DTRACE -arch i386 -arch x86_64 -pipe -I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -c build/temp.macosx-10.8-intel-2.7/check_libyaml.c -o build/temp.macosx-10.8-intel-2.7/check_libyaml.o
+    clang: warning: argument unused during compilation: &#39;-mno-fused-madd&#39;
+    checking if libyaml is linkable
+    clang build/temp.macosx-10.8-intel-2.7/check_libyaml.o -lyaml -o build/temp.macosx-10.8-intel-2.7/check_libyaml
+    building &#39;_yaml&#39; extension
+    clang -fno-strict-aliasing -fno-common -dynamic -g -Os -pipe -fno-common -fno-strict-aliasing -fwrapv -mno-fused-madd -DENABLE_DTRACE -DMACOSX -DNDEBUG -Wall -Wstrict-prototypes -Wshorten-64-to-32 -DNDEBUG -g -Os -Wall -Wstrict-prototypes -DENABLE_DTRACE -arch i386 -arch x86_64 -pipe -I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -c ext/_yaml.c -o build/temp.macosx-10.8-intel-2.7/ext/_yaml.o
+    clang: warning: argument unused during compilation: &#39;-mno-fused-madd&#39;
+    In file included from ext/_yaml.c:223:
+    ext/_yaml.h:6:9: warning: &#39;PyUnicode_FromString&#39; macro redefined
+    #define PyUnicode_FromString(s) PyUnicode_DecodeUTF8((s), strlen(s), &quot;strict&quot;)
+
+A LOT OF WARNINGS....
+
+    78 warnings generated.
+    clang -bundle -undefined dynamic_lookup -Wl,-F. -arch i386 -arch x86_64 build/temp.macosx-10.8-intel-2.7/ext/_yaml.o -lyaml -o build/lib.macosx-10.8-intel-2.7/_yaml.so
+    ld: warning: ignoring file /usr/local/lib/libyaml.dylib, file was built for unsupported file format ( 0xcf 0xfa 0xed 0xfe 0x 7 0x 0 0x 0 0x 1 0x 3 0x 0 0x 0 0x 0 0x 6 0x 0 0x 0 0x 0 ) which is not the architecture being linked (i386): /usr/local/lib/libyaml.dylib
+
+Successfully installed PyYAML
+Cleaning up...
+bash-3.2$</code></pre>
+<pre><code>pip install mercurial
+Downloading/unpacking mercurial
+  Downloading mercurial-2.4.1.tar.gz (3.6MB): 3.6MB downloaded
+  Running setup.py egg_info for package mercurial
+
+Installing collected packages: mercurial
+  Running setup.py install for mercurial
+    warning: hgbuildmo: could not find msgfmt executable, no translations will be built
+
+    building &#39;mercurial.base85&#39; extension
+    clang -fno-strict-aliasing -fno-common -dynamic -g -Os -pipe -fno-common -fno-strict-aliasing -fwrapv -mno-fused-madd -DENABLE_DTRACE -DMACOSX -DNDEBUG -Wall -Wstrict-prototypes -Wshorten-64-to-32 -DNDEBUG -g -Os -Wall -Wstrict-prototypes -DENABLE_DTRACE -pipe -I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -c mercurial/base85.c -o build/temp.macosx-10.8-intel-2.7/mercurial/base85.o
+    clang: warning: argument unused during compilation: &#39;-mno-fused-madd&#39;
+    clang -bundle -undefined dynamic_lookup -Wl,-F. build/temp.macosx-10.8-intel-2.7/mercurial/base85.o -o build/lib.macosx-10.8-intel-2.7/mercurial/base85.so
+    building &#39;mercurial.bdiff&#39; extension
+    clang -fno-strict-aliasing -fno-common -dynamic -g -Os -pipe -fno-common -fno-strict-aliasing -fwrapv -mno-fused-madd -DENABLE_DTRACE -DMACOSX -DNDEBUG -Wall -Wstrict-prototypes -Wshorten-64-to-32 -DNDEBUG -g -Os -Wall -Wstrict-prototypes -DENABLE_DTRACE -pipe -I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -c mercurial/bdiff.c -o build/temp.macosx-10.8-intel-2.7/mercurial/bdiff.o
+    clang: warning: argument unused during compilation: &#39;-mno-fused-madd&#39;
+    clang -bundle -undefined dynamic_lookup -Wl,-F. build/temp.macosx-10.8-intel-2.7/mercurial/bdiff.o -o build/lib.macosx-10.8-intel-2.7/mercurial/bdiff.so
+    building &#39;mercurial.diffhelpers&#39; extension
+    clang -fno-strict-aliasing -fno-common -dynamic -g -Os -pipe -fno-common -fno-strict-aliasing -fwrapv -mno-fused-madd -DENABLE_DTRACE -DMACOSX -DNDEBUG -Wall -Wstrict-prototypes -Wshorten-64-to-32 -DNDEBUG -g -Os -Wall -Wstrict-prototypes -DENABLE_DTRACE -pipe -I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -c mercurial/diffhelpers.c -o build/temp.macosx-10.8-intel-2.7/mercurial/diffhelpers.o
+    clang: warning: argument unused during compilation: &#39;-mno-fused-madd&#39;
+    clang -bundle -undefined dynamic_lookup -Wl,-F. build/temp.macosx-10.8-intel-2.7/mercurial/diffhelpers.o -o build/lib.macosx-10.8-intel-2.7/mercurial/diffhelpers.so
+    building &#39;mercurial.mpatch&#39; extension
+    clang -fno-strict-aliasing -fno-common -dynamic -g -Os -pipe -fno-common -fno-strict-aliasing -fwrapv -mno-fused-madd -DENABLE_DTRACE -DMACOSX -DNDEBUG -Wall -Wstrict-prototypes -Wshorten-64-to-32 -DNDEBUG -g -Os -Wall -Wstrict-prototypes -DENABLE_DTRACE -pipe -I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -c mercurial/mpatch.c -o build/temp.macosx-10.8-intel-2.7/mercurial/mpatch.o
+    clang: warning: argument unused during compilation: &#39;-mno-fused-madd&#39;
+    clang -bundle -undefined dynamic_lookup -Wl,-F. build/temp.macosx-10.8-intel-2.7/mercurial/mpatch.o -o build/lib.macosx-10.8-intel-2.7/mercurial/mpatch.so
+    building &#39;mercurial.parsers&#39; extension
+    clang -fno-strict-aliasing -fno-common -dynamic -g -Os -pipe -fno-common -fno-strict-aliasing -fwrapv -mno-fused-madd -DENABLE_DTRACE -DMACOSX -DNDEBUG -Wall -Wstrict-prototypes -Wshorten-64-to-32 -DNDEBUG -g -Os -Wall -Wstrict-prototypes -DENABLE_DTRACE -pipe -I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -c mercurial/parsers.c -o build/temp.macosx-10.8-intel-2.7/mercurial/parsers.o
+    clang: warning: argument unused during compilation: &#39;-mno-fused-madd&#39;
+    clang -fno-strict-aliasing -fno-common -dynamic -g -Os -pipe -fno-common -fno-strict-aliasing -fwrapv -mno-fused-madd -DENABLE_DTRACE -DMACOSX -DNDEBUG -Wall -Wstrict-prototypes -Wshorten-64-to-32 -DNDEBUG -g -Os -Wall -Wstrict-prototypes -DENABLE_DTRACE -pipe -I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -c mercurial/pathencode.c -o build/temp.macosx-10.8-intel-2.7/mercurial/pathencode.o
+    clang: warning: argument unused during compilation: &#39;-mno-fused-madd&#39;
+    clang -bundle -undefined dynamic_lookup -Wl,-F. build/temp.macosx-10.8-intel-2.7/mercurial/parsers.o build/temp.macosx-10.8-intel-2.7/mercurial/pathencode.o -o build/lib.macosx-10.8-intel-2.7/mercurial/parsers.so
+    building &#39;mercurial.osutil&#39; extension
+    clang -fno-strict-aliasing -fno-common -dynamic -g -Os -pipe -fno-common -fno-strict-aliasing -fwrapv -mno-fused-madd -DENABLE_DTRACE -DMACOSX -DNDEBUG -Wall -Wstrict-prototypes -Wshorten-64-to-32 -DNDEBUG -g -Os -Wall -Wstrict-prototypes -DENABLE_DTRACE -pipe -I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -c mercurial/osutil.c -o build/temp.macosx-10.8-intel-2.7/mercurial/osutil.o
+    clang: warning: argument unused during compilation: &#39;-mno-fused-madd&#39;
+    clang -bundle -undefined dynamic_lookup -Wl,-F. build/temp.macosx-10.8-intel-2.7/mercurial/osutil.o -o build/lib.macosx-10.8-intel-2.7/mercurial/osutil.so -framework ApplicationServices
+    changing mode of build/scripts-2.7/hg from 644 to 755
+
+    changing mode of /usr/local/bin/hg to 755
+Successfully installed mercurial
+Cleaning up...</code></pre>
+<pre><code>pip install -U empy nose
+Downloading/unpacking empy
+  Downloading empy-latest.tar.gz (137kB): 137kB downloaded
+  Running setup.py egg_info for package empy
+
+Downloading/unpacking nose
+  Downloading nose-1.2.1.tar.gz (400kB): 400kB downloaded
+  Running setup.py egg_info for package nose
+
+    no previously-included directories found matching &#39;doc/.build&#39;
+Installing collected packages: empy, nose
+  Running setup.py install for empy
+
+  Running setup.py install for nose
+    error: could not create &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/man&#39;: Permission denied
+    Complete output from command /usr/bin/python -c &quot;import setuptools;__file__=&#39;/var/folders/vn/5vzjp5bs21j0d82r53qzcvj00000gn/T/pip-build/nose/setup.py&#39;;exec(compile(open(__file__).read().replace(&#39;\r\n&#39;, &#39;\n&#39;), __file__, &#39;exec&#39;))&quot; install --record /var/folders/vn/5vzjp5bs21j0d82r53qzcvj00000gn/T/pip-LfkpD0-record/install-record.txt --single-version-externally-managed:
+    running install
+
+running build
+
+running build_py
+
+creating build
+
+creating build/lib
+
+creating build/lib/nose
+
+copying nose/__init__.py -&gt; build/lib/nose
+
+copying nose/case.py -&gt; build/lib/nose
+
+copying nose/commands.py -&gt; build/lib/nose
+
+copying nose/config.py -&gt; build/lib/nose
+
+copying nose/core.py -&gt; build/lib/nose
+
+copying nose/exc.py -&gt; build/lib/nose
+
+copying nose/failure.py -&gt; build/lib/nose
+
+copying nose/importer.py -&gt; build/lib/nose
+
+copying nose/inspector.py -&gt; build/lib/nose
+
+copying nose/loader.py -&gt; build/lib/nose
+
+copying nose/proxy.py -&gt; build/lib/nose
+
+copying nose/pyversion.py -&gt; build/lib/nose
+
+copying nose/result.py -&gt; build/lib/nose
+
+copying nose/selector.py -&gt; build/lib/nose
+
+copying nose/suite.py -&gt; build/lib/nose
+
+copying nose/twistedtools.py -&gt; build/lib/nose
+
+copying nose/util.py -&gt; build/lib/nose
+
+creating build/lib/nose/ext
+
+copying nose/ext/__init__.py -&gt; build/lib/nose/ext
+
+copying nose/ext/dtcompat.py -&gt; build/lib/nose/ext
+
+creating build/lib/nose/plugins
+
+copying nose/plugins/__init__.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/allmodules.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/attrib.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/base.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/builtin.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/capture.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/collect.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/cover.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/debug.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/deprecated.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/doctests.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/errorclass.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/failuredetail.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/isolate.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/logcapture.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/manager.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/multiprocess.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/plugintest.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/prof.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/skip.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/testid.py -&gt; build/lib/nose/plugins
+
+copying nose/plugins/xunit.py -&gt; build/lib/nose/plugins
+
+creating build/lib/nose/sphinx
+
+copying nose/sphinx/__init__.py -&gt; build/lib/nose/sphinx
+
+copying nose/sphinx/pluginopts.py -&gt; build/lib/nose/sphinx
+
+creating build/lib/nose/tools
+
+copying nose/tools/__init__.py -&gt; build/lib/nose/tools
+
+copying nose/tools/nontrivial.py -&gt; build/lib/nose/tools
+
+copying nose/tools/trivial.py -&gt; build/lib/nose/tools
+
+copying nose/usage.txt -&gt; build/lib/nose
+
+running install_lib
+
+creating /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/__init__.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/case.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/commands.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/config.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/core.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/exc.py -&gt; /Library/Python/2.7/site-packages/nose
+
+creating /Library/Python/2.7/site-packages/nose/ext
+
+copying build/lib/nose/ext/__init__.py -&gt; /Library/Python/2.7/site-packages/nose/ext
+
+copying build/lib/nose/ext/dtcompat.py -&gt; /Library/Python/2.7/site-packages/nose/ext
+
+copying build/lib/nose/failure.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/importer.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/inspector.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/loader.py -&gt; /Library/Python/2.7/site-packages/nose
+
+creating /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/__init__.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/allmodules.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/attrib.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/base.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/builtin.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/capture.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/collect.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/cover.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/debug.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/deprecated.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/doctests.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/errorclass.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/failuredetail.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/isolate.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/logcapture.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/manager.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/multiprocess.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/plugintest.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/prof.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/skip.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/testid.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/plugins/xunit.py -&gt; /Library/Python/2.7/site-packages/nose/plugins
+
+copying build/lib/nose/proxy.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/pyversion.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/result.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/selector.py -&gt; /Library/Python/2.7/site-packages/nose
+
+creating /Library/Python/2.7/site-packages/nose/sphinx
+
+copying build/lib/nose/sphinx/__init__.py -&gt; /Library/Python/2.7/site-packages/nose/sphinx
+
+copying build/lib/nose/sphinx/pluginopts.py -&gt; /Library/Python/2.7/site-packages/nose/sphinx
+
+copying build/lib/nose/suite.py -&gt; /Library/Python/2.7/site-packages/nose
+
+creating /Library/Python/2.7/site-packages/nose/tools
+
+copying build/lib/nose/tools/__init__.py -&gt; /Library/Python/2.7/site-packages/nose/tools
+
+copying build/lib/nose/tools/nontrivial.py -&gt; /Library/Python/2.7/site-packages/nose/tools
+
+copying build/lib/nose/tools/trivial.py -&gt; /Library/Python/2.7/site-packages/nose/tools
+
+copying build/lib/nose/twistedtools.py -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/usage.txt -&gt; /Library/Python/2.7/site-packages/nose
+
+copying build/lib/nose/util.py -&gt; /Library/Python/2.7/site-packages/nose
+
+byte-compiling /Library/Python/2.7/site-packages/nose/__init__.py to __init__.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/case.py to case.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/commands.py to commands.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/config.py to config.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/core.py to core.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/exc.py to exc.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/ext/__init__.py to __init__.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/ext/dtcompat.py to dtcompat.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/failure.py to failure.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/importer.py to importer.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/inspector.py to inspector.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/loader.py to loader.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/__init__.py to __init__.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/allmodules.py to allmodules.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/attrib.py to attrib.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/base.py to base.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/builtin.py to builtin.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/capture.py to capture.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/collect.py to collect.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/cover.py to cover.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/debug.py to debug.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/deprecated.py to deprecated.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/doctests.py to doctests.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/errorclass.py to errorclass.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/failuredetail.py to failuredetail.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/isolate.py to isolate.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/logcapture.py to logcapture.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/manager.py to manager.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/multiprocess.py to multiprocess.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/plugintest.py to plugintest.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/prof.py to prof.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/skip.py to skip.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/testid.py to testid.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/plugins/xunit.py to xunit.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/proxy.py to proxy.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/pyversion.py to pyversion.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/result.py to result.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/selector.py to selector.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/sphinx/__init__.py to __init__.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/sphinx/pluginopts.py to pluginopts.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/suite.py to suite.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/tools/__init__.py to __init__.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/tools/nontrivial.py to nontrivial.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/tools/trivial.py to trivial.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/twistedtools.py to twistedtools.pyc
+
+byte-compiling /Library/Python/2.7/site-packages/nose/util.py to util.pyc
+
+running install_data
+
+creating /System/Library/Frameworks/Python.framework/Versions/2.7/man
+
+error: could not create &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/man&#39;: Permission denied
+
+----------------------------------------
+Command /usr/bin/python -c &quot;import setuptools;__file__=&#39;/var/folders/vn/5vzjp5bs21j0d82r53qzcvj00000gn/T/pip-build/nose/setup.py&#39;;exec(compile(open(__file__).read().replace(&#39;\r\n&#39;, &#39;\n&#39;), __file__, &#39;exec&#39;))&quot; install --record /var/folders/vn/5vzjp5bs21j0d82r53qzcvj00000gn/T/pip-LfkpD0-record/install-record.txt --single-version-externally-managed failed with error code 1 in /var/folders/vn/5vzjp5bs21j0d82r53qzcvj00000gn/T/pip-build/nose
+Storing complete log in /Users/jonas/Library/Logs/pip.log</code></pre>
+<p>Got an error so I tried running with sudo:</p>
+<pre><code>bash-3.2$ sudo pip install -U empy nose
+Password:
+Requirement already up-to-date: empy in /Library/Python/2.7/site-packages
+Downloading/unpacking nose
+  Downloading nose-1.2.1.tar.gz (400kB): 400kB downloaded
+  Running setup.py egg_info for package nose
+
+    no previously-included directories found matching &#39;doc/.build&#39;
+Installing collected packages: nose
+  Running setup.py install for nose
+
+    no previously-included directories found matching &#39;doc/.build&#39;
+    Installing nosetests script to /usr/local/bin
+    Installing nosetests-2.7 script to /usr/local/bin
+Successfully installed nose
+Cleaning up...</code></pre>
+<h2>Homebrew Dependencies</h2>
+<p>cmake was already installed</p>
+<pre><code>bash-3.2$ brew install cmake
+Error: cmake-2.8.10.1 already installed</code></pre>
+<pre><code>cd /usr/local &amp;&amp; git checkout 57665ff /usr/local/Library/Formula/boost.rb
+bash-3.2$ brew install boost
+==&gt; Downloading http://downloads.sourceforge.net/project/boost/boost/1.47.0/boost_1_47_0.tar.bz2
+######################################################################## 100,0%
+==&gt; ./bootstrap.sh --prefix=/usr/local/Cellar/boost/1.47.0 --libdir=/usr/local/Cellar/boost/1.47.0/lib
+==&gt; ./bjam --prefix=/usr/local/Cellar/boost/1.47.0 --libdir=/usr/local/Cellar/boost/1.47.0/lib -j4 --layout=tagged --user-config=user-config.jam threading=multi install
+Warning: Could not link boost. Unlinking...
+Error: The `brew link` step did not complete successfully
+The formula built, but is not symlinked into /usr/local
+You can try again using `brew link boost&#39;
+==&gt; Summary
+/usr/local/Cellar/boost/1.47.0: 8616 files, 208M, built in 10.1 minutes</code></pre>
+<p>A old boost installation gives problems:</p>
+<pre><code>Gizur-Laptop-5:~ jonas$ brew link boost
+Linking /usr/local/Cellar/boost/1.47.0... Warning: Could not link boost. Unlinking...
+
+Error: Could not symlink file: /usr/local/Cellar/boost/1.47.0/include/boost/xpressive/xpressive_typeof.hpp
+Target /usr/local/include/boost/xpressive/xpressive_typeof.hpp already exists. You may need to delete it.
+To force the link and delete this file, do:
+  brew link --overwrite formula_name
+
+To list all files that would be deleted:
+  brew link --overwrite --dry-run formula_name</code></pre>
+<p>Overwriting the old boost installation:</p>
+<pre><code>Gizur-Laptop-5:~ jonas$ brew link --overwrite boost
+Linking /usr/local/Cellar/boost/1.47.0... 7746 symlinks created</code></pre>
+<pre><code>Gizur-Laptop-5:~ jonas$ cd /usr/local/Library/Formula &amp;&amp; curl -O https://raw.github.com/mxcl/homebrew/ac18935be50d603a64363ba9104b91c643992dce/Library/Formula/gtest.rb
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   705  100   705    0     0    201      0  0:00:03  0:00:03 --:--:--   232</code></pre>
+<pre><code>Gizur-Laptop-5:Formula jonas$ brew install gtest
+==&gt; Downloading http://googletest.googlecode.com/files/gtest-1.5.0.tar.gz
+######################################################################## 100,0%
+==&gt; ./configure --prefix=/usr/local/Cellar/gtest/1.5.0
+==&gt; make install
+/usr/local/Cellar/gtest/1.5.0: 29 files, 1,4M, built in 27 seconds</code></pre>
+<pre><code>Gizur-Laptop-5:Formula jonas$ brew install log4cxx
+==&gt; Installing log4cxx dependency: automake
+==&gt; Downloading http://ftpmirror.gnu.org/automake/automake-1.12.5.tar.gz
+######################################################################## 100,0%
+==&gt; ./configure --prefix=/usr/local/Cellar/automake/1.12.5
+==&gt; make install
+/usr/local/Cellar/automake/1.12.5: 130 files, 2,1M, built in 22 seconds
+==&gt; Installing log4cxx dependency: libtool
+==&gt; Downloading http://ftpmirror.gnu.org/libtool/libtool-2.4.2.tar.gz
+######################################################################## 100,0%
+==&gt; ./configure --prefix=/usr/local/Cellar/libtool/2.4.2 --program-prefix=g --enable-ltdl-install
+==&gt; make install
+==&gt; Caveats
+In order to prevent conflicts with Apple&#39;s own libtool we have prepended a &quot;g&quot;
+so, you have instead: glibtool and glibtoolize.
+==&gt; Summary
+/usr/local/Cellar/libtool/2.4.2: 66 files, 2,2M, built in 29 seconds
+==&gt; Installing log4cxx
+==&gt; Downloading http://www.apache.org/dyn/closer.cgi?path=logging/log4cxx/0.10.0/apache-log4cxx-0.10.0.tar.gz
+==&gt; Best Mirror http://apache.mirrors.spacedump.net/logging/log4cxx/0.10.0/apache-log4cxx-0.10.0.tar.gz
+######################################################################## 100,0%
+==&gt; ./autogen.sh
+==&gt; ./configure --prefix=/usr/local/Cellar/log4cxx/0.10.0 --disable-doxygen
+==&gt; make install
+^C
+Gizur-Laptop-5:Formula jonas$ 
+Gizur-Laptop-5:Formula jonas$ brew install log4cxx
+==&gt; Downloading http://www.apache.org/dyn/closer.cgi?path=logging/log4cxx/0.10.0/apache-log4cxx-0.10.0.tar.gz
+Already downloaded: /Library/Caches/Homebrew/log4cxx-0.10.0.tar.gz
+==&gt; ./autogen.sh
+==&gt; ./configure --prefix=/usr/local/Cellar/log4cxx/0.10.0 --disable-doxygen
+==&gt; make install
+/usr/local/Cellar/log4cxx/0.10.0: 183 files, 7,3M, built in 93 seconds</code></pre>
+<pre><code>Gizur-Laptop-5:Formula jonas$ brew install qt
+Error: qt-4.8.2 already installed
+To install this version, first `brew unlink qt&#39;
+Gizur-Laptop-5:Formula jonas$ brew unlink qt
+Unlinking /usr/local/Cellar/qt/4.8.2... 80 links removed
+Gizur-Laptop-5:Formula jonas$ brew install qt
+==&gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/qt-4.8.3.mountainlion.bottle.tar.gz
+######################################################################## 100,0%
+==&gt; Pouring qt-4.8.3.mountainlion.bottle.tar.gz
+==&gt; Caveats
+We agreed to the Qt opensource license for you.
+If this is unacceptable you should uninstall.
+==&gt; Summary
+/usr/local/Cellar/qt/4.8.3: 2779 files, 194M</code></pre>
+<pre><code>Gizur-Laptop-5:myblog jonas$ brew install ros/fuerte/swig-wx
+==&gt; Cloning git://github.com/wg-debs/swig-wx.git
+Cloning into &#39;/Library/Caches/Homebrew/swig-wx--git&#39;...
+fatal: remote error: 
+  Repository not found.
+Error: Failure while executing: git clone --no-checkout --depth 1 --branch upstream/1.3.29 git://github.com/wg-debs/swig-wx.git /Library/Caches/Homebrew/swig-wx--git</code></pre>
+<pre><code>Gizur-Laptop-5:Homebrew jonas$ brew install ros
+Unsatisfied dependency: rospkg
+Homebrew does not provide Python dependencies; install with:
+  pip install rospkg
+
+Unsatisfied dependency: PyYAML
+Homebrew does not provide Python dependencies; install with:
+  pip install PyYAML
+
+Unsatisfied dependency: nose
+Homebrew does not provide Python dependencies; install with:
+  pip install nose
+
+Unsatisfied dependency: EmPy
+Homebrew does not provide Python dependencies; install with:
+  pip install EmPy
+Error: Unsatisifed requirements failed this build.</code></pre>
+<pre><code>Gizur-Laptop-5:Homebrew jonas$ pip install rospkg
+Downloading/unpacking rospkg
+  Downloading rospkg-1.0.17.tar.gz
+  Running setup.py egg_info for package rospkg
+
+Installing collected packages: rospkg
+  Running setup.py install for rospkg
+    changing mode of build/scripts-2.7/rosversion from 644 to 755
+
+    changing mode of /usr/local/bin/rosversion to 755
+Successfully installed rospkg
+Cleaning up...</code></pre>
+<pre><code>Gizur-Laptop-5:Homebrew jonas$ pip install PyYAML
+Requirement already satisfied (use --upgrade to upgrade): PyYAML in /Library/Python/2.7/site-packages
+Cleaning up...
+Gizur-Laptop-5:Homebrew jonas$ pip install PyYAML --upgrade
+Requirement already up-to-date: PyYAML in /Library/Python/2.7/site-packages
+Cleaning up...</code></pre>
+<p>GIVING UP, THIS DON&#39;T WORK</p>
+<h2>Binary dependencies</h2>
+<pre><code>wget http://downloads.sourceforge.net/wxpython/wxPython2.9-osx-2.9.4.0-cocoa-py2.7.dmg
+
+sudo installer -pkg /Volumes/wxPython2.9-osx-2.9.4.0-cocoa-py2.7/wxPython2.9-osx-cocoa-py2.7.pkg/ -target /</code></pre>
+<pre><code>nano ~/.bash_profile
+
+export PATH=/usr/local/lib/wxPython/bin:$PATH
+
+bash</code></pre>
+<p>Install the nVidia CG toolkit for rViz by download their installation package: </p>
+<ul>
+<li><a href="http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg">http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg</a></li>
+</ul>
+<h2>rosinstall</h2>
+<p>ROS-Full: ROS package, build, communication, tutorials and graphical tools.</p>
+<pre><code>rosinstall --catkin ~/ros-underlay http://ros.org/rosinstalls/fuerte-ros-full.rosinstall</code></pre>
+<p>ROS-Base: (Bare Bones) ROS package, build, and communication libraries.</p>
+<pre><code>rosinstall --catkin ~/ros-underlay http://ros.org/rosinstalls/fuerte-ros-base.rosinstall</code></pre>
+<p>Build and install the underlay into /opt/ros/fuerte:</p>
+<pre><code>cd ~/ros-underlay
+mkdir build
+cd build</code></pre>
+<pre><code>cmake .. -DCMAKE_INSTALL_PREFIX=/opt/ros/fuerte -DSETUPTOOLS_DEB_LAYOUT=OFF</code></pre>
+<pre><code>make -j8
+sudo make install</code></pre>
+<p>Verify:</p>
+<pre><code>. /opt/ros/fuerte/setup.sh
+which roscore</code></pre>
+<h2>Layer 2: Higher-level robotics libraries and tools</h2>
+<pre><code>rosinstall ~/ros &quot;http://packages.ros.org/cgi-bin/gen_rosinstall.py?rosdistro=fuerte&amp;variant=desktop-full&amp;overlay=no&quot;</code></pre>
+<h2>Environment Setup</h2>
+<pre><code>sudo rosdep init
+rosdep update</code></pre>
+<pre><code>rosdep install -a</code></pre>
+<p>Alternative: </p>
+<pre><code>rosdep install -ay</code></pre>
+<p>Finally:</p>
+<pre><code>rosmake -a</code></pre>
+<p>NEXT: try the tutorails: <a href="http://www.ros.org/wiki/ROS/Tutorials">http://www.ros.org/wiki/ROS/Tutorials</a></p>
+</div>
+    
+</body>
+</html>

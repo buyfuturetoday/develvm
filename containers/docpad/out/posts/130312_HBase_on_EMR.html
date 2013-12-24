@@ -1,0 +1,44 @@
+<html>
+<head>
+    <title>HBase on Elastic Map Reduce</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>HBase on Elastic Map Reduce</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Tue Mar 12 2013 01:00:00 GMT+0100 (CET)</h3>
+<div><p>HBase on Elastic Map Reduce</p>
+<h2>REST Connector</h2>
+<ul>
+<li><a href="http://wiki.apache.org/hadoop/Hbase/Stargate">http://wiki.apache.org/hadoop/Hbase/Stargate</a></li>
+</ul>
+<pre><code># Login using SSH
+ elastic-mapreduce --ssh --jobflow &lt;JOBFLOW&gt;
+
+# Start REST connector
+./bin/hbase rest start -p 8080</code></pre>
+<p>Login to the AWS Console, goto EC2-&gt;Security Groups and open up port 8080 for everyone (Source 0.0.0.0)</p>
+<pre><code># Simple test to see if we can connect
+curl http://ec2-54-228-98-98.eu-west-1.compute.amazonaws.com:8080/version</code></pre>
+<pre><code>curl -H &quot;Accept: text/xml&quot; http://ec2-54-228-98-98.eu-west-1.compute.amazonaws.com:8080/version
+curl -H &quot;Accept: application/json&quot; http://ec2-54-228-98-98.eu-west-1.compute.amazonaws.com:8080/version
+curl -H &quot;Accept: application/x-protobuf&quot; http://ec2-54-228-98-98.eu-west-1.compute.amazonaws.com:8080/version</code></pre>
+<pre><code># Get tables
+curl -H &quot;Accept: application/json&quot; http://ec2-54-228-98-98.eu-west-1.compute.amazonaws.com:8080/
+
+# Get schema for the table named table
+curl -H &quot;Accept: application/json&quot; http://ec2-54-228-98-98.eu-west-1.compute.amazonaws.com:8080/table/schema</code></pre>
+<h2>View status on jobs</h2>
+<p>Configure FoxyProxy according to this article:</p>
+<ul>
+<li><a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-connect-master-node-foxy-proxy.html">http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-connect-master-node-foxy-proxy.html</a></li>
+</ul>
+<pre><code>ssh –i ~/keys/gc4-keypair1.pem  -ND 8157 hadoop@ec2-54-228-98-98.eu-west-1.compute.amazonaws.com
+
+ssh -o ServerAliveInterval=10 -o StrictHostKeyChecking=no -ND 8157 -i ~/keys/gc4-keypair1.pem hadoop@ec2-54-228-98-98.eu-west-1.compute.amazonaws.com</code></pre>
+<p>Connect to the Hadoop URL: <a href="http://ec2-54-228-98-98.eu-west-1.compute.amazonaws.com:9100">http://ec2-54-228-98-98.eu-west-1.compute.amazonaws.com:9100</a></p>
+</div>
+    
+</body>
+</html>

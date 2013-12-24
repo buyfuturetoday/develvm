@@ -1,0 +1,42 @@
+<html>
+<head>
+    <title>Lighttpd</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Lighttpd</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[IT resources]]</p>
+<p>Light and fast web server
+* <a href="http://www.lighttpd.net/">http://www.lighttpd.net/</a></p>
+<h1>= Installation =</h1>
+<h1>== osx ==</h1>
+<pre>
+sudo port
+install lighttpd
+
+
+###########################################################
+# A startup item has been generated that will aid in
+# starting lighttpd with launchd. It is disabled
+# by default. Execute the following command to start it,
+# and to cause it to launch at startup:
+#
+# sudo port load lighttpd
+###########################################################
+--->  Installing lighttpd @1.4.28_0+ssl
+--->  Activating lighttpd @1.4.28_0+ssl
+
+Before starting lighttpd it must be configured. Basic server configuration is in the file /opt/local/etc/lighttpd/lighttpd.conf.
+Select which modules you want enabled in /opt/local/etc/lighttpd/modules.conf. Individual modules' settings are in
+/opt/local/etc/lighttpd/conf.d.
+
+Sample config files have the .conf.default extension. When updating lighttpd, you should investigate whether you need to update your
+.conf files with changes from the corresponding .conf.default files.
+</pre></div>
+    
+</body>
+</html>

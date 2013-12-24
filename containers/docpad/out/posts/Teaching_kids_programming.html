@@ -1,0 +1,76 @@
+<html>
+<head>
+    <title>Teaching kids programming</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Teaching kids programming</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jul 21 2013 02:00:00 GMT+0200 (CEST)</h3>
+<div><p>I wrote this short article after showing my 11 years old boy howto develop a simple web app.</p>
+<p>We using a mac but it works just as well with windows or some linux flavour (or any other OS).</p>
+<h2>Preparations</h2>
+<p>Three applications needs to be installed and you need to register for a free Heroku account:</p>
+<ul>
+<li>NodeJS and npm - <a href="http://nodejs.org/download/">http://nodejs.org/download/</a></li>
+<li>Heroku account and toolbelt<ul>
+<li>Register for an account at <a href="https://id.heroku.com/signup">https://id.heroku.com/signup</a></li>
+<li>Download toolbelt - <a href="https://toolbelt.heroku.com/">https://toolbelt.heroku.com/</a></li>
+</ul>
+</li>
+<li>git - download at <a href="http://git-scm.com/downloads">http://git-scm.com/downloads</a></li>
+</ul>
+<p> A text editor is also needed. we&#39;re using nano which is included in OSX, this way we only need a terminal window and the browser.</p>
+<p>Open a terminal window and do this:</p>
+<pre><code>&gt;heroku login</code></pre>
+<p>Enter the mail adress and login you registered with heroku.</p>
+<h2>Article 1</h2>
+<p>Create a folder to put the app in:</p>
+<pre><code>&gt;mkdir web-appar
+&gt;cd web-appar
+&gt;mkdir hello
+&gt;cd hello</code></pre>
+<p>Create a git repository (just google git for an introduction) and create a new heroku app:</p>
+<pre><code>&gt;git init
+&gt;heroku create</code></pre>
+<p>Create these three files.</p>
+<p>app.js:</p>
+<pre><code>&gt;nano app.js</code></pre>
+<pre><code>var express = require(&#39;express&#39;);
+var PORT = process.env.PORT || 8080;
+var app = express();
+app.get(&#39;/&#39;, function (req, res){
+  res.send(&#39;hello everyone i am Algolt and i am eleven years old.&#39;);
+});
+app.get(&#39;/bajs&#39;, function (req, res){
+  res.send(&#39;Harry loves poop.&#39;);
+});
+app.listen(PORT);
+console.log(&#39;running on http://localhost:&#39; + PORT);</code></pre>
+<p>package.json:</p>
+<pre><code>nano package.json</code></pre>
+<pre><code>{
+  &quot;name&quot;:&quot;algot-app&quot;,
+  &quot;dependencies&quot;: {
+   &quot;express&quot;: &quot;*&quot;
+  }
+}</code></pre>
+<p>Procfile:</p>
+<pre><code>&gt;nano Procfile</code></pre>
+<pre><code>web: node app.js</code></pre>
+<p>Try to run the app on the local computer:</p>
+<pre><code>&gt;npm install
+&gt;node app.js</code></pre>
+<p>Open <a href="http://localhost:8080">http://localhost:8080</a> in your favorite browser.</p>
+<p>Then hit <code>ctrl+c</code> in the terminal to stop the web server.</p>
+<p>Publish the app to heroku:</p>
+<pre><code>&gt;git add .
+&gt;git commit -am &quot;my first app&quot;
+&gt;git push heroku master</code></pre>
+<p>This will open the heroku app in a browser:</p>
+<pre><code>&gt;heroku open</code></pre>
+</div>
+    
+</body>
+</html>

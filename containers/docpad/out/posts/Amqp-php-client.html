@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>Amqp</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Amqp</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Wiki]]</p>
+<p>h1. AMQP php client</p>
+<pre>
+sudo apt-get install git-core php5-cli
+cd dwnl
+git clone http://github.com/videlalvaro/php-amqplib.git lib/php-amqplib
+
+cd lib/php-amqplib
+make
+
+cd demo
+nano config.php
+
+# Send a message
+php amqp_publisher.php "GizurCloud MQ server is working!!"
+
+# Receive the message
+php amqp_consumer.php
+
+</pre>
+
+
+<ul>
+<li><a href="https://github.com/rabbitmq/rabbitmq-tutorials/tree/master/php">https://github.com/rabbitmq/rabbitmq-tutorials/tree/master/php</a></li>
+</ul>
+<p>Some files tutorial to test with:</p>
+<pre>
+cd ~
+mkdir git && cd git
+git clone https://github.com/rabbitmq/rabbitmq-tutorials/
+</pre></div>
+    
+</body>
+</html>

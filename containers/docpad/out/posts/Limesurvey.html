@@ -1,0 +1,44 @@
+<html>
+<head>
+    <title>Limesurvey</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Limesurvey</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[IT resources]]</p>
+<ul>
+<li><a href="http://www.limesurvey.org/en/download">http://www.limesurvey.org/en/download</a></li>
+<li><a href="http://docs.limesurvey.org/Installation&amp;structure=English+Instructions+for+LimeSurvey">http://docs.limesurvey.org/Installation&amp;structure=English+Instructions+for+LimeSurvey</a></li>
+</ul>
+<pre>
+wget http://sourceforge.net/projects/limesurvey/files/1._LimeSurvey_stable/1.90%2B/limesurvey190plus-build9642-20101214.tar.gz/download
+gunzip limesurvey190plus-build9642-20101214.tar.gz
+tar -xvf limesurvey190plus-build9642-20101214.tar
+mv limesurvey /var/www/html/
+cd /var/www/html/
+chown -R apache.apache limesurvey/
+cd /var/www/html/limesurvey/
+vi config.php
+
+$databasepass = 'mypassword'
+...
+$defaultpass        = 'mypassword'
+
+
+open http://s2.gizur.com/limesurvey/admin/install
+1. Create database
+2. Populate database
+3. Main admin screen
+
+mv admin/install admin/install2
+
+4. Try again
+5. login with admin/mypassword
+</pre></div>
+    
+</body>
+</html>

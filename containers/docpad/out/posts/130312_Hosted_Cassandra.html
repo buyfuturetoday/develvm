@@ -1,0 +1,67 @@
+<html>
+<head>
+    <title>Hosted vs</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Hosted vs</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Tue Mar 12 2013 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Hosted vs. private Cassandra NoSQL DB </p>
+<p>Alternatives:</p>
+<ul>
+<li><a href="http://cassandra.io/">http://cassandra.io/</a> - smallest setup <code>Mira 4</code> costs $1810 /month</li>
+</ul>
+<p>Links:</p>
+<ul>
+<li><a href="http://www.slideshare.net/davegardnerisme/running-cassandra-on-amazon-ec2">http://www.slideshare.net/davegardnerisme/running-cassandra-on-amazon-ec2</a></li>
+<li><a href="http://www.cloudcomputingetc.com/2012/10/cassandraio-hosted-cassandra-up-to-10tb.html">http://www.cloudcomputingetc.com/2012/10/cassandraio-hosted-cassandra-up-to-10tb.html</a></li>
+</ul>
+<h2>Setup on private server</h2>
+<ul>
+<li><a href="http://wiki.apache.org/cassandra/GettingStarted">http://wiki.apache.org/cassandra/GettingStarted</a></li>
+</ul>
+<pre><code>cd ~/local
+wget http://apache.mirrors.spacedump.net/cassandra/1.2.2/apache-cassandra-1.2.2-bin.tar.gz
+gunzip apache-cassandra-1.2.2-bin.tar.gz 
+tar -xf apache-cassandra-1.2.2-bin.tar
+cd apache-cassandra-1.2.2/
+
+
+cat README.txt 
+
+# We should do these steps according to the README
+sudo mkdir -p /var/log/cassandra
+sudo chown -R `whoami` /var/log/cassandra
+sudo mkdir -p /var/lib/cassandra
+sudo chown -R `whoami` /var/lib/cassandra
+
+
+# Let&#39;s try to start
+./bin/cassandra -f</code></pre>
+<p>An example of usage coped from the README file:</p>
+<pre><code># Open a new shell and run some queries
+./bin/cqlsh
+
+  cqlsh&gt; CREATE SCHEMA schema1 
+         WITH replication = { &#39;class&#39; : &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : 1 };
+  cqlsh&gt; USE schema1;
+  cqlsh:Schema1&gt; CREATE TABLE users (
+                   user_id varchar PRIMARY KEY,
+                   first varchar,
+                   last varchar,
+                   age int
+                 );
+  cqlsh:Schema1&gt; INSERT INTO users (user_id, first, last, age) 
+                 VALUES (&#39;jsmith&#39;, &#39;John&#39;, &#39;Smith&#39;, 42);
+  cqlsh:Schema1&gt; SELECT * FROM users;
+   user_id | age | first | last
+  ---------+-----+-------+-------
+    jsmith |  42 |  john | smith
+
+  cqlsh:Schema1&gt;</code></pre>
+</div>
+    
+</body>
+</html>

@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>Subversion</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Subversion</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Wiki]]</p>
+<p>h1. Subversion administration</p>
+<p>h2. Create new repository</p>
+<p>ssh into s2.gizur.com</p>
+<pre>
+svnadmin create /var/www/svn/<NAME_OF_REPO>
+chown -R apache.apache /var/www/svn/<NAME_OF_REPO>
+ls /var/www/svn/<NAME_OF_REPO>
+
+# Add a new group for the repository and assign priviledges for the new group
+vi /etc/svn-access-control 
+
+</pre>
+
+
+<p>Verify the new repository on another server or the locally</p>
+<pre>
+sudo svn co https://s2.gizur.com/svn/<NAME_OF_REPO>
+</pre>
+
+
+<p>h2. Add new user</p>
+<p>The LDAP directory is used for authentication so the same username and passwords are used.</p>
+<p>Access also needs to be setup in subversion:</p>
+<pre>
+vi /etc/svn-access-control 
+</pre></div>
+    
+</body>
+</html>

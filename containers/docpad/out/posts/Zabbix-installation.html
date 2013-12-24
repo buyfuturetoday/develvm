@@ -1,0 +1,53 @@
+<html>
+<head>
+    <title>Zabbix</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Zabbix</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Sun Jan 01 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Yet another post</p>
+<p>[[Wiki]]</p>
+<p>h1. Zabbix installation</p>
+<p>h2. Server</p>
+<pre>
+sudo apt-get install mysql-server
+
+sudo apt-get install zabbix-server-mysql
+
+sudo apt-get install zabbix-agent
+
+sudo apt-get install zabbix-frontend-php
+
+service apache2 restart
+</pre>
+
+
+
+<p>Create a DNS and virtual host</p>
+<h1>Point virtual host to: /usr/share/zabbix/</h1>
+<p>h2. Agent</p>
+<pre>
+
+
+</pre>
+
+
+<ul>
+<li>Log file: cat /var/log/zabbix-agent/zabbix_agentd.log </li>
+</ul>
+<p>h2. Configuration</p>
+<p>h3. Monitor log files</p>
+<ul>
+<li><a href="http://www.zabbix.com/documentation/1.8/manual/log_file_monitoring">http://www.zabbix.com/documentation/1.8/manual/log_file_monitoring</a></li>
+</ul>
+<p>Configuration -&gt; Hosts -&gt; Items
+<em> Type: Zabbix Agent (active): 
+</em> key: log[&quot;/var/log/apache2/error.log&quot;,&quot;<em>&quot;,&quot;UTF-8&quot;,100]
+</em> Type of information: Log</p>
+</div>
+    
+</body>
+</html>

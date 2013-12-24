@@ -1,0 +1,73 @@
+<html>
+<head>
+    <title>Stapes</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>Stapes</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Fri Dec 28 2012 01:00:00 GMT+0100 (CET)</h3>
+<div><p>Stapes - Minimal JavaScript MVC Framework </p>
+<p>Working with Phonegap, see <a href="/121220_More-Phonegap">More Phonegap</a>,
+I wanted a small simple JavaScript MVC Framework as an alternative to Backbonejs.</p>
+<p>Stapes can be found here <a href="http://hay.github.com/stapes/">http://hay.github.com/stapes/</a></p>
+<p>I&#39;ve reverse engineered a design for the Todos example that is included in the with
+stapes.</p>
+<h2>DOM Objects</h2>
+<pre><code>| Object         | Event          | Notes          |
+|----------------|----------------|----------------|
+| Window         | onhashchange   |                |
+| todoadd        | destroy        |                |
+|                | dbclick        |                |
+|                | keyup          |                |
+|                | focusout       |                |
+|                | input.toggle   |                |
+| newtodo        | keyup          |                |
+| clearcompleted | click          |                |
+| toggleall      |                |                |</code></pre>
+<h2>stapes events</h2>
+<pre><code>| Event          | Publishers     | Subscribers    |
+|----------------|----------------|----------------|
+| change         |                | Model.change   |
+| ready          |                |                |
+| clearcompleted |                |                |
+| edittodo       |                |                |
+| statechange    |                |                |
+| todoaddvalue   | newtodo.keyup  |                |
+| todocompleted  |                |                |
+| tododelete     | todoadd.destroy|                |
+| todoedit       |                |                |
+| completedall   |                |                |
+| uncompletedall |                |                |</code></pre>
+<h2>View Objects</h2>
+<pre><code>| Object         | Methods              | Notes          |
+|----------------|----------------------|----------------|
+| View           | showClearCompleted   |                |
+|                | clearCompleted       |                |
+|                | makeEditable         |                |
+|                | clearInput           |                |
+|                | render               |                |
+|                | showLeft             |                |</code></pre>
+<h2>Controller Objects</h2>
+<pre><code>| Object         | Methods              | Notes          |
+|----------------|----------------------|----------------|
+| Controller     | bindEventHandlers    |                |
+|                | init                 |                |
+|                | renderAll            |                |</code></pre>
+<h2>Model Objects</h2>
+<pre><code>| Object         | Methods              | Notes          |
+|----------------|----------------------|----------------|
+| Model          | clearCompleted       |                |
+|                | addTodo              |                |
+|                | remove               |                |
+|                | update               |                |</code></pre>
+<h2>Store Objects</h2>
+<pre><code>| Object         | Methods              | Notes          |
+|----------------|----------------------|----------------|
+| Store          | save                 |                |
+|                |                      |                |</code></pre>
+</div>
+    
+</body>
+</html>

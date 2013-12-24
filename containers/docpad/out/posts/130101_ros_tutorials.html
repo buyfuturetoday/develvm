@@ -1,0 +1,44 @@
+<html>
+<head>
+    <title>First steps learning ROS</title>
+    <meta name="generator" content="DocPad v6.59.6" />
+    
+</head>
+<body>
+    <h1>First steps learning ROS</h1>
+<h3>Author: Jonas Colmsjo</h3>
+<h3>Date: Tue Jan 01 2013 01:00:00 GMT+0100 (CET)</h3>
+<div><p>First steps learning ROS </p>
+<p>The tutorial seams like a good place to start:</p>
+<ul>
+<li><a href="http://www.ros.org/wiki/ROS/Tutorials">http://www.ros.org/wiki/ROS/Tutorials</a></li>
+</ul>
+<p>Create overlay in ~/fuerte_workspace</p>
+<pre><code>rosws init ~/fuerte_workspace /opt/ros/fuerte</code></pre>
+<p>Use overlay</p>
+<pre><code>source ~/fuerte_workspace/setup.bash</code></pre>
+<p>Create sandbox</p>
+<pre><code>mkdir ~/fuerte_workspace/sandbox
+rosws set ~/fuerte_workspace/sandbox</code></pre>
+<h1>Interactive markers</h1>
+<ul>
+<li><a href="http://www.ros.org/wiki/rviz/Tutorials/Interactive%20Markers%3A%20Getting%20Started">http://www.ros.org/wiki/rviz/Tutorials/Interactive%20Markers%3A%20Getting%20Started</a></li>
+</ul>
+<pre><code># One terminal
+roscore
+
+# Second terminal
+rosrun interactive_marker_tutorials basic_controls
+
+# Third terminal
+rosrun rviz rviz</code></pre>
+<h1>Turtle simulator</h1>
+<p>I&#39;m not sure this is needed</p>
+<pre><code>rosdep install turtle_tf rviz
+rosmake turtle_tf rviz</code></pre>
+<p>Run the demo</p>
+<pre><code>roslaunch turtle_tf turtle_tf_demo.launch</code></pre>
+</div>
+    
+</body>
+</html>
