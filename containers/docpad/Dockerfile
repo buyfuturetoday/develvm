@@ -13,7 +13,7 @@ RUN apt-get install -y curl git
 
 RUN curl https://raw.github.com/creationix/nvm/master/install.sh | sh
 RUN echo "[ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh" > /.profile
-RUN source /.profile && nvm install v0.11.9
+RUN /bin/bash -c "source /.profile && nvm install v0.11.9"
 
 
 # Bundle app source
