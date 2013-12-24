@@ -20,7 +20,7 @@ RUN source /.profile && nvm install v0.11.9
 ADD . /src
 
 # Install app dependencies
-RUN cd /src; npm install
+RUN /bin/bash -c "source /.profile && cd /src && nvm use v0.11.9 && npm install"
 
 EXPOSE  9778
 CMD ["/src/bin/docpad-server", ""]
