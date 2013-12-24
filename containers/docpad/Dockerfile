@@ -13,14 +13,14 @@ RUN apt-get install -y curl git
 
 RUN curl https://raw.github.com/creationix/nvm/master/install.sh | sh
 RUN echo "[ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh" > /.profile
-RUN /bin/bash -c "source /.profile && nvm install v0.11.9"
+RUN /bin/bash -c "source /.profile && nvm install v0.10.24"
 
 
 # Bundle app source
 ADD . /src
 
 # Install app dependencies
-RUN /bin/bash -c "source /.profile && cd /src && nvm use v0.11.9 && npm install"
+RUN /bin/bash -c "source /.profile && cd /src && nvm use v0.10.24 && npm install"
 
 EXPOSE  9778
-CMD ["/src/bin/docpad-server", ""]
+CMD ["/bin/bash -c 'source /.profile && nvm use v0.10.24 && /src/bin/docpad-server'", ""]
