@@ -1,25 +1,18 @@
-title:            Site Title
-tagline:          A short tagline
-description:      Describe your website.
+title:            Work In Progress
+tagline:          My public notebook
+description:      Jonas Colmjsö's blog.
 #Comment out url when working locally to resolve base urls correctly
-#url:              http://your-site.com
+#url:              http://colmsjo.com
 
 # Owner/author information
 owner:
-  name:           Your Name
+  name:           Jonas Colmsö
   avatar:         bio-photo.jpg
   bio:            "Describe your self."
-  email:          your@email.com
+  email:          jonas[a]gizur.com
   # Social networking links are used in author-bio sidebar. Update and remove as you like.
-  twitter:        
-  facebook:       
-  github:         
-  linkedin:       
-  instagram:      
-  lastfm:         
-  tumblr:         
-  # For Google Authorship https://plus.google.com/authorship
-  google_plus:    
+  twitter:        https://twitter.com/colmsjo
+  github:         https://github.com/colmsjo
 
 # Analytics and webmaster tools stuff goes here
 google_analytics:   
@@ -36,12 +29,12 @@ links:
     url: /articles
   - title: Theme Setup
     url: /theme-setup
-  - title: Made Mistakes
-    url: http://mademistakes.com
+  - title: Gizur
+    url: http://www.gizur.com
     external: true
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone:    America/New_York
+timezone:    Europe/Stockholm
 future:      true
 pygments:    true
 markdown:    kramdown
