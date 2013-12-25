@@ -1,14 +1,15 @@
 title:            Work In Progress
-tagline:          My public notebook
-description:      Jonas Colmjsö's blog.
-#Comment out url when working locally to resolve base urls correctly
-#url:              http://colmsjo.com
+description:      My public nodebook.
+logo:             site-logo.png
+disqus_shortname: colmsjo
+search:           true
+#Change url to your domain. Leave localhost server or blank when working locally.
+#url:              http://localhost:4000
 
 # Owner/author information
 owner:
-  name:           Jonas Colmsö
+  name:           Jonas Colmsjö
   avatar:         bio-photo.jpg
-  bio:            "My public notebook"
   email:          jonas[a]gizur.com
   twitter:        colmsjo
   github:         colmsjo
@@ -22,8 +23,6 @@ google_verify:
 links:
   - title: Articles
     url: /articles
-  - title: Theme Setup
-    url: /theme-setup
   - title: Gizur
     url: http://www.gizur.com
     external: true
@@ -52,4 +51,4 @@ kramdown:
     coderay_css: class
 
 include: [".htaccess"]
-exclude: ["lib", "config.rb", "Capfile", "config", "log", "Rakefile", "Rakefile.rb", "tmp", "less", "*.sublime-project", "*.sublime-workspace", "test", "spec", "Gruntfile.js", "package.json", "node_modules"]
+exclude: ["lib", "config.rb", "Gemfile", "Capfile", "Gemfile.lock", "config", "log", "Rakefile", "Rakefile.rb", "tmp", "less", "*.sublime-project", "*.sublime-workspace", "test", "spec", "Gruntfile.js", "package.json", "node_modules"]
