@@ -1,0 +1,30 @@
+{
+  "name": "jacc",
+  "private": false,
+  "version": "0.0.1",
+  "description": "A script for fixing with markdown files",
+  "author": "Jonas Colmsjö <jonas@gizur.com>",
+  "main": "./to-jekyll.js",
+  "bin": "./to-jekyll.sh",
+  "dependencies": {
+    "optimist": "*",
+    "underscore": "*",
+    "async": "*",
+    "helpersjs": "*"
+  },
+  "devDependencies" : {
+    "grunt": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-nodeunit": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-coffee": "*",
+    "doccoh":"0.4.1"
+  },
+  "keywords": [
+    "jekyll"
+  ],
+  "license": "WTFPL",
+  "preferGlobal": false
+}
