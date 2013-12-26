@@ -19,9 +19,9 @@ RUN apt-get install -y libdb4.8-dev libdb4.8++-dev libboost1.37-dev
 
 
 # Build
-RUN ./autogen.sh
-RUN ./configure
-RUN make
+RUN cd /bitcoin && ./autogen.sh
+RUN cd /bitcoin && ./configure
+RUN cd /bitcoin && make
 
 
 EXPOSE 8333 18333
