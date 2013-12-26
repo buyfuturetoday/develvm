@@ -11,11 +11,11 @@ RUN apt-get install -y curl git
 
 
 # Download the software
-git clone https://github.com/bitcoin/bitcoin.git
+RUN git clone https://github.com/bitcoin/bitcoin.git
 
 
 # Install dependencies
-apt-get install -y libdb4.8-dev libdb4.8++-dev libboost1.37-dev
+RUN apt-get install -y libdb4.8-dev libdb4.8++-dev libboost1.37-dev
 
 
 # Build
