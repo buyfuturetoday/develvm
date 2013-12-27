@@ -5,27 +5,11 @@
 FROM     base
 MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
-#echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
-#echo "deb http://cz.archive.ubuntu.com/ubuntu lucid main " >> /etc/apt/sources.list
-
-
 RUN apt-get update
-RUN apt-get install -y curl git wget make build-essential g++ autoconf libtool bsdmainutils pkg-config zlib1g-dev libbz2-dev
+RUN apt-get install -y curl git wget make build-essential g++ autoconf libtool bsdmainutils pkg-config zlib1g-dev libbz2-dev heirloom-mailx
 
 # Install boost
 RUN apt-get install -y libboost-all-dev
-
-# download and compile boost 1.37
-#RUN wget -O /boost_1_37_0.tar.gz http://downloads.sourceforge.net/project/boost/boost/1.37.0/boost_1_37_0.tar.gz?r=http%3A%2F%2Fwww.boost.org%2Fusers%2Fhistory%2Fversion_1_37_0.html&ts=1388099574&use_mirror=freefr && wait
-#RUN tar -xzf /boost_1_37_0.tar.gz
-#RUN cd /boost_1_37_0 && ./configure
-#RUN cd /boost_1_37_0 && ./bootstrap.sh
-#RUN cd /boost_1_37_0 && make && make install
-
-
-# Install Berkeley DB
-# Berkely DB 5.1 - not supported
-#RUN apt-get install -y libdb-dev libdb++-dev
 
 # Berkelt DB 4.8
 RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8-dev_4.8.30-2_amd64.deb
@@ -40,14 +24,10 @@ RUN dpkg  -i libdb4.8++-dev_4.8.30-2_amd64.deb
 # Download the software
 RUN git clone https://github.com/bitcoin/bitcoin.git
 
-
 # Build
 RUN cd /bitcoin && ./autogen.sh
 RUN cd /bitcoin && ./configure
 RUN cd /bitcoin && make && make install
-
-# Install mail cient - needed to send status alerts from bitcoind
-RUN apt-get install -y heirloom-mailx
 
 RUN mkdir /.bitcoin
 ADD bitcoin.conf /.bitcoin
