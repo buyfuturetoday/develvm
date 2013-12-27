@@ -22,8 +22,10 @@ RUN apt-get install -y libboost-all-dev
 #RUN cd /boost_1_37_0 && make && make install
 
 # Install Berkeley DB
+# Berkely DB 5.1 - not supported
 #RUN apt-get install -y libdb-dev libdb++-dev
 
+# Berkelt DB 4.8
 RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8-dev_4.8.30-2_amd64.deb
 RUn wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8_4.8.30-2_amd64.deb
 RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++_4.8.30-2_amd64.deb
@@ -40,6 +42,7 @@ RUN git clone https://github.com/bitcoin/bitcoin.git
 # Install dependencies
 #RUN apt-get install -y libdb4.8-dev libdb4.8++-dev libboost1.37-dev
 
+RUN apt-get install -y pkg-config
 
 # Build
 RUN cd /bitcoin && ./autogen.sh
