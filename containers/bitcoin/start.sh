@@ -1,4 +1,4 @@
 #!/bin/bash
-supervisord
-#bitcoind --daemon
+#supervisord
+bitcoind --daemon
 tail -f /.bitcoin/debug.log
