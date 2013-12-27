@@ -21,16 +21,17 @@ RUN apt-get install -y libboost-all-dev
 #RUN cd /boost_1_37_0 && ./bootstrap.sh
 #RUN cd /boost_1_37_0 && make && make install
 
-RUN apt-get install -y libdb-dev libdb++-dev
+# Install Berkeley DB
+#RUN apt-get install -y libdb-dev libdb++-dev
 
-#RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8-dev_4.8.30-2_amd64.deb
-#RUn wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8_4.8.30-2_amd64.deb
-#RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++_4.8.30-2_amd64.deb
-#RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++-dev_4.8.30-2_amd64.deb
-#RUN dpkg  -i libdb4.8_4.8.30-2_amd64.deb
-#RUN dpkg  -i libdb4.8-dev_4.8.30-2_amd64.deb
-#RUN dpkg  -i libdb4.8++_4.8.30-2_amd64.deb
-#RUN dpkg  -i libdb4.8++-dev_4.8.30-2_amd64.deb
+RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8-dev_4.8.30-2_amd64.deb
+RUn wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8_4.8.30-2_amd64.deb
+RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++_4.8.30-2_amd64.deb
+RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++-dev_4.8.30-2_amd64.deb
+RUN dpkg  -i libdb4.8_4.8.30-2_amd64.deb
+RUN dpkg  -i libdb4.8-dev_4.8.30-2_amd64.deb
+RUN dpkg  -i libdb4.8++_4.8.30-2_amd64.deb
+RUN dpkg  -i libdb4.8++-dev_4.8.30-2_amd64.deb
 
 # Download the software
 RUN git clone https://github.com/bitcoin/bitcoin.git
