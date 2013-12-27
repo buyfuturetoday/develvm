@@ -33,5 +33,7 @@ RUN mkdir /.bitcoin
 ADD bitcoin.conf /.bitcoin/bitcoin.conf
 ADD profile /.profile
 
+ADD etc-supervisor-bitcoin.conf /etc/supervisor/conf.d/bitcoin.conf
+
 EXPOSE 8333 18333
 CMD ["supervisord","-n"]
