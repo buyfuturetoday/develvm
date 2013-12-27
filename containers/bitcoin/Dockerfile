@@ -6,7 +6,7 @@ FROM     base
 MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
 RUN apt-get update
-RUN apt-get install -y curl git wget make build-essential g++ ccache autoconf libtool bsdmainutils pkg-config zlib1g-dev libbz2-dev heirloom-mailx supervisor
+RUN apt-get install -y curl git wget make build-essential g++ ccache autoconf libtool bsdmainutils pkg-config zlib1g-dev libbz2-dev heirloom-mailx supervisor nano
 
 # Install boost
 RUN apt-get install -y libboost-all-dev
@@ -34,7 +34,7 @@ ADD bitcoin.conf /.bitcoin/bitcoin.conf
 ADD profile /.profile
 ADD start.sh /start.sh
 
-ADD etc-supervisor-bitcoin.conf /etc/supervisor/conf.d/bitcoin.conf
+#ADD etc-supervisor-bitcoin.conf /etc/supervisor/conf.d/bitcoin.conf
 
 EXPOSE 8333 18333
 #CMD ["supervisord","-n"]
