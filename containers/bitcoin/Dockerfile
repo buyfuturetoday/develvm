@@ -44,8 +44,13 @@ RUN git clone https://github.com/bitcoin/bitcoin.git
 # Build
 RUN cd /bitcoin && ./autogen.sh
 RUN cd /bitcoin && ./configure
-RUN cd /bitcoin && make
+RUN cd /bitcoin && make && make install
 
+# Install mail cient - needed to send status alerts from bitcoind
+RUN apt-get install -y heirloom-mailx
+
+RUN mkdir /.bitcoin
+ADD bitcoin.conf /.bitcoin
 
 EXPOSE 8333 18333
 CMD ["bitcoind",""]
