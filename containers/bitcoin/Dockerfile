@@ -32,8 +32,10 @@ RUN cd /bitcoin && make && make install
 RUN mkdir /.bitcoin
 ADD bitcoin.conf /.bitcoin/bitcoin.conf
 ADD profile /.profile
+ADD start.sh /start.sh
 
 ADD etc-supervisor-bitcoin.conf /etc/supervisor/conf.d/bitcoin.conf
 
 EXPOSE 8333 18333
-CMD ["supervisord","-n"]
+#CMD ["supervisord","-n"]
+CMD ["/start.sh",""]
