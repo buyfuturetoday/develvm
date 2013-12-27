@@ -6,7 +6,7 @@ FROM     base
 MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
 RUN apt-get update
-RUN apt-get install -y curl git wget make build-essential g++ autoconf libtool bsdmainutils pkg-config zlib1g-dev libbz2-dev heirloom-mailx
+RUN apt-get install -y curl git wget make build-essential g++ ccache autoconf libtool bsdmainutils pkg-config zlib1g-dev libbz2-dev heirloom-mailx
 
 # Install boost
 RUN apt-get install -y libboost-all-dev
@@ -30,7 +30,7 @@ RUN cd /bitcoin && ./configure
 RUN cd /bitcoin && make && make install
 
 RUN mkdir /.bitcoin
-ADD bitcoin.conf /.bitcoin
+ADD bitcoin.conf /.bitcoin/bitcoin.conf
 
 EXPOSE 8333 18333
 CMD ["bitcoind",""]
