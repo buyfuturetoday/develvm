@@ -10,7 +10,7 @@ MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
 
 RUN apt-get update
-RUN apt-get install -y curl git wget make build-essential g++ zlib1g-dev libbz2-dev
+RUN apt-get install -y curl git wget make build-essential g++ autoconf libtool zlib1g-dev libbz2-dev
 
 # Download boost 1.37
 #RUN wget -O /boost_1_37_0.tar.gz 
@@ -19,13 +19,21 @@ RUN curl -o /boost_1_37_0.tar.gz http://downloads.sourceforge.net/project/boost/
 RUN tar -xzf /boost_1_37_0.tar.gz
 RUN cd /boost_1_37_0 && ./configure
 #RUN cd /boost_1_37_0 && ./bootstrap.sh
-RUN make --without-python
+RUN cd /boost_1_37_0 && make --without-python && make install
 
-RUN wget http://se.archive.ubuntu.com/ubuntu/pool/main/d/db/libdb4.8_4.8.24-1ubuntu1_amd64.deb
-RUN dpkg -i libdb4.8_4.8.24-1ubuntu1_amd64.deb 
-RUN wget http://se.archive.ubuntu.com/ubuntu/pool/main/d/db/libdb4.8-dev_4.8.24-1ubuntu1_amd64.deb
-RUN dpkg -i libdb4.8-dev_4.8.24-1ubuntu1_amd64.deb 
+#RUN wget http://se.archive.ubuntu.com/ubuntu/pool/main/d/db/libdb4.8_4.8.24-1ubuntu1_amd64.deb
+#RUN dpkg -i libdb4.8_4.8.24-1ubuntu1_amd64.deb 
+#RUN wget http://se.archive.ubuntu.com/ubuntu/pool/main/d/db/libdb4.8-dev_4.8.24-1ubuntu1_amd64.deb
+#RUN dpkg -i libdb4.8-dev_4.8.24-1ubuntu1_amd64.deb 
 
+RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8-dev_4.8.30-2_amd64.deb
+RUn wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8_4.8.30-2_amd64.deb
+RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++_4.8.30-2_amd64.deb
+RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++-dev_4.8.30-2_amd64.deb
+RUN dpkg --force-all -i libdb4.8_4.8.30-2_amd64.deb
+RUN dpkg --force-all -i libdb4.8-dev_4.8.30-2_amd64.deb
+RUN dpkg --force-all -i libdb4.8++_4.8.30-2_amd64.deb
+RUN dpkg --force-all -i libdb4.8++-dev_4.8.30-2_amd64.deb
 
 # Download the software
 RUN git clone https://github.com/bitcoin/bitcoin.git
