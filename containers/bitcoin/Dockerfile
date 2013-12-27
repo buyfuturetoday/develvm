@@ -19,7 +19,7 @@ RUN apt-get install -y libboost-all-dev
 #RUN tar -xzf /boost_1_37_0.tar.gz
 #RUN cd /boost_1_37_0 && ./configure
 #RUN cd /boost_1_37_0 && ./bootstrap.sh
-RUN cd /boost_1_37_0 && make && make install
+#RUN cd /boost_1_37_0 && make && make install
 
 RUN apt-get install -y libdb-dev libdb++-dev
 
