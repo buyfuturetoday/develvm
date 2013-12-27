@@ -17,7 +17,7 @@ RUN wget -O /boost_1_37_0.tar.gz http://downloads.sourceforge.net/project/boost/
 RUN tar -xzf /boost_1_37_0.tar.gz
 RUN cd /boost_1_37_0 && ./configure
 #RUN cd /boost_1_37_0 && ./bootstrap.sh
-RUN cd /boost_1_37_0 && make --without-python && make install
+RUN cd /boost_1_37_0 && make && make install
 
 #RUN wget http://se.archive.ubuntu.com/ubuntu/pool/main/d/db/libdb4.8_4.8.24-1ubuntu1_amd64.deb
 #RUN dpkg -i libdb4.8_4.8.24-1ubuntu1_amd64.deb 
@@ -28,10 +28,10 @@ RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8-dev_4.8.30-2
 RUn wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8_4.8.30-2_amd64.deb
 RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++_4.8.30-2_amd64.deb
 RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++-dev_4.8.30-2_amd64.deb
-RUN dpkg --force-all -i libdb4.8_4.8.30-2_amd64.deb
-RUN dpkg --force-all -i libdb4.8-dev_4.8.30-2_amd64.deb
-RUN dpkg --force-all -i libdb4.8++_4.8.30-2_amd64.deb
-RUN dpkg --force-all -i libdb4.8++-dev_4.8.30-2_amd64.deb
+RUN dpkg  -i libdb4.8_4.8.30-2_amd64.deb
+RUN dpkg  -i libdb4.8-dev_4.8.30-2_amd64.deb
+RUN dpkg  -i libdb4.8++_4.8.30-2_amd64.deb
+RUN dpkg  -i libdb4.8++-dev_4.8.30-2_amd64.deb
 
 # Download the software
 RUN git clone https://github.com/bitcoin/bitcoin.git
@@ -42,9 +42,9 @@ RUN git clone https://github.com/bitcoin/bitcoin.git
 
 
 # Build
-#RUN cd /bitcoin && ./autogen.sh
-#RUN cd /bitcoin && ./configure
-#RUN cd /bitcoin && make
+RUN cd /bitcoin && ./autogen.sh
+RUN cd /bitcoin && ./configure
+RUN cd /bitcoin && make
 
 
 EXPOSE 8333 18333
