@@ -10,10 +10,12 @@ MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
 
 RUN apt-get update
-RUN apt-get install -y curl git wget make build-essential g++
+RUN apt-get install -y curl git wget make build-essential g++ zlib1g-dev libbz2-dev
 
 # Download boost 1.37
-RUN wget -O /boost_1_37_0.tar.gz http://downloads.sourceforge.net/project/boost/boost/1.37.0/boost_1_37_0.tar.gz?r=http%3A%2F%2Fwww.boost.org%2Fusers%2Fhistory%2Fversion_1_37_0.html&ts=1388099574&use_mirror=freefr
+#RUN wget -O /boost_1_37_0.tar.gz 
+http://downloads.sourceforge.net/project/boost/boost/1.37.0/boost_1_37_0.tar.gz?r=http%3A%2F%2Fwww.boost.org%2Fusers%2Fhistory%2Fversion_1_37_0.html&ts=1388099574&use_mirror=freefr
+RUN curl -o /boost_1_37_0.tar.gz http://downloads.sourceforge.net/project/boost/boost/1.37.0/boost_1_37_0.tar.gz?r=http%3A%2F%2Fwww.boost.org%2Fusers%2Fhistory%2Fversion_1_37_0.html&ts=1388099574&use_mirror=freefr
 RUN tar -xzf /boost_1_37_0.tar.gz
 RUN cd /boost_1_37_0 && ./configure
 #RUN cd /boost_1_37_0 && ./bootstrap.sh
