@@ -1,1 +1,1 @@
-alias bc='bitcoind -rpcconnect=172.17.0.20 -rpuser=bitcoinrpc -rpcpassword=5JCY9hKXrJvcduHRwZXDASAjx4DRgN4NzdpSNPLy8AFG'
+alias bc='bitcoind -rpcconnect=172.17.0.XXX -rpcuser=bitcoinrpc -rpcpassword=5JCY9hKXrJvcduHRwZXDASAjx4DRgN4NzdpSNPLy8AFG'
