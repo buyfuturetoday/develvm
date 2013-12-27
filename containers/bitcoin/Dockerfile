@@ -31,6 +31,7 @@ RUN cd /bitcoin && make && make install
 
 RUN mkdir /.bitcoin
 ADD bitcoin.conf /.bitcoin/bitcoin.conf
+ADD profile /.profile
 
 EXPOSE 8333 18333
 CMD ["bitcoind",""]
