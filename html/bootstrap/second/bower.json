@@ -1,0 +1,25 @@
+{
+  "name": "test_bootatrap",
+  "version": "0.0.0",
+  "homepage": "https://github.com/colmsjo/develvm",
+  "authors": [
+    "Jonas Colmsjö <jonas.colmsjo@gizur.com>"
+  ],
+  "description": "My first shot at bootatrap",
+  "main": "index.html",
+  "keywords": [
+    "bitcoin"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+"dependencies": {
+    "bootstrap": "3.0.3"
+  }
+}
