@@ -10,4 +10,21 @@ Howto setup S3 buckets for web-sites is described here:
 Publish site using Amazon S3: http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html
 
 
+Bucket policy:
 
+```
+{
+  "Version":"2012-10-17",
+  "Statement":[{
+	"Sid":"AddPerm",
+        "Effect":"Allow",
+	  "Principal": {
+            "AWS": "*"
+         },
+      "Action":["s3:GetObject"],
+      "Resource":["arn:aws:s3:::qkwak.com/*"
+      ]
+    }
+  ]
+}
+```

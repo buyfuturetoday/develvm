@@ -1,0 +1,22 @@
+{
+  "name": "React test",
+  "version": "0.0.0",
+  "homepage": "https://github.com/colmsjo/develvm",
+  "authors": [
+    "Jonas Colmsjö <jonas.colmsjo@gizur.com>"
+  ],
+  "description": "React test",
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~0.8.0"
+  }
+}
