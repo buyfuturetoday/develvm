@@ -30,7 +30,7 @@ RUN apt-get install -y curl git wget make build-essential g++ ccache autoconf li
 #RUN cd /bitcoin && make && make install
 
 
-apt-get install -y bitcoind
+RUN apt-get install -y bitcoind
 
 RUN mkdir /.bitcoin
 ADD bitcoin.conf /.bitcoin/bitcoin.conf
