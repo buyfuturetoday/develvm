@@ -12,7 +12,7 @@ bitcoins to the server. A good way to do this is to use docker volumes, see belo
 Start a server
 --------------
 
-1. Create an image: `BITCOIND:IMAGE=(docker build .)`
+1. Create an image: `BITCOIND_IMAGE=(docker build .)`
 2. Start a bitcoin server: `BITCOIND=(docker run -d $BITCOIND_IMAGE)`
 3. Check the logs: `docker logs $BITCOIND`
 
