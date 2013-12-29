@@ -7,7 +7,7 @@ MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
 RUN apt-get update
 RUN apt-get install -y curl git wget make build-essential g++ ccache autoconf libtool bsdmainutils pkg-config zlib1g-dev \
- libbz2-dev heirloom-mailx supervisor nano libminiupnpc8 libc6
+ libbz2-dev heirloom-mailx supervisor nano libminiupnpc8
 
 # Install boost
 #RUN wget http://ftp.se.debian.org/debian/pool/main/b/boost1.54/libboost1.54-all-dev_1.54.0-4+b1_amd64.deb
@@ -21,6 +21,8 @@ RUN dpkg -i libboost-filesystem1.54.0_1.54.0-4+b1_amd64.deb
 RUN dpkg -i libboost-program-options1.54.0_1.54.0-4+b1_amd64.deb
 RUN dpkg -i libboost-thread1.54.0_1.54.0-4+b1_amd64.deb
 
+RUN wget http://ftp.se.debian.org/debian/pool/main/e/eglibc/libc6_2.17-97_amd64.deb
+RUN dpkg -i libc6_2.17-97_amd64.deb
 
 # Berkelt DB 5.1
 RUN wget http://ftp.se.debian.org/debian/pool/main/d/db/libdb5.1++_5.1.29-7_amd64.deb
