@@ -9,17 +9,12 @@ RUN apt-get update
 RUN apt-get install -y curl git wget make build-essential g++ ccache autoconf libtool bsdmainutils pkg-config zlib1g-dev libbz2-dev heirloom-mailx supervisor nano
 
 # Install boost
-RUN apt-get install -y libboost-all-dev
+RUN wget http://ftp.se.debian.org/debian/pool/main/b/boost1.54/libboost1.54-all-dev_1.54.0-4+b1_amd64.deb
+RUN dpkg -i libboost1.54-all-dev_1.54.0-4+b1_amd64.deb
 
-# Berkelt DB 4.8
-RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8-dev_4.8.30-2_amd64.deb
-RUn wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8_4.8.30-2_amd64.deb
-RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++_4.8.30-2_amd64.deb
-RUN wget http://ftp.se.debian.org/debian/pool/main/d/db4.8/libdb4.8++-dev_4.8.30-2_amd64.deb
-RUN dpkg  -i libdb4.8_4.8.30-2_amd64.deb
-RUN dpkg  -i libdb4.8-dev_4.8.30-2_amd64.deb
-RUN dpkg  -i libdb4.8++_4.8.30-2_amd64.deb
-RUN dpkg  -i libdb4.8++-dev_4.8.30-2_amd64.deb
+# Berkelt DB 5.1
+RUN wget http://ftp.se.debian.org/debian/pool/main/d/db/libdb5.1++_5.1.29-7_amd64.deb
+RUN dpkg -i libdb5.1++_5.1.29-7_amd64.deb
 
 # Instal bitcoin
 RUN wget http://ftp.se.debian.org/debian/pool/main/b/bitcoin/bitcoind_0.8.6-1_amd64.deb
@@ -30,8 +25,5 @@ ADD bitcoin.conf /.bitcoin/bitcoin.conf
 ADD profile /.profile
 ADD start.sh /start.sh
 
-#ADD etc-supervisor-bitcoin.conf /etc/supervisor/conf.d/bitcoin.conf
-
 EXPOSE 8333 18333
-#CMD ["supervisord","-n"]
 CMD ["/start.sh",""]

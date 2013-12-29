@@ -51,7 +51,7 @@ Check status of things:
 
 1. List connected peers: `bc getpeerinfo`
 2. List all accounts: `bc listaccounts`
-
+3. List versions: `bc getinfo`
 
 Finally, send back the testnet bitcoins:
 
@@ -63,4 +63,9 @@ docker volumes
 
 Read about docker volumes here:  http://docs.docker.io/en/latest/use/working_with_volumes/
 
+
+Update pre-build bitcoind version
+---------------------------------
+
+Pre-build bitcoind versions can be downloaded here: http://packages.debian.org/sv/sid/bitcoind
 
