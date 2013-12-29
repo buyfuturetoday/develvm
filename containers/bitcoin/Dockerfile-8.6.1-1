@@ -7,7 +7,7 @@ MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
 RUN apt-get update
 RUN apt-get install -y curl git wget make build-essential g++ ccache autoconf libtool bsdmainutils pkg-config zlib1g-dev \
-libbz2-dev heirloom-mailx supervisor nano libminiupnpc8 libc6
+ libbz2-dev heirloom-mailx supervisor nano libminiupnpc8 libc6
 
 # Install boost
 #RUN wget http://ftp.se.debian.org/debian/pool/main/b/boost1.54/libboost1.54-all-dev_1.54.0-4+b1_amd64.deb
