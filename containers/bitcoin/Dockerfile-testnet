@@ -11,7 +11,7 @@ RUN apt-get install -y curl git wget make build-essential g++ ccache autoconf li
 RUN apt-get install -y bitcoind
 
 RUN mkdir /.bitcoin
-ADD bitcoin-testnet.conf /.bitcoin/bitcoin.conf
+ADD bitcoin-testnet.conf /.bitcoin/bitcoin-testnet.conf
 ADD profile /.profile
 ADD start-testnet.sh /start.sh
 
