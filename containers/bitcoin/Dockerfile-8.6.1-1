@@ -21,6 +21,9 @@ RUN dpkg -i libboost-filesystem1.54.0_1.54.0-4+b1_amd64.deb
 RUN dpkg -i libboost-program-options1.54.0_1.54.0-4+b1_amd64.deb
 RUN dpkg -i libboost-thread1.54.0_1.54.0-4+b1_amd64.deb
 
+RUN wget http://ftp.se.debian.org/debian/pool/main/e/eglibc/locales_2.17-97_all.deb
+RUN dpkg -i locales_2.17-97_all.deb
+
 RUN wget http://ftp.se.debian.org/debian/pool/main/e/eglibc/libc6_2.17-97_amd64.deb
 RUN dpkg -i libc6_2.17-97_amd64.deb
 
