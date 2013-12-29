@@ -12,9 +12,9 @@ bitcoins to the server. A good way to do this is to use docker volumes, see belo
 Start a server
 --------------
 
-1. Create an image: `BITCOIND_IMAGE=$(docker build .)`
-2. Start a bitcoin server: `BITCOIND=$(docker run -d $BITCOIND_IMAGE)`
-3. Check the logs: `docker logs $BITCOIND`
+1. Create an image: `docker build .`
+2. Start a bitcoin server: `docker run -d <image id>`
+3. Check the logs: `docker logs <container id>`
 
 
 Getting started
@@ -29,6 +29,7 @@ with the server with `bc help`. A list of commands should be showed.
 First you need to get some bitcoins to test with. This can be done here: http://tpfaucet.appspot.com/
 Or just google `bitcoin testnet faucet`
 
+1. Add the testnet node used above (replace IP if not using tpfaucet.appspot.com): bc addnode 54.243.211.176 add
 1. Create a new address and associate it to an account: `bc getnewaddress account1`
 2. Goto the testnet site found above and enter the new testnet adress
 3. Wait a while and check if the bitcoins have arrived: `bc getbalance account1`
