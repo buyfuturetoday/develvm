@@ -1,7 +1,11 @@
 bitcoind server
 ==============
 
-IMPORTANT: Bitcoins have value. Make sure you keep a backup of the wallet if you send 
+IMPORTANT NOTE: The configuration has been set to use the testnet. This means that all
+transactions are fake, i.e. not real. This can be changed in the config file.
+
+IMPORTANT NOTE 2: If you change the configuration to use the real bitcoin net, remember that 
+bitcoins have value. Make sure you keep a backup of the wallet if you send 
 bitcoins to the server. A good way to do this is to use docker volumes, see below.
 
 
@@ -25,11 +29,13 @@ with the server with `bc help`. A list of commands should be showed.
 1. Create a new address and associate it to an account: `bc getnewaddress account1`
 2. Create a new address and associate it to an account: `bc getnewaddress account1`
 3. Create a new address and associate it to an account: `bc getnewaddress account2`
-4. 
+4. List the addresses: `bc getaddressesbyaccount account1`
+4. List the addresses: `bc getaddressesbyaccount account2`
 
 
 docker volumes
 -------------
 
-
 Read about docker volumes here:  http://docs.docker.io/en/latest/use/working_with_volumes/
+
+
