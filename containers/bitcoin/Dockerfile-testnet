@@ -1,0 +1,20 @@
+# Bitcon server
+#
+# VERSION               0.0.1
+
+FROM     base
+MAINTAINER Jonas Colmsjö "jonas@gizur.com"
+
+RUN apt-get update
+RUN apt-get install -y curl git wget make build-essential g++ ccache autoconf libtool bsdmainutils pkg-config zlib1g-dev libbz2-dev heirloom-mailx supervisor nano
+
+RUN apt-get install -y bitcoind
+
+RUN mkdir /.bitcoin
+ADD bitcoin-testnet.conf /.bitcoin/bitcoin.conf
+ADD profile /.profile
+ADD start-testnet.sh /start.sh
+
+
+EXPOSE 8333 18333
+CMD ["/start.sh",""]
