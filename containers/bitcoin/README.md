@@ -26,11 +26,35 @@ First you need to install bitcoind also in the client (where you want to run the
 Finally do `source profile` and you're all set. Test that you have a connection
 with the server with `bc help`. A list of commands should be showed.
 
+First you need to get some bitcoins to test with. This can be done here: http://tpfaucet.appspot.com/
+Or just google `bitcoin testnet faucet`
+
 1. Create a new address and associate it to an account: `bc getnewaddress account1`
-2. Create a new address and associate it to an account: `bc getnewaddress account1`
-3. Create a new address and associate it to an account: `bc getnewaddress account2`
-4. List the addresses: `bc getaddressesbyaccount account1`
+2. Goto the testnet site found above and enter the new testnet adress
+3. Wait a while and check if the bitcoins have arrived: `bc getbalance account1`
+
+
+Now you can play around with the bitcoins you have received:
+
+1. Create a new address and associate it to an account: `bc getnewaddress account1`
+2. Create a new address and associate it to an account: `bc getnewaddress account2`
+3. List the addresses: `bc getaddressesbyaccount account1`
 4. List the addresses: `bc getaddressesbyaccount account2`
+5. Send from one account to another: `bc sendfrom account1 <to adress> <amount>`
+6. List balance: `bc getbalance account1`
+7. List balance: `bc getbalance account2`
+8. List transactions: `bc getreceivedbyaccount account1`
+
+
+Check status of things:
+
+1. List connected peers: `bc getpeerinfo`
+2. List all accounts: `bc listaccounts`
+
+
+Finally, send back the testnet bitcoins:
+
+1. Send from one account to another: `bc sendfrom account1 mmhmMNfBiZZ37g1tgg2t8DDbNoEdqKVxAL <amount>`
 
 
 docker volumes
