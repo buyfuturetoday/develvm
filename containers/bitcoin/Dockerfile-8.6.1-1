@@ -15,9 +15,9 @@ RUN wget http://ftp.se.debian.org/debian/pool/main/b/boost1.54/libboost-filesyst
 RUN wget http://ftp.se.debian.org/debian/pool/main/b/boost1.54/libboost-program-options1.54.0_1.54.0-4+b1_amd64.deb
 RUN wget http://ftp.se.debian.org/debian/pool/main/b/boost1.54/libboost-system1.54.0_1.54.0-4+b1_amd64.deb
 RUN wget http://ftp.se.debian.org/debian/pool/main/b/boost1.54/libboost-thread1.54.0_1.54.0-4+b1_amd64.deb
+RUN dpkg -i libboost-system1.54.0_1.54.0-4+b1_amd64.deb
 RUN dpkg -i libboost-filesystem1.54.0_1.54.0-4+b1_amd64.deb
 RUN dpkg -i libboost-program-options1.54.0_1.54.0-4+b1_amd64.deb
-RUN dpkg -i libboost-system1.54.0_1.54.0-4+b1_amd64.deb
 RUN dpkg -i libboost-thread1.54.0_1.54.0-4+b1_amd64.deb
 
 
