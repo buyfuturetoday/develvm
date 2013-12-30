@@ -13,8 +13,9 @@ Start a server
 --------------
 
 1. Create an image: `docker build .`
-2. Start a bitcoin server: `docker run -d <image id>`
-3. Check the logs: `docker logs <container id>`
+2. Create a directory to mount as a docker volume: `mkdir bitcoin-dir`
+3. Start a bitcoin server: `docker run -d `pwd`/bitcoin-dir:/.bitcoin <image id>`
+4. Check the logs: `docker logs <container id>`
 
 
 Getting started
