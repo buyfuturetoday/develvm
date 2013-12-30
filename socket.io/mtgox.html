@@ -9,19 +9,23 @@
 <div id="message">No message yet</div>
 
 
-<script src="bower_components/socket.io-client/dist/socket.io.min.js/socket.io.js"></script>
+<script src="/lib/socket.io.js"></script>
 <script>
   window.onload = function(){
-    var socket = io.connect('http://localhost:8082');
-    socket.on('news', function (data) {
-      console.log(data);
-      document.getElementById('message').innerHTML = document.getElementById('message').innerHTML + "<br/>" + (JSON.stringify(data));
-      socket.emit('my other event', { my: 'data' });
-    });
 
+    var conn = io.connect('https://socketio.mtgox.com/mtgox');
+    conn.on('message', function(data) {
+        // Handle incoming data object.
+      document.getElementById('message').innerHTML = document.getElementById('message').innerHTML + "<br/>" + (JSON.stringify(data));
+    });
   };
 
 </script>
+
+<!-- <script src="https://socketio.mtgox.com/socket.io/socket.io.js"></script> -->
+<script>
+</script>
+
 
 </body>
 </html>

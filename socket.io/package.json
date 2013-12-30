@@ -10,5 +10,5 @@
   "repository": "",
   "author": "Jonas Colmsjö",
   "license": "MIT",
-  "dependencies" : "socket.io"
+  "dependencies": "socket.io"
 }
