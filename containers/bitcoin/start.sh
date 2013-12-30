@@ -1,3 +1,3 @@
 #!/bin/bash
-bitcoind --daemon
+bitcoind --daemon -conf=/bitcoin.conf
 tail -f /.bitcoin/debug.log

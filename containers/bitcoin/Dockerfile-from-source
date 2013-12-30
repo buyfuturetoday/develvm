@@ -31,7 +31,7 @@ RUN cd /bitcoin && ./configure
 RUN cd /bitcoin && make && make install
 
 RUN mkdir /.bitcoin
-ADD bitcoin.conf /.bitcoin/bitcoin.conf
+ADD bitcoin.conf /bitcoin.conf
 ADD profile /.profile
 ADD start.sh /start.sh
 
