@@ -23,7 +23,7 @@ RUN dpkg  -i libdb4.8++-dev_4.8.30-2_amd64.deb
 
 # Download the software
 RUN git clone https://github.com/bitcoin/bitcoin.git
-RUN cd /bitcoin && git checkout v0.8.6rc1
+#RUN cd /bitcoin && git checkout v0.8.6rc1
 
 # Build
 RUN cd /bitcoin && ./autogen.sh
