@@ -35,7 +35,7 @@ ADD bitcoin.conf /.bitcoin/bitcoin.conf
 ADD profile /.profile
 ADD start.sh /start.sh
 
-VOLUME["/.bitcoin"]
+VOLUME ["/.bitcoin"]
 
 EXPOSE 8333 18333
 CMD ["/start.sh",""]
