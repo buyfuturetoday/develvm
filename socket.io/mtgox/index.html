@@ -2,16 +2,20 @@
 
 <body>
 
-<h1>Socket.io sandbox</h1>
+<h1>MtGox socket.io client sandbox</h1>
 
-<h2>server output</h2>
+<h2>MtGox output</h2>
 
 <div id="message">No message yet</div>
 
 
-<script src="mtgox-client.js"></script>
+<script src="../bower_components/socket.io-client/dist/socket.io.min.js"></script>
+<script src="./mtgox.js"></script>
+
 <script>
   window.onload = function(){
+
+  	var client = mtgox.connect();
 
     var conn = io.connect('https://socketio.mtgox.com/mtgox');
     conn.on('message', function(data) {

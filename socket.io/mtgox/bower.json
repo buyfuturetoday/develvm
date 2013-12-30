@@ -1,0 +1,25 @@
+{
+  "name": "mtgox",
+  "main": "mtgox.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/colmsjo/develvm",
+  "authors": [
+    "Jonas Colmsjö <jonas.colmsjo@gizur.com>"
+  ],
+  "description": "A simple mtgox client for browsers",
+  "keywords": [
+    "mtgox",
+    "socket.io"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "socket.io-client": "~0.9.16"
+  }
+}
