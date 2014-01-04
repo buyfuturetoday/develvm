@@ -24,6 +24,7 @@ RUN ulimit -n 4096
 RUN wget http://s3.amazonaws.com/downloads.basho.com/riak/1.4/1.4.6/ubuntu/precise/riak_1.4.6-1_amd64.deb
 RUN dpkg -i riak_1.4.6-1_amd64.deb
 
+#RUN curl -H 'Content-Type: application/json' -X POST http://localhost:8098/riak-cs/user --data '{"email":"foobar@example.com", "name":"admin user"}'
 
-EXPOSE 3306 80 443
+EXPOSE 8098
 CMD ["/etc/init.d/riak","start"]
