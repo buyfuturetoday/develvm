@@ -22,4 +22,4 @@ RUN dpkg -i riak_1.4.6-1_amd64.deb
 
 
 EXPOSE 3306 80 443
-CMD ["supervisord","-n"]
+CMD ["/etc/init.d/riak","start"]
