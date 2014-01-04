@@ -10,7 +10,7 @@
 //var util = require('util');
 //var keys = require('./keys').keys;
 
-var MTGOX_SOCKET_URL = 'https://socketio.mtgox.com/mtgox';
+var MTGOX_SOCKET_URL = 'https://socketio.mtgox.com:80/mtgox';
 var MTGOX_CHANNELS = [
 		{ "key":"dbf1dee9-4f2e-4a08-8cb7-748919a71b21", "private":"trade", "name":"Trade" },
 		{ "key":"d5f06780-30a8-4a48-a2f8-7ed181b4a13f", "private":"ticker", "name":"Ticker" },
@@ -38,7 +38,7 @@ var MtGoxClient = function(options) {
 	var self = this;
 
 	self.emit = function(m1,m2) {
-		console.log(m1 +":" + m2);
+		console.log(m1 + ":" + m2);
 	}
 
 	var socket;
@@ -59,6 +59,8 @@ var MtGoxClient = function(options) {
 			"try multiple transports": !0
 		});
 
+
+//		var socket = io.connect(MTGOX_SOCKET_URL);
 
 		socket.on('message', function(raw) {
 			lastPulse = new Date() / 1E3;

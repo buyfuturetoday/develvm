@@ -17,11 +17,6 @@
 
   	var client = mtgox.connect();
 
-    var conn = io.connect('https://socketio.mtgox.com/mtgox');
-    conn.on('message', function(data) {
-        // Handle incoming data object.
-      document.getElementById('message').innerHTML = document.getElementById('message').innerHTML + "<br/>" + (JSON.stringify(data));
-    });
   };
 
 </script>
