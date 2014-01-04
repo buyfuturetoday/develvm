@@ -16,6 +16,10 @@ RUN echo "[ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh" > /.profile
 RUN /bin/bash -c "source /.profile && nvm install v0.11.9"
 
 
+# Riak want's this
+RUN ulimit -n 4096
+
+
 # Install riak
 RUN wget http://s3.amazonaws.com/downloads.basho.com/riak/1.4/1.4.6/ubuntu/precise/riak_1.4.6-1_amd64.deb
 RUN dpkg -i riak_1.4.6-1_amd64.deb
