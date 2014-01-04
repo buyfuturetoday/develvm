@@ -29,4 +29,4 @@ ADD ./etc-riak-app.config /etc/riak/app.config
 #RUN curl -H 'Content-Type: application/json' -X POST http://localhost:8098/riak-cs/user --data '{"email":"foobar@example.com", "name":"admin user"}'
 
 EXPOSE 8098
-CMD ["/etc/init.d/riak","start"]
+CMD ["sh", "-c", "/etc/init.d/riak start; tail -f /var/log/riak/*"]
