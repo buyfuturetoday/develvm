@@ -25,6 +25,9 @@ RUN wget http://s3.amazonaws.com/downloads.basho.com/riak/1.4/1.4.6/ubuntu/preci
 RUN dpkg -i riak_1.4.6-1_amd64.deb
 
 ADD ./etc-riak-app.config /etc/riak/app.config
+ADD ./server.crt /etc/riak/cert.pem
+ADD ./server.key /etc/riak/key.pem
+
 
 #RUN curl -H 'Content-Type: application/json' -X POST http://localhost:8098/riak-cs/user --data '{"email":"foobar@example.com", "name":"admin user"}'
 
