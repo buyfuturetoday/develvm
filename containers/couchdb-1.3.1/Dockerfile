@@ -1,6 +1,5 @@
 # Basic install of couchdb
 #
-# This will move the couchdb http server to port 8101 so adjust the port for your needs. 
 #
 # Currently installs couchdb 1.3.1
 
@@ -20,9 +19,10 @@ RUN cd /tmp && tar xvzf apache-couchdb-1.3.1.tar.gz
 RUN apt-get install -y make
 RUN cd /tmp/apache-couchdb-* ; ./configure && make install
 
-RUN printf "[httpd]\nport = 8101\nbind_address = 0.0.0.0" > /usr/local/etc/couchdb/local.d/docker.ini
+RUN printf "[httpd]\nport = 5984\nbind_address = 0.0.0.0" > /usr/local/etc/couchdb/local.d/docker.ini
 
-EXPOSE 8101
+ADD ./usr-local-etc-couchdb-local.ini /usr/local/etc/couchdb/local.ini
 
+EXPOSE 5984
 CMD ["/usr/local/bin/couchdb"]
 
