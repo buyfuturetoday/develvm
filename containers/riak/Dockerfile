@@ -31,5 +31,5 @@ ADD ./server.key /etc/riak/key.pem
 
 #RUN curl -H 'Content-Type: application/json' -X POST http://localhost:8098/riak-cs/user --data '{"email":"foobar@example.com", "name":"admin user"}'
 
-EXPOSE 8098
+EXPOSE 8087 8098 8069
 CMD ["sh", "-c", "ulimit -n 4096; /etc/init.d/riak start; tail -f /var/log/riak/*"]
