@@ -1,0 +1,6 @@
+{ "name"   : "hello_world"
+, "version": "0.1.0"
+, "description": "A simple hello-world Couch app"
+, "dependencies": { "node-couchapp": "~0.8.3" }
+, "app": "app"
+}
