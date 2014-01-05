@@ -18,6 +18,7 @@ RUN apt-get install -y curl git
 
 RUN apt-get install -y couchdb
 
+#ADD ./usr-local-etc-couchdb-local.ini /usr/local/etc/couchdb/local.ini
 
 EXPOSE 8101
 CMD ["/usr/local/bin/couchdb"]
