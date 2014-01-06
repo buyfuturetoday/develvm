@@ -299,5 +299,5 @@ var TodoApp = React.createClass({
 });
 
 React.renderComponent(
-  <TodoApp todos={new TodoList()} />, document.getElementById('container')
+  <TodoApp todos={new TodoList()} />, document.getElementById('content')
 );
