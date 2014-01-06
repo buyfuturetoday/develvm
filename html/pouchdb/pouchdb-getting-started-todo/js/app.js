@@ -20,6 +20,8 @@
       continuous: true,
       onChange: showTodos
     });
+
+    console.log("db.info:"+JSON.stringify(info));
   });
 
   // We have to create a new todo document and enter it in the database
