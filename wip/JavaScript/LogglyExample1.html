@@ -1,0 +1,97 @@
+<!--
+  -- LoglyExample1.html
+  --
+  -- THIS EXAMPLE IS NOT WORKING, TOO COMPLEX, GIVING UP FOR NOW 
+  --
+-->
+
+
+
+<html>
+<head>
+	<title>Views Example 1</title>
+	
+	<!-- My unit test and logging functions -->
+	<script src="lib/basic.js"></script>
+
+	<!-- Used for the views -->
+	<script src="lib/underscore-min.js"></script>
+	<script src="lib/jquery.min.js"></script>
+
+
+	<script type="text/javascript">
+		window.onload=function(){
+		  var key = "05588bb2-6d3f-4570-b0d9-3dc91f2905c8";
+		  var host = "//logs.loggly.com";
+		  castor = new loggly.castor({ url: host+'/inputs/'+key, level: 'log'});
+		  castor.log("Hello, world!");
+		  castor.log({date: Date(), location: window.location.href});
+		}
+	</script>
+	<script type="text/javascript" src="//d3eyf2cx8mbems.cloudfront.net/js/loggly-0.2.1.js"></script>
+
+
+	<script>
+
+/*	window.onload = function(){
+
+		// Cache the template function 
+		var tmpl = _.template($('#item-template').html());
+		
+		// Manage the event when add is clicked
+		$('#add').on('click', function() {			
+			var _todo = $('#new-todo')[0];
+			log('logging add '+_todo.value +'...');
+			$('#todos')[0].innerHTML = tmpl( {title: _todo.value} );
+		});
+		
+		test("Testing Underscore views...", function(){	
+			// Doing nothing right now
+		});
+  
+	};
+*/
+	</script>
+
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+
+
+</head>
+<body>
+
+	<div id="myapp">
+	
+		<header>
+			<h1>My App</h1>
+		</header>
+		
+		<section id="input-section">
+			<input id="new-todo" type="text" placeholder="What needs to be done?"/>
+			<a id="add">Add</a>
+		</section>
+
+		<div id="todos">
+		</div>
+		
+		<footer>
+			2012 by Gizur AB
+		</footer>
+	  
+	</div>
+	
+	<ul id="results"></ul>
+
+	<!-- Templates -->
+	
+	<script type="text/template" id="item-template">
+	  <div>
+	    <br/><label><%= title %></label><br/><br/>
+	  </div>
+	</script>
+
+
+</body>
+</html>

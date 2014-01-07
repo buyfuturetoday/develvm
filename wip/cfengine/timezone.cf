@@ -1,0 +1,22 @@
+#######################
+#
+# promises.cf
+#
+# 120905, Jonas Colmsjö, (c) gizur.com
+#
+#######################
+
+bundle agent timezone {
+
+files:
+
+    "/etc/default/timezone"
+        copy_from => local_cp("$(config_input_dir)/generic-server/etc/timezone");
+
+commands:
+
+    any::
+        "sudo sh -c 'dpkg-reconfigure -f noninteractive tzdata'";
+
+}
+

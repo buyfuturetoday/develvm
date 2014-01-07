@@ -1,0 +1,61 @@
+<html>
+<head>
+	<title>Module Example</title>
+	<script src="lib/basic.js"></script>
+	<script src="lib/signals.js"></script>
+	<script src="lib/crossroads.min.js"></script>
+	<script src="lib/hasher.min.js"></script>
+	<script>
+
+	window.onload = function(){
+		test("Testing Crossroads.js and Hasher.", function(){
+			
+			// setup crossroads, using the global object. 
+			// It is also possible to have several independent Routers			crossroads.addRoute('route1', function() { 
+				log('logging static route1...');} 
+			);
+			
+			crossroads.addRoute('route2', function() {
+				log('logging static route2...');} 
+			); 
+			
+			crossroads.addRoute('/{route}/{param1}/{param2}', function(route, param1, param2){
+				log('logging dynamic route:'+route+', param1:'+param1+', param2:'+param2+'...');} 
+			); 
+			
+			// default listener, log all routes that has been matched
+			crossroads.routed.add(console.log, console); 			
+			// Also log routes that did not match anything (useful for debugging)
+			crossroads.bypassed.add(function(request){				log("A route that wasn't matched:"+request); 
+			});
+						//setup hasher			function parseHash(newHash, oldHash){				crossroads.parse(newHash); 
+			}						hasher.initialized.add(parseHash); 			// parse initial hash 
+			hasher.changed.add(parseHash); 				// parse hash changes 
+			hasher.init(); 								// start listening for history change						//update URL fragment generating new history record 
+			hasher.setHash('route1');
+
+		});
+  
+	};
+	
+	
+	</script>
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+</head>
+<body>
+	<ul id="results"></ul>
+	
+	
+	<div id="test1">
+		Some links:<br/>
+		<a href="#route1">#route1</a><br/>
+		<a href="#route2">#route2</a><br/>
+		<a href="#/route3/i_love/this">#route3</a><br/>
+		<a href="#route4">#route4</a><br/>
+	</div>
+	
+</body>
+</html>

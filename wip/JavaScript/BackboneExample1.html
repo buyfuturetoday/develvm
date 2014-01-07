@@ -1,0 +1,154 @@
+<html>
+<head>
+	<title>Backbone Example 1</title>
+	
+	<!-- My unit test and logging functions -->
+	<script src="lib/basic.js"></script>
+
+	<!-- Used for the views -->
+	<script src="lib/underscore-min.js"></script>
+	<script src="lib/jquery.min.js"></script>
+
+
+	<!-- Backbone MVC -->
+	<script src="lib/backbone-min.js"></script>
+
+	<!-- Bootstrap Backbone Model, supposed to be best practice instead of loading in when window.onload -->
+	<script>
+
+		// extend Backbone
+		var Gist = Backbone.Model.extend({
+
+			// REST function to use
+			url: 'https://api.github.com/users/colmsjo/gists',
+
+			// Save the data part and get rid of meta
+			parse: function(response){
+				return response.data;
+			}  
+		});
+
+
+		var GistList = Backbone.Collection.extend({
+
+			// REST function to use
+			url: 'https://api.github.com/users/colmsjo/gists',
+
+			// Save the data part and get rid of meta for all elements
+			parse: function(response){
+				var res = [];
+
+				_.each(response.data, function(item){ 
+					res.push(item); 
+				});
+
+				return res;
+			}  
+		});
+		
+		var gist = new Gist;
+		gist.fetch({
+			dataType: 'jsonp',
+
+			success: function(model, repsonse) {
+				log( "Yea - fetched gist from git..."); // + JSON.stringify(model) );
+			},
+
+			error: function(model, repsonse) {
+				log( "Shit - error fetching gist from git: " + JSON.stringify(model) );
+			}
+
+		});
+
+		var gists = new GistList;
+		gists.fetch({
+			dataType: 'jsonp',
+
+			success: function(model, repsonse) {
+				log( "Yea - fetched gists from git..."); // + JSON.stringify(model) );
+			},
+
+			error: function(model, repsonse) {
+				log( "Shit - error fetching gists from git: " + JSON.stringify(model) );
+			}
+
+		});
+
+	</script>
+
+
+	<script>
+	window.onload = function(){
+
+
+		//log( "gist:" + JSON.stringify( gist ));
+
+		log( "gists.length:" + gists.length );
+		//log( "gists.models:"   + JSON.stringify( gists.models ));
+
+		gists.each( function(item) {
+
+			log( "item.id:"           + item.id );
+
+			log( "item.comments:"     + item.get("comments") );
+			log( "item.created_at:"   + item.get("created_at") );
+			log( "item.updated_at:"   + item.get("updated_at") );
+			log( "item.public:"       + item.get("public") );
+			log( "item.url:"          + item.get("url") );
+			log( "item.git_pull_url:" + item.get("git_pull_url") );
+			log( "item.git_push_url:" + item.get("git_push_url") );
+			log( "item.html_url:"     + item.get("html_url") );
+
+			//log( "gist:"  + JSON.stringify(item) );
+		});
+
+
+		test("Testing Backbone...", function(){	
+			// Doing nothing right now
+		});
+  
+	};
+	</script>
+
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+
+
+</head>
+<body>
+
+	<div id="myapp">
+	
+		<header>
+			<h1>My App</h1>
+		</header>
+		
+		<section id="input-section">
+			<input id="new-todo" type="text" placeholder="What needs to be done?"/>
+			<a id="add">Add</a>
+		</section>
+
+		<section id="todos">
+		</section>
+		
+		<footer>
+			2012 by Gizur AB
+		</footer>
+	  
+	</div>
+	
+	<ul id="results"></ul>
+
+	<!-- Templates -->
+	
+	<script type="text/template" id="item-template">
+	  <div>
+	    <br/><label><%= title %></label><br/><br/>
+	  </div>
+	</script>
+
+
+</body>
+</html>

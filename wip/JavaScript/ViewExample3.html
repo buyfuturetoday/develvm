@@ -1,0 +1,98 @@
+<html>
+<head>
+	<title>Views Example 3</title>
+	
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+
+
+</head>
+<body>
+
+	<div id="myapp">
+	
+		<header>
+			<h1>My App</h1>
+		</header>
+		
+		<section id="input-section">
+			<input id="new-todo" type="text" placeholder="What needs to be done?"/>
+			<a id="add">Add</a>
+		</section>
+
+		<section id="todos">
+		</section>
+		
+		<footer>
+			2012 by Gizur AB
+		</footer>
+	  
+	</div>
+	
+
+	<ul id="results"></ul>
+
+	<!-- Templates -->
+	
+	<script type="text/html" id="item_tmpl">	  <div>
+	    <br/><label><%= title %></label><br/><br/>
+	  </div>
+	</script>
+
+
+
+	<!-- Scripts at the end for faster rendering in the browser -->
+	<script src="lib/jquery.js"></script>
+	
+	<!-- My unit test and logging functions -->
+	<script src="lib/basic.js"></script>
+
+	<script>
+	window.onload = function(){
+
+		// Simple JavaScript Templating		// John Resig - http://ejohn.org/ - MIT Licensed 
+		(function(){			var cache = {};			this.tmpl = function tmpl(str, data){
+							// Figure out if we're getting a template, or if we need to 
+				// load the template - and be sure to cache the result. 
+				var fn = !/\W/.test(str) ?					cache[str] = cache[str] || tmpl(document.getElementById(str).innerHTML) :
+								// Generate a reusable function that will serve as a template 
+				// generator (and which will be cached).				new Function(
+					"obj","var p=[],print=function(){p.push.apply(p,arguments);};" + 
+					
+					// Introduce the data as local variables using with(){}					"with(obj){p.push('" +					
+					// Convert the template into pure JavaScript
+					str
+						.replace(/[\r\t\n]/g, " ")
+						.split("<%").join("\t")
+						.replace(/((^|%>)[^\t]*)'/g, "$1\r")
+						.replace(/\t=(.*?)%>/g, "',$1,'")
+						.split("\t").join("');")
+						.split("%>").join("p.push('")
+						.split("\r").join("\\'")
+						+ "');}"
+						+ "return p.join('');"
+					);
+								// Provide some basic currying to the user				return data ? fn( data ) : fn; 
+			};		})();
+
+
+		// Manage the event when add is clicked
+		$('#add').on('click', function() {			
+			var _todo = $('#new-todo')[0];
+			log('logging add '+_todo.value +'...');
+			$('#todos')[0].innerHTML = tmpl( "item_tmpl", {title: _todo.value} );
+		});
+
+		test("Testing home made micro-templating views ...", function(){
+			
+			// Doing nothing right now
+
+		});
+  
+	};
+	</script>
+
+</body>
+</html>

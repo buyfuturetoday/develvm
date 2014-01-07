@@ -1,0 +1,13 @@
+{
+  "name": "Example Offline webapp",
+  "description": "A first example",
+  "launch_path": "/JavaScript/Offline.webapp/",
+  "icons": {
+    "128": "/img/icon-128.png"
+  },
+  "developer": {
+    "name": "Jonas Colmsjö",
+    "url": "http://colmsjo.com"
+  },
+  "default_locale": "en"
+}

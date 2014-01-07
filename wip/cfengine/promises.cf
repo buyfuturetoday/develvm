@@ -1,0 +1,43 @@
+#######################
+#
+# promises.cf
+#
+# 120905, Jonas Colmsjö, (c) gizur.com
+#
+#######################
+
+
+body common control {
+
+    any::
+        bundlesequence => {
+            "cf_config", "packages", "timezone",
+        };
+
+
+    any::
+        inputs => {
+            "cfengine_stdlib.cf",
+            "cf_config.cf",
+            "timezone.cf",
+            "packages.cf",
+        };
+}
+
+
+body agent control {
+    # Do not rely on DNS
+    skipidentify => "true";
+}
+
+
+# global vars
+bundle common g {
+ 
+vars:
+ 
+    # This needs to be chnaged according to the installtion
+    "workdir"           string => "/home/ubuntu/.cfagent/inputs";
+
+    "config_input_dir"  string => "$(workdir)";
+}

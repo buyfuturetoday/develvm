@@ -1,0 +1,198 @@
+<html>
+<head>
+	<title>Git Content Example 1</title>
+	
+
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+
+
+</head>
+<body>
+
+	<div id="myapp">
+	
+		<header>
+			<h1>My App</h1>
+		</header>
+		
+		<section id="input-section">
+			<input id="new-todo" type="text" placeholder="What needs to be done?"/>
+			<a id="add">Add</a>
+		</section>
+
+		<section id="todos">
+		</section>
+		
+		<footer>
+			2012 by Gizur AB
+		</footer>
+	  
+	</div>
+	<br/>
+	<div id="container">
+		No content!
+	</div>
+	
+
+	<ul id="results"></ul>
+
+
+	<!-- Scripts at the end for better performance -->
+
+
+	<!-- My unit test and logging functions -->
+	<script src="lib/helpers-1.0.js"></script>
+
+	<!-- External dependencies -->
+	<script src="lib/underscore-min.js"></script>
+	<script src="lib/jquery.min.js"></script>
+	<script src="lib/base64.js"></script>
+	<script src="lib/github.js"></script>
+
+
+	<!-- When the browser is ready -->
+	<script>
+	window.onload = function(){
+
+		// Using the github.js library
+		// ---------------------------
+
+		var github = new Github({
+		  username: "colmsjo",
+		  password: "XXXXXX",
+		  auth: "basic"
+		});
+
+		var repo = github.getRepo("colmsjo", "wip");
+
+		repo.read('master', 'JavaScript/GitContentExample.text', function(err, data) {
+			$("#container")[0].innerHTML += JSON.stringify(data);
+
+		});
+
+		repo.contents("JavaScript/GitContentExample.text", function(err, contents) {
+			$("#container")[0].innerHTML += JSON.stringify(contents);
+
+		});
+
+
+		// The homemade version - not fully functional yet
+		// -----------------------------------------------
+		//
+		// I'm getting this error: No conversion from text to application/vnd.github.version.raw 
+
+		// Register ajax error handler
+		$.ajaxSetup({
+	        error: function (x, status, error) {
+				log('Got an error: ' + status + 'Error details:' + error);
+	        },
+			statusCode: {
+				403: function() {												// Both this and the error function below will be called for 4XX
+					log('Got an 403, forbidden...');
+				},
+				404: function() {
+					log('Got an 404...');
+				},
+				302: function() {
+					log('Got a re-direct, 302...');
+				}
+			}
+		});
+
+		// Register my own window error handler
+		window.onerror = function(errorMsg, url, lineNumber) {
+			log('Got window.onerror: ' + errorMsg + ' for URL: ' + url + ' on line number: ' + lineNumber);
+		};
+
+
+		//
+		// CORS need to be setup - in Github please register the URL that the application is callled from
+		//
+		// Example:
+		// curl -i https://api.github.com -H "Origin: https://s3-eu-west-1.amazonaws.com/gc4-web-dev/"
+		// HTTP/1.1 302 Found
+		// Server: nginx
+		// Date: Wed, 17 Oct 2012 15:12:09 GMT
+		// Content-Type: text/html;charset=utf-8
+		// Connection: keep-alive
+		// Status: 302 Found
+		// X-Content-Type-Options: nosniff
+		// Access-Control-Expose-Headers: Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-OAuth-Scopes, X-Accepted-OAuth-Scopes
+		// Access-Control-Allow-Credentials: true
+		// X-RateLimit-Limit: 60
+		// Cache-Control: 
+		// X-RateLimit-Remaining: 40
+		// Access-Control-Allow-Origin: https://s3-eu-west-1.amazonaws.com/gc4-web-dev/     <======
+		// Location: http://developer.github.com
+		// Content-Length: 0
+
+
+		// get the SHA hash for the file to fetch
+		// Equivalent to curl -i https://api.github.com/repos/colmsjo/wip/contents/JavaScript/GitContentExample.text
+		$('#add').on('click', function() {			
+
+			// The hash for the object ot fetch
+			var objSHA;
+
+
+			$.when( 
+
+				$.ajax({
+					url:      'https://api.github.com/repos/colmsjo/wip/contents/JavaScript/GitContentExample.text',
+					origin:   'https://s3-eu-west-1.amazonaws.com/',
+					type:     'GET',
+					success: function(data) {
+						objSHA = data.sha;
+						log( JSON.stringify(data) );
+						log('One:' + objSHA );
+					}
+				}))
+			    .then( function() {
+					log('Two:' + objSHA );
+
+					// Get the contents of the file
+					// curl -i -H "Accept: application/vnd.github.VERSION.raw" https://api.github.com/repos/colmsjo/wip/git/blobs/ceeebe8461285214e5eb8bcd34610efe0610d4a8
+					$.ajax({
+						url:      'https://api.github.com/repos/colmsjo/wip/git/blobs/' + objSHA,
+//						dataType: 'application/vnd.github.raw',
+						origin:   'https://s3-eu-west-1.amazonaws.com/',
+						type:     'GET',
+						headers:  {'Accept':'application/vnd.github.raw','Content-Type':'application/json'},
+						success: function(data) {
+							log('Three:' + objSHA );
+							$("#container")[0].innerHTML = JSON.stringify(data);
+						}
+					})
+			    })
+			    .fail( function() {
+			        logErr('Failed getting contents...');
+			    })
+
+
+
+
+		});
+
+
+		test("Testing Git Content...", function(){	
+			// Doing nothing right now
+		});
+  
+	};
+	</script>
+
+
+	<!-- Templates -->
+	
+	<script type="text/template" id="item-template">
+	  <div>
+	    <br/><label><%= title %></label><br/><br/>
+	  </div>
+	</script>
+
+
+</body>
+</html>

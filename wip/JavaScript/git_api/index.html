@@ -1,0 +1,76 @@
+<html>
+<head>
+	<title>Git API Exmaple</title>
+
+	<!-- Formatting -->
+
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+	
+</head>
+<body>
+
+	<div id="myapp">
+	
+		<header>
+			<h1>My App</h1>
+		</header>
+
+		<div id="test1">
+			Menu:
+			<a href="#route1">lists gists</a>
+			<a href="#route2">#route2</a>
+			<a href="#/route3/i_love/this">#route3</a>
+			<a href="#route4">#route4</a>
+		</div>
+
+		<section id="blog">
+			<ul id="gists">
+
+			</ul>
+		</section>
+		
+		<footer>
+			2012 by Gizur AB
+		</footer>
+	  
+	</div>
+
+	
+	<ul id="results"></ul>
+
+
+	<!-- Scripts at the end for quicker loading -->
+
+	<script src="lib/jquery.min.js"></script>
+
+	<!-- My unit test and logging functions -->
+	<script src="lib/basic.js"></script>
+
+	<!-- Used for the views -->
+	<script src="lib/underscore-min.js"></script>
+
+	<!-- Used for routing -->
+	<script src="lib/signals.js"></script>
+	<script src="lib/crossroads.min.js"></script>
+	<script src="lib/hasher.min.js"></script>
+
+	<!-- Backbone MVC framework-->
+	<script src="lib/backbone-min.js"></script>
+
+	<script src="git_api.js"></script>
+
+
+
+	<!-- Templates -->
+	<script type="text/template" id="item-template">
+	  <div>
+	    <br/><label><%= title %></label><br/><br/>
+	  </div>
+	</script>
+
+
+</body>
+</html>

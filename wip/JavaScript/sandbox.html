@@ -1,0 +1,49 @@
+	<div id="test"><b>Hello</b>, I'm a ninja!</div> 
+	<div id="test2"></div>
+
+	<script src="lib/basic.js"></script>
+	<script src="lib/jquery.js"></script>
+	<script>
+
+	window.onload = function () {
+	
+		log("Logging work...");
+
+
+		var obj = {var1: "var1",  var2: "var2" };
+		log(obj.var1);
+
+	
+		var elems = document.getElementsByTagName("div");
+				args = "<b>Name:</b>";
+
+		if (elems.length) {			var doc = elems[0].ownerDocument || elems[0],				fragment = doc.createDocumentFragment( ), 
+				// scripts = getNodes(args, doc, fragment), 
+				first = fragment.firstChild;
+						if (first) {
+					this.appendChild(fragment);
+
+			}
+		}
+		
+		
+		var fragment1 = jQuery.buildFragment([args], null, null);		
+		var div1 = document.createElement("div");
+		div1.innerHTML = "<b>Name:</b>";
+		
+		log(fragment1);
+		log(fragment1.innerHTML);
+
+		log(div1);
+		log(div1.innerHTML);
+
+		
+		elems[0].appendChild( div1 );
+		
+		var fragment2 = fragment1.fragment;
+		elems[0].appendChild(fragment2.firstChild);
+		
+
+	};
+	</script>
+

@@ -1,0 +1,9 @@
+.*
+!.gitignore
+!.travis.yml
+composer.lock
+Pakefile
+pake.phar
+bin/phpunit
+coverage/
+src/vendors/

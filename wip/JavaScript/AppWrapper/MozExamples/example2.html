@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+
+<head>
+<title>XMLHttpRequest example</title>
+<script type="text/javascript">
+
+function init()
+{
+	var objOutput = document.getElementById("output");
+
+	var request = new XMLHttpRequest();
+	request.open('GET', 'http://developer1.gizurcloud.com/developers/jonas/vtwrapper/javascript1/', false);
+	request.send(); // because of "false" above, will block until the request is done 
+	                // and status is available. Not recommended, however it works for simple cases.
+	
+	if (request.status === 200) {
+		  objOutput.innerHTML = request.responseText;
+		  
+		  // console.log(request.responseText);
+	}
+}
+	
+</script>
+</head>
+<body onload="init();">
+
+Everything below has been fetched with XMLHttpRequest:
+
+<div id="output"> </div>
+
+
+</body>
+</html>

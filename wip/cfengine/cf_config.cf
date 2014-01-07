@@ -1,0 +1,25 @@
+#######################
+#
+# pull_cf_config.cf
+#
+# 120905, Jonas Colmsjö, (c) gizur.com
+#
+#######################
+
+
+bundle agent cf_config {
+classes:
+
+  "my_result" expression => splayclass("$(sys.host)$(sys.ipv4)","hourly");
+
+commands:
+
+  "/usr/bin/git"
+     args    => "pull",
+     chdir   => "/etc/cfengine3",
+     exec_owner => "root",
+     useshell => "true",
+     comment => "Pull cfengine configuration updates from git repository",
+     handle  => "pull_cf_config";
+}
+

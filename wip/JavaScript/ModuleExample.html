@@ -1,0 +1,54 @@
+<html>
+<head>
+	<title>Module Example</title>
+	<script src="lib/basic.js"></script>
+	<script>
+
+	//
+	// Define a module. This should be placed in the folder gizur/MyModule.js 
+	//
+	
+	var gizur;
+	if(!gizur) gizur = {};
+	
+	// A simple module
+	gizur.modules = (function () {
+		
+		// A private constructor
+		function MyModule() {
+			this._myString = "";			// a private variable
+		}
+		
+		MyModule.prototype.getString = function() {
+			return this._myString;	
+		}
+		
+		MyModule.prototype.setString = function(str) {
+			this._myString = str;	
+		}
+		
+		
+		return { MyModule: MyModule };					// make the module public by returning the constructors
+	}());
+		
+
+	window.onload = function(){
+		test("Testing the module MyModule.", function(){
+			
+			var _myModule = new gizur.modules.MyModule();	// create a MyModule object (by cloning the gizur.modules.MyModule)
+			
+			_myModule.setString("testing");
+			assert( _myModule.getString() == "testing", "Make sure that custom setter and getter works" );
+		});
+  
+	};
+	</script>
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+</head>
+<body>
+	<ul id="results"></ul>
+</body>
+</html>

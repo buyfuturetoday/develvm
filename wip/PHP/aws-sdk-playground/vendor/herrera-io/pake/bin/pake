@@ -1,0 +1,48 @@
+#!/usr/bin/env php
+<?php
+
+use Herrera\Pake\Pake;
+use Herrera\Service\Process\ProcessServiceProvider;
+
+// workaround not being able to use __DIR__ in a closure
+define('PAKE_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR);
+
+call_user_func(function () {
+    if (file_exists('composer.json')) {
+        $composer = realpath('composer.json');
+        $dir = realpath('.') . DIRECTORY_SEPARATOR;
+    } else {
+        $composer = PAKE_DIR . '/composer.json';
+        $dir = PAKE_DIR;
+    }
+
+    $composer = json_decode(file_get_contents($composer), true);
+
+    if (isset($composer['config']['vendor-dir'])) {
+        $file = $dir . $composer['config']['vendor-dir'] . '/autoload.php';
+    } else {
+        $file = $dir . 'vendor/autoload.php';
+    }
+
+    if (file_exists($file)) {
+        require($file);
+    } else {
+        echo "Unable to load Pake.\n";
+
+        exit(1);
+    }
+
+    $app = new Pake('Pake', '@git_version@');
+    $app->register(new ProcessServiceProvider());
+
+    try {
+    $app->load();
+
+    } catch (Exception $exception) {
+        $app['console']->renderException($exception, $app['console.output']);
+
+        exit(1);
+    }
+
+    $app->run();
+});

@@ -1,0 +1,155 @@
+<!doctype html>
+
+<html manifest="/JavaScript/Fortnox_API_test/fortnox.appcache">
+  <head>
+
+    <title>Offline webapp</title>
+
+
+    <!-- Bootstrap -->
+    <link href="/lib/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <!-- Top row with menu -->
+      <div class="row">
+        <div class="span12">
+
+          <!-- The menu used to show different templates -->
+          <div id="menu">
+            Menu:
+            <a href="#route1">#screen1</a> 
+            <a href="#route2">#screen2</a> 
+            <a href="#route3">#screen3</a>
+          </div>
+
+        </div> <!-- /span12 -->
+      </div> <!-- /row -->
+
+      <!-- Second row with content -->
+      <div class="row">
+
+        <!-- Left column with the UI -->
+        <div class="span8">
+
+          <!-- Templates are rendered here -->
+          <div id="ui">
+          </div>
+
+        </div> <!-- /span8 -->
+
+
+        <!-- Left column with some settings -->
+        <div class="span4">
+          <form>
+            <fieldset>
+              <legend>Settings</legend>
+
+              <span class="help-block">These settings are stored locally on your laptop and nowhere else. The 
+                calls to Fortnox are made with HTTPS so your credentials are safe.</span>
+
+              <label>Databas</label>
+              <input id="database_id" type="text" placeholder="Your Fortnox database id">
+              <span class="help-block">Your Database id is showed in Administration in the Lobby in Fortnox.</span>
+
+              <label>API Token</label>
+              <input id="api_token" type="text" placeholder="Your Fortnox token">
+              <span class="help-block">Your token is showed in Administration in the Lobby in Fortnox.</span>
+
+            </fieldset>
+          </form>
+
+
+        </div> <!-- /span4 -->
+      </div> <!-- /row -->
+
+ 
+      <!-- Bottom row with tests etc. -->
+      <div class="row">
+        <div class="span12">
+ 
+          <!-- Show test results -->
+          <ul id="results"></ul>
+
+        </div> <!-- /span12 -->
+      </div> <!-- /row -->
+
+    </div> <!-- /container -->
+
+
+    <!-- Templates -->
+
+    <script type="text/template" id="template1">
+      <h3>This is screen 1</h3>
+    </script>
+
+    <script type="text/template" id="template2">
+      <h3>This is screen 2</h3>
+    </script>
+
+    <script type="text/template" id="template3">
+      <h3>This is screen 3</h3>
+    </script>
+
+
+
+    <!-- Scripts at the end for better performance -->
+
+    <script src="/lib/js/jquery.js"></script>
+    <script src="/lib/js/bootstrap.min.js"></script>
+    <script src="/lib/js/persona-include.js"></script>
+    <script src="/lib/js/modernizr-build.min.js"></script>
+
+    <script src="/lib/js/helpers-1.0.js"></script>
+    <script src="/lib/js/signals.js"></script>
+    <script src="/lib/js/crossroads.min.js"></script>
+    <script src="/lib/js/hasher.min.js"></script>
+    <script src="/lib/js/plates.js"></script>
+    <script src="/lib/js/stapes.js"></script>
+
+    <script src="/lib/js/jquery.doomTweaks.js"></script>
+
+    <script src="/JavaScript/Fortnox_API_test/js/view.js"></script>
+    <script src="/JavaScript/Fortnox_API_test/js/controller.js"></script>
+    <script src="/JavaScript/Fortnox_API_test/js/model.js"></script>
+
+    <script type="text/javascript">
+
+
+    // Make sure the page is loading before we start
+    // ---------------------------------------------
+
+    window.onload = function(){
+
+      (function(){
+
+        // run the app, controller.js for the code
+        window.main();
+
+      }());
+
+   } // window.onload
+
+
+    </script>
+
+
+    <!-- Give unit test results a little color -->
+
+    <style>
+      #results li.pass { color: green; }
+      #results li.fail { color: red; }
+    </style>
+
+
+  </body>
+</html>

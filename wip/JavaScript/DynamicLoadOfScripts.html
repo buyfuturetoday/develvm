@@ -1,0 +1,94 @@
+<html>
+<head>
+	<title>Events Example 1</title>
+	
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+
+
+</head>
+<body>
+
+	<div id="registration_page">
+	
+		<header>
+			<h1>Registration</h1>
+		</header>
+		
+		<section id="registration">
+			<input id="userid" type="text" placeholder="Enter the desired user id..."/>
+			<button id="add">Add</button>
+		</section>
+
+		<section id="message">
+		</section>
+		
+		<footer>
+			© 2012 by Gizur AB
+		</footer>
+	  
+	</div>
+	
+
+	<ul id="results"></ul>
+
+	<!-- Templates -->
+	
+	<script type="text/html" id="item_tmpl">	  <div>
+	    <br/><label><%= title %></label><br/><br/>
+	  </div>
+	</script>
+
+
+
+	<!-- Scripts at the end for faster rendering in the browser -->
+	<script src="lib/jquery.js"></script>
+	
+	<!-- My unit test and logging functions -->
+	<script src="lib/basic.js"></script>
+
+	<script>
+	
+
+		test("Testing $.getScript(DynamicLoadOfScripts.js)...see console for the results", function(){
+			
+			// Will load the script asynchronously, so need to wait until done
+			$.getScript("DynamicLoadOfScripts.js")
+			.done(function(script, textStatus) {
+
+				console.log( textStatus );
+
+	  			var _myModule2 = gizur2.modules.MyModule;
+
+			})
+			.fail(function(jqxhr, settings, exception) {
+				console.log( "$.getScript ajaxError handler." );
+			});
+  
+		});
+
+
+		test("Testing $.getScript(DynamicLoadOfScripts2.js)...see console for the results", function(){
+			
+			// Will load the script asynchronously, so need to wait until done
+			$.getScript("DynamicLoadOfScripts2.js")
+			.done(function(script, textStatus) {
+
+				console.log( textStatus );
+
+	  			var _myModule = new gizur.modules.MyModule();
+
+			})
+			.fail(function(jqxhr, settings, exception) {
+				console.log( "$.getScript ajaxError handler." );
+			});
+   
+		});
+ 			
+
+	</script>
+
+</body>
+</html>

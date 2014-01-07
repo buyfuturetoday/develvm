@@ -1,0 +1,3 @@
+MyApp
+Fabric>=1.0.0
+Pycco>=0.3.0

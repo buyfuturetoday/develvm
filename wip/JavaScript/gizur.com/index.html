@@ -1,0 +1,41 @@
+<html>
+<head>
+	<title>Gizur.com</title>
+
+	<script src="../lib/jquery.js"></script>
+	<script src="../lib/basic.js"></script>
+	<script>
+		$(document).ready(function(){
+			
+			$('#forgot_password').click(function() {
+				log("Clicked on forgot password");
+			});
+		  
+			$('#register_account').click( function() {
+				log("Clicked on register account");
+			});
+		  
+			$('#login_btn').click( function() {
+				log("Clicked on login");
+			});
+		  
+		});
+	</script>
+	
+	<style>
+		.test { width: 300px; height: 200px; background: grey; }
+	</style>
+
+</head>
+<body>
+	<div id="login" class="test">
+		E-mail: <input type="text" id="mail" placeholder="Enter e-mail"/><br/>
+		Password: <input type="password" id="password" placeholder="Enter password"/><br/>
+		<input type="button" id="login_btn" value="Login"/><br/>
+	
+		<a href="#forgot_password" id="forgot_password">Forgot password</a><br/>
+		<a href="#register_account" id="register_account">Register account</a>
+	
+	</div>
+</body>
+</html>

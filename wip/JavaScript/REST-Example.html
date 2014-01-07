@@ -1,0 +1,215 @@
+<html>
+<head>
+
+    <!--
+
+    NOTE: MUST BE OPENED USING THIS URL: https://s3-eu-west-1.amazonaws.com/gc4-cdn/wip/JavaScript/REST-Example.html
+
+
+    REST CALLS WILL NOT WORK OTHERWISE DUE TO CORS POLCIES!!!
+
+    -->
+
+
+	<title>REST Example 1</title>
+	
+	<!-- My unit test and logging functions -->
+	<script src="lib/basic.js"></script>
+
+	<!-- Used for the views -->
+	<script src="lib/underscore-min.js"></script>
+	<script src="lib/jquery.min.js"></script>
+	<script>
+
+	window.onload = function(){
+
+		// Register ajax error handler
+		$.ajaxSetup({
+	        error: function (x, status, error) {
+				log('Got an error: ' + status + 'Error details:' + error);
+	        },
+			statusCode: {
+				403: function() {												// Both this and the error function below will be called for 4XX
+					log('Got an 403, forbidden...');
+				},
+				404: function() {
+					log('Got an 404...');
+				},
+				302: function() {
+					log('Got a re-direct, 302...');
+				}
+			}
+		});
+
+		// Register my own window error handler
+		window.onerror = function(errorMsg, url, lineNumber) {
+			log('Got window.onerror: ' + errorMsg + ' for URL: ' + url + ' on line number: ' + lineNumber);
+		};
+
+		// Cache the template function 
+		var tmpl = _.template($('#item-template').html());
+		
+		// Register ajax error handler
+		$.ajaxSetup({
+	        error: function (x, status, error) {
+				log('Got an error: ' + status + 'Error details:' + error);
+	        },
+			statusCode: {
+				403: function() {												// Both this and the error function below will be called for 4XX
+					log('Got an 403, forbidden...');
+				},
+				404: function() {
+					log('Got an 404...');
+				},
+				302: function() {
+					log('Got a re-direct, 302...');
+				}
+			}
+		});
+
+		// Register my own window error handler
+		window.onerror = function(errorMsg, url, lineNumber) {
+			log('Got window.onerror: ' + errorMsg + ' for URL: ' + url + ' on line number: ' + lineNumber);
+		};
+
+		// Manage the event when ajax1 is clicked
+		$('#ajax1').on('click', function() {			
+
+			// Play around with REST
+			$.ajax({
+				url:      'ajax/test.json',
+				dataType: 'json',
+				type:     'GET',														// What's supported depends on the browser
+				headers: {'API_KEY':'ASDFGH123455'},
+				success: function(data) {
+
+					var items = [];
+
+					log('logging json: ' + JSON.stringify(data) );
+
+					$.each(data, function(key, val) {
+					    items.push('<li id="' + key + '">' + val + '</li>');
+					});
+
+					log('logging json: ' + items.join(''));
+
+					$('<ul/>', {
+					    'class': 'my-new-list',
+					    html: items.join('')
+					}).appendTo('body');
+				}
+			});
+
+		});
+
+		// Manage the event when ajax2 is clicked
+		$('#ajax2').on('click', function() {			
+			// Play around with REST
+			$.ajax({
+				url:      'ajax/test1.json',
+				dataType: 'json',
+				type:     'GET',														// What's supported depends on the browser
+				headers: {'API_KEY':'ASDFGH123455'},
+				success: function(data) {
+
+					var items = [];
+
+					log('logging json: ' + JSON.stringify(data) );
+
+					$.each(data, function(key, val) {
+					    items.push('<li id="' + key + '">' + val + '</li>');
+					});
+
+					log('logging json: ' + items.join(''));
+
+					$('<ul/>', {
+					    'class': 'my-new-list',
+					    html: items.join('')
+					}).appendTo('body');
+				}
+			});
+
+		});
+
+
+		// Manage the event when ajax3 is clicked
+		$('#ajax3').on('click', function() {	
+
+			// Play around with REST
+			$.ajax({
+				url:      'https://api.github.com/users/colmsjo/repos',
+				dataType: 'jsonp',
+				type:     'GET',														// What's supported depends on the browser
+				//headers: {'Access-Control-Allow-Origin':'*'},
+				success: function(data) {
+
+					var gists = [];
+
+					log('logging json: ' + JSON.stringify(data) );
+
+					$.each(data, function(index, val) {
+					    gists.push( val.description );
+					});
+
+					log('logging json: ' + items.join(''));
+
+					$('<ul/>', {
+					    'class': 'my-new-list',
+					    html: items.join('')
+					}).appendTo('body');
+				}
+			});
+
+		});
+		
+		test("Testing Underscore views...", function(){	
+			// Doing nothing right now
+		});
+  
+	};
+	</script>
+
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+
+
+</head>
+<body>
+
+	<div id="myapp">
+	
+		<header>
+			<h1>REST Exampel</h1>
+		</header>
+		
+		<section id="input-section">
+			<a id="ajax1">Ajax request 1</a>
+			<a id="ajax2">Ajax request 2</a>
+			<a id="ajax3">Ajax request 3</a>
+		</section>
+
+		<section id="todos">
+		</section>
+		
+		<footer>
+			2012 by Gizur AB
+		</footer>
+	  
+	</div>
+	
+	<ul id="results"></ul>
+
+	<!-- Templates -->
+	
+	<script type="text/template" id="item-template">
+	  <div>
+	    <br/><label><%= title %></label><br/><br/>
+	  </div>
+	</script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,100 @@
+/* Default */
+
+#nav {
+width: 728px;
+height: 40px;
+position: relative;
+background: url(../img/nav_main.png);
+margin: 0;
+padding: 0;
+}
+
+#nav li {
+float: left;
+}
+
+#nav li a {
+position: absolute;
+top: 0;
+margin: 0;
+padding: 0;
+display: block;
+height: 40px;
+background: url(../img/nav_main.png) no-repeat;
+text-indent: -9999px;
+overflow: hidden;
+}
+
+/*up state*/
+li#nav_home a {
+left: 0;
+width: 145px;
+background-position: 0 0;
+}
+
+li#nav_about a {
+left: 145px;
+width: 145px;
+background-position: -145px 0;
+}
+
+li#nav_gallery a {
+left: 290px;
+width: 145px;
+background-position: -290px 0;
+}
+
+li#nav_services a {
+left: 435px;
+width: 145px;
+background-position: -435px 0;
+}
+
+li#nav_contact a {
+left: 580px;
+width: 148px;
+background-position: -580px 0;
+}
+
+/*hover state*/
+li#nav_home a:hover {
+background-position: 0 -45px;
+}
+
+li#nav_about a:hover {
+background-position: -145px -45px;
+}
+
+li#nav_gallery a:hover {
+background-position: -290px -45px;
+}
+
+li#nav_services a:hover {
+background-position: -435px -45px;
+}
+
+li#nav_contact a:hover {
+background-position: -580px -45px;
+}
+
+/*current state*/
+#body_home li#nav_home a {
+background-position: 0 -90px;
+}
+
+#body_about li#nav_about a {
+background-position: -145px -90px;
+}
+
+#body_gallery li#nav_gallery a {
+background-position: -290px -90px;
+}
+
+#body_services li#nav_services a {
+background-position: -290px -90px;
+}
+
+#body_contact li#nav_contact a {
+background-position: -290px -90px;
+}
+

@@ -1,0 +1,151 @@
+<html>
+  <head>
+    <title>Testing Persona</title>
+
+    <style type="text/css">
+      body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+      }
+
+      .form-signin {
+        max-width: 300px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+      .form-signin .form-signin-heading,
+      .form-signin .checkbox {
+        margin-bottom: 10px;
+      }
+      .form-signin input[type="text"],
+      .form-signin input[type="password"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }
+
+    </style>
+
+    <!-- Bootstrap -->
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <form class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="text" class="input-block-level" placeholder="Email address">
+        <input type="password" class="input-block-level" placeholder="Password">
+        <label class="checkbox">
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+        <button class="btn btn-large btn-primary" id="signin"  type="submit">Sign in</button>
+        <button class="btn btn-large btn-primary" id="signout" type="submit">Sign out</button>
+      </form>
+
+    </div> <!-- /container -->
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+    <script src="https://raw.github.com/colmsjo/helpersjs/master/lib/js/helpers-1.0.js"></script>
+
+    <script src="https://login.persona.org/include.js"></script>
+
+
+    <script type="text/javascript">
+    window.onload = function(){
+
+      logging.threshold  = logging.debug;
+      logDebug('Loading page...');
+
+      var signinLink = document.getElementById('signin');
+      if (signinLink) {
+        signinLink.onclick = function() { 
+          logDebug('Signing in...');
+
+          // Do the BrowserID login
+          navigator.id.request(); 
+
+          // Prevent page from being reloaded
+          return false;
+        };
+      }
+       
+      var signoutLink = document.getElementById('signout');
+      if (signoutLink) {
+        signoutLink.onclick = function() { 
+          logDebug('Signing out...');
+
+          // Do the BrowserID logout
+          navigator.id.logout(); 
+
+          // Prevent page from being reloaded
+          return false;
+        };
+      }
+
+      // could store and fetch in a cookie
+      var currentUser = null;
+       
+      navigator.id.watch({
+        loggedInUser: currentUser,
+        onlogin: function(assertion) {
+
+          logDebug('Logging in with Persona: assertion: '+ assertion);
+
+          // A user has logged in! Here you need to:
+          // 1. Send the assertion to your backend for verification and to create a session.
+          // 2. Update your UI.
+          /* NOT iMPLEMENTED YET
+          $.ajax({ 
+            type: 'POST',
+            url: '/auth/login', // This is a URL on your website.
+            data: {assertion: assertion},
+            success: function(res, status, xhr) { window.location.reload(); },
+            error: function(xhr, status, err) { alert("Login failure: " + err); }
+          }); */
+        },
+        onlogout: function() {
+          
+          logDebug('Logging out from Persona');
+
+          // A user has logged out! Here you need to:
+          // Tear down the user's session by redirecting the user or making a call to your backend.
+          // Also, make sure loggedInUser will get set to null on the next page load.
+          // (That's a literal JavaScript null. Not false, 0, or undefined. null.)
+          /* NOT IMPLEMENTED YET
+          $.ajax({
+            type: 'POST',
+            url: '/auth/logout', // This is a URL on your website.
+            success: function(res, status, xhr) { window.location.reload(); },
+            error: function(xhr, status, err) { alert("Logout failure: " + err); }
+          }); */
+        }
+      });
+
+
+    } // window.onload
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+{
+  "name"        : "wip",
+  "description" : "Work In Progress",
+  "version"     : "0.0.1",
+  "author": {
+    "name": "Jonas Colmsjö",
+    "email": "jonas.colmsjo@gizur.com"
+  },
+  "repository": {
+    "type" : "git",
+    "url"  : "git://github.com/colmsjo/wip.git"
+  },
+  "licenses": [
+    {
+      "type" : "MIT",
+      "url"  : "https://github.com/gizur/gizur-cron/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "static_server.js",
+  "dependencies": {
+    "time"         : "0.8.x",
+    "express"      : ">=2.5.x",
+    "fmt"          : "0.4.0",
+    "awssum"       : "0.11.0",
+    "aws2js"       : "0.7.6",
+    "grunt-exec"   : "~0.3.0",
+    "nodeunit"     : "0.7.4",
+    "grunt-doccoh" : "0.1.3",
+    "grunt-clean"  : "0.3.0"
+  },
+  "engines": {
+    "node" : "0.8.x",
+    "npm"  : "1.1.x"
+  },
+  "devDependencies": {
+    "grunt"          : "~0.3.16"
+  },
+  "bundleDependencies": [
+    "helpers"
+  ], 
+  "keywords": ["cron", "logging"]
+}

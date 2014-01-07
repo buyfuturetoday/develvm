@@ -1,0 +1,43 @@
+<?php
+
+
+// Some constants that needs to be set according to each installation
+//===========================================================================
+
+define('DOCCOH_PATH', '/usr/local/bin/doccoh');
+
+
+// The tasks
+//============================================================================
+
+$task('hello', 'Just want to say hello!', function ($input, $output) {
+    $output->writeln(sprintf(
+        'Hello, <info>%s</info>!',
+        $input->getArgument('name') ?: 'Guest'
+    ));
+})->addArgument('name');
+
+
+$task('test', 'Test using PHPUnit', function () use ($pake) {
+    $process = $pake['process']('./vendor/bin/phpunit');
+
+    return $process->error($process->stream(STDERR))
+                   ->output($process->stream(STDOUT))
+                   ->run();
+});
+
+
+$task('doc', 'Generating documentation using doccoh (needs to be installed using npm)', function () use ($pake) {
+    $process = $pake['process'](DOCCOH_PATH);
+
+    return $process->error($process->stream(STDERR))
+                   ->output($process->stream(STDOUT))
+                   ->run();
+});
+
+
+$task('run', 'Running example1.php', function ($input, $output) {
+
+    require './example1.php';
+
+});

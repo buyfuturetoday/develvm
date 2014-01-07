@@ -1,0 +1,129 @@
+<html>
+<head>
+	<title>Plates Example</title>
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+</head>
+<body>
+	<ul id="results"></ul>
+	
+	
+	<div id="test1">
+		Some links:<br/>
+		<a href="#route1">#route1</a> - clear result<br/>
+		<a href="#route2">#route2</a> - single contact<br/>
+		<a href="#route3">#route3</a> - several contacts<br/>
+		<a href="#route4">#route4</a><br/>
+	</div>
+
+
+	<div id="ui">
+	</div>
+
+
+	<!-- Templates -->
+	
+	<script type="text/template" id="template1">
+	  <div>
+		<ul class="contacts">
+		  <li class="contact">
+		    <span class="address">Git URL</span> - <span class="name">name</span>
+		  </li>
+		</ul>
+	  </div>
+	</script>
+
+
+	<script type="text/template" id="template2">
+		  <a href="/">link</a>
+	</script>
+	
+	<!-- Scripts at the end for better performance -->
+
+	<script type="text/javascript" src="https://raw.github.com/colmsjo/helpersjs/master/helpers.js"></script>
+
+	<script type="text/javascript" src="https://raw.github.com/colmsjo/helpersjs/master/lib/js/jquery-1.7.2.min.js"></script>
+
+	<script src="https://raw.github.com/colmsjo/helpersjs/master/lib/js/signals.js"></script>
+	<script src="https://raw.github.com/colmsjo/helpersjs/master/lib/js/crossroads.min.js"></script>
+	<script src="https://raw.github.com/colmsjo/helpersjs/master/lib/js/hasher.min.js"></script>
+
+	<script src="https://raw.github.com/colmsjo/helpersjs/master/lib/js/plates.js"></script>
+
+	<script>
+	window.onload = function(){
+
+		var h = helpers.create();
+
+		h.test("Testing to use the plates library.", function(){
+			
+			// setup crossroads, using the global object. 
+			// It is also possible to have several independent Routers
+			crossroads.addRoute('route1', function() { 
+
+				$('#ui').html("");
+
+				h.log('logging static route1...');} 
+			);
+			
+			crossroads.addRoute('route2', function() {
+
+				var html = $('#template1').html();
+				var data = { 
+					"address": "http://github.com/colmsjo",
+					"name": "Jonas"
+				};
+
+				var output = Plates.bind(html, data);  // not using the third map argument
+				$('#ui').html(output);
+
+				h.log('logging static route2...');} 
+			); 
+			
+			crossroads.addRoute('route3', function() {
+
+				var html = $('#template2').html();
+
+				var data = [ 
+					{ "url": "/a" },
+					{ "url": "/b" },
+					{ "url": "/c" }
+				];
+
+				var map = Plates.Map();
+				map.where('href').is('/').insert('url');
+
+				var output = Plates.bind(html, data, map);
+				$('#ui').html(output);
+
+				h.log('logging static route3...'+output);} 
+			); 
+			
+			
+			// Also log routes that did not match anything (useful for debugging)
+			crossroads.bypassed.add(function(request){
+				h.log("A route that wasn't matched:"+request); 
+			});
+			
+			//setup hasher
+			function parseHash(newHash, oldHash){
+				crossroads.parse(newHash); 
+			}
+			
+			hasher.initialized.add(parseHash); 			// parse initial hash 
+			hasher.changed.add(parseHash); 				// parse hash changes 
+			hasher.init(); 								// start listening for history change
+			
+			//update URL fragment generating new history record 
+			hasher.setHash('route1');
+
+		});
+  
+	};
+	
+	
+	</script>
+</body>
+</html>

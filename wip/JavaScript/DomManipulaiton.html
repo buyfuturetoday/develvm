@@ -1,0 +1,47 @@
+<!-- An implementation of test grouping. -->
+
+<html>
+<head>
+	<title>Test Suite</title>
+	
+	<script src="lib/jquery.js"></script>
+	<script src="lib/basic.js"></script>
+	<script>
+
+
+	window.onload = function () {
+				}; 
+
+
+	
+	
+	// Manage some events
+	$(function () {
+		$('#button1').on('click', function() {
+			
+			var fragment1 = jQuery.buildFragment(["<b>Name:</b>"], null, null);		
+						$('#div1')[0].appendChild(fragment1.fragment.firstChild);
+			
+		});
+	});
+
+	</script>
+	
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+	
+</head>
+<body>
+    <!-- For unit testing -->
+	<ul id="results"></ul>
+	
+	<button id="button1"></button>	
+	<div id="div1"></div>
+
+	<div id="test"><b>Hello</b>, I'm a ninja!</div> 
+	<div id="test2"></div>
+	
+</body>
+</html>

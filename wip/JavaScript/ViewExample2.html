@@ -1,0 +1,91 @@
+<html>
+<head>
+	<title>Views Example</title>
+	
+	<style>
+		#results li.pass { color: green; }
+		#results li.fail { color: red; }
+	</style>
+
+
+</head>
+<body>
+
+	<div id="myapp">
+	
+		<header>
+			<h1>My App</h1>
+		</header>
+		
+		<section id="input-section">
+			<input id="new-todo" type="text" placeholder="What needs to be done?"/>
+			<a id="add">Add</a>
+		</section>
+
+		<section id="todos">
+		</section>
+		
+		<footer>
+			2012 by Gizur AB
+		</footer>
+	  
+	</div>
+	
+
+	<ul id="results"></ul>
+
+	<!-- Templates -->
+	
+	<script type="text/template" id="item-template">
+		<div>
+			{{#view App.ItemView}}
+				<br/><label>{{MyModel.item}}</label><br/><br/>
+			{{/view}}
+		</div>
+	</script>
+
+
+	<!-- In the Ember examples are the scripts at the end (for faster rendering in the browser) -->
+	<script src="lib/jquery-1.7.2.min.js"></script>
+	<script src="lib/handlebars-1.0.0.beta.6.js"></script>
+	<script src="lib/ember.js"></script>
+	
+	<!-- My unit test and logging functions -->
+	<script src="lib/basic.js"></script>
+
+	<script>
+	window.onload = function(){
+
+		// Create a simple model with an item, used in the view above
+		var MyApp.item = Ember.Object.create({
+			contents: "Empty"							// Just to make it easier to debug
+		});
+
+		var MyApp.container = Ember.ContainerView.create({
+			Bindings: ['name'],
+			name: 'foo'
+		});
+		
+		Ember.run(function() {
+			container.appendTo('#todos');
+		});
+		
+		// Manage the event when add is clicked
+		$('#add').on('click', function() {
+			var _todo = $('#new-todo')[0];
+			log('logging add '+_todo.value +'...');
+			MyModel.set('item', _todo);		// The view should now be updated automatically
+		});
+		
+
+		test("Testing Underscore views...", function(){
+			
+			// Doing nothing right now
+
+		});
+  
+	};
+	</script>
+
+</body>
+</html>
