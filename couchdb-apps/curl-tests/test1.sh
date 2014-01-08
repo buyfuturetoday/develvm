@@ -22,6 +22,11 @@ CMD="curl -X POST -H Content-Type:application/json -d {} ${COUCHDB1}/test/"
 echo $CMD
 time $CMD
 
+# Store hello world document
+CMD="curl -X POST -H Content-Type:application/json -d {message:hello world} ${COUCHDB1}/test/"
+echo $CMD
+time $CMD
+
 # List all documents
 CMD="curl -X GET ${COUCHDB1}/test/_all_docs"
 echo $CMD
