@@ -1,17 +1,18 @@
 <html>
 <head>
 	<title>Module Example</title>
-	<script src="lib/basic.js"></script>
-	<script src="lib/signals.js"></script>
-	<script src="lib/crossroads.min.js"></script>
-	<script src="lib/hasher.min.js"></script>
+	<script src="../lib/js/basic.js"></script>
+	<script src="../lib/js/signals.js"></script>
+	<script src="../lib/js/crossroads.min.js"></script>
+	<script src="../lib/js/hasher.min.js"></script>
 	<script>
 
 	window.onload = function(){
 		test("Testing Crossroads.js and Hasher.", function(){
 			
 			// setup crossroads, using the global object. 
-			// It is also possible to have several independent Routers			crossroads.addRoute('route1', function() { 
+			// It is also possible to have several independent Routers
+			crossroads.addRoute('route1', function() { 
 				log('logging static route1...');} 
 			);
 			
@@ -24,14 +25,23 @@
 			); 
 			
 			// default listener, log all routes that has been matched
-			crossroads.routed.add(console.log, console); 			
+			//crossroads.routed.add(console.log, console); 
+			
 			// Also log routes that did not match anything (useful for debugging)
-			crossroads.bypassed.add(function(request){				log("A route that wasn't matched:"+request); 
+			crossroads.bypassed.add(function(request){
+				log("A route that wasn't matched:"+request); 
 			});
-						//setup hasher			function parseHash(newHash, oldHash){				crossroads.parse(newHash); 
-			}						hasher.initialized.add(parseHash); 			// parse initial hash 
+			
+			//setup hasher
+			function parseHash(newHash, oldHash){
+				crossroads.parse(newHash); 
+			}
+			
+			hasher.initialized.add(parseHash); 			// parse initial hash 
 			hasher.changed.add(parseHash); 				// parse hash changes 
-			hasher.init(); 								// start listening for history change						//update URL fragment generating new history record 
+			hasher.init(); 								// start listening for history change
+			
+			//update URL fragment generating new history record 
 			hasher.setHash('route1');
 
 		});
