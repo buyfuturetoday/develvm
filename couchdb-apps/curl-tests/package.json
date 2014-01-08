@@ -1,0 +1,15 @@
+{
+  "name": "curl-tests",
+  "version": "0.0.0",
+  "description": "First create a setenv file `cp setenv.temnplate setenv`, update it and `source setenv` to  create a environment varaible named `COUCHDB` containing the URL to the couch database.",
+  "main": "config-template.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "async": "~0.2.9"
+  }
+}
