@@ -18,6 +18,6 @@ var start = new Date().getTime();
 setInterval(function() {
   React.renderComponent(
     <Application elapsed={new Date().getTime() - start} />,
-    document.getElementById('container')
+    document.getElementById('content')
   );
 }, 50);

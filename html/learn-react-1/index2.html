@@ -2,34 +2,46 @@
 <html>
   <head>
     <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Description of app">
+    <meta name="author" content="Jonas Colmsjö">
 
     <title>Application</title>
 
-    <link rel="stylesheet" href="./css/base.css" />
 
-    <style type="text/css" media="screen">
-      .codeBox {
-        padding: 7px;
-        overflow:scroll;
-        background-color: #eee;
-        font-weight:normal;
-      }
-    </style>
+    <!-- Bootstrap core CSS -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
   </head>
 
   <body>
-    <h1>Application</h1>
+    <div class="container">
 
-    <div id="container">
- 
+      <!-- TODO: Need to fix 'active': <li class="active"><a href="index.html">Växla</a></li>-->
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="#">Home</a></li>
+          <li><a href="#l">About</a></li>
+        </ul>
+        <h3 class="text-muted">Application XX</h3>
+
+        <div id="content"> 
+        </div>
+
+      </div>
+
+
     </div>
 
 
-    <!-- Scripts at the end -->
-    <script src="bower_components/react/react.min.js"></script>
-    <script src="bower_components/react/JSXTransformer.js"></script>
-    <script type="text/jsx" src="./js/app.js"></script>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="bower_components/jquery/jquery.min.js"    type="text/javascript"></script>
+    <script src="bower_components/react/react.min.js"      type="text/javascript"></script>
+    <script src="bower_components/react/JSXTransformer.js" type="text/javascript"></script>
+    <script src="./js/app.js"                              type="text/jsx"></script>
+
   </body>
 
 </html>
