@@ -74,7 +74,7 @@ RUN /src-mysql/mysql-setup.sh
 
 RUN pear channel-discover pear.horde.org
 RUN pear install horde/horde_role
-RUN pear run-scripts horde/horde_role
+RUN sh -c "echo / | pear run-scripts horde/horde_role"
 RUN pear install -a -B horde/webmail
 
 EXPOSE 3306 80 443
