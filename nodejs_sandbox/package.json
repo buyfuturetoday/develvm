@@ -1,56 +1,60 @@
 {
-  "name"        : "nodejs_sandbox",
-  "description" : "Sandbox for Node development",
-  "version"     : "0.0.1",
+  "name": "nodejs_sandbox",
+  "description": "Sandbox for Node development",
+  "version": "0.0.1",
   "author": {
     "name": "Jonas Colmsjö",
     "email": "jonas.colmsjo@gizur.com"
   },
   "repository": {
-    "type" : "git",
-    "url"  : "git://github.com/colmsjo/nodejs_sandbox.git"
+    "type": "git",
+    "url": "git://github.com/colmsjo/nodejs_sandbox.git"
   },
   "bugs": {
     "url": "https://github.com/colmsjo/nodejs_sandbox/issues"
   },
   "licenses": [
     {
-      "type" : "MIT",
-      "url"  : "http://opensource.org/licenses/MIT"
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
     }
   ],
   "main": "app.js",
   "dependencies": {
-    "express"      : ">=2.5.x",
-    "request"      : "*",
-    "fmt"          : "0.4.0",
-    "grunt-exec"   : "~0.3.0",
-    "nodeunit"     : "0.7.4",
-    "grunt-doccoh" : "0.1.3",
-    "grunt-clean"  : "0.3.0",
-    "underscore"  : "*",
-    "forever-monitor"  : "*",
-    "daemon"  : "*",
-    "async"  : "*"
+    "express": ">=2.5.x",
+    "request": "*",
+    "fmt": "0.4.0",
+    "grunt-exec": "~0.3.0",
+    "nodeunit": "0.7.4",
+    "grunt-doccoh": "0.1.3",
+    "grunt-clean": "0.3.0",
+    "underscore": "*",
+    "forever-monitor": "*",
+    "daemon": "*",
+    "async": "*",
+    "jsmail": "0.0.0"
   },
   "engines": {
-    "node" : "0.8.x",
-    "npm"  : "1.1.x"
+    "node": "0.8.x",
+    "npm": "1.1.x"
   },
-   "bin": {
+  "bin": {
     "server": "foreman"
   },
   "scripts": {
-    "test"       : "grunt test",
-    "start"      : "node --debug-brk app.js",
-    "predeploy"  : "echo Starting to deploy app...",
-    "postdeploy" : "echo Application deployed."
+    "test": "grunt test",
+    "start": "node --debug-brk app.js",
+    "predeploy": "echo Starting to deploy app...",
+    "postdeploy": "echo Application deployed."
   },
   "devDependencies": {
-    "grunt"          : "~0.3.16"
+    "grunt": "~0.3.16"
   },
   "bundleDependencies": [
     "helpers"
-  ], 
-  "keywords": ["cron", "logging"]
+  ],
+  "keywords": [
+    "cron",
+    "logging"
+  ]
 }
