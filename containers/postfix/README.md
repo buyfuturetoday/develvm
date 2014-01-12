@@ -61,11 +61,24 @@ quit
 ```
 
 
-See if it came through: `ls /home/someone/Maildir/new/`
+See if it came through: `ls /home/fmaster/Maildir/new/`
 
 Being it up in a mail client:
 
 ```
 su - fmaster
-mail
+mutt
+```
+
+
+Now try to connect using POP3:
+
+```
+telnet localhost 110
+user fmaster
++OK Password required.
+pass password
++OK logged in.
+quit
+
 ```

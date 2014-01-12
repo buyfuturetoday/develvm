@@ -75,7 +75,7 @@ run cat /etc-postfix-main.cf >> /etc/postfix/main.cf
 
 
 # Good for debugging
-run apt-get install -q -y vim mailutils mutt dnsutils telnet nano
+run apt-get install -q -y  mutt dnsutils telnet nano
 
 
 #
@@ -83,4 +83,5 @@ run apt-get install -q -y vim mailutils mutt dnsutils telnet nano
 #
 
 expose 25 110 143
-cmd ["sh", "-c", "service syslog-ng start ; service postfix start ; service courier-pop start ; service courier-imap start ; tail -F /var/log/mail.log -F /var/log/messages"]
+cmd ["sh", "-c", "service syslog-ng start ; service postfix start ; service courier-pop start ; service courier-imap start ; service courier-authdaemon start ; tail -F 
+/var/log/mail.log -F /var/log/messages"]
