@@ -1,3 +1,7 @@
+#
+# Postfix with POP3 and IMAP (courier)
+#
+
 from ubuntu:12.04
 maintainer Vo Minh Thu <noteed@gmail.com>
 
@@ -38,7 +42,8 @@ RUN postconf -e "home_mailbox = Maildir/"
 RUN useradd -m -s /bin/bash fmaster
 RUN echo fmaster:password |chpasswd
 
-run useradd -s /bin/bash someone
+run useradd -m -s /bin/bash someone
+RUN echo someone:password |chpasswd
 run mkdir /var/spool/mail/someone
 run chown someone:mail /var/spool/mail/someone
 
@@ -81,4 +86,4 @@ RUN apt-get install -y courier-pop courier-imap
 #
 
 expose 25
-cmd ["sh", "-c", "service syslog-ng start ; service postfix start ; tail -F /var/log/mail.log"]
+cmd ["sh", "-c", "service syslog-ng start ; service postfix start ; service courier-pop start ; service courier-imap start ; tail -F /var/log/mail.log -F /var/log/messages"]
