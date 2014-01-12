@@ -35,3 +35,37 @@ running mail server with the following commands:
 
 Note: You have to setup a reverse MX DNS entry pointing back to your mail server's
 hostname.
+
+
+Testing
+------
+
+Start a interactive container: `docker run -t -i <image> /bin/bash`
+
+Send a test mail:
+
+```
+telnet localhost 25
+ehlo localhost
+mail from: root@localhost
+rcpt to: fmaster@localhost
+data
+Subject: My first mail on Postfix
+
+Hi,
+Are you there?
+regards,
+Admin
+. (Type the .[dot] in a new Line and press Enter )
+quit
+```
+
+
+See if it came through: `ls /home/someone/Maildir/new/`
+
+Being it up in a mail client:
+
+```
+su - fmaster
+mail
+```

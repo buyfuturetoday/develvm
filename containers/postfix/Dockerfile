@@ -39,6 +39,7 @@ RUN postconf -e "home_mailbox = Maildir/"
 # not in the original setup, needed? RUN postconf -e "mynetworks = 127.0.0.0/8, 192.168.1.0/24"
 # RUN postconf -e "inet_interfaces = all"
 
+# Needs to be done after postfix setup
 add etc-aliases.txt /etc/aliases
 #run chown root:root /etc/aliases
 #run newaliases
@@ -52,6 +53,7 @@ run apt-get install -y syslog-ng courier-pop courier-imap
 # Two slightly different ways of adding a user
 RUN useradd -m -s /bin/bash fmaster
 RUN echo fmaster:password |chpasswd
+ADD ./muttrc /home/fmaster/.muttrc
 
 run useradd -m -s /bin/bash someone
 RUN echo someone:password |chpasswd
@@ -73,7 +75,7 @@ run cat /etc-postfix-main.cf >> /etc/postfix/main.cf
 
 
 # Good for debugging
-run apt-get install -q -y vim mailutils mutt vim dnsutils
+run apt-get install -q -y vim mailutils mutt dnsutils telnet nano
 
 
 #
