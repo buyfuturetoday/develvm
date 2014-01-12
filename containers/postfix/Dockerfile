@@ -32,7 +32,7 @@ run echo "postfix postfix/main_mailer_type string Internet site" > preseed.txt
 run echo "postfix postfix/mailname string mail.example.com" >> preseed.txt
 # Use Mailbox format.
 run debconf-set-selections preseed.txt
-run DEBIAN_FRONTEND=noninteractive apt-get install -q -y postfix syslog-ng
+run DEBIAN_FRONTEND=noninteractive apt-get install -q -y postfix
 
 run postconf -e myhostname=mail.example.com
 run postconf -e mydestination="mail.example.com, example.com, localhost.localdomain, localhost"
@@ -43,7 +43,7 @@ RUN postconf -e "home_mailbox = Maildir/"
 # RUN postconf -e "inet_interfaces = all"
 
 # Installing together with postfix don't seam to work
-run apt-get install -y courier-pop courier-imap
+run apt-get install -y syslog-ng courier-pop courier-imap
 
 # Add a local user to receive mail at someone@example.com, with a delivery directory
 # (for the Mailbox format).
