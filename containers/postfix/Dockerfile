@@ -17,9 +17,6 @@ run update-locale LANG=en_US.UTF-8
 #run echo mail > /etc/hostname
 add etc-hosts.txt /etc/hosts
 #run chown root:root /etc/hosts
-add etc-aliases.txt /etc/aliases
-#run chown root:root /etc/aliases
-#run newaliases
 
 
 #
@@ -41,6 +38,10 @@ run postconf -e mailbox_command=""
 RUN postconf -e "home_mailbox = Maildir/"
 # not in the original setup, needed? RUN postconf -e "mynetworks = 127.0.0.0/8, 192.168.1.0/24"
 # RUN postconf -e "inet_interfaces = all"
+
+add etc-aliases.txt /etc/aliases
+#run chown root:root /etc/aliases
+#run newaliases
 
 # Installing together with postfix don't seam to work
 run apt-get install -y syslog-ng courier-pop courier-imap
