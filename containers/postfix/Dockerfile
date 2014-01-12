@@ -22,10 +22,6 @@ add etc-aliases.txt /etc/aliases
 #run newaliases
 
 
-# Good for debugging
-run apt-get install -q -y vim mailutils mutt vim dnsutils
-
-
 #
 # Install Postfix.
 #
@@ -71,6 +67,10 @@ run chmod 600 /etc/postfix/relay_passwd
 run postmap /etc/postfix/relay_passwd
 add etc-postfix-main.cf /etc-postfix-main.cf
 run cat /etc-postfix-main.cf >> /etc/postfix/main.cf
+
+
+# Good for debugging
+run apt-get install -q -y vim mailutils mutt vim dnsutils
 
 
 #
