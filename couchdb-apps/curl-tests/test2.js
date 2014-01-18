@@ -75,7 +75,7 @@ function response(res) {
     if(counter < http_calls.length)
       options.path   = http_calls[counter].path;
       options.method = http_calls[counter].method;
-      data           = http_call[conunter].data;
+      data           = http_calls[counter].data;
       console.log("OPTIONS:"+JSON.stringify(options)+"\n"+JSON.stringify(data));
       request        = http.request(options, response);
       if (data != null) req.write(JSON.stringify(data));

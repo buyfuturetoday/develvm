@@ -4,7 +4,7 @@
 
         return {
 
-			COUCHDB_HOSTNAME    : "app1.jacc.local",
+			COUCHDB_HOSTNAME    : "app2.jacc.local",
 			COUCHDB_PORT        : 8080,
 			COUCHDB_ADMIN       : "admin",
 			COUCHDB_ADMIN_PASS  : "mysecretpassword",
