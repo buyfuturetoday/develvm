@@ -27,8 +27,7 @@
  */
 
 var config = require('./config.js').create(),
-    http   = require('http'),
-    async  = require('async');
+    http   = require('http');
 
 var options = {
   hostname: config.COUCHDB_HOSTNAME,
