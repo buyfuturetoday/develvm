@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
 /*
+ * Jonas Colmsjo, 2014-01-15
+ *
  * Make a series of rest http calls. The next call is started in
- * in the on('end') callback for the previous call.
+ * in the on('end') callback for the previous call. This is necessary
+ * since node http requests are asynchronous.
  *
  * Pseudo code:
  *
@@ -26,9 +29,13 @@
  *
  */
 
+// Includes and some variables
+// --------------------------------------------------------------------------
+
 var config = require('./config.js').create(),
     http   = require('http');
 
+// The couchdb hostname, IP, username and password is fetched from config.js
 var options = {
   hostname: config.COUCHDB_HOSTNAME,
   port:     config.COUCHDB_PORT,
@@ -38,10 +45,15 @@ var options = {
   }
 };
 
+
 var http_calls = [],
     counter    = 0,
     request    = null,
     data       = null;
+
+
+// These are the http calls to be made
+// --------------------------------------------------------------------------
 
 http_calls[0] = {
   path:   '/test/',
@@ -71,6 +83,10 @@ http_calls[4] = {
   method: 'POST',
   data:   { "message" : "hello world" }
 };
+
+
+// Perform the http calls and handle response and errors
+// --------------------------------------------------------------------------
 
 function response(res) {
   console.log('STATUS: ' + res.statusCode);
