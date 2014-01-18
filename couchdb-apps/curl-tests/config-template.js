@@ -1,9 +1,17 @@
-var COUCHDB_HOST        = "app1.jacc.local",
-    COUCHDB_PORT        = 5984,
-    COUCHDB_ADMIN       = "admin",
-    COUCHDB_ADMIN_PASS  = "mysecretpassword",
-    COUCHDB_USER        = "username",
-    COUCHDB_USER_PASS   = "xxx";
+(function(exports) {
 
-var COUCHDB1            = "http://"+COUCHDB_ADMIN+":"+COUCHDB_ADMIN_PASS+"@"+COUCHDB_IP_AND_PORT,
-    COUCHDB2            = "http://"+COUCHDB_USER+":"+COUCHDB_USER_PASS+"@"+COUCHDB_IP_AND_PORT;
+    exports.create = function() {
+
+        return {
+
+                        COUCHDB_HOSTNAME : "app1.jacc.local",
+                        COUCHDB_PORT : 8080,
+                        COUCHDB_ADMIN : "admin",
+                        COUCHDB_ADMIN_PASS : "mysecretpassword",
+                        COUCHDB_USER : "username",
+                        COUCHDB_USER_PASS : "xxx"
+
+                };
+        };
+
+}(typeof exports === 'undefined' ? this['config']={} : exports));
