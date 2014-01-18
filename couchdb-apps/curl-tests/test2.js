@@ -46,18 +46,30 @@ var http_calls = [],
 http_calls[0] = {
   path:   '/test/',
   method: 'DELETE',
-  data:   { "message" : "hello world" }
+  data: null
 };
 
 http_calls[1] = {
   path:   '/test/',
   method: 'PUT',
-  data:   { "message" : "hello world" }
+  data: null
 };
 
 http_calls[2] = {
   path:   '/test/',
   method: 'GET'
+};
+
+http_calls[3] = {
+  path:   '/test/',
+  method: 'POST',
+  data:   { }
+};
+
+http_calls[4] = {
+  path:   '/test/',
+  method: 'POST',
+  data:   { "message" : "hello world" }
 };
 
 function response(res) {
@@ -72,14 +84,15 @@ function response(res) {
 
   res.on('end', function () {
     counter++;
-    if(counter < http_calls.length)
+    if(counter < http_calls.length) {
       options.path   = http_calls[counter].path;
       options.method = http_calls[counter].method;
       data           = http_calls[counter].data;
-      console.log("OPTIONS:"+JSON.stringify(options)+"\n"+JSON.stringify(data));
+      console.log("OPTIONS:"+JSON.stringify(options)+"\n"+((data!=null)?JSON.stringify(data):""));
       request        = http.request(options, response);
-      if (data != null) req.write(JSON.stringify(data));
-      req.end();
+      if (data != null) request.write(JSON.stringify(data));
+      request.end();
+    }
   });
 
 }
@@ -92,11 +105,11 @@ options.path   = http_calls[counter].path;
 options.method = http_calls[counter].method;
 data           = http_calls[counter].data;
 
-console.log("OPTIONS:"+JSON.stringify(options)+"\n"+JSON.stringify(data));
-var req = http.request(options, response);
-req.on('error', error);
-if (data != null) req.write(JSON.stringify(data));
-req.end();
+console.log("OPTIONS:"+JSON.stringify(options)+"\n"+((data!=null)?JSON.stringify(data):""));
+request = http.request(options, response);
+request.on('error', error);
+if (data != null) request.write(JSON.stringify(data));
+request.end();
 
 
 
