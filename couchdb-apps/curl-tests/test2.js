@@ -93,7 +93,7 @@ options.method = http_calls[counter].method;
 data           = http_calls[counter].data;
 
 console.log("OPTIONS:"+JSON.stringify(options)+"\n"+JSON.stringify(data));
-request = http.request(options, response);
+var req = http.request(options, response);
 req.on('error', error);
 if (data != null) req.write(JSON.stringify(data));
 req.end();
