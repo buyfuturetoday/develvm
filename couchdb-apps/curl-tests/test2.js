@@ -90,7 +90,7 @@ function error(e) {
 
 options.path   = http_calls[counter].path;
 options.method = http_calls[counter].method;
-data           = http_calls[conunter].data;
+data           = http_calls[counter].data;
 
 console.log("OPTIONS:"+JSON.stringify(options)+"\n"+JSON.stringify(data));
 request = http.request(options, response);
