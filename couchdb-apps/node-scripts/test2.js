@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
 /*
+ * Jonas Colmsjo, 2014-01-15
+ *
  * Make a series of rest http calls. The next call is started in
- * in the on('end') callback for the previous call.
+ * in the on('end') callback for the previous call. This is necessary
+ * since node http requests are asynchronous.
  *
  * Pseudo code:
  *
@@ -26,10 +29,13 @@
  *
  */
 
-var config = require('./config.js').create(),
-    http   = require('http'),
-    async  = require('async');
+// Includes and some variables
+// --------------------------------------------------------------------------
 
+var config = require('./config.js').create(),
+    http   = require('http');
+
+// The couchdb hostname, IP, username and password is fetched from config.js
 var options = {
   hostname: config.COUCHDB_HOSTNAME,
   port:     config.COUCHDB_PORT,
@@ -39,27 +45,48 @@ var options = {
   }
 };
 
+
 var http_calls = [],
     counter    = 0,
     request    = null,
     data       = null;
 
+
+// These are the http calls to be made
+// --------------------------------------------------------------------------
+
 http_calls[0] = {
   path:   '/test/',
   method: 'DELETE',
-  data:   { "message" : "hello world" }
+  data: null
 };
 
 http_calls[1] = {
   path:   '/test/',
   method: 'PUT',
-  data:   { "message" : "hello world" }
+  data: null
 };
 
 http_calls[2] = {
   path:   '/test/',
   method: 'GET'
 };
+
+http_calls[3] = {
+  path:   '/test/',
+  method: 'POST',
+  data:   { }
+};
+
+http_calls[4] = {
+  path:   '/test/',
+  method: 'POST',
+  data:   { "message" : "hello world" }
+};
+
+
+// Perform the http calls and handle response and errors
+// --------------------------------------------------------------------------
 
 function response(res) {
   console.log('STATUS: ' + res.statusCode);
@@ -73,14 +100,15 @@ function response(res) {
 
   res.on('end', function () {
     counter++;
-    if(counter < http_calls.length)
+    if(counter < http_calls.length) {
       options.path   = http_calls[counter].path;
       options.method = http_calls[counter].method;
-      data           = http_call[conunter].data;
-      console.log("OPTIONS:"+JSON.stringify(options)+"\n"+JSON.stringify(data));
+      data           = http_calls[counter].data;
+      console.log("OPTIONS:"+JSON.stringify(options)+"\n"+((data!=null)?JSON.stringify(data):""));
       request        = http.request(options, response);
-      if (data != null) req.write(JSON.stringify(data));
-      req.end();
+      if (data != null) request.write(JSON.stringify(data));
+      request.end();
+    }
   });
 
 }
@@ -91,13 +119,13 @@ function error(e) {
 
 options.path   = http_calls[counter].path;
 options.method = http_calls[counter].method;
-data           = http_calls[conunter].data;
+data           = http_calls[counter].data;
 
-console.log("OPTIONS:"+JSON.stringify(options)+"\n"+JSON.stringify(data));
+console.log("OPTIONS:"+JSON.stringify(options)+"\n"+((data!=null)?JSON.stringify(data):""));
 request = http.request(options, response);
-req.on('error', error);
-if (data != null) req.write(JSON.stringify(data));
-req.end();
+request.on('error', error);
+if (data != null) request.write(JSON.stringify(data));
+request.end();
 
 
 

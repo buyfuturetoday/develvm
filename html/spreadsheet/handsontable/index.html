@@ -1,0 +1,139 @@
+<html>
+<head>
+	<link rel="stylesheet" media="screen" href="bower_components/handson-table/dist/jquery.handsontable.full.css">
+</head>
+
+<body>
+
+	<h1>Handson-table example</h1>
+
+	<h2>Example 1</h2>
+	<div id="example1">
+	</div>
+
+	<h2>Example 2</h2>
+	<div id="example2">
+	</div>
+
+	<h2>Example 3 - load from pouch</h2>
+	<div id="example3">
+	</div>
+
+	<p/>
+	<button id="load">load</button>
+	<button id="save">save</button>
+	<button id="dump">dump</button>
+	<button id="clear">clear</button>
+
+
+	<script src="bower_components/jquery/jquery.min.js"></script>
+	<script src="bower_components/handson-table/dist/jquery.handsontable.full.js"></script>
+	<script src="bower_components/pouchdb/dist/pouchdb-nightly.min.js"></script>
+
+	<script>
+	document.ready = function() {
+
+		// Example 1
+		// -----------------------------------------------------
+
+		var data1 = [
+		  ["", "Maserati", "Mazda", "Mercedes", "Mini", "Mitsubishi"],
+		  ["2009", 0, 2941, 4303, 354, 5814],
+		  ["2010", 5, 2905, 2867, 412, 5284],
+		  ["2011", 4, 2517, 4822, 552, 6127],
+		  ["2012", 2, 2422, 5399, 776, 4151]
+		];
+
+		$('#example1').handsontable({
+		  data: data1,
+		  minSpareRows: 1,
+		  colHeaders: true,
+		  contextMenu: true
+		});
+
+
+		// Example 2
+		// -----------------------------------------------------
+
+		var data2 = [
+		  {id: 1, name: "Ted Right", address: ""},
+		  {id: 2, name: "Frank Honest", address: ""},
+		  {id: 3, name: "Joan Well", address: ""}
+		];
+
+		var $container2 = $("#example2");
+		$container2.handsontable({
+		  data: data2,
+		  startRows: 5,
+		  startCols: 3,
+		  colHeaders: true,
+		  minSpareRows: 1
+		});
+
+		// Example 3
+		// -----------------------------------------------------
+
+		var pouchdb = new PouchDB('my_first_table_db');
+
+		this.doc = null;
+		this.data3 = [
+		  {id: 1, name: "", address: ""}
+		];
+
+		this.$container3 = $("#example3");
+		this.$container3.handsontable({
+		  data: this.data3,
+		  startRows: 5,
+		  startCols: 3,
+		  colHeaders: true,
+		  minSpareRows: 1
+		});
+
+		document.getElementById("load").onclick = function(){
+			console.log("load clicked!");
+			pouchdb.get('table1', function(err, doc) { 
+				if(err!=null) console.log("err:"+err);
+				this.doc = doc;
+				this.data3 = doc.table;
+				this.$container3.handsontable('render');
+				console.log("fetched: "+JSON.stringify(this.doc));
+			}.bind(this));
+
+		}.bind(this);
+		
+		document.getElementById("save").onclick = function(){
+			console.log("save clicked!");
+			console.log(JSON.stringify(this.data3));
+			pouchdb.put({
+			 _id: 'table1',
+			 _rev: this.doc._rev,
+			 table: this.data3
+			}, function(err, res) { 
+				if(err!=null) console.log("err:"+err);
+				if(res!=null) console.log("res:"+JSON.stringify(res));
+			});
+		}.bind(this);
+
+		document.getElementById("dump").onclick = function(){
+			console.log("dump clicked!");
+			console.log(JSON.stringify(this.data3));
+			console.log(JSON.stringify(this.doc));
+		}.bind(this);
+
+
+		document.getElementById("clear").onclick = function(){
+			console.log("clear clicked!");
+			this.data3 = [{id: null, name: null, adress: null}];
+			this.$container3.handsontable({
+			  data: this.data3,
+			  startRows: 5,
+			  startCols: 3,
+			  colHeaders: true,
+			  minSpareRows: 1
+			});
+		}.bind(this);
+	};
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "handsontable",
+  "version": "0.0.0",
+  "homepage": "https://github.com/colmsjo/develvm",
+  "authors": [
+    "Jonas Colmsjö <jonas.colmsjo@gizur.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "handson-table": "~0.10.1",
+    "pouchdb": "~1.1.0"
+  }
+}

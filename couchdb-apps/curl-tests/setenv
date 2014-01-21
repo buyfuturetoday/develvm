@@ -1,4 +1,4 @@
-COUCHDB_IP_AND_PORT="app1.jacc.local:8080"
+COUCHDB_IP_AND_PORT="app2.jacc.local:8080"
 COUCHDB_ADMIN="admin"
 COUCHDB_ADMIN_PASS="mysecretpassword"
 COUCHDB_USER="username"
