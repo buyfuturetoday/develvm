@@ -177,7 +177,7 @@ run source  ~/.rvm/scripts/rvm && rvm use 2.0.0 --default && cd /discourse && ge
 # Start postfix and postgres
 #
 
-EXPOSE 25, 5432
+EXPOSE 25 5432
 
 CMD ["/bin/su","postgres","-c","/usr/lib/postgresql/9.1/bin/postgres -D /var/lib/postgresql/9.1/main -c config_file=/etc/postgresql/9.1/main/postgresql.conf"]
 #cmd ["sh", "-c", "service syslog-ng start ; service postfix start ; tail -F /var/log/mail.log"]
