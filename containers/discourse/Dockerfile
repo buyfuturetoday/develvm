@@ -108,7 +108,70 @@ run postmap /etc/postfix/relay_passwd
 add etc-postfix-main.cf /etc-postfix-main.cf
 run cat /etc-postfix-main.cf >> /etc/postfix/main.cf
 
+
 #---------------------------------------------
+
+#
+# Misc stuff
+#
+
+run sudo apt-get -y install build-essential libssl-dev libyaml-dev git libtool libxslt-dev libxml2-dev libpq-dev gawk curl pngcrush imagemagick python-software-properties
+
+#
+# Latest stable version of redis
+#
+
+run sudo apt-add-repository -y ppa:rwky/redis
+run sudo apt-get update
+run sudo apt-get install redis-server
+
+
+#
+# Latest stable version of ngix
+#
+
+# Remove any existing versions of nginx
+run sudo apt-get remove '^nginx.*$'
+
+# Setup a sources.list.d file for the nginx repository
+run cat << 'EOF' | sudo tee /etc/apt/sources.list.d/nginx.list
+deb http://nginx.org/packages/ubuntu/ precise nginx
+deb-src http://nginx.org/packages/ubuntu/ precise nginx
+EOF
+
+# Add nginx key
+run curl http://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+
+# install nginx
+run sudo apt-get update && sudo apt-get -y install nginx
+
+
+#
+# Fetch the discourse code
+#
+
+run git clone https://github.com/discourse/discourse.git /discourse
+
+
+#
+# Install RVM
+#
+
+run curl -s -S -L https://get.rvm.io | bash -s stable
+
+# Install missing ubuntu packages
+run source  ~/.rvm/scripts/rvm && rvm --autolibs=read-fail requirements
+
+# Install Ruby
+run source  ~/.rvm/scripts/rvm && rvm install 2.0.0
+
+# Install discourse
+run source  ~/.rvm/scripts/rvm && rvm use 2.0.0 --default && cd /discourse && gem install bundler
+
+
+
+#---------------------------------------------
+
 
 #
 # Start postfix and postgres
