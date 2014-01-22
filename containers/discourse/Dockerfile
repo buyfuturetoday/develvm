@@ -134,10 +134,14 @@ run apt-get install redis-server
 run apt-get remove '^nginx.*$'
 
 # Setup a sources.list.d file for the nginx repository
-run cat << 'EOF' | tee /etc/apt/sources.list.d/nginx.list
-deb http://nginx.org/packages/ubuntu/ precise nginx
-deb-src http://nginx.org/packages/ubuntu/ precise nginx
-EOF
+#run cat << 'EOF' | tee /etc/apt/sources.list.d/nginx.list
+#deb http://nginx.org/packages/ubuntu/ precise nginx
+#deb-src http://nginx.org/packages/ubuntu/ precise nginx
+#EOF
+
+run /bin/sh -c "echo deb http://nginx.org/packages/ubuntu/ precise nginx >> /etc/apt/sources.list.d/nginx.list"
+run /bin/sh -c "echo deb-src http://nginx.org/packages/ubuntu/ precise nginx >> /etc/apt/sources.list.d/nginx.list"
+
 
 # Add nginx key
 run curl http://nginx.org/keys/nginx_signing.key | sudo apt-key add -
@@ -160,13 +164,13 @@ run git clone https://github.com/discourse/discourse.git /discourse
 run curl -s -S -L https://get.rvm.io | bash -s stable
 
 # Install missing ubuntu packages
-run source  ~/.rvm/scripts/rvm && rvm --autolibs=read-fail requirements
+run /bin/sh -c "source  ~/.rvm/scripts/rvm && rvm --autolibs=read-fail requirements"
 
 # Install Ruby
-run source  ~/.rvm/scripts/rvm && rvm install 2.0.0
+run /bin/sh -c "source  ~/.rvm/scripts/rvm && rvm install 2.0.0"
 
 # Install discourse
-run source  ~/.rvm/scripts/rvm && rvm use 2.0.0 --default && cd /discourse && gem install bundler
+run /bin/sh -c "source  ~/.rvm/scripts/rvm && rvm use 2.0.0 --default && cd /discourse && gem install bundler"
 
 
 
