@@ -164,13 +164,13 @@ run git clone https://github.com/discourse/discourse.git /discourse
 run curl -s -S -L https://get.rvm.io | bash -s stable
 
 # Install missing ubuntu packages
-run /bin/sh -c ".  /etc/profile.d/rvm.sh && rvm --autolibs=read-fail requirements"
+run /bin/bash -c ".  /etc/profile.d/rvm.sh && rvm autolibs enable && rvm --autolibs=read-fail requirements"
 
 # Install Ruby
-run /bin/sh -c ". /etc/profile.d/rvm.sh && rvm install 2.0.0"
+run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm install 2.0.0"
 
 # Install discourse
-run /bin/sh -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && cd /discourse && gem install bundler"
+run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && cd /discourse && gem install bundler"
 
 
 
