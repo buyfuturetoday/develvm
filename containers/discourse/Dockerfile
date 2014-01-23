@@ -144,10 +144,10 @@ run /bin/sh -c "echo deb-src http://nginx.org/packages/ubuntu/ precise nginx >> 
 
 
 # Add nginx key
-run curl http://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+run curl http://nginx.org/keys/nginx_signing.key | apt-key add -
 
 # install nginx
-run apt-get update && sudo apt-get -y install nginx
+run apt-get update && apt-get -y install nginx
 
 
 #
