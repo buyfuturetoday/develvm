@@ -164,7 +164,7 @@ run git clone https://github.com/discourse/discourse.git /discourse
 run curl -s -S -L https://get.rvm.io | bash -s stable
 
 # Install missing ubuntu packages
-run /bin/bash -c ".  /etc/profile.d/rvm.sh && rvm autolibs enable && rvm --autolibs=read-fail requirements"
+run /bin/bash -c ".  /etc/profile.d/rvm.sh && rvm --autolibs=packages requirements"
 
 # Install Ruby
 run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm install 2.0.0"
