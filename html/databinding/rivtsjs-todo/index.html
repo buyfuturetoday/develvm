@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rivets.js todo list example</title>
+  <script src='http://code.jquery.com/jquery-1.10.1.min.js'></script>
+  <script src='http://underscorejs.org/underscore-min.js'></script>
+  <script src='http://hay.github.io/stapes/stapes.min.js'></script>
+  <script src='http://rivetsjs.com/dist/rivets.min.js'></script>
+  <script src='config.js'></script>
+  <script src='application.js'></script>
+  <link rel='stylesheet' type='text/css' href='application.css'>
+</head>
+
+<body>
+  <section id='todo-list'>
+    <input rv-on-keypress='app.add'>
+
+    <ul>
+      <li rv-each-todo='app:todos' rv-class-done='todo:done'>
+        <input type='checkbox' rv-checked='todo:done' rv-on-change='app.setRemaining'>
+        { todo:summary }
+      </li>
+    </ul>
+
+    <p>{ app:remaining } remaining</p>
+
+    <section>
+      <button rv-on-click='app.showAll'>Show All</button>
+      <button rv-on-click='app.showActive'>Hide Completed</button>
+    </section>
+  </section>
+</body>
+</html>
