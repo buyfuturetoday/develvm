@@ -1,7 +1,16 @@
-Configuration applied after  the installation
----------------------------------------------
+Discourse discussion platform
+==============================
 
-These settings are probably not appropriate for production.
+
+https://github.com/discourse/discourse
+
+
+
+
+Postgres
+--------
+
+Simple postgres setup. Perhaps not commonly used in production.
 
 
 /etc/postgresql/9.1/main/postgresql.conf:
