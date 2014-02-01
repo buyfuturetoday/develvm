@@ -155,7 +155,7 @@ run apt-get update && apt-get -y install nginx
 # Fetch the discourse code
 #
 
-run git clone https://github.com/discourse/discourse.git /discourse
+run git clone https://github.com/discourse/discourse.git /var/www/discourse
 
 
 #
@@ -171,15 +171,47 @@ run /bin/bash -c ".  /etc/profile.d/rvm.sh && rvm --autolibs=packages requiremen
 run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm install 2.0.0"
 
 # Install discourse
-run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && cd /discourse && gem install bundler"
+run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && gem install bundler"
+run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && cd /var/www/discourse && bundle install --deployment --without test"
 
 
 
 #---------------------------------------------
 
 
+
+# adduser --shell /bin/bash --gecos 'Discourse application' --disabled-password discourse
+# cd /discourse && install -d -m 755 -o discourse -g discourse /var/www/discourse
+
+
+# Configure discurse
+run cd /var/www/discourse/config && cp discourse_quickstart.conf discourse.conf
+run cd /var/www/discourse/config && cp discourse.pill.sample discourse.pill
+
+
+# initialize databse
+run cd /var/www/discourse && createdb discourse_prod
+run /bin/bash -c "cd /var/www/discourse && RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ENV=production bundle exec rake db:migrate"
+run /bin/bash -c "cd /var/www/discourse && RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ENV=production bundle exec rake assets:precompile"
+
+
+# Setup nginx
+run cp /var/www/discourse/config/nginx.global.conf /etc/nginx/conf.d/local-server.conf
+run cp /var/www/discourse/config/nginx.sample.conf /etc/nginx/conf.d/discourse.conf
+
+
+# Bluepill setup
+run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && gem install bluepill"
+run echo 'alias bluepill="NOEXEC_DISABLE=1 bluepill --no-privileged -c ~/.bluepill"' >> ~/.bash_aliases
+run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && rvm wrapper $(rvm current) bootup bluepill"
+run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && rvm wrapper $(rvm current) bootup bundle"
+
+
+#---------------------------------------------
+
+
 #
-# Start postfix and postgres
+# Start everything
 #
 
 EXPOSE 80 443
