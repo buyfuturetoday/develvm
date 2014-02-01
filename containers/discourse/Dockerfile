@@ -183,5 +183,5 @@ run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && cd /disc
 
 EXPOSE 80 443
 
-["/src/start.sh"]
+cmd ["/src/start.sh"]
 
