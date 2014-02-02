@@ -9,6 +9,7 @@ echo "CREATE ROLE root WITH SUPERUSER CREATEDB LOGIN PASSWORD 'root';create data
 pg_roles;\q"|/bin/su postgres -c "psql -U postgres"
 
 # Init discourse db
+. /etc/profile.d/rvm.sh && rvm use 2.0.0 --default
 cd /var/www/discourse && createdb discourse_prod
 /bin/bash -c "cd /var/www/discourse && RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ENV=production bundle exec rake db:migrate"
 /bin/bash -c "cd /var/www/discourse && RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ENV=production bundle exec rake assets:precompile"
