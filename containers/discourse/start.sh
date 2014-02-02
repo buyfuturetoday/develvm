@@ -15,4 +15,11 @@ service nginx start
 
 # supervisord -n
 
+echo 'alias bluepill="NOEXEC_DISABLE=1 bluepill --no-privileged -c ~/.bluepill"' >> ~/.bash_aliases
+
+. /etc/profile.d/rvm.sh
+rvm use 2.0.0 --default
+rvm wrapper $(rvm current) bootup bluepill
+rvm wrapper $(rvm current) bootup bundle
+
 RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ROOT=/var/www/discourse RAILS_ENV=production NUM_WEBS=2 bluepill --no-privileged -c ~/.bluepill load /var/www/discourse/config/discourse.pill
