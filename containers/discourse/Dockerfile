@@ -12,10 +12,6 @@ FROM     ubuntu
 MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
 
-# sudo will complain about unknown host otherwise
-#RUN echo "127.0.0.1\tlocalhost" >> /etc/hosts
-#RUN echo "127.0.0.1\t`hostname`" >> /etc/hosts
-
 # make sure the package repository is up to date
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update -y
@@ -43,12 +39,6 @@ RUN if [ -e /var/lib/postgresql/9.1/main/postmaster.pid ]; then rm /var/lib/post
 RUN if [ -d /var/run/postgresql ]; then rm -rf /var/run/postgresql; fi
 RUN mkdir -p /var/run/postgresql
 RUN chown -R postgres:postgres /var/run/postgresql
-
-
-# Create postgres user for OpenERP
-ADD . /src
-RUN chown -R postgres:root /src
-RUN /src/init.sh
 
 
 
@@ -134,14 +124,8 @@ run apt-get install redis-server
 run apt-get remove '^nginx.*$'
 
 # Setup a sources.list.d file for the nginx repository
-#run cat << 'EOF' | tee /etc/apt/sources.list.d/nginx.list
-#deb http://nginx.org/packages/ubuntu/ precise nginx
-#deb-src http://nginx.org/packages/ubuntu/ precise nginx
-#EOF
-
 run /bin/sh -c "echo deb http://nginx.org/packages/ubuntu/ precise nginx >> /etc/apt/sources.list.d/nginx.list"
 run /bin/sh -c "echo deb-src http://nginx.org/packages/ubuntu/ precise nginx >> /etc/apt/sources.list.d/nginx.list"
-
 
 # Add nginx key
 run curl http://nginx.org/keys/nginx_signing.key | apt-key add -
@@ -188,10 +172,15 @@ run cd /var/www/discourse/config && cp discourse_quickstart.conf discourse.conf
 run cd /var/www/discourse/config && cp discourse.pill.sample discourse.pill
 
 
-# initialize databse
-run cd /var/www/discourse && createdb discourse_prod
-run /bin/bash -c "cd /var/www/discourse && RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ENV=production bundle exec rake db:migrate"
-run /bin/bash -c "cd /var/www/discourse && RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ENV=production bundle exec rake assets:precompile"
+# initialize databse, moved to init.sh
+#run cd /var/www/discourse && createdb discourse_prod
+#run /bin/bash -c "cd /var/www/discourse && RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ENV=production bundle exec rake db:migrate"
+#run /bin/bash -c "cd /var/www/discourse && RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ENV=production bundle exec rake assets:precompile"
+
+# Create postgres user for OpenERP
+ADD . /src
+RUN chown -R postgres:root /src
+RUN /src/init.sh
 
 
 # Setup nginx
