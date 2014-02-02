@@ -115,8 +115,7 @@ run cat /etc-postfix-main.cf >> /etc/postfix/main.cf
 # Misc stuff
 #
 
-run apt-get -y install build-essential libssl-dev libyaml-dev git libtool libxslt-dev libxml2-dev libpq-dev gawk curl pngcrush imagemagick python-software-properties 
-supervisor
+run apt-get -y install build-essential libssl-dev libyaml-dev git libtool libxslt-dev libxml2-dev libpq-dev gawk curl pngcrush imagemagick python-software-properties supervisor
 
 #
 # Latest stable version of redis
