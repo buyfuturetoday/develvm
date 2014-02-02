@@ -190,9 +190,9 @@ run cp /var/www/discourse/config/nginx.sample.conf /etc/nginx/conf.d/discourse.c
 
 # Bluepill setup
 run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && gem install bluepill"
-run echo 'alias bluepill="NOEXEC_DISABLE=1 bluepill --no-privileged -c ~/.bluepill"' >> ~/.bash_aliases
-run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && rvm wrapper $(rvm current) bootup bluepill"
-run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && rvm wrapper $(rvm current) bootup bundle"
+#run echo 'alias bluepill="NOEXEC_DISABLE=1 bluepill --no-privileged -c ~/.bluepill"' >> ~/.bash_aliases
+#run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && rvm wrapper $(rvm current) bootup bluepill"
+#run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && rvm wrapper $(rvm current) bootup bundle"
 
 
 #---------------------------------------------
