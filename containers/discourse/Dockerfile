@@ -162,7 +162,6 @@ run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && cd /var/
 #---------------------------------------------
 
 
-
 # adduser --shell /bin/bash --gecos 'Discourse application' --disabled-password discourse
 # cd /discourse && install -d -m 755 -o discourse -g discourse /var/www/discourse
 
@@ -171,11 +170,6 @@ run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && cd /var/
 run cd /var/www/discourse/config && cp discourse_quickstart.conf discourse.conf
 run cd /var/www/discourse/config && cp discourse.pill.sample discourse.pill
 
-
-# initialize databse, moved to init.sh
-#run cd /var/www/discourse && createdb discourse_prod
-#run /bin/bash -c "cd /var/www/discourse && RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ENV=production bundle exec rake db:migrate"
-#run /bin/bash -c "cd /var/www/discourse && RUBY_GC_MALLOC_LIMIT=90000000 RAILS_ENV=production bundle exec rake assets:precompile"
 
 # Create postgres user for OpenERP
 ADD . /src
@@ -190,9 +184,6 @@ run cp /var/www/discourse/config/nginx.sample.conf /etc/nginx/conf.d/discourse.c
 
 # Bluepill setup
 run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && gem install bluepill"
-#run echo 'alias bluepill="NOEXEC_DISABLE=1 bluepill --no-privileged -c ~/.bluepill"' >> ~/.bash_aliases
-#run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && rvm wrapper $(rvm current) bootup bluepill"
-#run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && rvm wrapper $(rvm current) bootup bundle"
 
 
 #---------------------------------------------

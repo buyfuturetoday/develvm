@@ -8,11 +8,9 @@
 sleep 5
 
 # Create user and database root, perhaps not needed?
-echo "CREATE ROLE root WITH SUPERUSER CREATEDB LOGIN PASSWORD '';create database root with owner=root encoding='UTF8' template=template0;\q"|/bin/su postgres -c "psql -U 
-postgres"
+echo "CREATE ROLE root WITH SUPERUSER CREATEDB LOGIN PASSWORD '';create database root with owner=root encoding='UTF8' template=template0;\q"|/bin/su postgres -c "psql -U postgres"
 
-echo "CREATE ROLE discourse WITH SUPERUSER CREATEDB LOGIN PASSWORD '';create database discourse_prod with owner=discourse encoding='UTF8' template=template0;\q"|/bin/su 
-postgres -c$
+echo "CREATE ROLE discourse WITH SUPERUSER CREATEDB LOGIN PASSWORD '';create database discourse_prod with owner=discourse encoding='UTF8' template=template0;\q"|/bin/su postgres -c "psql -U postgres"
 
 echo "SELECT rolname FROM pg_roles;\q"|/bin/su postgres -c "psql -U postgres"
 
