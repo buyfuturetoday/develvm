@@ -8,7 +8,8 @@ service postgresql start
 service syslog-ng start ; service postfix start
 
 # start redis
-service redis-server start
+# service redis-server start
+/usr/bin/redis-server &> /dev/null
 
 # start nginx
 service nginx start

@@ -21,7 +21,7 @@ RUN apt-get update -y
 # Install Postgres
 #
 
-RUN apt-get install postgresql -y
+RUN apt-get install postgresql postgresql-contrib -y
 
 
 #
