@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Gizur-scalr-installation.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[Wiki]]</p>
+<p>h1. Gizur Scalr installation</p>
+<ul>
+<li><a href="http://wiki.scalr.net/pages/viewpage.action?pageId=327743">http://wiki.scalr.net/pages/viewpage.action?pageId=327743</a></li>
+</ul>
+<p>On server with scalr archive:</p>
+<pre>
+scp -i ~/keys/scalr-server.pem scalr-3.0.r6748.tar.gz ubuntu@ec2-79-125-77-38.eu-west-1.compute.amazonaws.com:/tmp 
+</pre>
+
+<p>On Scalr-server:</p>
+<pre>
+sudo apt-get update
+sudo apt-get install apache2-mpm-prefork php5 php5-mysql php5-curl php5-mcrypt php5-snmp php-pear rrdtool librrd-dev libcurl4-openssl-dev mysql-server snmp libssh2-php apparmor-utils
+
+cd /tmp
+tar xvfz scalr-3.0.r6748.tar.gz
+sudo mv scalr-3.0.r6748/app /var/www
+sudo chown root.www-data /var/www/app -R
+sudo chmod g+w /var/www/app/etc/.cryptokey
+sudo chmod g+w /var/www/app/cache -R
+
+# Skip this step, does not seam necessary for 3.0...
+# sudo nano /var/www/app/src/Scalr/Net/Dns/Bind/RemoteBind.php
+ctrl+_ 36
+//                        if (count($this->zonesConfig) == 0)
+//                                throw new Exception("Zones config is empty");
+
+#
+# MySQL
+#
+
+mysql -uroot -p -e 'create database scalr; grant all on scalr.* to scalr@localhost identified by "<scalrpassword>";flush privileges;'
+
+# cat /tmp/scalr-3.0.r6748/sql/structure.sql | mysql -uscalr -p scalr
+# cat /tmp/scalr-3.0.r6748/sql/data.sql | mysql -uscalr -p scalr
+cat /tmp/scalr-3.0.r6748/sql/scalr.sql | mysql -uscalr -pXXX scalr 
+
+
+sudo nano /var/www/app/etc/config.ini
+
+driver=mysqli
+host = "localhost"
+name = "scalr"
+user = "scalr"
+pass = "<scalrpassword>"
+
+#
+# Apache
+#
+
+sudo rm /etc/apache2/sites-enabled/000-default
+
+sudo nano /etc/apache2/sites-available/scalr
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        ServerName scalr.local
+        DocumentRoot /var/www/app/www
+        <Directory /var/www/app/www>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride All
+        </Directory>
+</VirtualHost>
+
+sudo a2ensite scalr
+sudo service apache2 reload
+
+sudo pecl install rrd
+
+sudo /etc/php5/apache2/conf.d/rrd.ini
+extension=rrd.so
+
+sudo pecl install pecl_http
+
+sudo nano /etc/php5/apache2/conf.d/http.ini
+extension=http.so 
+
+sudo a2enmod rewrite
+sudo service apache2 restart
+
+
+# sudo cat <<EOF> /etc/cron.d/scalr
+
+crontab -e
+*/2 * * * *  root /usr/bin/php -q  /var/www/app/cron-ng/cron.php --Poller
+* * * * *  root /usr/bin/php -q /var/www/app/cron/cron.php --Scheduler
+*/10 * * * *  root /usr/bin/php -q  /var/www/app/cron/cron.php --MySQLMaintenance
+* * * * *  root /usr/bin/php -q  /var/www/app/cron/cron.php --DNSManagerPoll
+17 5 * * * root /usr/bin/php -q  /var/www/app/cron/cron.php --RotateLogs
+*/2 * * * *  root /usr/bin/php -q  /var/www/app/cron/cron.php --EBSManager
+*/20 * * * *  root /usr/bin/php -q  /var/www/app/cron/cron.php --RolesQueue
+*/5 * * * *  root /usr/bin/php -q  /var/www/app/cron-ng/cron.php --DbMsrMaintenance
+*/2 * * * *  root /usr/bin/php -q  /var/www/app/cron-ng/cron.php --Scaling
+*/5 * * * *  root /usr/bin/php -q  /var/www/app/cron/cron.php --DBQueueEvent
+*/2 * * * *  root /usr/bin/php -q  /var/www/app/cron/cron.php --SzrMessaging
+*/4 * * * *  root /usr/bin/php -q  /var/www/app/cron/cron.php --RDSMaintenance
+*/2 * * * *  root /usr/bin/php -q  /var/www/app/cron/cron.php --BundleTasksManager
+* * * * *  root /usr/bin/php -q  /var/www/app/cron-ng/cron.php --ScalarizrMessaging
+* * * * *  root /usr/bin/php -q  /var/www/app/cron-ng/cron.php --MessagingQueue
+*/2 * * * *  root /usr/bin/php -q  /var/www/app/cron-ng/cron.php --DeployManager
+
+crontab -l
+
+#
+# Bind
+#
+
+sudo apt-get install bind9
+sudo chmod g+w /etc/bind/named.conf
+
+sudo nano /etc/bind/named.conf
+include "/var/named/etc/namedb/client_zones/zones.include";
+
+sudo mkdir -p /var/named/etc/namedb/client_zones
+sudo chown root.bind /var/named/etc/namedb/client_zones
+sudo chmod 2775 /var/named/etc/namedb/client_zones
+
+# New domains will go to this file
+sudo nano /var/named/etc/namedb/client_zones/zones.include
+# insert space and save
+
+sudo chown root.bind /var/named/etc/namedb/client_zones/zones.include
+sudo chmod g+w /var/named/etc/namedb/client_zones/zones.include
+
+# Put Bind in apparmor complain mode. This will allow Bind to include **zones.include** as mentioned above. May need to setup a more secure configuration
+sudo aa-complain /usr/sbin/named
+
+# Restart
+sudo service bind9 restart
+
+</pre>
+
+
+
+
+<p>Login - should fix so that the root is used instead:
+<em> <a href="http://ec2-79-125-77-38.eu-west-1.compute.amazonaws.com/app/www/">http://ec2-79-125-77-38.eu-west-1.compute.amazonaws.com/app/www/</a>
+<em>* Email: admin
+</em></em> Password: admin</p>
+<ul>
+<li><p>Change Admin password (upper right corner of the screen)</p>
+</li>
+<li><p>Change Core settings</p>
+</li>
+<li><p>Create a scalr user. Then login as that user to create your first server farm</p>
+</li>
+<li><p>Create your first server farm</p>
+</li>
+</ul>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

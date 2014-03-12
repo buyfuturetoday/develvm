@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Execution-architecture-design.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[wiki]] &gt; [[Technical Architecture]] &gt; [[Execution Architecture]]</p>
+<p>h1. Execution Architecture Design</p>
+<p>h2. PHP &amp; MySQL Execution Architecture Design</p>
+<p>h3. Background</p>
+<p>Links:
+<em> MySQL cluster: <a href="http://www.google.se/url?sa=t&amp;rct=j&amp;q=mysql%20proxies%20load%20balancinf%2Bpdf&amp;source=web&amp;cd=2&amp;ved=0CDYQFjAB&amp;url=http%3A%2F%2Fdownloads.mysql.com%2Fforge%2Fslides%2FMySQL-Proxy.pdf&amp;ei=JkXjTvOJIqTR4QSjoZWUBQ&amp;usg=AFQjCNEbFSNCWhdhdj70i3ZFbG60cD949A">http://www.google.se/url?sa=t&amp;rct=j&amp;q=mysql%20proxies%20load%20balancinf%2Bpdf&amp;source=web&amp;cd=2&amp;ved=0CDYQFjAB&amp;url=http%3A%2F%2Fdownloads.mysql.com%2Fforge%2Fslides%2FMySQL-Proxy.pdf&amp;ei=JkXjTvOJIqTR4QSjoZWUBQ&amp;usg=AFQjCNEbFSNCWhdhdj70i3ZFbG60cD949A</a>
+</em> <a href="http://wiki.scalr.net/Tutorials/Setup_MySQL_proxy?highlight=mysql+proxy">http://wiki.scalr.net/Tutorials/Setup_MySQL_proxy?highlight=mysql+proxy</a></p>
+<p>A load balancing cluster with failover functionality will be used. Initial thoughts on desgin:
+<em> one laod balancer (likely ngix), 
+</em> two apache server - need HA client in order to mange failover between the two MySQL proxies
+<em> two MySQL server, one master and one slave
+</em> Two load balancing MySQL proxies will be used to manage that writes are written to the master and reads distributed to all servers</p>
+<p>Scalr&#39;s pre-configured images are used. </p>
+<p>Ubuntu 10.04 will be used for both application servers and database servers. The main reason is that ubuntu has a newer PHP version than CentOS 5,5.</p>
+<p>The MySQL database server will run on failover cluster using MySQL master-slave synchronization. </p>
+<p>The laod balancer will initially run a micro image while the database and application server runs on small images.</p>
+<p>Application and database server should have minimum 2 instances in the scaling options. Maximum should also be set to two instances (and scaling disabled).</p>
+<p>The server will consist of:
+<em> Load balancer: lb-nginx-centos-ebs ubuntu 10.04l, x32
+</em> Applications servers: app-apache-ubuntu-ebs Ubuntu 10.04, x32
+* Database servers: percona-ubuntu1004 Ubuntu 10.04, x32</p>
+<p>Platform: Amazon EC2
+Location: AWS /EU West 1 (Ireland)</p>
+<p>h3. Application server</p>
+<p>The OS for the application server is Ubuntu 10.04. PHP version is 5.3.X.</p>
+<p>In addition to the standard modules should the following modules should be installed:
+<em> php-pecl-apc - PHP opcache
+</em> Postfix (for sending mail)
+<em> Subversion client
+</em> ec2-api-tools</p>
+<p>Consider the folowing for system Admin:
+<em> webmin (not installed yet)
+</em> phpMyAdmin (not installed yet)</p>
+<p>h4. SSL</p>
+<p>All communication with vTiger and the portal should be encrypted with SSL. It should not be possible to connect using standard http. Port 80 should be closed in the firewall and apache should not listen on port 80.</p>
+<p>A SSL certificate from RapidSSL is available here. This is a wildcard certificate that can be used for all subdomains of gizurcloud.com
+<a href="http://s2.gizur.com:81/attachments/download/64/gizurcloud.com_RapidSSL_Wildcard_Order.pdf">http://s2.gizur.com:81/attachments/download/64/gizurcloud.com_RapidSSL_Wildcard_Order.pdf</a></p>
+<p>Preparations (needed for the vTifger portal to work):</p>
+<pre>
+sudo apt-get install php5-curl
+service apache2 restart
+</pre>
+
+<p>SSL is configured in scalr when setting up the virtual host.</p>
+<p>h3. Database server</p>
+<p>Standard MySQL 5 is used. The scalr MySQL role which has a master/slave setup is used.</p>
+<p>h3. Management Server</p>
+<p>The scalr ASP service will be used for the production environment. </p>
+<p>Login here: <a href="https://my.scalr.net/#/dashboard">https://my.scalr.net/#/dashboard</a></p>
+<p>h4. Testing of scalr </p>
+<p>Scalr is open source and it is possible to install your own scalr server. This requires that you have your own nameservers for the managed domain though.
+A separate scalr test environment is usefull when doing performance testing since scalr charges based on the number of servers being managed. </p>
+<p>Howto install a scalr server on ubuntu is described here: [[Installation of management server]]. Scalr supports centos but I&#39;ve not been able to install all dependencies on Rackspace centos 5.6.</p>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

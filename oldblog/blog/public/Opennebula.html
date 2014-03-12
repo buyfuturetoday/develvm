@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Opennebula.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[Gizur server admin]]</p>
+<p>== Installation ==</p>
+<ul>
+<li><a href="http://www.opennebula.org/documentation:rel1.4:notes">http://www.opennebula.org/documentation:rel1.4:notes</a></li>
+<li>Express - <a href="http://dev.opennebula.org/projects/opennebula-express/wiki">http://dev.opennebula.org/projects/opennebula-express/wiki</a></li>
+</ul>
+<p>=== First try ===</p>
+<pre>
+yum install ruby ruby-devel ruby-docs ruby-ri ruby-irb ruby-rdoc
+
+wget http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-3.noarch.rpm
+yum --nogpgcheck localinstall epel-release-5-3.noarch.rpm
+yum install rubygems
+
+gem install nokogiri rake xmlparser
+
+wget http://prdownloads.sourceforge.net/scons/scons-1.2.0-1.noarch.rpm
+yum --nogpgcheck localinstall scons-1.2.0-1.noarch.rpm
+
+wget http://centos.karan.org/el5/extras/testing/i386/RPMS/xmlrpc-c-1.06.18-1.el5.kb.i386.rpm
+wget http://centos.karan.org/el5/extras/testing/i386/RPMS/xmlrpc-c-devel-1.06.18-1.el5.kb.i386.rpm
+yum localinstall xmlrpc-c-1.06.18-1.el5.kb.i386.rpm xmlrpc-c-devel-1.06.18-1.el5.kb.i386.rpm
+
+wget http://www.sqlite.org/sqlite-amalgamation-3.6.17.tar.gz
+tar xvzf sqlite-amalgamation-3.6.17.tar.gz
+cd sqlite-3.6.17/
+yum install gcc
+./configure
+make
+make install
+
+scons sqlite=<path where you installed sqlite>
+</pre>
+
+
+<p>=== Second try ===</p>
+<pre>
+wget http://dev.opennebula.org/attachments/download/165/opennebula-express-1.0.tar.gz
+tar xvzf opennebula-express-1.0.tar.gz
+cd opennebula-express
+./install
+</pre>
+
+<pre>
+[root@hubert opennebula-express]# ./install.sh
+Select deployment type (press '0' to exit):
+1) Ubuntu 10.04 - KVM - NFS
+2) Ubuntu 10.04 - KVM - SSH
+3) CentOS 5.4 - Xen - NFS
+4) CentOS 5.4 - Xen - SSH
+4
+
+Review your configuration:
+
+- OS: CentOS 5.4
+- Hypervisor: XEN
+- Transfer Maneger: SSH
+- NFS configuration
+        no NFS configuration
+
+Proceed? (y/n) y
+- Installing frontend dependencies
+- Installing gems
+- Creating user oneadmin
+- Downloading and installing binary package
+- Processing configuration files
+- Writing ONE_AUTH file
+- Starting OpenNebula
+- Creating SSH Keys
+
+Success!
+Generated install script for the nodes: node-install.sh.
+Execute node-install.sh in your nodes to configure it as an OpenNebula
+worker node.
+
+- Configure bridge manually
+
+Don't forget to configure your bridges in your nodes, so you can
+pass them to OpenNebula. To do so use:
+
+'brctl addbr br0' # creates bridge br0
+'brctl addif br0 eth0' # add interface eth0 to bridge br0
+
+and configure the IP of your bridge interface.
+[root@hubert opennebula-express]#
+
+
+</pre>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

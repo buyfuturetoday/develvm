@@ -1,0 +1,10 @@
+{
+  "pages": {
+    "archive": {
+      "content": {
+        "list": "post",
+        "truncate": true
+      }
+    }
+  }
+}

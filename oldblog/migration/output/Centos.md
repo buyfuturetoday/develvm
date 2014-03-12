@@ -1,0 +1,611 @@
+Yet another post
+
+[meta:author]: <> (Jonas Colmsjo)
+[meta:title]: <> (Centos.md)
+[meta:date]: <> (2012-01-01)
+[meta:nested:key]: <> (Metadata value)
+
+##!!truncate
+
+
+[[Main_Page]] > [[Gizur server admin]]
+
+= Docs =
+
+* http://www.centos.org/docs/5/
+* Mail transport - https://help.ubuntu.com/community/PostfixBasicSetupHowto
+* Mail forwarding - http://www.zulius.com/how-to/set-up-postfix-with-a-remote-smtp-relay-host/
+
+
+== jython ==
+
+Could not find jython RPM. Also need to make sure it works with my java version that Ofbiz runs on (Sun JDK, NOT OpenJDK).
+
+* Article - http://www.centos.org/modules/newbb/viewtopic.php?topic_id=12377
+* http://wiki.python.org/jython/InstallationInstructions
+
+
+<pre>
+wget http://sourceforge.net/projects/jython/files/jython/2.5.2/jython_installer-2.5.2.jar/download
+wget http://sourceforge.net/projects/jython/files/jython/2.5.2/readme/download
+
+
+java -jar jython_installer-2.5.2.jar --help
+java -jar jython_installer-2.5.2.jar --console
+
+[root@ofbiz1 dwnl]# java -jar jython_installer-2.5.2.jar --console
+Welcome to Jython !
+You are about to install Jython version 2.5.2
+(at any time, answer c to cancel the installation)
+For the installation process, the following languages are available: English, German
+Please select your language [E/g] >>> E
+Do you want to read the license agreement now ? [y/N] >>> N
+Do you accept the license agreement ? [Y/n] >>> Y
+The following installation types are available:
+  1. All (everything, including sources)
+  2. Standard (core, library modules, demos and examples, documentation)
+  3. Minimum (core)
+  9. Standalone (a single, executable .jar)
+Please select the installation type [ 1 /2/3/9] >>> 2
+Do you want to install additional parts ? [y/N] >>> N
+Do you want to exclude parts from the installation ? [y/N] >>> N
+Please enter the target directory >>> /opt/jython
+Unable to find directory /opt/jython, create it ? [Y/n] >>> Y
+Please enter the java home directory (empty for using the current java runtime) >>> 
+Your java version to start Jython is: Sun Microsystems Inc. / 1.6.0_29
+Your operating system version is: Linux / 2.6.35.4-rscloud
+Summary:
+  - mod: true
+  - demo: true
+  - doc: true
+  - src: false
+  - JRE: /usr/java/jdk1.6.0_29/jre
+Please confirm copying of files to directory /opt/jython [Y/n] >>> Y
+ 10 %
+ 20 %
+ 30 %
+ 40 %
+ 50 %
+ 60 %
+ 70 %
+ 80 %
+ 90 %
+Generating start scripts ...
+ 100 %
+Do you want to show the contents of README ? [y/N] >>> N
+Congratulations! You successfully installed Jython 2.5.2 to directory /opt/jython.
+[root@ofbiz1 dwnl]# 
+
+
+/opt/jython/jython
+
+</pre>
+
+== ntp ==
+
+* http://www.thewebhostinghero.com/tutorials/synchronizing-system-clock-ntp.html
+* http://www.jaredstenquist.com/2010/08/18/changing-timezone-on-centos-via-ntp/
+
+<pre>
+vi /etc/ntp.conf
+
+server 2.centos.pool.ntp.org
+# 110412, Jonas C.
+server se.pool.ntp.org
+
+[root@test-centos1 etc]# cp /etc/localtime /etc/localtime.org
+[root@test-centos1 etc]# cp /usr/share/zoneinfo/Europe/Stockholm /etc/localtime
+cp: overwrite `/etc/localtime'? yes
+[root@test-centos1 etc]#
+
+</pre>
+
+== Postfix ==
+
+* http://postfixmail.com/blog/index.php/using-webmin-to-set-up-postfix/
+
+<pre>
+yum install postfix
+cp -R /etc/postfix /etc/postfix.bak
+vi /etc/postfix/main.cf
+
+</pre>
+
+== s3cmd ==
+
+* http://s3tools.org/repositories
+
+<pre>
+wget http://s3tools.org/repo/RHEL_5/s3tools.repo
+
+vi /etc/yum.repo.d/s3tools.repo
+[s3tools]
+name=Tools for managing Amazon S3 - Simple Storage Service (RHEL_5)
+type=rpm-md
+baseurl=http://s3tools.org/repo/RHEL_5/
+gpgcheck=1
+gpgkey=http://s3tools.org/repo/RHEL_5/repodata/repomd.xml.key
+enabled=1
+
+s3cmd --configure
+s3cmd ls
+s3cmd put
+s3cmd get
+</pre>
+
+== ddclient - Dyndns client ==
+
+<pre>
+wget http://cdn.dyndns.com/ddclient.tar.gz
+gunzip 
+tar cd
+
+# Config
+cp ddclient /usr/sbin/
+mkdir /etc/ddclient
+#cp sample-etc_ddclient.conf /etc/ddclient/ddclient.conf
+vi /etc/ddclient/ddclient.conf
+
+# Basic HTTPS configuration file for ddclient
+#
+# /etc/ddclient.conf
+daemon=600
+pid=/var/run/ddclient.pid
+# ssl=yes
+use=web, web=checkip.dyndns.com/, web-skip='IP Address'
+login=colmsjo
+password=homeend
+protocol=dyndns2
+server=members.dyndns.org
+wildcard=YES
+gizur2.dyndns.org
+# custom=yes, s2.gizur.com
+
+
+
+# Startup
+cp sample-etc_rc.d_init.d_ddclient /etc/rc.d/init.d/ddclient
+vi /etc/ddclient/ddclient.conf
+/sbin/chkconfig --add ddclient
+/etc/rc.d/init.d/ddclient start
+</pre>
+
+Force a update:
+<pre>
+ddclient --force
+</pre>
+
+== iptables ==
+
+* http://www.cyberciti.biz/faq/linux-open-iptables-firewall-port-22-23/
+
+* https://help.ubuntu.com/community/IptablesHowTo
+
+<pre>
+vi /etc/sysconfig/iptables
+
+Find REJECT line, insert before:
+-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 80 -j ACCEPT
+-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 443 -j ACCEPT
+-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 10000 -j ACCEPT
+
+service iptables restart
+
+This open ssh (should be open in Rackspace)
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+
+</pre>
+
+== Java in Firefox (64 bit) ==
+
+<pre>
+chmod +x jre-6u23-linux-x64-rpm.bin 
+./jre-6u23-linux-x64-rpm.bin
+alternatives --install /usr/bin/java java /usr/java/default/bin/java 2
+
+alternatives --config java
+
+There are 2 programs which provide 'java'.
+
+  Selection    Command
+-----------------------------------------------
+*+ 1           /usr/lib/jvm/jre-1.6.0-openjdk.x86_64/bin/java
+   2           /usr/java/default/bin/java
+
+Enter to keep the current selection[+], or type selection number: 2
+
+cd /usr/lib64/mozilla/plugins
+ln -fs /usr/java/default/lib/amd64/libnpjp2.so
+
+java -version
+java version "1.6.0_23"
+Java(TM) SE Runtime Environment (build 1.6.0_23-b05)
+Java HotSpot(TM) 64-Bit Server VM (build 19.0-b09, mixed mode)
+
+Restart firefox
+</pre>
+
+
+
+== Resize filesystem ==
+
+<pre>
+umount /vm
+e2fsck -f /dev/VolGroup00/vm
+resize2fs
+e2fsck -f /dev/VolGroup00/vm
+mount /vm
+</pre>
+
+== MySQL ==
+
+Links:
+* http://www.software-pointers.com/en-mysql-tools.html
+* http://www.webyog.com/
+* http://hackmysql.com/
+* https://launchpad.net/percona-toolkit
+
+phpMyAdmin
+
+<pre>
+sudo apt-get install php5-mysql php5-mcrypt
+service apache2 restart
+
+wget http://sourceforge.net/projects/phpmyadmin/files%2FphpMyAdmin%2F3.3.9.2%2FphpMyAdmin-3.3.9.2-english.tar.gz
+gunzip ...
+tar -xvf ...
+</pre>
+
+
+mtop
+
+* http://www.webhostingtalk.com/showthread.php?t=590444
+<pre>
+yum -y install perl-Curses perl-DBI libnet
+perl Makefile.PL
+make
+make install
+
+# could also setup mysqltop
+mtop --dbuser=root -p password 
+</pre>
+
+== Software Raid ==
+
+* http://www.serverboost.com/whmcs/knowledgebase/1/Linux-rebuild-broken-software-raid-array---CENTOS.html
+* http://wiki.centos.org/HowTos/SoftwareRAIDonCentOS5
+* http://serverfault.com/questions/32709/how-do-i-move-a-linux-software-raid-to-a-new-machine
+
+<pre>
+cat /proc/mdstat 
+mdadm-- detail /dev/md?
+mdadm -D /dev/md?
+</pre>
+
+/etc/raidtab is not used anymore, mdadm is used instead.
+
+
+mdadm.conf from blixten:
+<pre>
+# mdadm.conf written out by anaconda
+DEVICE partitions
+MAILADDR root
+ARRAY /dev/md2 super-minor=2
+ARRAY /dev/md0 super-minor=0
+ARRAY /dev/md1 super-minor=1
+ARRAY /dev/md3 super-minor=3
+ARRAY /dev/md4 super-minor=4
+ARRAY /dev/md5 level=raid10 num-devices=2 uuid=a4ddab9c:7cf4e516:3fd3059f:e81ba406
+ARRAY /dev/md6 super-minor=6
+</pre>
+
+mdadm.conf from fractal:
+<pre>
+# mdadm.conf written out by anaconda
+DEVICE partitions
+MAILADDR root
+ARRAY /dev/md0 level=raid1 num-devices=2 uuid=5b5aa4e9:9c376d0a:e4720825:6712a8d0
+ARRAY /dev/md1 level=raid5 num-devices=5 uuid=45198d7d:a68b4a39:859ffd2f:b668ddd8
+</pre>
+
+Reconstruct without mdadm.conf:
+<pre>
+mdadm --assemble --scan --verbose /dev/md{number} /dev/{disk1} /dev/{disk2} /dev/{disk3} /dev/{disk4}
+</pre>
+
+== nfs ==
+
+* http://www.howtoforge.com/setting-up-an-nfs-server-and-client-on-centos-5.5
+* http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-nfs-server-config-exports.html
+
+
+== ntop ==
+
+* http://www.ntop.org
+* http://www.ntop.org/ntop-overview.pdf
+
+<pre>
+wget http://packages.sw.be/ntop/ntop-3.3.8-2.el5.rf.i386.rpm
+yum install rrdtool libtool tcpdump
+rpm -i ntop-3.3.8-2.el5.rf.i386.rpm
+ntop #ange lösenord för admin user
+</pre>
+
+Access ntop at http://linux_server2:3000/
+Logga in med admin/lösenord
+
+== webmin ==
+
+http://www.webmin.com/rpm.html
+
+<pre>
+vi /etc/yum.repo.d/web.repo
+
+[Webmin]
+name=Webmin Distribution Neutral
+baseurl=http://download.webmin.com/download/yum
+enabled=1
+
+rpm --import http://www.webmin.com/jcameron-key.asc
+
+yum search webmin
+
+yum install webmin
+</pre>
+
+
+
+Had problems with modules not installed (doing a refresh modules):
+<pre>
+wget http://downloads.sourceforge.net/project/webadmin/webmin/1.520/webmin-1.520-1.noarch.rpm?r=http%3A%2F%2Fwww.webmin.com%2F&ts=1283150535&use_mirror=garr
+rpm -i ...
+
+yum install make            # seams to be needed
+</pre>
+
+
+
+== cloudmin ==
+
+* http://www.webmin.com/cinstall.html
+
+<pre>
+wget http://cloudmin.virtualmin.com/gpl/scripts/cloudmin-gpl-redhat-install.sh
+chmod +x cloudmin-gpl-redhat-install.sh
+./cloudmin-gpl-redhat-install.sh
+</pre>
+
+
+== mail server ==
+
+
+Using postfix. 
+
+<pre>
+yum install postfix
+</pre>
+
+<pre>
+cp /mnt/linksys_gizur2/Install/Linux/main.cf .
+cp /mnt/linksys_gizur2/Install/Linux/sasl_passwd .
+service postfix start
+</pre>
+
+Test the installation:
+
+<pre>
+sendmail jonas.colmsjo@gizur.com
+HEJ HEJ HEJ
+.
+</pre>
+
+== Super Scheduler ==
+
+Installed subversion
+
+* http://wiki.centos.org/HowTos/Subversion
+
+<pre>
+yum install mod_dav_svn subversion
+</pre>
+
+
+Installed SuperScheduler. Also installed Java version 1.4.2_19.
+
+Had to write a custom start script for the deamon. This is called from /etc/rc.local:
+<pre>
+#!/bin/bash
+
+export CLASSPATH=/usr/share/acelet/acelet-scheduler.jar:/usr/share/acelet/hsql.jar:.
+export JAVA_OPTIONS="-Xms32m -Xmx200m"
+
+# java org.hsql.Server &
+
+cd /usr/share/acelet/database
+. ./startDatabase.sh  &
+
+cd ..
+. ./runSuperSchedulerDaemon.sh > deamon.log &
+</pre>
+
+
+== rpmforge ==
+* http://wiki.centos.org/AdditionalResources/Repositories/RPMForge
+
+<pre>
+wget http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.1-1.el5.rf.i386.rpm
+
+wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.2-2.el5.rf.x86_64.rpm
+
+rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+rpm -K rpmforge-release-0.5.1-1.el5.rf.*.rpm
+rpm -i rpmforge-release-0.5.1-1.el5.rf.*.rpm
+yum check-update
+</pre>
+
+== backups ==
+
+Article: http://www.cyberciti.biz/faq/linux-tape-backup-with-mt-and-tar-command-howto/
+
+<pre>
+#!/bin/bash
+# A UNIX / Linux shell script to backup dirs to tape device like /dev/st0 (linux)
+# This script make both full and incremental backups.
+# You need at two sets of five  tapes. Label each tape as Mon, Tue, Wed, Thu and Fri.
+# You can run script at midnight or early morning each day using cronjons.
+# The operator or sys admin can replace the tape every day after the script has done.
+# Script must run as root or configure permission via sudo.
+# -------------------------------------------------------------------------
+# Copyright (c) 1999 Vivek Gite <vivek@nixcraft.com>
+# This script is licensed under GNU GPL version 2.0 or above
+# -------------------------------------------------------------------------
+# This script is part of nixCraft shell script collection (NSSC)
+# Visit http://bash.cyberciti.biz/ for more information.
+# -------------------------------------------------------------------------
+# Last updated on : March-2003 - Added log file support.
+# Last updated on : Feb-2007 - Added support for excluding files / dirs.
+# -------------------------------------------------------------------------
+LOGBASE=/root/backup/log
+ 
+# Backup dirs; do not prefix /
+BACKUP_ROOT_DIR="bin boot dev etc home lib lib64 media misc net opt proc root sbin selinux srv sys usr var"
+ 
+# Get todays day like Mon, Tue and so on
+NOW=$(date +"%a")
+ 
+# Tape devie name
+TAPE="/dev/tape/by-id/scsi-3500110a0051bd01a-nst"
+ 
+# Exclude file
+TAR_ARGS=""
+EXCLUDE_CONF=/root/.backup.exclude.conf
+ 
+# Backup Log file
+LOGFIILE=$LOGBASE/$NOW.backup.log
+ 
+# Path to binaries
+TAR=/bin/tar
+MT=/bin/mt
+MKDIR=/bin/mkdir
+ 
+# ------------------------------------------------------------------------
+# Excluding files when using tar
+# Create a file called $EXCLUDE_CONF using a text editor
+# Add files matching patterns such as follows (regex allowed):
+# home/vivek/iso
+# home/vivek/*.cpp~
+# ------------------------------------------------------------------------
+[ -f $EXCLUDE_CONF ] && TAR_ARGS="-X $EXCLUDE_CONF"
+ 
+#### Custom functions #####
+# Make a full backup
+full_backup(){
+        local old=$(pwd)
+        cd /
+        $TAR $TAR_ARGS -cvpf $TAPE $BACKUP_ROOT_DIR
+        $MT -f $TAPE rewind
+        $MT -f $TAPE offline
+        cd $old
+}
+ 
+# Make a  partial backup
+partial_backup(){
+        local old=$(pwd)
+        cd /
+        $TAR $TAR_ARGS -cvpf $TAPE -N "$(date -d '1 day ago')" $BACKUP_ROOT_DIR
+        $MT -f $TAPE rewind
+        $MT -f $TAPE offline
+        cd $old
+}
+ 
+# Make sure all dirs exits
+verify_backup_dirs(){
+        local s=0
+        for d in $BACKUP_ROOT_DIR
+        do
+                if [ ! -d /$d ];
+                then
+                        echo "Error : /$d directory does not exits!"
+                        s=1
+                fi
+        done
+        # if not; just die
+        [ $s -eq 1 ] && exit 1
+}
+ 
+#### Main logic ####
+ 
+# Make sure log dir exits
+[ ! -d $LOGBASE ] && $MKDIR -p $LOGBASE
+ 
+# Verify dirs
+verify_backup_dirs
+ 
+# Okay let us start backup procedure
+# If it is monday make a full backup;
+# For Tue to Fri make a partial backup
+# Weekend no backups
+case $NOW in
+        Mon)    full_backup;;
+        Tue|Wed|Thu|Fri|Sat|Sun)        partial_backup;;
+        *) ;;
+esac > $LOGFIILE 2>&1
+</pre>
+
+Add script to /etc/cron.daily/
+<pre>
+#!/bin/bash
+
+/root/scrips/backuptape.sh
+</pre>
+
+== VNC ==
+
+Has setup VNC. Followed these instructions: http://wiki.centos.org/HowTos/VNC-Server#head-dfa9273a7c8eb8be0310b9264105d5f97ca3f6e4
+
+Steps:
+* run vncpasswd as each user that should be able to login
+* edit /etc/sysconfig/vncservers and add VNCSERVERS="1:larry 2:moe 3:curly". Also make sure that the VNCSERVERARGS are set so that is it possible to login (allow tcp, http etc.)
+* service vncserver start - crteates xstartup file
+* service vncserver stop
+* uncomment unset SESSION_MANAGER and exec /etc/X11/xinit/xinitrc in xstartup in .vnc/xstartup
+* start on reboot - /sbin/chkconfig vncserver on
+* add ports 5800-5810 and 5900-5910 to firewall system->Administration->security level and firewall
+
+
+=== CentOS 6 ===
+
+<pre>
+yum -y groupinstall "Fönstersystemet X" "KDE-skrivbord"
+yum install tigervnc-server
+vi /etc/sysconfig/vncservers
+
+vi /etc/sysconfig/iptables
+
+-A INPUT -m state --state NEW -p tcp --dport 5802 -j ACCEPT
+-A INPUT -m state --state NEW -p tcp --dport 8902 -j ACCEPT
+
+service iptables restart
+
+vncpasswd
+
+service vncserver start 
+service vncserver stop
+
+cd
+cd .vnc
+vi xstartup
+
+/sbin/chkconfig vncserver on
+
+service vncserver start
+
+</pre>
+
+== Start services on boot ==
+
+Run command:
+<pre>
+ntsysv
+</pre>
+and select the services to start.

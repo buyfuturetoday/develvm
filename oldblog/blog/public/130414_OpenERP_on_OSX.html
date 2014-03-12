@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">OpenERP on OSX</h1>
+  </div>
+  <div class="content"><p>OpenERP on OSX</p>
+<h2>Introduction</h2>
+<p>I tried to build OpenBravo without success. Let&#39;s see if I have more success with OpenERP.</p>
+<ul>
+<li><a href="https://doc.openerp.com/install/#installation-link">https://doc.openerp.com/install/#installation-link</a></li>
+<li><a href="http://www.slideshare.net/openobject">http://www.slideshare.net/openobject</a></li>
+<li><a href="https://launchpad.net/openobject">https://launchpad.net/openobject</a></li>
+<li><a href="http://doc.openerp.com/v6.1/contribute/index.html#how-to-contribute-link">http://doc.openerp.com/v6.1/contribute/index.html#how-to-contribute-link</a></li>
+</ul>
+<h2>Installation</h2>
+<h3>Pre-requisites</h3>
+<p>On ubuntu:</p>
+<pre><code>apt-get install python-dateutil python-feedparser python-gdata python-ldap \
+    python-libxslt1 python-lxml python-mako python-openid python-psycopg2 \
+    python-pybabel python-pychart python-pydot python-pyparsing python-reportlab \
+    python-simplejson python-tz python-vatnumber python-vobject python-webdav \
+    python-werkzeug python-xlwt python-yaml python-zsi</code></pre>
+<p>Postgres:</p>
+<pre><code># see details below
+brew install postgres
+initdb /usr/local/var/postgres -E utf8
+pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+export PGDATA=/usr/local/var/postgres/
+pg_ctl status</code></pre>
+<p>Create a postgres user</p>
+<pre><code>createuser openerp
+psql -l
+psql template1
+alter role openerp with password &#39;postgres&#39;;</code></pre>
+<p>First create a Python virtual environment using virtualenv:</p>
+<pre><code>sudo pip install virtualenv
+# python-env is a suggested name, any name can be used
+virtualenv openerp-env</code></pre>
+<pre><code>cp requirements.txt openerp-env &amp;&amp; cd openerp-env
+./bin/pip install -r requirements.txt
+cd ..</code></pre>
+<pre><code>wget http://nightly.openerp.com/7.0/nightly/src/openerp-7.0-latest.tar.gz
+tar -xvzf openerp-7.0-latest.tar.gz
+cd openerp
+../bin/python setup.py install</code></pre>
+<h3>Download source</h3>
+<pre><code>bzr branch lp:openobject-server</code></pre>
+<p>Build and install:</p>
+<pre><code>python setup.py help
+python setup.py build
+sudo python setup.py install</code></pre>
+<p>Try to start the server:</p>
+<pre><code>./openerp-server --addons-path=~/home/workspace/stable/addons
+...
+ImportError: No module named PIL</code></pre>
+<p>I have created an issue about this: <a href="http://help.openerp.com/question/14169/howto-install-openobject-server-on-osx/">http://help.openerp.com/question/14169/howto-install-openobject-server-on-osx/</a></p>
+<h3>Troubleshooting</h3>
+<p>Try to install PIL:</p>
+<pre><code>pip install PIL</code></pre>
+<p>Build a zip (not sure what it&#39;s good for):</p>
+<pre><code>python setup.py sdist --format=zip
+...
+ls dist</code></pre>
+<h1>Postgres installation</h1>
+<pre><code>brew install postgres
+
+...
+
+# Build Notes
+
+If builds of PostgreSQL 9 are failing and you have version 8.x installed,
+you may need to remove the previous version first. See:
+  https://github.com/mxcl/homebrew/issues/issue/2510
+
+To build plpython against a specific Python, set PYTHON prior to brewing:
+  PYTHON=/usr/local/bin/python  brew install postgresql
+See:
+  http://www.postgresql.org/docs/9.2/static/install-procedure.html
+
+# Create/Upgrade a Database
+
+If this is your first install, create a database with:
+  initdb /usr/local/var/postgres -E utf8
+
+To migrate existing data from a previous major version (pre-9.2) of PostgreSQL, see:
+  http://www.postgresql.org/docs/9.2/static/upgrading.html
+
+# Loading Extensions
+
+By default, Homebrew builds all available Contrib extensions.  To see a list of all
+available extensions, from the psql command line, run:
+  SELECT * FROM pg_available_extensions;
+
+To load any of the extension names, navigate to the desired database and run:
+  CREATE EXTENSION [extension name];
+
+For instance, to load the tablefunc extension in the current database, run:
+  CREATE EXTENSION tablefunc;
+
+For more information on the CREATE EXTENSION command, see:
+  http://www.postgresql.org/docs/9.2/static/sql-createextension.html
+For more information on extensions, see:
+  http://www.postgresql.org/docs/9.2/static/contrib.html
+
+# Other
+
+Some machines may require provisioning of shared memory:
+  http://www.postgresql.org/docs/9.2/static/kernel-resources.html#SYSVIPC
+When installing the postgres gem, including ARCHFLAGS is recommended:
+  ARCHFLAGS=&quot;-arch x86_64&quot; gem install pg
+
+To install gems without sudo, see the Homebrew wiki.
+
+To have launchd start postgresql at login:
+    ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
+Then to load postgresql now:
+    launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+Or, if you don&#39;t want/need launchctl, you can just run:
+    pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+==&gt; Summary
+🍺  /usr/local/Cellar/postgresql/9.2.4: 2831 files, 39M, built in 2.6 minutes</code></pre>
+<p>Install pgadmin: <a href="http://www.postgresql.org/ftp/pgadmin3/release/v1.16.1/osx/">http://www.postgresql.org/ftp/pgadmin3/release/v1.16.1/osx/</a></p>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, April 14, 2013</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

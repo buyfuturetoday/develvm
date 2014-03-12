@@ -1,0 +1,154 @@
+
+body {
+	background: none repeat scroll 0 0 #fff;
+}
+
+.headshot img {
+
+	border-radius: 2px;
+  -moz-border-radius: 2px; 
+  -webkit-border-radius: 2px;	
+}
+
+#main {
+	width: 1100px;
+	position: relative;
+}
+
+#nav-container {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	z-index: 1000;
+  font-size:18px;
+  text-align: right;
+  padding-top: 10px;
+}
+
+#nav-container a {
+	font-size: 20px;
+	margin-right: 20px;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+
+header {
+	position: relative;
+	height: 300px;
+}
+
+header .site-name {
+  display: block;
+	width: 590px;
+	height: 100%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin: 0 0 0 -290px;
+	background: url('../img/header.png') no-repeat scroll center center;  
+}
+
+#content {
+  padding-left:20px;
+  padding-right:20px;
+  text-align:left;
+	position: absolute;
+	left: 0;
+	right: 35%;
+}
+
+#content .code-link {
+	-moz-border-radius-bottomleft:5px;
+	background-color:#FFFFFF;
+	border:1px solid #AAAAAA;
+	display:block;
+	float:right;
+	font-size:12px;
+	font-weight:bold;
+	height:12px;
+	line-height:12px;
+	margin:0 0 -24px;
+	padding:5px 10px;
+	position:relative;
+}
+
+#content-container h1{
+  font-size:24px;
+}
+
+
+#content-container h1, #content-container h2, #content-container h3{
+  text-align:left;	
+}
+
+#content-container h2 {
+  margin:10px 0px 5px 0;
+}
+
+.readMore, .readMore:visited, .readMore:active {
+  margin: 20px 0;
+  display: inline-block;
+  color: #fff;
+  padding: 0 10px;
+  height: 32px;
+  line-height: 32px;
+  background: #426B92;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.readMore:hover {
+  text-decoration: none;
+  color: #fff;
+  background: #395F85;
+}
+
+#content-container ul {
+  text-align:left;
+  margin: 20px 0 10px 0;
+  list-style-position: inside;
+  list-style-type: square;
+  font-size:14px;
+}
+
+#content-container li {
+  margin: 10px 0;
+  line-height: 1.6em;
+}
+
+#content-container table {
+  margin: 35px 0;
+}
+
+#content-container table th,
+#content-container table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+
+#main pre {
+	background-color:#fff;
+	display:block;
+	text-align:left;
+	margin: 20px 0 10px 0;
+
+	overflow-x: auto; /* Use horizontal scroller if needed; for Firefox 2, not needed in Firefox 3 */
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	/* width: 99%; */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+
+.center { text-align: center; }

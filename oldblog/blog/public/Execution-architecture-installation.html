@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Execution-architecture-installation.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[wiki]] &gt; [[Technical Architecture]] &gt; [[Execution Architecture]]</p>
+<p>h1. Execution Architecture Installation</p>
+<p>h3. All environments but production</p>
+<p>The vTiger CRM archives that contains the installation resides in the repository: <a href="http://s2.gizur.com:81/projects/cikab1/repository/show/setup">http://s2.gizur.com:81/projects/cikab1/repository/show/setup</a>.
+The repository must be checkout to this path: /root/svn/gom-dev</p>
+<p>Each vTiger environment (baseline, sandbox, development, test, prod etc.) has a setup script. The scripts are also found here:
+* <a href="http://s2.gizur.com:81/projects/cikab1/repository/show/setup">http://s2.gizur.com:81/projects/cikab1/repository/show/setup</a></p>
+<p>There are two configuration files that also needs to be managed manually on the application server. The files should be copied to subversion after the initial installation. Updates are then automatically deployed from subversion in the same way as all other php files. </p>
+<h1>config.inc.php - example for the baseline environment - <a href="http://s2.gizur.com:81/projects/cikab1/repository/show/root-dir/var/www/html/vtigerbase">http://s2.gizur.com:81/projects/cikab1/repository/show/root-dir/var/www/html/vtigerbase</a></h1>
+<h1>portal/PortalConfig.php - example for the baseline environment - <a href="http://s2.gizur.com:81/projects/cikab1/repository/show/root-dir/var/www/html/vtigerbase/portal">http://s2.gizur.com:81/projects/cikab1/repository/show/root-dir/var/www/html/vtigerbase/portal</a></h1>
+<p>The database also needs to be initialized when a new database is installed. This needs to be performed before the config.inc.php file is deployed. Open the page http://<server>/<environment> and follow the instructions.</p>
+<p>h3. Setup of production environment</p>
+<p>Everything related to deployment to the production server is managed by the subversion repository:
+<em> <a href="https://s2.gizur.com/svn/gom-prod">https://s2.gizur.com/svn/gom-prod</a>
+</em> The repository must be checkout to this path: /root/svn/gom-prod</p>
+<p>The structure of the repository is the same as the development repository. Setup on the production server is performed by first checking out the repository.
+<em> Edit the setup script and make changes according to the OS that vTiger is installed on
+</em> Then execute the setup script.</p>
+<p>There are two configuration files that also needs to be managed manually on the application server. The files should be copied to subversion after the initial installation. Updates are then automatically deployed from subversion in the same way as all other php files. </p>
+<h1>config.inc.php</h1>
+<h1>portal/PortalConfig.php</h1>
+<p>The usual vTiger installation procedure should then be followed:
+<em> <a href="http://wiki.vtiger.com/index.php/Vtiger_CRM_5.3_Installation">http://wiki.vtiger.com/index.php/Vtiger_CRM_5.3_Installation</a>
+</em> <a href="http://wiki.vtiger.com/index.php/Customer_Portal">http://wiki.vtiger.com/index.php/Customer_Portal</a></p>
+<p>h4. Workaround</p>
+<p>In case the Settings &gt; Customer Portal meny show &#39;CustomerPortal not active&#39;: try to uncheck and then re-check the CustomerPortal module.</p>
+<p>h2. Application server installation routine</p>
+<p>Installation routine:
+<em> Ubuntu (now used in all environments) - [[ubuntu installation of app server]]
+</em> Centos - [[Server installation instructions]]</p>
+<p>h2. phpMyAdmin installation</p>
+<ul>
+<li>phpmyadmin.gizurcloud.com has been setup in the DNS with a virtual host pointing to /var/www/html/phpmyadmin</li>
+<li>There is a setup script in svn/gom-dev/setup</li>
+</ul>
+<p>Dependencies needs to be installed:</p>
+<pre>
+root@ec2-46-137-62-95:~# apt-cache depends phpmyadmin
+phpmyadmin
+ |Depends: libapache2-mod-php5
+ |Depends: php5-cgi
+  Depends: php5
+ |Depends: php5-mysql
+  Depends: <php5-mysqli>
+  Depends: php5-mcrypt
+  Depends: perl
+ |Depends: debconf
+  Depends: <debconf-2.0>
+    cdebconf
+    debconf
+  Depends: dbconfig-common
+  Depends: ucf
+  Depends: libjs-mootools
+  Suggests: mysql-server
+    mysql-cluster-server-5.1
+    mysql-server-5.1
+ |Recommends: apache2
+    apache2-mpm-itk
+    apache2-mpm-event
+    apache2-mpm-prefork
+    apache2-mpm-worker
+ |Recommends: lighttpd
+  Recommends: <httpd>
+    apache2-mpm-itk
+    bozohttpd
+    monkey
+    tntnet
+    aolserver4-core
+    aolserver4-daemon
+    apache2-mpm-event
+    apache2-mpm-prefork
+    apache2-mpm-worker
+    boa
+    cherokee
+    dhttpd
+    ebhttpd
+    fnord
+    lighttpd
+    mathopd
+    micro-httpd
+    mini-httpd
+    nginx
+    ocsigen
+    thttpd
+    webfs
+    yaws
+  Recommends: php5-gd
+  Recommends: mysql-client
+    mysql-client-5.1
+    mysql-cluster-client-5.1
+</pre>
+
+
+
+
+
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

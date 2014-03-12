@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Microsoft BigData/HDInsight</h1>
+  </div>
+  <div class="content"><p>Microsoft BigData/HDInsight Datawarehouse</p>
+<h2>Introduction</h2>
+<p>Micorosft are developing a BigData Solution based on Hadoop. Currently is Hortonworkd HDP 1.1 used but
+this might change. What&#39;s good is that HDP has good support for ODBC which makes it possible to 
+connect to the data warehouse from a vareity of reporting solutions (foir instance Excel).</p>
+<h2>Installation</h2>
+<p>Steps:</p>
+<ol>
+<li>Launch a AWS EC2 instance, I&#39;m using m1.xlarge for now</li>
+<li>Connect and install HDInsight using this <a href="http://www.microsoft.com/en-gb/download/details.aspx?id=35397">http://www.microsoft.com/en-gb/download/details.aspx?id=35397</a></li>
+<li>Install Hortonworks ODBC driver (I&#39;m using 64 bit) - <a href="http://hortonworks.com/thankyou-hdp12/#addon-table">http://hortonworks.com/thankyou-hdp12/#addon-table</a></li>
+<li>Check that hive is up and running. Open a PowerShell session<ul>
+<li><code>cd C:\Hadoop\hive-0.9.0\bin</code></li>
+<li><code>./hive -h localhost -p 10000</code></li>
+<li><code>show tables</code>- empty result but there should not be any errors</li>
+</ul>
+</li>
+<li>Open the task manager, check that CPU and Memory is ok</li>
+<li>Open the ODBC manager</li>
+<li>Navigate to System DSN-&gt;select Sample Hortonworks...-&gt;Configure</li>
+<li>Now enter Host: localhost, Hive Server Type: Hive Server 1</li>
+<li>Hit test</li>
+<li>Go to the Task Manager and click on the CPU column</li>
+</ol>
+<p>Java consumes 30% CPU and ODBC 15% and ODBC manager does not respond.</p>
+<h2>Test with MapR ODBC Connector</h2>
+<p>Download the MapR ODBC driver from here: <a href="http://www.mapr.com/doc/display/MapR/Hive+ODBC+Connector">http://www.mapr.com/doc/display/MapR/Hive+ODBC+Connector</a></p>
+<p>Do the same test as above. Same result...</p>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Friday, March 22, 2013</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

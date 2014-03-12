@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Development for Motorola MC40</h1>
+  </div>
+  <div class="content"><p>Development for Motorola MC40 </p>
+<h2>Introduction</h2>
+<p>MC40 runs Android but Phonegap APK files don&#39;t seam to work.</p>
+<p>Motorola provides a development suite:</p>
+<ul>
+<li>Installation instruction - <a href="http://docs.rhomobile.com/rhomobile-install">http://docs.rhomobile.com/rhomobile-install</a></li>
+<li><a href="http://docs.rhomobile.com/">http://docs.rhomobile.com/</a></li>
+<li><a href="https://developer.motorolasolutions.com/community/rhomobile-suite">https://developer.motorolasolutions.com/community/rhomobile-suite</a></li>
+<li><a href="https://app.rhohub.com/">https://app.rhohub.com/</a></li>
+</ul>
+<h2>Installation on OSX</h2>
+<p>Need to install tvm  - <a href="https://rvm.io/">https://rvm.io/</a></p>
+<pre><code>curl -L https://get.rvm.io | bash -s stable --rails --autolibs=enabled # Or, --ruby=1.9.3</code></pre>
+<p>Runing <code>curl -L https://get.rvm.io | bash -s stable --rails --autolibs=enabled</code> gives me an error, see below.</p>
+<p>Run this instread:</p>
+<pre><code>rvm install 1.9.3</code></pre>
+<h3>Erorrs</h3>
+<pre><code>Error running &#39;env GEM_PATH=/Users/jonas/.rvm/gems/ruby-2.0.0-p0:/Users/jonas/.rvm/gems/ruby-2.0.0-p0@global:/Users/jonas/.rvm/gems/ruby-2.0.0-p0:/Users/jonas/.rvm/gems/ruby-2.0.0-p0@global GEM_HOME=/Users/jonas/.rvm/gems/ruby-2.0.0-p0 /Users/jonas/.rvm/rubies/ruby-2.0.0-p0/bin/ruby -d /Users/jonas/.rvm/src/rubygems-2.0.3/setup.rb&#39;,
+please read /Users/jonas/.rvm/log/ruby-2.0.0-p0/1367225774_rubygems.install.log</code></pre>
+<p>This is the content of the install log:</p>
+<pre><code>[2013-04-29 10:56:14] /Users/jonas/.rvm/rubies/ruby-2.0.0-p0/bin/ruby
+Exception `LoadError&#39; at /Users/jonas/.rvm/rubies/ruby-2.0.0-p0/lib/ruby/2.0.0/rubygems.rb:1073 - cannot load such file -- rubygems/defaults/operating_system
+Exception `LoadError&#39; at /Users/jonas/.rvm/rubies/ruby-2.0.0-p0/lib/ruby/2.0.0/rubygems.rb:1082 - cannot load such file -- rubygems/defaults/ruby
+/Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;: dlopen(/Users/jonas/.rvm/rubies/ruby-2.0.0-p0/lib/ruby/2.0.0/x86_64-darwin12.3.0/openssl.bundle, 9): Symbol not found: _TLSv1_1_client_method (LoadError)
+  Referenced from: /Users/jonas/.rvm/rubies/ruby-2.0.0-p0/lib/ruby/2.0.0/x86_64-darwin12.3.0/openssl.bundle
+  Expected in: /usr/lib/hive/lib/native/universal/libssl.1.0.0.dylib
+ in /Users/jonas/.rvm/rubies/ruby-2.0.0-p0/lib/ruby/2.0.0/x86_64-darwin12.3.0/openssl.bundle - /Users/jonas/.rvm/rubies/ruby-2.0.0-p0/lib/ruby/2.0.0/x86_64-darwin12.3.0/openssl.bundle
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/rubies/ruby-2.0.0-p0/lib/ruby/2.0.0/openssl.rb:17:in `&lt;top (required)&gt;&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/security.rb:11:in `&lt;top (required)&gt;&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/package.rb:43:in `&lt;top (required)&gt;&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/installer.rb:8:in `&lt;top (required)&gt;&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/request_set.rb:5:in `&lt;top (required)&gt;&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems.rb:195:in `finish_resolve&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/rdoc.rb:14:in `&lt;top (required)&gt;&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/uninstaller.rb:10:in `&lt;top (required)&gt;&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/commands/setup_command.rb:462:in `uninstall_old_gemcutter&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/commands/setup_command.rb:146:in `execute&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/command.rb:305:in `invoke_with_build_args&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/command_manager.rb:170:in `process_args&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/command_manager.rb:130:in `run&#39;
+        from /Users/jonas/.rvm/src/rubygems-2.0.3/lib/rubygems/gem_runner.rb:60:in `run&#39;
+        from setup.rb:45:in `&lt;main&gt;&#39;
+RubyGems 2.0.3 installed</code></pre>
+<h2>Alternative way to install</h2>
+<ul>
+<li><a href="https://github.com/railsinstaller/railsinstaller-nix/downloads">https://github.com/railsinstaller/railsinstaller-nix/downloads</a></li>
+<li>background - <a href="http://www.engineyard.com/blog/2012/railsinstaller-for-os-x/">http://www.engineyard.com/blog/2012/railsinstaller-for-os-x/</a></li>
+</ul>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Friday, April 26, 2013</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

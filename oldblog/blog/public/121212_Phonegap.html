@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Getting started with Phonegap</h1>
+  </div>
+  <div class="content"><p>Getting started with Phonegap</p>
+<h1>Background</h1>
+<p>I want to develop a web app that can take pictures using the camera. I&#39;ll start with Android.</p>
+<p>The source code is available here: <a href="https://github.com/colmsjo/cardova-test">https://github.com/colmsjo/cardova-test</a></p>
+<h1>Links</h1>
+<p>Some articles:</p>
+<ul>
+<li>Excellent background on how it works - <a href="http://www.risingj.com/archives/267">http://www.risingj.com/archives/267</a></li>
+<li>I followed this guide - <a href="http://docs.phonegap.com/en/2.2.0/guide_getting-started_android_index.md.html#Getting%20Started%20with%20Android">http://docs.phonegap.com/en/2.2.0/guide_getting-started_android_index.md.html#Getting%20Started%20with%20Android</a></li>
+<li><a href="http://agiliq.com/blog/2012/03/developing-android-applications-from-command-line/">http://agiliq.com/blog/2012/03/developing-android-applications-from-command-line/</a></li>
+</ul>
+<p>Links:</p>
+<ul>
+<li><a href="http://cordova.apache.org/">http://cordova.apache.org/</a></li>
+<li>Node Cordova client - <a href="https://github.com/filmaj/cordova-client">https://github.com/filmaj/cordova-client</a></li>
+</ul>
+<h1>Step by step</h1>
+<ol>
+<li>Download the Android SDK - <a href="http://developer.android.com/sdk/index.html#download">http://developer.android.com/sdk/index.html#download</a></li>
+<li>Download Phonegap (could not find a Cordova download, but they are supposed to be the same) - <a href="http://phonegap.com/download#">http://phonegap.com/download#</a></li>
+</ol>
+<p>These steps are mentioned in the guide, but I don&#39;t think they are needed: </p>
+<ol>
+<li>Download Eclipse for mobile developers - <a href="http://www.eclipse.org/downloads/packages/eclipse-mobile-developers/junosr1">http://www.eclipse.org/downloads/packages/eclipse-mobile-developers/junosr1</a></li>
+<li>Download ADT plugin - <a href="http://developer.android.com/sdk/installing/installing-adt.html">http://developer.android.com/sdk/installing/installing-adt.html</a></li>
+</ol>
+<h2>Install the SDK and run a Hello World</h2>
+<p>After downloading the SDK and Phonegap, do this:</p>
+<pre><code>nano ~/.bash_profile
+...
+#
+# Android SDK
+#
+
+export PATH=&quot;$PATH:/Users/jonas/local2/adt-bundle-mac/sdk/tools:/Users/jonas/local2/adt-bundle-mac/sdk/platform-tools&quot;
+
+source ~/.bash_profile
+
+cd ~/local/phonegap/lib/android/bin</code></pre>
+<p>Now you&#39;re supposed to be able to create a first project:</p>
+<pre><code># NOTE: it needs to be com.XXX only XXX do not work
+./create ~/tmp/phonegap com.test testproject1</code></pre>
+<p>Now open eclipse. </p>
+<ol>
+<li>Choose File-&gt;New-&gt;Other-&gt;Android Project From existing Code</li>
+<li>Right click on the project and Select Run As-&gt;Android Application</li>
+</ol>
+<p>This is supposed to work, for me the app only says &#39;CONNECTING TO DEVICE&#39;</p>
+<p>I tried this:</p>
+<ol>
+<li>Install one or more Intel x86 Atom System Images as well as the Intel Hardware Accelerated Execution Manager (under Extras).</li>
+<li>Run the Intel installer, which has been downloaded to: extras/intel/Hardware_Accelerated_Execution_Manager within your Android SDK
+Create a new AVD with the Target set to an Intel image.</li>
+</ol>
+<p>Now it works, it says: &#39;DEVICE IS READY&#39;</p>
+<h2>Develop a app accessing the camera</h2>
+<p>I took the HTML code from the example below and inserted into index.html</p>
+<ul>
+<li><a href="http://docs.phonegap.com/en/2.2.0/cordova_camera_camera.md.html#Camera">http://docs.phonegap.com/en/2.2.0/cordova_camera_camera.md.html#Camera</a></li>
+</ul>
+<p>This works well. Try yourself, the source code is here: <a href="https://github.com/colmsjo/cardova-test">https://github.com/colmsjo/cardova-test</a></p>
+<h2>Troubleshooting</h2>
+<p>Google and you&#39;ll find a lot of info about people having trouble. </p>
+<p>An AVD needs to be created in order to run the emulator. Start Eclipse and open the 
+Android Virtual Device Manager Windows </p>
+<p>Or run this:</p>
+<pre><code>android avd</code></pre>
+<p>Devices also needs to be setup:</p>
+<pre><code>adb devices
+adb kill-server
+adb reboot
+
+# Start one emulator
+emulator @avd1
+
+# Check connected devices
+adb devices</code></pre>
+<p>There is a Hello world app here:</p>
+<ul>
+<li>git://github.com/apache/cordova-app-hello-world.git </li>
+</ul>
+<p>Did a lot of testing, finally this actually works:</p>
+<pre><code>cd ~/local2/phonegap/lib/android
+./bin/create ~/phonegap_android_proj com.example TestProjActivity 3
+
+cd ~/phonegap_android_proj
+
+ant clean debug install</code></pre>
+<p>Install apk in emulator:</p>
+<pre><code>adb install TestProjActivity-debug.apk</code></pre>
+<p>Now check the list of apps in the device and start HelloCordova. It should say DEVICE IS READY</p>
+<h2>Alternative way of creating the app</h2>
+<p>I tested this instead and it seams to work:</p>
+<pre><code>npm install cordova -g
+sudo chown -R &lt;yourusername&gt; /usr/local/lib/node_modules/cordova
+
+cordova create Baz
+cd Baz/
+cordova platform add android
+cordova build
+cordova serve android</code></pre>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Wednesday, December 12, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

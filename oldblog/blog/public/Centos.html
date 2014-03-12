@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Centos.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[Gizur server admin]]</p>
+<p>= Docs =</p>
+<ul>
+<li><a href="http://www.centos.org/docs/5/">http://www.centos.org/docs/5/</a></li>
+<li>Mail transport - <a href="https://help.ubuntu.com/community/PostfixBasicSetupHowto">https://help.ubuntu.com/community/PostfixBasicSetupHowto</a></li>
+<li>Mail forwarding - <a href="http://www.zulius.com/how-to/set-up-postfix-with-a-remote-smtp-relay-host/">http://www.zulius.com/how-to/set-up-postfix-with-a-remote-smtp-relay-host/</a></li>
+</ul>
+<p>== jython ==</p>
+<p>Could not find jython RPM. Also need to make sure it works with my java version that Ofbiz runs on (Sun JDK, NOT OpenJDK).</p>
+<ul>
+<li>Article - <a href="http://www.centos.org/modules/newbb/viewtopic.php?topic_id=12377">http://www.centos.org/modules/newbb/viewtopic.php?topic_id=12377</a></li>
+<li><a href="http://wiki.python.org/jython/InstallationInstructions">http://wiki.python.org/jython/InstallationInstructions</a></li>
+</ul>
+<pre>
+wget http://sourceforge.net/projects/jython/files/jython/2.5.2/jython_installer-2.5.2.jar/download
+wget http://sourceforge.net/projects/jython/files/jython/2.5.2/readme/download
+
+
+java -jar jython_installer-2.5.2.jar --help
+java -jar jython_installer-2.5.2.jar --console
+
+[root@ofbiz1 dwnl]# java -jar jython_installer-2.5.2.jar --console
+Welcome to Jython !
+You are about to install Jython version 2.5.2
+(at any time, answer c to cancel the installation)
+For the installation process, the following languages are available: English, German
+Please select your language [E/g] >>> E
+Do you want to read the license agreement now ? [y/N] >>> N
+Do you accept the license agreement ? [Y/n] >>> Y
+The following installation types are available:
+  1. All (everything, including sources)
+  2. Standard (core, library modules, demos and examples, documentation)
+  3. Minimum (core)
+  9. Standalone (a single, executable .jar)
+Please select the installation type [ 1 /2/3/9] >>> 2
+Do you want to install additional parts ? [y/N] >>> N
+Do you want to exclude parts from the installation ? [y/N] >>> N
+Please enter the target directory >>> /opt/jython
+Unable to find directory /opt/jython, create it ? [Y/n] >>> Y
+Please enter the java home directory (empty for using the current java runtime) >>> 
+Your java version to start Jython is: Sun Microsystems Inc. / 1.6.0_29
+Your operating system version is: Linux / 2.6.35.4-rscloud
+Summary:
+  - mod: true
+  - demo: true
+  - doc: true
+  - src: false
+  - JRE: /usr/java/jdk1.6.0_29/jre
+Please confirm copying of files to directory /opt/jython [Y/n] >>> Y
+ 10 %
+ 20 %
+ 30 %
+ 40 %
+ 50 %
+ 60 %
+ 70 %
+ 80 %
+ 90 %
+Generating start scripts ...
+ 100 %
+Do you want to show the contents of README ? [y/N] >>> N
+Congratulations! You successfully installed Jython 2.5.2 to directory /opt/jython.
+[root@ofbiz1 dwnl]# 
+
+
+/opt/jython/jython
+
+</pre>
+
+<p>== ntp ==</p>
+<ul>
+<li><a href="http://www.thewebhostinghero.com/tutorials/synchronizing-system-clock-ntp.html">http://www.thewebhostinghero.com/tutorials/synchronizing-system-clock-ntp.html</a></li>
+<li><a href="http://www.jaredstenquist.com/2010/08/18/changing-timezone-on-centos-via-ntp/">http://www.jaredstenquist.com/2010/08/18/changing-timezone-on-centos-via-ntp/</a></li>
+</ul>
+<pre>
+vi /etc/ntp.conf
+
+server 2.centos.pool.ntp.org
+# 110412, Jonas C.
+server se.pool.ntp.org
+
+[root@test-centos1 etc]# cp /etc/localtime /etc/localtime.org
+[root@test-centos1 etc]# cp /usr/share/zoneinfo/Europe/Stockholm /etc/localtime
+cp: overwrite `/etc/localtime'? yes
+[root@test-centos1 etc]#
+
+</pre>
+
+<p>== Postfix ==</p>
+<ul>
+<li><a href="http://postfixmail.com/blog/index.php/using-webmin-to-set-up-postfix/">http://postfixmail.com/blog/index.php/using-webmin-to-set-up-postfix/</a></li>
+</ul>
+<pre>
+yum install postfix
+cp -R /etc/postfix /etc/postfix.bak
+vi /etc/postfix/main.cf
+
+</pre>
+
+<p>== s3cmd ==</p>
+<ul>
+<li><a href="http://s3tools.org/repositories">http://s3tools.org/repositories</a></li>
+</ul>
+<pre>
+wget http://s3tools.org/repo/RHEL_5/s3tools.repo
+
+vi /etc/yum.repo.d/s3tools.repo
+[s3tools]
+name=Tools for managing Amazon S3 - Simple Storage Service (RHEL_5)
+type=rpm-md
+baseurl=http://s3tools.org/repo/RHEL_5/
+gpgcheck=1
+gpgkey=http://s3tools.org/repo/RHEL_5/repodata/repomd.xml.key
+enabled=1
+
+s3cmd --configure
+s3cmd ls
+s3cmd put
+s3cmd get
+</pre>
+
+<p>== ddclient - Dyndns client ==</p>
+<pre>
+wget http://cdn.dyndns.com/ddclient.tar.gz
+gunzip 
+tar cd
+
+# Config
+cp ddclient /usr/sbin/
+mkdir /etc/ddclient
+#cp sample-etc_ddclient.conf /etc/ddclient/ddclient.conf
+vi /etc/ddclient/ddclient.conf
+
+# Basic HTTPS configuration file for ddclient
+#
+# /etc/ddclient.conf
+daemon=600
+pid=/var/run/ddclient.pid
+# ssl=yes
+use=web, web=checkip.dyndns.com/, web-skip='IP Address'
+login=colmsjo
+password=homeend
+protocol=dyndns2
+server=members.dyndns.org
+wildcard=YES
+gizur2.dyndns.org
+# custom=yes, s2.gizur.com
+
+
+
+# Startup
+cp sample-etc_rc.d_init.d_ddclient /etc/rc.d/init.d/ddclient
+vi /etc/ddclient/ddclient.conf
+/sbin/chkconfig --add ddclient
+/etc/rc.d/init.d/ddclient start
+</pre>
+
+<p>Force a update:</p>
+<pre>
+ddclient --force
+</pre>
+
+<p>== iptables ==</p>
+<ul>
+<li><p><a href="http://www.cyberciti.biz/faq/linux-open-iptables-firewall-port-22-23/">http://www.cyberciti.biz/faq/linux-open-iptables-firewall-port-22-23/</a></p>
+</li>
+<li><p><a href="https://help.ubuntu.com/community/IptablesHowTo">https://help.ubuntu.com/community/IptablesHowTo</a></p>
+</li>
+</ul>
+<pre>
+vi /etc/sysconfig/iptables
+
+Find REJECT line, insert before:
+-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 80 -j ACCEPT
+-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 443 -j ACCEPT
+-A RH-Firewall-1-INPUT -m state --state NEW -p tcp --dport 10000 -j ACCEPT
+
+service iptables restart
+
+This open ssh (should be open in Rackspace)
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+
+</pre>
+
+<p>== Java in Firefox (64 bit) ==</p>
+<pre>
+chmod +x jre-6u23-linux-x64-rpm.bin 
+./jre-6u23-linux-x64-rpm.bin
+alternatives --install /usr/bin/java java /usr/java/default/bin/java 2
+
+alternatives --config java
+
+There are 2 programs which provide 'java'.
+
+  Selection    Command
+-----------------------------------------------
+*+ 1           /usr/lib/jvm/jre-1.6.0-openjdk.x86_64/bin/java
+   2           /usr/java/default/bin/java
+
+Enter to keep the current selection[+], or type selection number: 2
+
+cd /usr/lib64/mozilla/plugins
+ln -fs /usr/java/default/lib/amd64/libnpjp2.so
+
+java -version
+java version "1.6.0_23"
+Java(TM) SE Runtime Environment (build 1.6.0_23-b05)
+Java HotSpot(TM) 64-Bit Server VM (build 19.0-b09, mixed mode)
+
+Restart firefox
+</pre>
+
+
+
+<p>== Resize filesystem ==</p>
+<pre>
+umount /vm
+e2fsck -f /dev/VolGroup00/vm
+resize2fs
+e2fsck -f /dev/VolGroup00/vm
+mount /vm
+</pre>
+
+<p>== MySQL ==</p>
+<p>Links:
+<em> <a href="http://www.software-pointers.com/en-mysql-tools.html">http://www.software-pointers.com/en-mysql-tools.html</a>
+</em> <a href="http://www.webyog.com/">http://www.webyog.com/</a>
+<em> <a href="http://hackmysql.com/">http://hackmysql.com/</a>
+</em> <a href="https://launchpad.net/percona-toolkit">https://launchpad.net/percona-toolkit</a></p>
+<p>phpMyAdmin</p>
+<pre>
+sudo apt-get install php5-mysql php5-mcrypt
+service apache2 restart
+
+wget http://sourceforge.net/projects/phpmyadmin/files%2FphpMyAdmin%2F3.3.9.2%2FphpMyAdmin-3.3.9.2-english.tar.gz
+gunzip ...
+tar -xvf ...
+</pre>
+
+
+<p>mtop</p>
+<ul>
+<li><a href="http://www.webhostingtalk.com/showthread.php?t=590444">http://www.webhostingtalk.com/showthread.php?t=590444</a>
+<pre>
+yum -y install perl-Curses perl-DBI libnet
+perl Makefile.PL
+make
+make install</li>
+</ul>
+<h1>could also setup mysqltop</h1>
+<p>mtop --dbuser=root -p password 
+</pre></p>
+<p>== Software Raid ==</p>
+<ul>
+<li><a href="http://www.serverboost.com/whmcs/knowledgebase/1/Linux-rebuild-broken-software-raid-array---CENTOS.html">http://www.serverboost.com/whmcs/knowledgebase/1/Linux-rebuild-broken-software-raid-array---CENTOS.html</a></li>
+<li><a href="http://wiki.centos.org/HowTos/SoftwareRAIDonCentOS5">http://wiki.centos.org/HowTos/SoftwareRAIDonCentOS5</a></li>
+<li><a href="http://serverfault.com/questions/32709/how-do-i-move-a-linux-software-raid-to-a-new-machine">http://serverfault.com/questions/32709/how-do-i-move-a-linux-software-raid-to-a-new-machine</a></li>
+</ul>
+<pre>
+cat /proc/mdstat 
+mdadm-- detail /dev/md?
+mdadm -D /dev/md?
+</pre>
+
+<p>/etc/raidtab is not used anymore, mdadm is used instead.</p>
+<p>mdadm.conf from blixten:</p>
+<pre>
+# mdadm.conf written out by anaconda
+DEVICE partitions
+MAILADDR root
+ARRAY /dev/md2 super-minor=2
+ARRAY /dev/md0 super-minor=0
+ARRAY /dev/md1 super-minor=1
+ARRAY /dev/md3 super-minor=3
+ARRAY /dev/md4 super-minor=4
+ARRAY /dev/md5 level=raid10 num-devices=2 uuid=a4ddab9c:7cf4e516:3fd3059f:e81ba406
+ARRAY /dev/md6 super-minor=6
+</pre>
+
+<p>mdadm.conf from fractal:</p>
+<pre>
+# mdadm.conf written out by anaconda
+DEVICE partitions
+MAILADDR root
+ARRAY /dev/md0 level=raid1 num-devices=2 uuid=5b5aa4e9:9c376d0a:e4720825:6712a8d0
+ARRAY /dev/md1 level=raid5 num-devices=5 uuid=45198d7d:a68b4a39:859ffd2f:b668ddd8
+</pre>
+
+<p>Reconstruct without mdadm.conf:</p>
+<pre>
+mdadm --assemble --scan --verbose /dev/md{number} /dev/{disk1} /dev/{disk2} /dev/{disk3} /dev/{disk4}
+</pre>
+
+<p>== nfs ==</p>
+<ul>
+<li><a href="http://www.howtoforge.com/setting-up-an-nfs-server-and-client-on-centos-5.5">http://www.howtoforge.com/setting-up-an-nfs-server-and-client-on-centos-5.5</a></li>
+<li><a href="http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-nfs-server-config-exports.html">http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-nfs-server-config-exports.html</a></li>
+</ul>
+<p>== ntop ==</p>
+<ul>
+<li><a href="http://www.ntop.org">http://www.ntop.org</a></li>
+<li><a href="http://www.ntop.org/ntop-overview.pdf">http://www.ntop.org/ntop-overview.pdf</a></li>
+</ul>
+<pre>
+wget http://packages.sw.be/ntop/ntop-3.3.8-2.el5.rf.i386.rpm
+yum install rrdtool libtool tcpdump
+rpm -i ntop-3.3.8-2.el5.rf.i386.rpm
+ntop #ange lösenord för admin user
+</pre>
+
+<p>Access ntop at <a href="http://linux_server2:3000/">http://linux_server2:3000/</a>
+Logga in med admin/lösenord</p>
+<p>== webmin ==</p>
+<p><a href="http://www.webmin.com/rpm.html">http://www.webmin.com/rpm.html</a></p>
+<pre>
+vi /etc/yum.repo.d/web.repo
+
+[Webmin]
+name=Webmin Distribution Neutral
+baseurl=http://download.webmin.com/download/yum
+enabled=1
+
+rpm --import http://www.webmin.com/jcameron-key.asc
+
+yum search webmin
+
+yum install webmin
+</pre>
+
+
+
+<p>Had problems with modules not installed (doing a refresh modules):</p>
+<pre>
+wget http://downloads.sourceforge.net/project/webadmin/webmin/1.520/webmin-1.520-1.noarch.rpm?r=http%3A%2F%2Fwww.webmin.com%2F&ts=1283150535&use_mirror=garr
+rpm -i ...
+
+yum install make            # seams to be needed
+</pre>
+
+
+
+<p>== cloudmin ==</p>
+<ul>
+<li><a href="http://www.webmin.com/cinstall.html">http://www.webmin.com/cinstall.html</a></li>
+</ul>
+<pre>
+wget http://cloudmin.virtualmin.com/gpl/scripts/cloudmin-gpl-redhat-install.sh
+chmod +x cloudmin-gpl-redhat-install.sh
+./cloudmin-gpl-redhat-install.sh
+</pre>
+
+
+<p>== mail server ==</p>
+<p>Using postfix. </p>
+<pre>
+yum install postfix
+</pre>
+
+<pre>
+cp /mnt/linksys_gizur2/Install/Linux/main.cf .
+cp /mnt/linksys_gizur2/Install/Linux/sasl_passwd .
+service postfix start
+</pre>
+
+<p>Test the installation:</p>
+<pre>
+sendmail jonas.colmsjo@gizur.com
+HEJ HEJ HEJ
+.
+</pre>
+
+<p>== Super Scheduler ==</p>
+<p>Installed subversion</p>
+<ul>
+<li><a href="http://wiki.centos.org/HowTos/Subversion">http://wiki.centos.org/HowTos/Subversion</a></li>
+</ul>
+<pre>
+yum install mod_dav_svn subversion
+</pre>
+
+
+<p>Installed SuperScheduler. Also installed Java version 1.4.2_19.</p>
+<p>Had to write a custom start script for the deamon. This is called from /etc/rc.local:</p>
+<pre>
+#!/bin/bash
+
+export CLASSPATH=/usr/share/acelet/acelet-scheduler.jar:/usr/share/acelet/hsql.jar:.
+export JAVA_OPTIONS="-Xms32m -Xmx200m"
+
+# java org.hsql.Server &
+
+cd /usr/share/acelet/database
+. ./startDatabase.sh  &
+
+cd ..
+. ./runSuperSchedulerDaemon.sh > deamon.log &
+</pre>
+
+
+<p>== rpmforge ==
+* <a href="http://wiki.centos.org/AdditionalResources/Repositories/RPMForge">http://wiki.centos.org/AdditionalResources/Repositories/RPMForge</a></p>
+<pre>
+wget http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.1-1.el5.rf.i386.rpm
+
+wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.2-2.el5.rf.x86_64.rpm
+
+rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+rpm -K rpmforge-release-0.5.1-1.el5.rf.*.rpm
+rpm -i rpmforge-release-0.5.1-1.el5.rf.*.rpm
+yum check-update
+</pre>
+
+<p>== backups ==</p>
+<p>Article: <a href="http://www.cyberciti.biz/faq/linux-tape-backup-with-mt-and-tar-command-howto/">http://www.cyberciti.biz/faq/linux-tape-backup-with-mt-and-tar-command-howto/</a></p>
+<pre>
+#!/bin/bash
+# A UNIX / Linux shell script to backup dirs to tape device like /dev/st0 (linux)
+# This script make both full and incremental backups.
+# You need at two sets of five  tapes. Label each tape as Mon, Tue, Wed, Thu and Fri.
+# You can run script at midnight or early morning each day using cronjons.
+# The operator or sys admin can replace the tape every day after the script has done.
+# Script must run as root or configure permission via sudo.
+# -------------------------------------------------------------------------
+# Copyright (c) 1999 Vivek Gite <vivek@nixcraft.com>
+# This script is licensed under GNU GPL version 2.0 or above
+# -------------------------------------------------------------------------
+# This script is part of nixCraft shell script collection (NSSC)
+# Visit http://bash.cyberciti.biz/ for more information.
+# -------------------------------------------------------------------------
+# Last updated on : March-2003 - Added log file support.
+# Last updated on : Feb-2007 - Added support for excluding files / dirs.
+# -------------------------------------------------------------------------
+LOGBASE=/root/backup/log
+
+# Backup dirs; do not prefix /
+BACKUP_ROOT_DIR="bin boot dev etc home lib lib64 media misc net opt proc root sbin selinux srv sys usr var"
+
+# Get todays day like Mon, Tue and so on
+NOW=$(date +"%a")
+
+# Tape devie name
+TAPE="/dev/tape/by-id/scsi-3500110a0051bd01a-nst"
+
+# Exclude file
+TAR_ARGS=""
+EXCLUDE_CONF=/root/.backup.exclude.conf
+
+# Backup Log file
+LOGFIILE=$LOGBASE/$NOW.backup.log
+
+# Path to binaries
+TAR=/bin/tar
+MT=/bin/mt
+MKDIR=/bin/mkdir
+
+# ------------------------------------------------------------------------
+# Excluding files when using tar
+# Create a file called $EXCLUDE_CONF using a text editor
+# Add files matching patterns such as follows (regex allowed):
+# home/vivek/iso
+# home/vivek/*.cpp~
+# ------------------------------------------------------------------------
+[ -f $EXCLUDE_CONF ] && TAR_ARGS="-X $EXCLUDE_CONF"
+
+#### Custom functions #####
+# Make a full backup
+full_backup(){
+        local old=$(pwd)
+        cd /
+        $TAR $TAR_ARGS -cvpf $TAPE $BACKUP_ROOT_DIR
+        $MT -f $TAPE rewind
+        $MT -f $TAPE offline
+        cd $old
+}
+
+# Make a  partial backup
+partial_backup(){
+        local old=$(pwd)
+        cd /
+        $TAR $TAR_ARGS -cvpf $TAPE -N "$(date -d '1 day ago')" $BACKUP_ROOT_DIR
+        $MT -f $TAPE rewind
+        $MT -f $TAPE offline
+        cd $old
+}
+
+# Make sure all dirs exits
+verify_backup_dirs(){
+        local s=0
+        for d in $BACKUP_ROOT_DIR
+        do
+                if [ ! -d /$d ];
+                then
+                        echo "Error : /$d directory does not exits!"
+                        s=1
+                fi
+        done
+        # if not; just die
+        [ $s -eq 1 ] && exit 1
+}
+
+#### Main logic ####
+
+# Make sure log dir exits
+[ ! -d $LOGBASE ] && $MKDIR -p $LOGBASE
+
+# Verify dirs
+verify_backup_dirs
+
+# Okay let us start backup procedure
+# If it is monday make a full backup;
+# For Tue to Fri make a partial backup
+# Weekend no backups
+case $NOW in
+        Mon)    full_backup;;
+        Tue|Wed|Thu|Fri|Sat|Sun)        partial_backup;;
+        *) ;;
+esac > $LOGFIILE 2>&1
+</pre>
+
+<p>Add script to /etc/cron.daily/</p>
+<pre>
+#!/bin/bash
+
+/root/scrips/backuptape.sh
+</pre>
+
+<p>== VNC ==</p>
+<p>Has setup VNC. Followed these instructions: <a href="http://wiki.centos.org/HowTos/VNC-Server#head-dfa9273a7c8eb8be0310b9264105d5f97ca3f6e4">http://wiki.centos.org/HowTos/VNC-Server#head-dfa9273a7c8eb8be0310b9264105d5f97ca3f6e4</a></p>
+<p>Steps:
+<em> run vncpasswd as each user that should be able to login
+</em> edit /etc/sysconfig/vncservers and add VNCSERVERS=&quot;1:larry 2:moe 3:curly&quot;. Also make sure that the VNCSERVERARGS are set so that is it possible to login (allow tcp, http etc.)
+<em> service vncserver start - crteates xstartup file
+</em> service vncserver stop
+<em> uncomment unset SESSION_MANAGER and exec /etc/X11/xinit/xinitrc in xstartup in .vnc/xstartup
+</em> start on reboot - /sbin/chkconfig vncserver on
+* add ports 5800-5810 and 5900-5910 to firewall system-&gt;Administration-&gt;security level and firewall</p>
+<p>=== CentOS 6 ===</p>
+<pre>
+yum -y groupinstall "Fönstersystemet X" "KDE-skrivbord"
+yum install tigervnc-server
+vi /etc/sysconfig/vncservers
+
+vi /etc/sysconfig/iptables
+
+-A INPUT -m state --state NEW -p tcp --dport 5802 -j ACCEPT
+-A INPUT -m state --state NEW -p tcp --dport 8902 -j ACCEPT
+
+service iptables restart
+
+vncpasswd
+
+service vncserver start 
+service vncserver stop
+
+cd
+cd .vnc
+vi xstartup
+
+/sbin/chkconfig vncserver on
+
+service vncserver start
+
+</pre>
+
+<p>== Start services on boot ==</p>
+<p>Run command:</p>
+<p><pre>
+ntsysv
+</pre>
+and select the services to start.</p>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

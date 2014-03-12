@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Cfengine server basic setup</h1>
+  </div>
+  <div class="content"><p>Setup the cfengine server</p>
+<h1>A first basic configuration</h1>
+<h2>Initial setup</h2>
+<p>Copy the files in <a href="https://github.com/colmsjo/wip/tree/master/cfengine">https://github.com/colmsjo/wip/tree/master/cfengine</a> to /etc/cfengine3 to get started (for Ubuntu 12.04).</p>
+<h2>Hello world</h2>
+<p>Cfengine allows any user to execute promises for validation purposes. A bit of setup needs to be performed for each user though, see below.</p>
+<p>Put his in /home/ubuntu/promises.cf</p>
+<pre><code>body common control {
+
+    bundlesequence =&gt; {
+        &quot;recipe&quot;,
+    };
+
+    inputs =&gt; {
+        &quot;cfengine_stdlib.cf&quot;,
+    };
+}
+
+bundle agent recipe {
+
+# Recipe promise here
+reports:
+  cfengine_3::
+      &quot;Hello world!&quot;;
+}</code></pre>
+<p>Make intial setup for the ubuntu user and execute:</p>
+<pre><code># Need a keypair, only needs to be done once per user
+cf-key
+
+# Need to copy binaries
+cp /var/lib/cfengine3/bin/cf-* ~/.cfagent/bin
+
+# Fix permissions
+chmod go-rwx promisis.cf 
+
+# Make include file readble for everyone
+sudo -s &#39;chmod a+r /etc/cfengine3/cfengine_stdlib.cf&#39;
+
+# Copy include file and make it mine
+sh -c &#39;cp /etc/cfengine3/cfengine_stdlib.cf .&#39;
+sudo sh -c &#39;chown ubuntu cfengine_stdlib.cf&#39;
+
+# Validate file
+cf-promises -f ~/promisis.cf 
+
+# Hello world!
+cf-agent -Kv -f ~/promisis.cf</code></pre>
+<p>The output looks like this:</p>
+<pre><code>...
+cf3&gt;     .........................................................
+cf3&gt;     Promise handle: 
+cf3&gt;     Promise made by: Hello world!
+cf3&gt;     .........................................................
+cf3&gt; 
+cf3&gt; Report: Hello world!
+cf3&gt; R: Hello world!
+cf3&gt; 
+cf3&gt;      +  Private classes augmented:
+cf3&gt; 
+cf3&gt;      -  Private classes diminished:
+...
+cf3&gt; Outcome of version (not specified) (agent-0): Promises observed to be kept 0%, Promises repaired 100%, Promises not repaired 0%
+cf3&gt; Estimated system complexity as touched objects = 0, for 1 promises
+cf3&gt;  -&gt; Writing last-seen observations
+cf3&gt;  -&gt; Keyring is empty
+cf3&gt;  -&gt; No lock purging scheduled</code></pre>
+<h2>Set timezone</h2>
+<p>The timezone for the server can be set with the command <code>dpkg-reconfigure tzdata</code>. It is also possible to set the timezone noninteractive.</p>
+<pre><code>sudo sh -c &#39;echo &quot;Europe/Stockholm&quot; &gt; /etc/timezone&#39;  
+sudo sh -c &#39;dpkg-reconfigure -f noninteractive tzdata&#39;</code></pre>
+<p>The code can be found here: <a href="https://github.com/colmsjo/wip/blob/master/cfengine/timezone.cf">https://github.com/colmsjo/wip/blob/master/cfengine/timezone.cf</a></p>
+<h2>Install webmin</h2>
+<p>Make promises out of this:</p>
+<pre><code>sudo nano /etc/apt/sources.list
+
+deb http://download.webmin.com/download/repository sarge contrib
+deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib
+
+
+cd /root
+wget http://www.webmin.com/jcameron-key.asc
+apt-key add jcameron-key.asc
+
+apt-get update
+apt-get install webmin</code></pre>
+<h2>pull git repository periodically</h2>
+<ul>
+<li><a href="https://cfengine.com/manuals/cf3-Reference#Familiiarizing-yourself">https://cfengine.com/manuals/cf3-Reference#Familiiarizing-yourself</a></li>
+<li><a href="http://cfengine.com/manuals/st-schedule#Commands-promises">http://cfengine.com/manuals/st-schedule#Commands-promises</a></li>
+<li><a href="http://cfengine.com/manuals/cf3-Reference#Function-splayclass">http://cfengine.com/manuals/cf3-Reference#Function-splayclass</a></li>
+</ul>
+<p>First git need to be setup. Login to the server and:</p>
+<pre><code>cd &amp;&amp; cd .ssh
+ssh-keygen -t rsa -C &quot;your_email@youremail.com&quot;
+# Add SSH key to github (or whatever git host you are using)
+ssh -T git@github.com
+
+# Pu the keys in the root account
+sudo sh -c &quot;cp /home/ubuntu/.ssh/id_rsa* /root/.ssh/&quot;
+
+# Now checkout the git repository with the cfengine configuration
+sudo sh -c &quot;git clone git@github.com:XXXXX/XXXXXX.git&quot;</code></pre>
+<h3>Have the cfengine configuration updated periodically</h3>
+<pre><code>body common control
+{
+bundlesequence  =&gt; { &quot;pull_cf_config&quot; };
+}
+
+bundle agent pull_cf_config
+{
+classes:
+
+  &quot;my_result&quot; expression =&gt; splayclass(&quot;$(sys.host)$(sys.ipv4)&quot;,&quot;hourly&quot;);
+
+commands:
+
+  &quot;cd /etc/cfengine3 &amp;&amp; /usr/bin/git&quot;
+     args =&gt; &quot;pull&quot;,
+     contain =&gt; standard;
+}
+
+body contain standard
+{
+exec_owner =&gt; &quot;root&quot;;
+useshell =&gt; &quot;true&quot;;
+}</code></pre>
+<h2>Run cf-agent at random intervals</h2>
+<p>Run cf-agent at random interval no longer than maximum 10 minutes:</p>
+<pre><code>body executor control
+{
+splaytime =&gt; &quot;10&quot;;              # Minutes
+}</code></pre>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Thursday, August 30, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

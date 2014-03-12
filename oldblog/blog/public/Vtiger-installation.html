@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Vtiger-installation.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[vTigerCRM]]</p>
+<p>== Upgrade ==</p>
+<ul>
+<li><a href="http://wiki.vtiger.com/index.php/Vtiger530:Migration">http://wiki.vtiger.com/index.php/Vtiger530:Migration</a></li>
+</ul>
+<pre>
+wget ...
+unzip ...
+chown -R apache.apache vtigercrm
+mv /var/www/html/vtigercrm/ /var/www/html/vtigercrm.old
+mv vtigercrm /var/www/html/ 
+
+# Create new database in MySQL
+# Login and access installation, choose migrate, Fix table engine, Do database copy of contents
+</pre>
+
+
+<p>ALternative:</p>
+<pre>
+wget http://downloads.sourceforge.net/project/vtigercrm/vtiger%20CRM%205.3.0/Add-ons/vtigercrm-521-530-patch.zip?r=http%3A%2F%2Fwww.vtiger.com%2Fvtiger-crm%2Fdownload&ts=1323200950&use_mirror=kent
+cp vtigercrm-521-530-patch.zip /var/www/html/vtigercrm
+unzip vtigercrm-521-530-patch.zip
+
+</pre>
+
+
+<p>== Setup customer portal ==</p>
+<ul>
+<li><a href="http://wiki.vtiger.com/index.php/Vtiger530:Customer_Portal_User_Manual">http://wiki.vtiger.com/index.php/Vtiger530:Customer_Portal_User_Manual</a></li>
+</ul>
+<pre>
+wget http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%205.3.0/Add-ons/vtigercrm-customerportal-5.3.0.zip/download
+mkdir portal
+mv vtigercrm-customerportal-5.3.0.zip portal
+unzip vtigercrm-customerportal-5.3.0.zip 
+cd ..
+chown -R apache.apache portal
+mv portal /var/www/html/vtigercrm
+
+cd /var/www/html/vtigercrm/portal
+vi PortalConfig.php
+
+
+mkdir tmp
+chown apache.apache tmp
+chmod ug+w tmp
+
+
+</pre>
+
+
+<p>== Upgrade from 5.2.0 to 5.2.1 ==</p>
+<p>Not tested yet.</p>
+<ul>
+<li><a href="http://www.vtiger.com/blogs/2010/11/16/vtiger-crm-521-is-released/">http://www.vtiger.com/blogs/2010/11/16/vtiger-crm-521-is-released/</a></li>
+</ul>
+<p>== Configure mail ==</p>
+<ul>
+<li>Setup gmail - <a href="http://swik.net/Vtiger-CRM/Vtiger+Blogs/GMail+integration+with+vtiger+CRM/b32wx">http://swik.net/Vtiger-CRM/Vtiger+Blogs/GMail+integration+with+vtiger+CRM/b32wx</a></li>
+<li><a href="http://wiki.vtiger.com/index.php/vtiger510:Config_Files#config.cron.php">http://wiki.vtiger.com/index.php/vtiger510:Config_Files#config.cron.php</a></li>
+</ul>
+<pre>
+cd /var/www/html/vtigercrm
+grep application_unique_key config.inc.php
+cd cron
+vi config.cron.php
+'app_key' => ...
+
+also setup cron to run  MailScannerCron.sh
+</pre>
+
+
+<p>Problems with segmentation fault:</p>
+<ul>
+<li><a href="http://www.linuxcompatible.org/news/story/php_5217_for_centos_5.html">http://www.linuxcompatible.org/news/story/php_5217_for_centos_5.html</a></li>
+<li><a href="http://forums.vtiger.com/viewtopic.php?f=104&amp;t=40906">http://forums.vtiger.com/viewtopic.php?f=104&amp;t=40906</a></li>
+</ul>
+<pre>
+yum erase php php-common
+yum install php53
+yum install php53-xmlrpc php53-mbstring php53-imap php53-common php53-gd php53-mysql php53-cli php53-ldap php53-pdo
+</pre>
+
+
+<p>Problems with mails being sent twice:</p>
+<ul>
+<li><p>Happens when the receiving mail is the same as some in the contacts
+** Fixed in Relese 5.2.1  (I havee 5.2.0) - <a href="http://wiki.vtiger.com/index.php/Vtiger521:Release_Notes">http://wiki.vtiger.com/index.php/Vtiger521:Release_Notes</a></p>
+</li>
+<li><p><a href="http://forums.vtiger.com/viewtopic.php?t=11428">http://forums.vtiger.com/viewtopic.php?t=11428</a></p>
+</li>
+</ul>
+<p>== Installation - ubuntu ==</p>
+<p>FUNGERAR EJ</p>
+<pre>
+wget http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%205.2.0/Core%20Product/vtigercrm-5.2.0.tar.gz/download
+
+sudo apt-get install Xlibs xlibs-dev libgd2 libfreetype6 libfreetype6-dev zlib-1.2.1 Libpng-1.2.5 jpeg-6b Unzip openssl libssl-dev libkrb5-de imap-2004
+
+
+sudo apt-get install apache2 php5 mysql-server libapache2-mod-php5
+
+</pre>
+
+<p>== Installation - centos ==</p>
+<ul>
+<li><a href="http://www.vtiger.com/index.php?option=com_content&amp;task=view&amp;id=30&amp;Itemid=57">http://www.vtiger.com/index.php?option=com_content&amp;task=view&amp;id=30&amp;Itemid=57</a></li>
+<li><a href="http://wiki.vtiger.com/index.php/Vtiger521:Linux_Installation">http://wiki.vtiger.com/index.php/Vtiger521:Linux_Installation</a></li>
+<li><a href="http://www.howtoforge.com/vtiger-installation-on-centos-5.x">http://www.howtoforge.com/vtiger-installation-on-centos-5.x</a></li>
+</ul>
+<pre>
+wget http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%205.2.0/Core%20Product/vtigercrm-5.2.0.tar.gz/download
+or
+wget http://downloads.sourceforge.net/project/vtigercrm/vtiger%20CRM%205.2.0/Core%20Product/vtigercrm-5.2.0.tar.gz?r=http%3A%2F%2Fwiki.vtiger.com%2Findex.php%2FVtiger521%3ALinux_Installation&ts=1298907744&use_mirror=kent
+
+yum install gd mysql-server libpng libpng-devel libjpeg libjpeg-devel freetype freetype-devel xfree Xfree86-dev openssl openssl-devel krb5 krb5-devel make zlib krb5-devel binutils automake gcc flex  autoconf bison libxml2-devel gcc-c++ perl-XML-LibXML
+
+yum insatall php-imap php-gd
+
+mv vtigercrm /var/www/html/
+cd /var/www/html/
+chown -R apache.apache vtigercrm
+chmod -R a+rw /var/www/html/vtigercrm
+
+service mysqld start
+http://localhost/vtigercrm/install.php
+</pre>
+
+<p>Script for creating instances:</p>
+<pre>
+#!/bin/bash
+
+
+EXPECTED_ARGS=1
+E_BADARGS=65
+
+if [ $# -ne $EXPECTED_ARGS ]
+then
+  echo "Usage: `basename $0` {instance number}"
+  exit $E_BADARGS
+fi
+
+rm -rf /var/www/html/vtigercrm$1
+tar -xvf vtigercrm-5.2.0.tar
+mv vtigercrm vtigercrm$1
+mv vtigercrm$1 /var/www/html/
+cd /var/www/html/
+chown -R apache.apache vtigercrm$1
+chmod -R a+rw /var/www/html/vtigercrm$1
+</pre>
+
+
+<pre>
+vi /etc/php.ini
+
+
+display_errors
+...
+max_execution_time
+...
+allow_call_time_pass_reference
+...
+log_errors
+...
+short_open_tag
+
+
+
+</pre>
+
+<ul>
+<li>FEL: Sorry! Attempt to access restricted file.
+** <a href="http://forums.vtiger.com/viewtopic.php?t=22045">http://forums.vtiger.com/viewtopic.php?t=22045</a></li>
+</ul>
+<pre>
+vtigercrm-5.2.0 is all set to go!
+Getting Started: 
+You can start using your CRM now.
+
+    * Your login page: http://localhost/vtigercrm.
+    * Please log in using the "admin" user name and the password you entered in step 3/4.
+    * To add more users, please visit the Settings page..
+
+
+Recommended Steps:
+It is important that you complete the following steps
+
+    * Do not forget to set the outgoing email server (setup accessible from Settings->Outgoing Server)
+    * Setup 'Backup Server' so that your CRM data and files are archived to another location on a daily basis
+    * Rename htaccess.txt file to .htaccess to control public file access. More Information
+
+
+      This .htaccess file will work if "AllowOverride All" is set on Apache server configuration file (httpd.conf) for the DocumentRoot or for the current vtiger path.
+      If this AllowOverride is set as None ie., "AllowOverride None" then .htaccess file will not take into effect.
+      If AllowOverride is None then add the following configuration in the apache server configuration file (httpd.conf)
+      <Directory "C:/Program Files/vtigercrm/apache/htdocs/vtigerCRM">
+      Options -Indexes
+      </Directory>
+      So that without .htaccess file we can restrict the directory listing
+
+
+Documentation And Tutorial
+
+    * Documentation including User Manual can be found at http://wiki.vtiger.com
+    * Video Tutorials are available at http://youtube.com/vtigercrm
+
+
+We aim to be - simply the best. We welcome your feedback.
+
+    * Talk to us at forums
+    * Discuss with us at blogs
+    * Drop us an email to feedback@vtiger.com
+
+    * Your install.php file has been renamed to 8083192304d6d3317c4a218.10498832install.php.txt.
+    * Your install folder too has been renamed to 8083192304d6d3317c4a218.10498832install.
+
+</pre>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

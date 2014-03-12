@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">JavaScript Modules</h1>
+  </div>
+  <div class="content"><p>THere are several ways to modularize JavaScript</p>
+<h1>JavaScript Modules</h1>
+<p>Some articles:
+ <em> <a href="http://caolanmcmahon.com/posts/writing_for_node_and_the_browser/">http://caolanmcmahon.com/posts/writing_for_node_and_the_browser/</a>
+ </em> <a href="http://www.2ality.com/2011/11/module-gap.html">http://www.2ality.com/2011/11/module-gap.html</a></p>
+<h2>Example</h2>
+<p>This exmaple has been taken from David Flannagans book, &#39;JavaScript: The Definite Guide&#39;.</p>
+<pre><code>
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Module Example&lt;/title&gt;
+    &lt;script src=&quot;lib/basic.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+
+    //
+    // Define a module. This should be placed in the folder gizur/MyModule.js 
+    //
+
+    var gizur;
+    if(!gizur) gizur = {};
+
+    // A simple module
+    gizur.modules = (function () {
+
+        // A private constructor
+        function MyModule() {
+            this._myString = &quot;&quot;;            // a private variable
+        }
+
+        MyModule.prototype.getString = function() {
+            return this._myString;    
+        }
+
+        MyModule.prototype.setString = function(str) {
+            this._myString = str;    
+        }
+
+        return { MyModule: MyModule };                    // make the module public by returning the constructors
+    }());
+
+
+    window.onload = function(){
+        test(&quot;Testing the module MyModule.&quot;, function(){
+
+            var _myModule = new gizur.modules.MyModule();    // create a MyModule object (by cloning the gizur.modules.MyModule)
+
+            _myModule.setString(&quot;testing&quot;);
+            assert( _myModule.getString() == &quot;testing&quot;, &quot;Make sure that custom setter and getter works&quot; );
+        });
+
+    };
+    &lt;/script&gt;
+    &lt;style&gt;
+        #results li.pass { color: green; }
+        #results li.fail { color: red; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;ul id=&quot;results&quot;&gt;&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>There are three main points in this:</p>
+<ol>
+<li>The module <code>gizur.modules</code> has been encapsulated in a anonymouns function expresssion in order not to clutter the global namespace. All variables and functions in JavaScript have global scope. They are assigned as properties to the window object which is the context that everthing runs within. This expression avoid the side effect of creating new global properties on the windows object.</li>
+<li>New objects are created with the <code>new</code> operator applied on constructurs which simply are functions. In this module is the MyModule constructor hidden within the anonymous function but a new object is returned by the function. The expression <code>new gizur.modules.MyModule()</code> will invoke the constructor and return a new object.</li>
+<li>New public methods and properties are assigned to the object through <code>prototype</code>, for instance <code>MyModule.prototype.getString</code>.</li>
+</ol>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Friday, August 10, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+
