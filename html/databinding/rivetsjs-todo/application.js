@@ -50,6 +50,8 @@ var ViewModel = Stapes.subclass({
       todo.set('summary', ev.currentTarget.value)
       ev.currentTarget.value = ''
       this.todos.push(todo)
+
+      console.log("ev.currentTarget:"+JSON.stringify(ev.currentTarget))
     }
   }
 })

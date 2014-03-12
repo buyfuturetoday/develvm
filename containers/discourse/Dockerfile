@@ -12,10 +12,6 @@ FROM     ubuntu
 MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
 
-# sudo will complain about unknown host otherwise
-#RUN echo "127.0.0.1\tlocalhost" >> /etc/hosts
-#RUN echo "127.0.0.1\t`hostname`" >> /etc/hosts
-
 # make sure the package repository is up to date
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update -y
@@ -25,7 +21,7 @@ RUN apt-get update -y
 # Install Postgres
 #
 
-RUN apt-get install postgresql -y
+RUN apt-get install postgresql postgresql-contrib -y
 
 
 #
@@ -43,12 +39,6 @@ RUN if [ -e /var/lib/postgresql/9.1/main/postmaster.pid ]; then rm /var/lib/post
 RUN if [ -d /var/run/postgresql ]; then rm -rf /var/run/postgresql; fi
 RUN mkdir -p /var/run/postgresql
 RUN chown -R postgres:postgres /var/run/postgresql
-
-
-# Create postgres user for OpenERP
-ADD . /src
-RUN chown -R postgres:root /src
-RUN /src/init.sh
 
 
 
@@ -115,7 +105,7 @@ run cat /etc-postfix-main.cf >> /etc/postfix/main.cf
 # Misc stuff
 #
 
-run apt-get -y install build-essential libssl-dev libyaml-dev git libtool libxslt-dev libxml2-dev libpq-dev gawk curl pngcrush imagemagick python-software-properties
+run apt-get -y install build-essential libssl-dev libyaml-dev git libtool libxslt-dev libxml2-dev libpq-dev gawk curl pngcrush imagemagick python-software-properties supervisor
 
 #
 # Latest stable version of redis
@@ -134,14 +124,8 @@ run apt-get install redis-server
 run apt-get remove '^nginx.*$'
 
 # Setup a sources.list.d file for the nginx repository
-#run cat << 'EOF' | tee /etc/apt/sources.list.d/nginx.list
-#deb http://nginx.org/packages/ubuntu/ precise nginx
-#deb-src http://nginx.org/packages/ubuntu/ precise nginx
-#EOF
-
 run /bin/sh -c "echo deb http://nginx.org/packages/ubuntu/ precise nginx >> /etc/apt/sources.list.d/nginx.list"
 run /bin/sh -c "echo deb-src http://nginx.org/packages/ubuntu/ precise nginx >> /etc/apt/sources.list.d/nginx.list"
-
 
 # Add nginx key
 run curl http://nginx.org/keys/nginx_signing.key | apt-key add -
@@ -154,7 +138,7 @@ run apt-get update && apt-get -y install nginx
 # Fetch the discourse code
 #
 
-run git clone https://github.com/discourse/discourse.git /discourse
+run git clone https://github.com/discourse/discourse.git /var/www/discourse
 
 
 #
@@ -170,20 +154,46 @@ run /bin/bash -c ".  /etc/profile.d/rvm.sh && rvm --autolibs=packages requiremen
 run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm install 2.0.0"
 
 # Install discourse
-run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && cd /discourse && gem install bundler"
+run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && gem install bundler"
+run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && cd /var/www/discourse && bundle install --deployment --without test"
 
 
 
 #---------------------------------------------
 
 
+# adduser --shell /bin/bash --gecos 'Discourse application' --disabled-password discourse
+# cd /discourse && install -d -m 755 -o discourse -g discourse /var/www/discourse
+
+
+# Configure discurse
+run cd /var/www/discourse/config && cp discourse_quickstart.conf discourse.conf
+run cd /var/www/discourse/config && cp discourse.pill.sample discourse.pill
+
+
+# Create postgres user for OpenERP
+ADD . /src
+RUN chown -R postgres:root /src
+RUN /src/init.sh
+
+
+# Setup nginx
+run cp /var/www/discourse/config/nginx.global.conf /etc/nginx/conf.d/local-server.conf
+run cp /var/www/discourse/config/nginx.sample.conf /etc/nginx/conf.d/discourse.conf
+
+
+# Bluepill setup
+run /bin/bash -c ". /etc/profile.d/rvm.sh && rvm use 2.0.0 --default && gem install bluepill"
+
+
+#---------------------------------------------
+
+
 #
-# Start postfix and postgres
+# Start everything
 #
 
-EXPOSE 25 5432
+EXPOSE 80 443
 
-CMD ["/bin/su","postgres","-c","/usr/lib/postgresql/9.1/bin/postgres -D /var/lib/postgresql/9.1/main -c config_file=/etc/postgresql/9.1/main/postgresql.conf"]
-#cmd ["sh", "-c", "service syslog-ng start ; service postfix start ; tail -F /var/log/mail.log"]
-["supervisord","-n"]
+cmd ["/src/start.sh"]
 
