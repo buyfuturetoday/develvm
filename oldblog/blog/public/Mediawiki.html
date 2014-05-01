@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Mediawiki.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[Gizur IT services]]</p>
+<p>= Setup =</p>
+<p>= Authentication and Access control =</p>
+<ul>
+<li><p><a href="http://www.mediawiki.org/wiki/Extension:Group_Based_Access_Control">http://www.mediawiki.org/wiki/Extension:Group_Based_Access_Control</a></p>
+</li>
+<li><p><a href="http://www.mediawiki.org/wiki/Extension:LDAP_Authentication">http://www.mediawiki.org/wiki/Extension:LDAP_Authentication</a></p>
+</li>
+</ul>
+<p>= Themes =</p>
+<ul>
+<li><p>Cavendish theme
+<strong> <a href="http://mediawiki2u.com/2008/04/mediawiki-theme-cavendish/#more-62">http://mediawiki2u.com/2008/04/mediawiki-theme-cavendish/#more-62</a>
+</strong> Never version - <a href="http://sourceforge.net/apps/trac/wecowi/wiki/Cavendish_Skin">http://sourceforge.net/apps/trac/wecowi/wiki/Cavendish_Skin</a></p>
+</li>
+<li><p><a href="http://www.mediawiki.org/wiki/Manual:Skin_configuration">http://www.mediawiki.org/wiki/Manual:Skin_configuration</a></p>
+</li>
+</ul>
+<p>= Routines =</p>
+<p>== Add user ==</p>
+<p>A login is needed for all pages but this page (Main_Page). Login can be disabled for more pages by editing the LocalSettings.php configuration file. </p>
+<ul>
+<li>Go to [[Special:Userlogin]], when logged in as a WikiSysop.</li>
+<li>Click on &quot;Create an account&quot; link to get to the account creation form.</li>
+<li>Enter a username and an email address, and click the &quot;by email&quot; button. Note you need $wgEnableEmail=true or else the sysop must pick a password and send it to the user.</li>
+<li>The account will be created with a random password which is then emailed to the given address (as with the &quot;forgot password&quot; feature). The user will be requested to change password at first login; when he does this, his e-mail address will also be marked as confirmed.
+When you click the &quot;create account&quot; button instead, you have to manually send the user his password. If you&#39;ve set $wgMinimalPasswordLength=0 (default configuration up to version 1.15) and you&#39;ve left the password field blank, the user will be emailed an e-mail address confirmation request but will be unable to access Special:Confirmemail to perform the confirmation. Instead, he&#39;ll get an error (unless you&#39;ve added it to $wgWhitelistRead); he&#39;ll be able to login with a blank password and then confirm email, but his password will not have been reset (he&#39;ll have to reset it manually).
+It may be appropriate to edit the text displayed when a non-user attempts to log in. This can be done at [[MediaWiki:Nosuchuser]], when logged in as a sysop. Use plain text without any special formatting, as the formatting is ignored and the text is literally rendered.</li>
+</ul>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

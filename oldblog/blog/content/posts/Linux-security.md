@@ -1,0 +1,31 @@
+Yet another post
+
+[meta:author]: <> (Jonas Colmsjo)
+[meta:title]: <> (Linux-security.md)
+[meta:date]: <> (2012-01-01)
+[meta:nested:key]: <> (Metadata value)
+
+##!!truncate
+
+
+[[Main_Page]]
+
+
+== Articles ==
+
+* http://www.cyberciti.biz/tips/selinux-vs-apparmor-vs-grsecurity.html
+* http://doc.opensuse.org/products/draft/SLES/SLES-security_sd_draft/book.security.html
+* https://help.ubuntu.com/community/Security
+
+
+== Enhance security ==
+
+
+* SE linux - advanced but complex and difficult to learn
+* AppArmor - should e easier to learn
+** http://en.opensuse.org/SDB:AppArmor_geeks
+
+== Detect intrusion ==
+
+* tripwire.org
+* AIDE

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Nodejs on heroku</h1>
+  </div>
+  <div class="content"><p>Get started with NodeJS on Heroku</p>
+<ol>
+<li>Register for an account on heroku.com</li>
+<li>Install heroku toolbelt - <a href="https://toolbelt.heroku.com/">https://toolbelt.heroku.com/</a></li>
+<li>Login running <code>heroku login</code> - your SSH key will be uploaded</li>
+<li>Develop a first app</li>
+</ol>
+<p>Save this as web.js:</p>
+<pre><code>var express = require(&#39;express&#39;);
+
+var app = express.createServer(express.logger());
+
+app.get(&#39;/&#39;, function(request, response) {
+  response.send(&#39;Hello World!&#39;);
+});
+
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
+  console.log(&quot;Listening on &quot; + port);
+});</code></pre>
+<p>Save this as package.json:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;heroku-node-example&quot;,
+  &quot;version&quot;: &quot;0.0.1&quot;,
+  &quot;dependencies&quot;: {
+    &quot;express&quot;: &quot;2.5.x&quot;
+  },
+  &quot;engines&quot;: {
+    &quot;node&quot;: &quot;0.8.x&quot;,
+    &quot;npm&quot;: &quot;1.1.x&quot;
+  }
+}</code></pre>
+<p>Install the application locally (I always install globally)</p>
+<pre><code># Run in same folder as web.js and package.json are in
+npm install -g</code></pre>
+<p>Check that the install is ok:</p>
+<pre><code>npm ls 
+
+# for more details
+npm ll</code></pre>
+<p>Install using foreman:</p>
+<pre><code># I need to cd to the installation path (since it is installed globally)
+cd /usr/local/lib/node_modules/heroku-node-example/
+
+foreman start</code></pre>
+<p>Test that it is working in a separate terminal:</p>
+<pre><code>curl -j localhost:5000</code></pre>
+<h1>Upload to heroku</h1>
+<p>Create Procfile containing this:</p>
+<pre><code>web: node web.js</code></pre>
+<p>Create a git repo:</p>
+<pre><code># cd back to the source
+cd ~/.../heroku-test1/
+git init
+git add *
+git commit -a -m &quot;Initial commit&quot;</code></pre>
+<p>Create the app:</p>
+<pre><code># create app
+heroku create
+Creating agile-oasis-4317... done, stack is cedar
+http://agile-oasis-4317.herokuapp.com/ | git@heroku.com:agile-oasis-4317.git
+Git remote heroku added
+
+# push to heroku
+git push heroku master
+...
+http://agile-oasis-4317.herokuapp.com deployed to Heroku</code></pre>
+<p>Start a dyno</p>
+<pre><code>heroku ps:scale web=1
+
+# Check that everything is ok:
+heroku ps</code></pre>
+<h1>Test</h1>
+<p>Test the app, I got this URL, see above:</p>
+<ul>
+<li><a href="http://agile-oasis-4317.herokuapp.com/">http://agile-oasis-4317.herokuapp.com/</a></li>
+</ul>
+<p>The app can also be run like this:</p>
+<pre><code>heroku open</code></pre>
+<h1>Logs and finetuning</h1>
+<pre><code>heroku logs</code></pre>
+<p>Set envionment vairables:</p>
+<pre><code>heroku config:add NODE_ENV=production</code></pre>
+<p>Connect to remote heroku node from terminal (in order to experiment):</p>
+<pre><code>heroku run node</code></pre>
+<h1>Add ons</h1>
+<p>There is a large number of addons</p>
+<p>One example:</p>
+<ul>
+<li><a href="https://addons.heroku.com/scheduler">https://addons.heroku.com/scheduler</a></li>
+</ul>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Thursday, October 18, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

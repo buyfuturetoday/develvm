@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Hardening-ubuntu.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[Wiki]]</p>
+<p>h1. Intro</p>
+<ul>
+<li><a href="https://help.ubuntu.com/community/Security">https://help.ubuntu.com/community/Security</a></li>
+</ul>
+<p>h2. Firewall</p>
+<ul>
+<li><a href="https://help.ubuntu.com/community/UFW">https://help.ubuntu.com/community/UFW</a></li>
+</ul>
+<pre>
+sudo apt-get install ufw
+
+sudo ufw default deny
+chmod g-w /etc
+
+sudo ufw allow ssh
+
+# Scalr
+sudo ufw allow 8013/tcp
+sudo ufw allow 8014/udp
+
+sudo ufw allow 8008/tcp
+
+# Webmin
+sudo ufw allow 10000/tcp
+
+
+# Zabbix
+sudo ufw allow 10050/tcp
+
+sudo ufw enable
+
+
+sudo ufw status
+
+sudo ufw logging on
+</pre>
+
+
+<p>h2. Lock-up cron</p>
+<pre>
+sudo nano /etc/cron.allow
+root
+</pre>
+
+<p>h1. Hardening ubuntu</p>
+<p>h2. Unattended upgrades</p>
+<ul>
+<li><a href="https://help.ubuntu.com/10.04/serverguide/automatic-updates.html">https://help.ubuntu.com/10.04/serverguide/automatic-updates.html</a></li>
+</ul>
+<pre>
+sudo apt-get install mailutils
+sudo apt-get install unattended-upgrades
+sudo nano /etc/apt/apt.conf.d/50unattended-upgrades 
+Unattended-Upgrade::Allowed-Origins {
+        "Ubuntu lucid-security";
+//      "Ubuntu lucid-updates";
+};
+...
+Unattended-Upgrade::Mail "admin@gizur.com";
+...
+Unattended-Upgrade::MailOnlyOnError "true";
+...
+Unattended-Upgrade::Automatic-Reboot "true";
+
+sudo nano /etc/apt/apt.conf.d/10periodic
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Unattended-Upgrade "1";
+
+
+</pre>
+
+<p>h2. Shared Memory</p>
+<pre>
+# show current mount
+root@ec2-46-137-61-247:DEVELOPER_C2:~/scripts# mount
+/dev/sda1 on / type ext3 (rw)
+proc on /proc type proc (rw,noexec,nosuid,nodev)
+none on /sys type sysfs (rw,noexec,nosuid,nodev)
+none on /sys/kernel/debug type debugfs (rw)
+none on /sys/kernel/security type securityfs (rw)
+devtmpfs on /dev type devtmpfs (rw,mode=0755)
+none on /dev/pts type devpts (rw,noexec,nosuid,gid=5,mode=0620)
+none on /dev/shm type tmpfs (rw,nosuid,nodev)
+none on /var/run type tmpfs (rw,nosuid,mode=0755)
+none on /var/lock type tmpfs (rw,noexec,nosuid,nodev)
+none on /lib/init/rw type tmpfs (rw,nosuid,mode=0755)
+
+sudo nano /etc/fstab
+tmpfs                                           /dev/shm     tmpfs     defaults,ro     0     0
+
+reboot
+</pre>
+
+
+<p>h2. SSH Daemon</p>
+<pre>
+sudoedit /etc/ssh/sshd_config
+
+...
+LoginGraceTime 20
+...
+Banner /etc/issue.net
+
+sudo nano /etc/issue.net
+
+
+***************************************************************************
+                            NOTICE TO USERS
+
+
+This computer system is the private property of its owner, whether
+individual, corporate or government.  It is for authorized use only.
+Users (authorized or unauthorized) have no explicit or implicit
+expectation of privacy.
+
+Any or all uses of this system and all files on this system may be
+intercepted, monitored, recorded, copied, audited, inspected, and
+disclosed to your employer, to authorized site, government, and law
+enforcement personnel, as well as authorized officials of government
+agencies, both domestic and foreign.
+
+By using this system, the user consents to such interception, monitoring,
+recording, copying, auditing, inspection, and disclosure at the
+discretion of such personnel or officials.  Unauthorized or improper use
+of this system may result in civil and criminal penalties and
+administrative or disciplinary action, as appropriate. By continuing to
+use this system you indicate your awareness of and consent to these terms
+and conditions of use. LOG OFF IMMEDIATELY if you do not agree to the
+conditions stated in this warning.
+
+****************************************************************************
+</pre>
+
+
+<p>h2. Disable su</p>
+<pre>
+sudo dpkg-statoverride --update --add root admin 4750 /bin/su
+</pre>
+
+
+
+
+<p>h2. AppArmor</p>
+<pre>
+sudo apt-get install apparmor-profiles apparmor-utils
+</pre>
+
+
+
+<p>h2. Disable IPv6</p>
+<pre>
+sudo nano /etc/modprobe.d/aliases
+change alias net-pf-10 ipv6 to alias net-pf-10 off in 
+
+reboot
+</pre>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

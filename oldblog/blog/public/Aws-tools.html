@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Aws-tools.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[Gizur server admin]]</p>
+<p>= Docs =</p>
+<p>Getting started:
+<em> AWS Console: <a href="http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/">http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/</a>
+</em> CLI: <a href="http://docs.amazonwebservices.com/AmazonEC2/gsg/2006-06-26/">http://docs.amazonwebservices.com/AmazonEC2/gsg/2006-06-26/</a>
+* Documentation: <a href="https://developer.amazonwebservices.com/connect/kbcategory.jspa?categoryID=84">https://developer.amazonwebservices.com/connect/kbcategory.jspa?categoryID=84</a></p>
+<p>Ec2 Tools:
+<em> AWS: <a href="http://developer.amazonwebservices.com/connect/kbcategory.jspa?categoryID=88">http://developer.amazonwebservices.com/connect/kbcategory.jspa?categoryID=88</a>
+</em> EC2 API Tools: <a href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=351&amp;categoryID=88">http://developer.amazonwebservices.com/connect/entry.jspa?externalID=351&amp;categoryID=88</a>
+* AMI tools: <a href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368">http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368</a></p>
+<p>Setup of ec2 tools
+<em> <a href="http://linuxsysadminblog.com/2009/06/howto-get-started-with-amazon-ec2-api-tools/">http://linuxsysadminblog.com/2009/06/howto-get-started-with-amazon-ec2-api-tools/</a>
+</em> Also add EC2_URL=<a href="https://ec2.eu-west-1.amazonaws.com">https://ec2.eu-west-1.amazonaws.com</a>
+* Check some ELB tools (installed on s1.gizur.com, not sure what it is)</p>
+<p>Create new AMIs:
+<em> <a href="http://alestic.com/2010/01/ec2-ebs-boot-ubuntu">http://alestic.com/2010/01/ec2-ebs-boot-ubuntu</a>
+</em> <a href="http://www.philchen.com/2009/02/14/how-to-create-an-amazon-elastic-compute-cloud-ec2-machine-image-ami">http://www.philchen.com/2009/02/14/how-to-create-an-amazon-elastic-compute-cloud-ec2-machine-image-ami</a>
+<em> <a href="http://www.elastician.com/2009/12/creating-ebs-backed-ami-from-s3-backed.html">http://www.elastician.com/2009/12/creating-ebs-backed-ami-from-s3-backed.html</a>
+</em> <a href="http://www.ioncannon.net/system-administration/894/fedora-12-bootable-root-ebs-on-ec2/">http://www.ioncannon.net/system-administration/894/fedora-12-bootable-root-ebs-on-ec2/</a></p>
+<p>Pre-configured images:
+<em> <a href="http://stacklet.com/downloads/images/lister/CentOS/5.5/x86">http://stacklet.com/downloads/images/lister/CentOS/5.5/x86</a> - $10 subscription gives access to all images
+</em> <a href="http://www.rightscale.com/library">http://www.rightscale.com/library</a> - costs money
+* <a href="http://support.rightscale.com/18-Release_Notes/02-AMI/RightImages_Release_Notes">http://support.rightscale.com/18-Release_Notes/02-AMI/RightImages_Release_Notes</a></p>
+<p>= Guides =</p>
+<p>== Lauch instance with specific kernel ==</p>
+<ul>
+<li><a href="http://aws.amazon.com/articles/1345?_encoding=UTF8&amp;jiveRedirect=1">http://aws.amazon.com/articles/1345?_encoding=UTF8&amp;jiveRedirect=1</a></li>
+<li><a href="http://ec2-downloads.s3.amazonaws.com/user_specified_kernels.pdf">http://ec2-downloads.s3.amazonaws.com/user_specified_kernels.pdf</a></li>
+</ul>
+<pre>Amazon EC2 has introduced two new kernels: aki-9b00e5f2 (32 bit) and aki-9800e5f1 (64 bit). They are the 2.6.18 Xen kernels (vmlinuz-2.6.18-xenU-ec2-v1.0)
+
+ec2-describe-images -a | grep 2.6.18
+
+alt.
+ec2-describe-images -o self -o amazon | grep 2.6.18
+
+</pre>
+
+<p>== Shrink an image ==</p>
+<p><a href="http://www.howtoforge.com/linux_resizing_ext3_partitions">http://www.howtoforge.com/linux_resizing_ext3_partitions</a></p>
+<pre>
+tune2fs -l /vm/linux_server-v1.4.img
+fsck -n /vm/linux_server1.4.img
+tune2fs -O ^has_journal /vm/linux_server1.4.img
+e2fsck -f /vm/linux_server1.4.img
+resize2fs /vm/linux_server1.4.img 9G
+fsck -n /dev/sda1
+tune2fs -j /vm/linux_server1.4.img
+</pre>
+
+<p>== Setup Ec2 tools ==</p>
+<p>Install java and tools:</p>
+<pre>
+yum install java-openjdk
+
+wget http://s3.amazonaws.com/ec2-downloads/ec2-api-tools.zip
+unzip ec2-api-tools.zip
+mv ec2-api-tools-1.3-53907 /usr/share
+ln -s /usr/share/ec2-api-tools-1.3-53907 /usr/share/ec2-api-tools
+
+</pre>
+
+<p>Create key files. Check Google docs for the content:</p>
+<pre>
+mkdir /etc/ec2
+cd /etc/ec2
+vi cert.pem
+vi gswin1.pem
+vi private-key.pem
+</pre>
+
+<p>Setup environment variables:</p>
+<pre>
+vi ~/.bashrc
+export EC2_HOME=/usr/share/ec2-api-tools
+export PATH=$PATH:$EC2_HOME/bin
+export EC2_PRIVATE_KEY=/etc/ec2/private-key.pem
+export EC2_CERT=/etc/ec2/cert.pem
+
+export JAVA_HOME=/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/
+
+export EC2_URL=https://ec2.eu-west-1.amazonaws.com
+</pre>
+
+<p>Test the certificate and private key:</p>
+<pre>
+openssl x509 -in cert.pem -text 
+openssl rsa -in private-key.pem -text 
+</pre>
+
+<p>Run some commands just to test</p>
+<pre>
+ec2-describe-instances
+</pre>
+
+<p>Setup AMI-tools:</p>
+<pre>
+yum install ruby
+wget http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.noarch.rpm
+rpm -i ec2-ami-tools.noarch.rpm
+</pre>
+
+
+<p>== Create ec2 image ==</p>
+<p>Mount the image as loopback device:</p>
+<pre>
+cd /var/stacklet
+mount -o loop centos.5-4.x86.img /mnt/loop
+</pre>
+
+
+<p>Copy the private key to the image:</p>
+<pre>
+cp private-key.pem /mnt/loop/root/
+</pre>
+
+<ul>
+<li><a href="http://docs.amazonwebservices.com/AmazonEC2/dg/2006-10-01/CLTRG-ami-bundle-image.html">http://docs.amazonwebservices.com/AmazonEC2/dg/2006-10-01/CLTRG-ami-bundle-image.html</a></li>
+</ul>
+<p>Create bundle from a Xen image file:</p>
+<pre>
+ec2-bundle-image -u 4290-9734-6310 -c $EC2_CERT -k $EC2_PRIVATE_KEY -i centos.5-4.x86.img -d bundled/
+</pre>
+
+<p>Upload bundle to S3-bucket (the bucket is created if it doesn&#39;t exist):</p>
+<pre>
+ ec2-upload-bundle -b centos.5-4.x86-eu -a $(cat /etc/ec2/access_key) -s $(cat /etc/ec2/secret_access_key) -m bundled2/centos.5-4.x86.img.manifest.xml --location EU
+</pre>
+
+<p>Register the image:</p>
+<pre>
+ec2-register -n centos.5-4.x86 centos.5-4.x86-eu/centos.5-4.x86.img.manifest.xml
+IMAGE   ami-cea18bba
+</pre>
+
+<p>Test to start the image:</p>
+<pre>
+ec2-run-instances ami-cea18bba
+</pre>
+
+<p>Wait for the instance to start and then get the IP:</p>
+<pre>
+ec2-describe-instances
+INSTANCE        i-65ec9d12      ami-cea18bba    ec2-79-125-57-16.eu-west-1.compute.amazonaws.com        ip-10-48-98-153.eu-west-1.compute.internal    running         0               m1.small        2010-08-20T10:17:49+0000        eu-west-1a                              monitoring-disabled   79.125.57.16    10.48.98.153                    instance-store
+</pre>
+
+<p>Connect to the instance:</p>
+<pre>
+ssh -i /etc/ec2/gswin1.pem root@ec2-79-125-57-16.eu-west-1.compute.amazonaws.com 
+</pre>
+
+<p>Shutdown the instance:</p>
+<pre>
+ec2-terminate-instances i-65ec9d12
+</pre>
+
+<p>Can use the Stacklet Stackbundler application (but I did not det the beta working on CentOs). Ubuntu also has vmbuilder tool but it doens&#39;t seam to exist for CentOS .</p>
+<p>== Download EC2 image ==</p>
+<pre>
+ec2-download-bundle -b gizur/openbravo250-ubuntu -a $(cat /etc/ec2/access_key) -s $(cat /etc/ec2/secret_access_key) -m image.manifest.xml --privatekey /etc/ec2/private-key.pem
+</pre>
+
+<p>ec2-unbundle -m manifest -k private_key [-d destination_directory] [-s source_directory]</p>
+<pre>
+ec2-unbundle -m image.manifest.xml -k /etc/ec2/private-key.pem
+
+</pre>
+
+<p>== Manage EBS bootable instances ==</p>
+<p>EBS snapshots are used when a EBS bootable iamge is created. Up/downloading EBS-snapshots would make it possible to customize these in the same way as S3 backed instances.</p>
+<p>There is no simple way to do this:
+* <a href="http://developer.amazonwebservices.com/connect/message.jspa?messageID=151353">http://developer.amazonwebservices.com/connect/message.jspa?messageID=151353</a></p>
+<p>== Save Ec2 image on AWS to S3 and download to local server ==</p>
+<ul>
+<li><a href="http://docs.amazonwebservices.com/AmazonEC2/dg/2006-10-01/CLTRG-ami-bundle-vol.html">http://docs.amazonwebservices.com/AmazonEC2/dg/2006-10-01/CLTRG-ami-bundle-vol.html</a></li>
+<li><a href="http://docs.amazonwebservices.com/AmazonEC2/dg/2007-01-03/CLTRG-ami-download-bundle.html">http://docs.amazonwebservices.com/AmazonEC2/dg/2007-01-03/CLTRG-ami-download-bundle.html</a></li>
+<li><a href="http://docs.amazonwebservices.com/AmazonEC2/dg/2006-10-01/CLTRG-ami-unbundle.html">http://docs.amazonwebservices.com/AmazonEC2/dg/2006-10-01/CLTRG-ami-unbundle.html</a></li>
+</ul>
+<pre>
+ec2-describe-instances
+ssh -i /etc/ec2/gswin1.pem root@...
+
+from blixten:
+scp -i /etc/ec2/gswin1.pem /etc/ec2/cert.pem /etc/ec2/private-key.pem root@79.125.98.101:/mnt
+
+Check the upload on aws:
+ls /mnt
+
+Bundle på filsystemets root, från aws:
+ec2-bundle-vol -k /mnt/private-key.pem -c /mnt/cert.pem -u 4290-9734-6310
+
+Ladda upp bundle till S3, från aws
+ec2-upload-bundle -b centos.5-4.x86.v2-eu -m /tmp/image.manifest.xml -a AKIAJWRED4WYJS43ELWQ -s XP2sGuZwJEVseJjajflz1r5kFyfJ5jxY9MchgVsd --location EU
+
+Registrera image för att den ska gå att använda
+ec2-register -n centos.5-4.x86.v2-eu -K /mnt/private-key.pem -C /mnt/cert.pem -U https://ec2.eu-west-1.amazonaws.com  centos.5-4.x86.v2-eu/image.manifest.xml
+
+Lista alla images som ägs av mig
+ec2-describe-images -K private-key.pem -C cert.pem -U https://ec2.eu-west-1.amazonaws.com -o self
+
+På blixten:
+ec2-download-bundle -b centos.5-4.x86.v2-eu --privatekey /etc/ec2/private-key.pem -a AKIAJWRED4WYJS43ELWQ -s XP2sGuZwJEVseJjajflz1r5kFyfJ5jxY9MchgVsd
+
+På blixten:
+ec2-unbundle -m bundle/image.manifest.xml -s bundle -d unbundle --privatekey /etc/ec2/private-key.pem
+
+cd unbudle
+dd if=image of=/dev/VolGroup00/linux_server1
+</pre>
+
+<p>Create a xen config file:</p>
+<pre>
+Copy an existing linux config file
+
+Generate random MAC adress:
+2>/dev/null dd if=/dev/urandom bs=1 count=6 | od -t x1 | sed '2d;s/^0\+ //;s/ /:/g'
+
+Update config file with MAC adress
+</pre>
+
+<p>== Install windows from scratch ==</p>
+<p>Need to install with paravirualizwed drivers in order to be able to use with Amazon ec2.
+* <a href="http://wiki.xensource.com/xenwiki/XenWindowsGplPv/Installing">http://wiki.xensource.com/xenwiki/XenWindowsGplPv/Installing</a></p>
+<p>== Use S3 images with database on EBS ==</p>
+<p>An alternative to using EBS bootable instances is to have files with data on a EBS device and the bootable instance on a S3 device.</p>
+<ul>
+<li><a href="http://www.kablambda.org/blog/2007/12/22/ec2-confluence-s3-and-postgresql/">http://www.kablambda.org/blog/2007/12/22/ec2-confluence-s3-and-postgresql/</a></li>
+</ul>
+<p>== Use VNC Server ==</p>
+<ul>
+<li><a href="http://developer.amazonwebservices.com/connect/message.jspa?messageID=86036">http://developer.amazonwebservices.com/connect/message.jspa?messageID=86036</a></li>
+</ul>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

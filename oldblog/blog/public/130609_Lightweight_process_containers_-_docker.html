@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Lightweight process containers - docker</h1>
+  </div>
+  <div class="content"><p>Lightweight process containers - docker</p>
+<h2>Overview</h2>
+<p>Heroku provides an extremely easy to use technology for hosting web apps based on dynos (linux containers). Amazon Web Services (AWS) provdies full virtuals servers with fir more advanced security mechanisms and even the possibility to have VPN connections. AWS also provides a wide array of hosted servises, like RDS, SES, SQS etc. etc. Elastic Beanstalk provides similar solutions to Heroku with the advantage of AWS security and isolation.</p>
+<p>The drawback og AWS and Elastic Beanstalk is that it becomes fairly expensive when using several development languages (like PHP, Node and Python) since a EB instance only can run one language.</p>
+<p>I&#39;m looking for a solution where I can run several web apps in one and same ec2 virtual machine.</p>
+<p>lxc provides containers for processes running under linux. These are much more lightweight that full VMs. lxc is for instance used by Heroku in their cloud solution. Docker is a, open source, solution built on top of lxc that is used by docCloud. docCloud makes it possible to combine different technologies (php, node, python, perl etc.) in one environment.</p>
+<h2>First test on OSX</h2>
+<p>I&#39;m simply following this:</p>
+<ul>
+<li><a href="http://docs.docker.io/en/latest/installation/vagrant/">http://docs.docker.io/en/latest/installation/vagrant/</a></li>
+</ul>
+<p>First install VirtualBox and Vagrantup.</p>
+<p>This will take a while:</p>
+<pre><code>git clone https://github.com/dotcloud/docker.git
+cd docker
+vagrant up
+vagrant reload</code></pre>
+<pre><code>vagrant ssh
+docker</code></pre>
+<pre><code>docker pull base
+docker run -i -t base /bin/bash
+root@8088365a71c3:/# ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  selinux  srv  sys  tmp  usr  var
+root@8088365a71c3:/# ps -ef
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 22:28 ?        00:00:00 /bin/bash
+root         9     1  0 22:28 ?        00:00:00 ps -ef
+root@8088365a71c3:/# exit
+exit</code></pre>
+<pre><code># Start a very useful long-running process
+JOB=$(docker run -d base /bin/sh -c &quot;while true; do echo Hello world; sleep 1; done&quot;)
+
+# Collect the output of the job so far
+docker logs $JOB
+
+# show containers
+docker ps
+
+docker stop ...
+
+docker export ... &gt; mycontainer.tar
+
+cat mycontainer.tar | docker import - node010
+
+docker images
+
+# Kill the job
+docker kill $JOB</code></pre>
+<h2>More on lxc</h2>
+<p>Links:</p>
+<ul>
+<li><a href="https://help.ubuntu.com/12.04/serverguide/lxc.html">https://help.ubuntu.com/12.04/serverguide/lxc.html</a></li>
+</ul>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, June 09, 2013</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Cfengine installation</h1>
+  </div>
+  <div class="content"><p>Installation of the excellent Configuration Management Tool cfengine</p>
+<h2>Installation</h2>
+<p>I&#39;m using Ubuntu 12.04. </p>
+<p>NOTE: Make sure you don&#39;t miss the <code>sudo</code> command. The command will run as user ubuntu otherwise and use input files from the .cfagent folder in the home directory</p>
+<pre>
+sudo apt-get install cfengine3
+
+sudo ls /etc/cfengine3/
+ls /var/lib/cfengine3/
+
+sudo nano /var/lib/cfengine3/inputs/hello.cf
+body common control  
+{
+bundlesequence => { "test" };
+}
+
+bundle agent test
+{
+reports:
+  cfengine_3::
+      "Hello world!";
+}
+
+# Fix permission
+sudo chmod og-rwx /var/lib/cfengine3/inputs/hello.cf 
+
+# Should not show anything
+sudo cf-promises -f /var/lib/cfengine3/inputs/hello.cf
+
+# Should print Hello world
+sudo cf-agent -f /var/lib/cfengine3/inputs/hello.cf 
+</pre>
+
+
+
+<h2>Start daemons</h2>
+<p>I&#39;m going to setup a minimalistic configuration with:</p>
+<ol>
+<li>cf-execd - scheduler, means that cron does not need to be scheduled. Keeps the promises made in common and monitor bundles, and is affected by common and monitor control bodies. cf-agent is executed which keeps the promises made in common and agent bundles, and is affected by common and agent control bodies.</li>
+<li>cf-monitord - keeps the promises made in common bundles, and is affected by common and executor control bodies</li>
+</ol>
+<p>I&#39;m not running cf-serverd since I&#39;m using git to distribute configuration files.</p>
+<p>Example files are shipped with the installation:</p>
+<pre><code>
+more /usr/share/doc/cfengine3/README.Debian 
+
+ls /usr/share/doc/cfengine3/examples/
+
+sudo cp /usr/share/doc/cfengine3/examples/* /etc/cfengine3/
+
+sudo nano /etc/cfengine3/site.cf
+
+sudo vi /etc/default/cfengine3
+...
+RUN_CFMONITORD=1
+RUN_CFSERVERD=0
+RUN_CFEXECD=1
+
+sudo /etc/init.d/cfengine3 start
+
+ps -ef | grep cf
+
+sudo cf-agent --verbose</code></pre>
+<h3>Troubleshooting</h3>
+<pre><code>sudo cf-agent --verbose 
+...
+cf3&gt; SERIOUS SECURITY ALERT: path race exploited in recursion to/from /var/lib/cfengine3/inputs. Not safe for agent to continue - aborting</code></pre>
+<p>Found this: <a href="https://bugs.launchpad.net/ubuntu/+source/cfengine3/+bug/646777">https://bugs.launchpad.net/ubuntu/+source/cfengine3/+bug/646777</a></p>
+<pre><code>ls -al /var/lib/cfengine3/inputs
+
+# Update the config file and replace /var/lib/cfengine3/inputs with /etc/cfengine3
+sudo nano /etc/cfengine3/update.cf
+
+sudo cf-agent --verbose
+...
+cf3&gt; Outcome of version (not specified) (agent-0): Promises observed to be kept 56%, Promises repaired 44%, Promises not repaired 0%</code></pre>
+<p>Now it seams to work better. I have no clue with the exmample files we copied actually do though...</p>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Thursday, August 30, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

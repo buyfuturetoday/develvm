@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Php-mysql-performance.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[IT resources]]</p>
+<ul>
+<li><a href="http://openlife.cc/blogs/2011/june/mythbusters-how-configure-innodb-buffer-pool-large-mysql-servers">http://openlife.cc/blogs/2011/june/mythbusters-how-configure-innodb-buffer-pool-large-mysql-servers</a>
+-* <a href="http://www.notesbit.com/index.php/web-mysql/mysql/mysql-tuning-optimizing-my-cnf-file/">http://www.notesbit.com/index.php/web-mysql/mysql/mysql-tuning-optimizing-my-cnf-file/</a></li>
+</ul>
+<p>= Drift och support =</p>
+<ul>
+<li><a href="http://www.percona.com/prices/mysql-support/">http://www.percona.com/prices/mysql-support/</a></li>
+</ul>
+<p>Exempel på tjäsnter och verktyg:
+<em> RightScale
+</em> Scalr</p>
+<p>Performance:
+<em> SmartOptimizer
+</em>use db slave for reading
+<em> use inmemory cache - memcached etc.
+</em> <a href="http://eliw.com/presentations/zendcon-2007-high-perf.pdf">http://eliw.com/presentations/zendcon-2007-high-perf.pdf</a>
+<em> <a href="http://eliw.com/presentations/zendcon-2007-high-perf.pdf">http://eliw.com/presentations/zendcon-2007-high-perf.pdf</a>
+</em> <a href="http://httpd.apache.org/docs/2.0/programs/ab.html">http://httpd.apache.org/docs/2.0/programs/ab.html</a>
+<em> <a href="http://en.wikipedia.org/wiki/Web_server_benchmarking">http://en.wikipedia.org/wiki/Web_server_benchmarking</a>
+</em> <a href="http://www.opensourcetesting.org/performance.php">http://www.opensourcetesting.org/performance.php</a>
+<em> <a href="http://en.wikipedia.org/wiki/List_of_PHP_accelerators">http://en.wikipedia.org/wiki/List_of_PHP_accelerators</a>
+</em> <a href="http://www.script-tutorials.com/how-to-install-apc-on-linux/">http://www.script-tutorials.com/how-to-install-apc-on-linux/</a>
+<em> <a href="http://www.scribd.com/mobile/documents/2602028/download?secret_password=1j1e9fj5jikq8k6hu35d">http://www.scribd.com/mobile/documents/2602028/download?secret_password=1j1e9fj5jikq8k6hu35d</a>
+</em> sql bench included with mysql
+<em> mybench
+</em> mysqlslap
+* jmeter complex...</p>
+<p>== MySQL ==</p>
+<p>Probably good, $300 per year for one server
+* <a href="http://www.webyog.com/en/">http://www.webyog.com/en/</a></p>
+<p>Packages:
+<em> mysql-bench
+</em> mysqlreport - yum install mysqlreport
+<em> mysqltuner
+</em> mtop - mtop --dbuser=root --password=
+*</p>
+<p>Comprehensive tests:
+* <a href="http://sourceforge.net/apps/mediawiki/osdldbt/index.php?title=Main_Page">http://sourceforge.net/apps/mediawiki/osdldbt/index.php?title=Main_Page</a></p>
+<p>Alternatives: Nagios 25 xxxxxxxxxxxxxxxxxxxxxxxxx MONyog 8 xxxxxxxx Cacti 4 xxxx Munin 3 xxx MySQL Enterprise Monitor/Merlin 3 xxx</p>
+<p>Nagios:</p>
+<pre>
+yum install gcc glibc glibc-common
+yum install gd gd-devel
+yum install nagios
+yum install nagios-plugins-all
+service nagios start
+# open https://<IP>/nagios, nagiosadmin/nagiosadmin
+</pre>
+
+
+
+<p>Increase php resource limit to 1024M in Webmin
+Also set timezone</p>
+<ul>
+<li><a href="http://www.cyberciti.biz/faq/fedora-rhel-install-cacti-monitoring-rrd-software/">http://www.cyberciti.biz/faq/fedora-rhel-install-cacti-monitoring-rrd-software/</a></li>
+<li><a href="http://docs.cacti.net/plugins">http://docs.cacti.net/plugins</a></li>
+<li><a href="http://www.cacti.net/downloads/docs/html/unix_configure_cacti.html">http://www.cacti.net/downloads/docs/html/unix_configure_cacti.html</a></li>
+</ul>
+<pre>
+# cerate cacti database in mysql
+yum install net-snmp-utils php-snmp net-snmp-libs
+yum install cacti
+service httpd restart
+cd /usr/share/cacti
+
+rpm -ql cacti | grep cacti.sql
+mysql cacti -ucacti -p  < /usr/share/doc/cacti-0.8.7h/cacti.sql
+
+# remove #
+vi /etc/cron.d/cacti
+
+# Login with admin/admin
+http://31.222.155.9/cacti/install/
+</pre>
+
+
+<p>== Scalr installation ==</p>
+<ul>
+<li><a href="http://code.google.com/p/scalr/">http://code.google.com/p/scalr/</a></li>
+<li><a href="http://wiki.scalr.net/Getting_Started">http://wiki.scalr.net/Getting_Started</a></li>
+<li><a href="http://wiki.scalr.net/Installing_Scalr">http://wiki.scalr.net/Installing_Scalr</a></li>
+</ul>
+<p>Setup bind in webmin</p>
+<pre>
+yum -y install libssh2 openssl net-snmp-utils bind php-ZendFramework-Db-Adapter-Mysqli gettext php-php-gettext php-mcrypt mhash php-pecl-ssh2 php-xml php-pear-SOA php-snmp 
+wget http://scalr.googlecode.com/files/scalr-2.2.1.tar.gz
+
+# Might need this also
+yum install php-pear
+pear install pecl_html
+</pre>
+
+
+<p>Apache:
+* php-pecl-apc</p>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

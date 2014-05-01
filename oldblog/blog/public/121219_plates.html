@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">JavaScript plates example</h1>
+  </div>
+  <div class="content"><p>Example on howto use the JavaScript plates library</p>
+<p>See <a href="https://github.com/flatiron/plates">https://github.com/flatiron/plates</a> for details</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Plates Example&lt;/title&gt;
+    &lt;style&gt;
+        #results li.pass { color: green; }
+        #results li.fail { color: red; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;ul id=&quot;results&quot;&gt;&lt;/ul&gt;
+
+
+    &lt;div id=&quot;test1&quot;&gt;
+        Some links:&lt;br/&gt;
+        &lt;a href=&quot;#route1&quot;&gt;#route1&lt;/a&gt; - clear result&lt;br/&gt;
+        &lt;a href=&quot;#route2&quot;&gt;#route2&lt;/a&gt; - single contact&lt;br/&gt;
+        &lt;a href=&quot;#route3&quot;&gt;#route3&lt;/a&gt; - several contacts&lt;br/&gt;
+        &lt;a href=&quot;#route4&quot;&gt;#route4&lt;/a&gt;&lt;br/&gt;
+    &lt;/div&gt;
+
+
+    &lt;div id=&quot;ui&quot;&gt;
+    &lt;/div&gt;
+
+
+    &lt;!-- Templates --&gt;
+
+    &lt;script type=&quot;text/template&quot; id=&quot;template1&quot;&gt;
+      &lt;div&gt;
+        &lt;ul class=&quot;contacts&quot;&gt;
+          &lt;li class=&quot;contact&quot;&gt;
+            &lt;span class=&quot;address&quot;&gt;Git URL&lt;/span&gt; - &lt;span class=&quot;name&quot;&gt;name&lt;/span&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/script&gt;
+
+
+    &lt;script type=&quot;text/template&quot; id=&quot;template2&quot;&gt;
+          &lt;a href=&quot;/&quot;&gt;link&lt;/a&gt;
+    &lt;/script&gt;
+
+    &lt;!-- Scripts at the end for better performance --&gt;
+
+    &lt;script type=&quot;text/javascript&quot; src=&quot;https://raw.github.com/colmsjo/helpersjs/master/helpers.js&quot;&gt;&lt;/script&gt;
+
+    &lt;script type=&quot;text/javascript&quot; src=&quot;https://raw.github.com/colmsjo/helpersjs/master/lib/js/jquery-1.7.2.min.js&quot;&gt;&lt;/script&gt;
+
+    &lt;script src=&quot;https://raw.github.com/colmsjo/helpersjs/master/lib/js/signals.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://raw.github.com/colmsjo/helpersjs/master/lib/js/crossroads.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://raw.github.com/colmsjo/helpersjs/master/lib/js/hasher.min.js&quot;&gt;&lt;/script&gt;
+
+    &lt;script src=&quot;https://raw.github.com/colmsjo/helpersjs/master/lib/js/plates.js&quot;&gt;&lt;/script&gt;
+
+    &lt;script&gt;
+    window.onload = function(){
+
+        var h = helpers.create();
+
+        h.test(&quot;Testing to use the plates library.&quot;, function(){
+
+            // setup crossroads, using the global object. 
+            // It is also possible to have several independent Routers
+            crossroads.addRoute(&#39;route1&#39;, function() { 
+
+                $(&#39;#ui&#39;).html(&quot;&quot;);
+
+                h.log(&#39;logging static route1...&#39;);} 
+            );
+
+            crossroads.addRoute(&#39;route2&#39;, function() {
+
+                var html = $(&#39;#template1&#39;).html();
+                var data = { 
+                    &quot;address&quot;: &quot;http://github.com/colmsjo&quot;,
+                    &quot;name&quot;: &quot;Jonas&quot;
+                };
+
+                var output = Plates.bind(html, data);  // not using the third map argument
+                $(&#39;#ui&#39;).html(output);
+
+                h.log(&#39;logging static route2...&#39;);} 
+            ); 
+
+            crossroads.addRoute(&#39;route3&#39;, function() {
+
+                var html = $(&#39;#template2&#39;).html();
+
+                var data = [ 
+                    { &quot;url&quot;: &quot;/a&quot; },
+                    { &quot;url&quot;: &quot;/b&quot; },
+                    { &quot;url&quot;: &quot;/c&quot; }
+                ];
+
+                var map = Plates.Map();
+                map.where(&#39;href&#39;).is(&#39;/&#39;).insert(&#39;url&#39;);
+
+                var output = Plates.bind(html, data, map);
+                $(&#39;#ui&#39;).html(output);
+
+                h.log(&#39;logging static route3...&#39;+output);} 
+            ); 
+
+
+            // Also log routes that did not match anything (useful for debugging)
+            crossroads.bypassed.add(function(request){
+                h.log(&quot;A route that wasn&#39;t matched:&quot;+request); 
+            });
+
+            //setup hasher
+            function parseHash(newHash, oldHash){
+                crossroads.parse(newHash); 
+            }
+
+            hasher.initialized.add(parseHash);             // parse initial hash 
+            hasher.changed.add(parseHash);                 // parse hash changes 
+            hasher.init();                                 // start listening for history change
+
+            //update URL fragment generating new history record 
+            hasher.setHash(&#39;route1&#39;);
+
+        });
+
+    };
+
+
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Wednesday, December 19, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

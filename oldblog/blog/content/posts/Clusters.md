@@ -1,0 +1,25 @@
+Yet another post
+
+[meta:author]: <> (Jonas Colmsjo)
+[meta:title]: <> (Clusters.md)
+[meta:date]: <> (2012-01-01)
+[meta:nested:key]: <> (Metadata value)
+
+##!!truncate
+
+
+[[Main_Page]] > [[Cloud Solutions]]
+
+* http://www.linux-ha.org/wiki/Main_Page
+* http://www.faqs.org/docs/Linux-mini/IP-Alias.html
+
+* http://www.ultramonkey.org/
+* http://www.clustermonkey.net/content/view/139/33/
+
+
+* http://www.beowulf.org/overview/howto.html
+* http://www.phy.duke.edu/~rgb/Beowulf/beowulf_book/beowulf_book/index.html
+
+HTTP redirect:
+* http://www.yolinux.com/TUTORIALS/ApacheRedirect.html
+* http://discomoose.org/2005/11/02/how-to-find-the-current-url-with-php/

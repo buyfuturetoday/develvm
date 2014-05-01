@@ -1,0 +1,67 @@
+[[Main_Page]]
+
+* http://code.google.com/p/s3backer/wiki/BuildAndInstall
+
+TRIED TO MOUNT TO SAME BUCKET ON TWO SERVERS BUT IT DID NOT WORK WELL
+
+<pre>
+wget http://s3backer.googlecode.com/files/s3backer-1.3.2.tar.gz
+tar -xvzf s3backer-1.3.2.tar.gz 
+cd s3backer-1.3.2
+sudo apt-get install build-essential libfuse-dev
+sudo apt-get install libfuse-dev libcurl4-openssl-dev  libexpat1-dev libssl-dev  pkg-config zlibc
+./configure
+make
+sudo make install
+
+man s3backer
+
+sudo vi .s3backer_passwd
+#
+# A file containing `accessID:accessKey' pairs, one per-line.  Blank lines and lines beginning with a `#' are ignored.  
+# If no --accessKey is specified, this file will be searched for the entry matching the access ID specified via 
+# --accessId; if neither --accessKey nor --accessId is specified, the first entry in this file will be used.
+#
+#
+
+XXX:YYYY
+
+
+mkdir -p /mnt2/s3backer
+s3backer --blockSize=128k --size=1g --listBlocks --directIO --baseURL=https://s3-eu-west-1.amazonaws.com/ s3backer1  /mnt2/s3backer
+
+mkfs -t ext3 /mnt2/s3backer/file
+
+
+mkdir -p /mnt2/s3-files
+sudo mount -o sync,loop /mnt2/s3backer/file /mnt2/s3-files
+
+# If you want to delete the contents
+s3backer --erase --size=1g s3backer1.s3-website-eu-west-1.amazonaws.com
+
+
+
+# unmount as usual
+umount /mnt2/s3-files/
+umount /mnt2/s3backer/
+
+</pre>
+
+
+
+Is this a problem??:
+<pre>
+sudo apt-get install build-essential libfuse-dev
+...
+Processing triggers for initramfs-tools ...
+update-initramfs: Generating /boot/initrd.img-2.6.32-309-ec2
+</pre>
+
+
+
+== s3cmd ==
+
+<pre>
+sudo apt-get s3cmd
+s3cmd --configure
+</pre>

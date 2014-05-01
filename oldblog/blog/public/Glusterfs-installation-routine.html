@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Glusterfs-installation-routine.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[wiki]] &gt; [[Technical Architecture]] &gt; [[Execution Architecture]]</p>
+<p>h1. Notes</p>
+<ul>
+<li>Should stop mounting Gluster drives. Should use rsync instead. I think some ports are missing below for the mount to work</li>
+<li>Scaling of Gluster servers do not work</li>
+</ul>
+<p>h1. Build SCM Tree</p>
+<p>On both</p>
+<pre>
+crontab -e
+
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /root/scripts/gluster-main.sh
+</pre>
+
+<p>On gluster2</p>
+<pre>
+crontab -e
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /root/scripts/scm-build-tree.sh
+</pre>
+
+
+<p>h1. GlusterFS installation routine</p>
+<ul>
+<li><a href="http://download.gluster.com/pub/gluster/glusterfs/3.2/Documentation/IG/html/sect-Installation_Guide-Installing-Debian.html">http://download.gluster.com/pub/gluster/glusterfs/3.2/Documentation/IG/html/sect-Installation_Guide-Installing-Debian.html</a></li>
+</ul>
+<pre>
+cd dwnl
+wget http://download.gluster.com/pub/gluster/glusterfs/LATEST/Ubuntu/10.10/glusterfs_3.2.6-1_amd64.deb
+
+s3cmd get s3://gizur-install/glusterfs_3.2.5-1_amd64.deb
+
+sudo apt-get install openssh-server wget nfs-common
+sudo dpkg -i glusterfs_3.2.5-1_amd64.deb
+
+service glusterd start
+gluster peer status
+
+# start at boot
+update-rc.d glusterd defaults
+</pre>
+
+<p>Ensure that TCP ports 111, 24007, 24008, 24009-(24009 + number of bricks across all volumes) are open on all Gluster servers. If you will be using NFS, open additional ports 38465 to 38467</p>
+<p>Start a second server (here using Scalr MySQL Master/Slave setup)</p>
+<pre>
+gluster peer probe int-mysql-slave.fs.gizurcloud.com
+</pre>
+
+
+<p>Create a volume:</p>
+<pre>
+# gluster volume create vol1 replica 2 transport tcp int-mysql-master.fs.gizurcloud.com:/mnt/dbstorage/exp1 int-mysql-slave.fs.gizurcloud.com:/mnt/dbstorage/exp2
+
+gluster volume create vol1 replica 2 transport tcp int-custom-glusterfs1.fs1.gizurcloud.com:/mnt/storage/exp1 int-custom-glusterfs2.fs2.gizurcloud.com:/mnt/storage/exp2
+
+gluster volume start vol1
+</pre>
+
+
+<p>h3. Scaling Gluster - DOES NOT WORK</p>
+<p>There is a script that automatically adds new slaves to the cluster (looking at the domain).
+The script also creates a directory in the slave and adds this to the volume.</p>
+<pre>
+
+crontab -e
+
+@hourly /root/scripts/gluster-main.sh
+
+
+sudo apt-get install libnet-dns-perl libuuid-tiny-perl
+
+</pre>
+
+
+<p>h3. Security</p>
+<pre>
+sudo apt-get install ufw
+
+sudo ufw default deny
+chmod g-w /etc
+
+sudo ufw allow ssh
+sudo ufw allow 8014/udp
+sudo ufw allow 8013/tcp
+
+sudo ufw allow 111/tcp
+sudo ufw allow 111/udp
+
+sudo ufw allow 24007/tcp
+sudo ufw allow 24008/tcp
+sudo ufw allow 24009/tcp
+sudo ufw allow 24010/tcp
+sudo ufw allow 24011/tcp
+sudo ufw allow 24012/tcp
+
+
+sudo ufw allow 38465/tcp
+sudo ufw allow 38466/tcp
+sudo ufw allow 38467/tcp
+sudo ufw allow 38468/tcp
+
+sudo ufw allow 10000/tcp
+
+sudo ufw enable
+
+sudo ufw status
+
+sudo ufw logging on
+
+</pre>
+
+<p>h2. Mount the drive</p>
+<pre>
+vi /etc/fstab
+
+localhost:/vol1 /mnt/vol1 glusterfs defaults,_netdev,log-level=ERROR,log-file=/var/log/gluster.log,nobootwait 0 0
+
+mkdir /mnt/storage/vol1
+mount /mnt/storage/vol1 
+
+</pre>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

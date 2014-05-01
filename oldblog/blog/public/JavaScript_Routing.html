@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">JavaScript Routing</h1>
+  </div>
+  <div class="content"><p>Client side routing in JavaScript</p>
+<h1>JavaScript Routing</h1>
+<p>We need a solid way of managing navigation between different parts (pages etc.) in the application that is easy to understand and maintain. Using different routing techniques has become common in web applications and there are JavaScript libraries for this.</p>
+<p>We&#39;ll take a look at crossroads.js and Hasher. </p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Module Example&lt;/title&gt;
+    &lt;script src=&quot;lib/basic.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;lib/signals.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;lib/crossroads.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;lib/hasher.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+
+    window.onload = function(){
+        test(&quot;Testing Crossroads.js and Hasher.&quot;, function(){
+
+            // setup crossroads, using the global object. 
+            // It is also possible to have several independent Routers
+            crossroads.addRoute(&#39;route1&#39;, function() { 
+                log(&#39;logging static route1...&#39;);} 
+            );
+
+            crossroads.addRoute(&#39;route2&#39;, function() {
+                log(&#39;logging static route2...&#39;);} 
+            ); 
+
+            crossroads.addRoute(&#39;/{route}/{param1}/{param2}&#39;, function(route, param1, param2){
+                log(&#39;logging dynamic route:&#39;+route+&#39;, param1:&#39;+param1+&#39;, param2:&#39;+param2+&#39;...&#39;);} 
+            ); 
+
+            // default listener, log all routes that has been matched
+            crossroads.routed.add(console.log, console); 
+
+            // Also log routes that did not match anything (useful for debugging)
+            crossroads.bypassed.add(function(request){
+                log(&quot;A route that wasn&#39;t matched:&quot;+request); 
+            });
+
+            //setup hasher
+            function parseHash(newHash, oldHash){
+                crossroads.parse(newHash); 
+            }
+
+            hasher.initialized.add(parseHash); // parse initial hash 
+            hasher.changed.add(parseHash);     // parse hash changes 
+            hasher.init();                     // start listening for history change
+
+            //update URL fragment generating new history record 
+            hasher.setHash(&#39;route1&#39;);
+
+        });
+
+    };
+
+
+    &lt;/script&gt;
+    &lt;style&gt;
+        #results li.pass { color: green; }
+        #results li.fail { color: red; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;ul id=&quot;results&quot;&gt;&lt;/ul&gt;
+
+
+    &lt;div id=&quot;test1&quot;&gt;
+        Some links:&lt;br/&gt;
+        &lt;a href=&quot;#route1&quot;&gt;#route1&lt;/a&gt;&lt;br/&gt;
+        &lt;a href=&quot;#route2&quot;&gt;#route2&lt;/a&gt;&lt;br/&gt;
+        &lt;a href=&quot;#/route3/i_love/this&quot;&gt;#route3&lt;/a&gt;&lt;br/&gt;
+        &lt;a href=&quot;#route4&quot;&gt;#route4&lt;/a&gt;&lt;br/&gt;
+    &lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>crossroads associates a route with a callback functions. Callbaks are very common in modern JavaScript so just get used to them (if you&#39;re not already). For instance will clikcing on the link <code>&lt;a href=&quot;#route1&quot;&gt;#route1&lt;/a&gt;</code> trigger a call to the function <code>function() { log(&#39;logging static route1...&#39;);} );</code>. This function was associated with the event using <code>crossroads.addRoute</code>.</p>
+<p>The statement <code>hasher.changed.add(parseHash)</code> will make sure that Hasher calls the function <code>parseHash</code> each time the URL in the application changes. This is so called hash navigation.</p>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Friday, August 10, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

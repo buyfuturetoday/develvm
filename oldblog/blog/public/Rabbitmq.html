@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Rabbitmq.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[Main_Page]]</p>
+<p>== Enable web interface ==</p>
+<ul>
+<li><a href="http://www.rabbitmq.com/plugins.html">http://www.rabbitmq.com/plugins.html</a></li>
+</ul>
+<pre>
+root@rabbit-1:~# rabbitmq-plugins list
+[ ] amqp_client                       2.7.1
+[ ] eldap                             2.7.1-git
+[ ] erlando                           2.7.1
+[ ] mochiweb                          1.3-rmq2.7.1-git
+[ ] rabbitmq_auth_backend_ldap        2.7.1
+[ ] rabbitmq_auth_mechanism_ssl       2.7.1
+[ ] rabbitmq_consistent_hash_exchange 2.7.1
+[ ] rabbitmq_federation               2.7.1
+[ ] rabbitmq_jsonrpc                  2.7.1
+[ ] rabbitmq_jsonrpc_channel          2.7.1
+[ ] rabbitmq_jsonrpc_channel_examples 2.7.1
+[ ] rabbitmq_management               2.7.1
+[E] rabbitmq_management_agent         2.7.1
+[ ] rabbitmq_management_visualiser    2.7.1
+[ ] rabbitmq_mochiweb                 2.7.1
+[ ] rabbitmq_shovel                   2.7.1
+[ ] rabbitmq_shovel_management        2.7.1
+[ ] rabbitmq_stomp                    2.7.1
+[ ] rabbitmq_tracing                  2.7.1
+[ ] rfc4627_jsonrpc                   2.7.1-git
+[ ] webmachine                        1.7.0-rmq2.7.1-hg
+
+root@rabbit-1:~# service rabbitmq-server status
+Status of node 'rabbit@rabbit-1' ...
+[{pid,1462},
+ {running_applications,
+     [{rabbitmq_management_agent,"RabbitMQ Management Agent","2.7.1"},
+      {rabbit,"RabbitMQ","2.7.1"},
+      {mnesia,"MNESIA  CXC 138 12","4.4.12"},
+      {os_mon,"CPO  CXC 138 46","2.2.4"},
+      {sasl,"SASL  CXC 138 11","2.1.8"},
+      {stdlib,"ERTS  CXC 138 10","1.16.4"},
+      {kernel,"ERTS  CXC 138 10","2.13.4"}]},
+ {os,{unix,linux}},
+ {erlang_version,
+     "Erlang R13B03 (erts-5.7.4) [source] [rq:1] [async-threads:30] [hipe] [kernel-poll:true]\n"},
+ {memory,
+     [{total,12984120},
+      {processes,4982728},
+      {processes_used,4973592},
+      {system,8001392},
+      {atom,736561},
+      {atom_used,727757},
+      {binary,63096},
+      {code,6077475},
+      {ets,377604}]},
+ {vm_memory_high_watermark,0.3999999997777084},
+ {vm_memory_limit,719775334}]
+...done.
+
+rabbitmq-plugins enable rabbitmq_management
+service rabbitmq-server restart
+</pre>
+
+<p>== Users ==</p>
+<ul>
+<li><a href="http://www.rabbitmq.com/man/rabbitmqctl.1.man.html">http://www.rabbitmq.com/man/rabbitmqctl.1.man.html</a></li>
+</ul>
+<pre>
+root@rabbit-1:~# rabbitmqctl list_users
+Listing users ...
+scalr    [administrator]
+...done.
+
+
+rabbitmqctl add_user admin XXXXX
+rabbitmqctl set_user_tags admin administrator
+
+</pre>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

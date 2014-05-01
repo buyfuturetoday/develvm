@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Vtiger-development.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[VTigerCRM]]</p>
+<p>= Integrate with vTiger =</p>
+<p>There is vtigerservice.php and webservice.php
+* <a href="http://gom-dev.gizurcloud.com/vtigerservice.php">http://gom-dev.gizurcloud.com/vtigerservice.php</a></p>
+<p>=== Web Service ===</p>
+<p>The web services api supports the security model followed in the Vtiger web user interface.
+* <a href="https://wiki.vtiger.com/index.php/510:Webservice_reference_manual">https://wiki.vtiger.com/index.php/510:Webservice_reference_manual</a></p>
+<p>Use the $client-&gt;call method</p>
+<ul>
+<li><p><a href="http://api.vtiger.com/classsoapclient2.html#a806d1d83f45454caf9c6c361c0a4b0ad">http://api.vtiger.com/classsoapclient2.html#a806d1d83f45454caf9c6c361c0a4b0ad</a></p>
+</li>
+<li><p><a href="http://api.vtiger.com/class_vtiger___net___client.html">http://api.vtiger.com/class_vtiger___net___client.html</a>
+** vtlib -&gt; Vtiger_Net_Client in client.php</p>
+</li>
+</ul>
+<p>=== vtlib ===</p>
+<ul>
+<li><p><a href="http://www.vtiger.com/products/crm/help/5.2.0/VtigerCRM_5.2.0_Vtlib.pdf">http://www.vtiger.com/products/crm/help/5.2.0/VtigerCRM_5.2.0_Vtlib.pdf</a></p>
+</li>
+<li><p><a href="http://api.vtiger.com">http://api.vtiger.com</a>
+<strong> <a href="http://api.vtiger.com/class_users.html">http://api.vtiger.com/class_users.html</a>
+</strong> <a href="http://api.vtiger.com/class_login_history.html">http://api.vtiger.com/class_login_history.html</a></p>
+</li>
+</ul>
+<p>=== Portal ===</p>
+<p>The portal seams to be using SOAP (nusoap):
+* <a href="http://sourceforge.net/projects/nusoap">http://sourceforge.net/projects/nusoap</a></p>
+<p>Login.php calls portal/CustomerAuthenticate.php on the server
+* <a href="http://forums.vtiger.com/viewtopic.php?t=29791">http://forums.vtiger.com/viewtopic.php?t=29791</a></p>
+<pre>
+root@ec2-176-34-180-30:PHP:/var/www/html/vtigersbx/portal# grep -n "\$client \=" *
+include.php:18:$client = new soapclient2($Server_Path."/vtigerservice.php?service=customerportal", false, $proxy_host, $proxy_port, $proxy_username, $proxy_password);
+</pre>
+
+
+<p>vtigerservice.php:</p>
+<pre>
+if(isset($_REQUEST['service']))
+{
+    if($_REQUEST['service'] == "outlook")
+    {
+        include("soap/vtigerolservice.php");
+    }
+    elseif($_REQUEST['service'] == "customerportal")
+    {
+        include("soap/customerportal.php");
+    }
+</pre>
+
+
+<p>soap/customerportal.php</p>
+<pre>
+$NAMESPACE = 'http://www.vtiger.com/products/crm';
+$server = new soap_server;
+
+$server->configureWSDL('customerportal');
+
+$server->wsdl->addComplexType(
+    'common_array',
+    'complexType',
+    'array',
+    '',
+    array(
+        'fieldname' => array('name'=>'fieldname','type'=>'xsd:string'),
+    )
+);
+...
+</pre>
+
+
+
+<p>soap_server:
+<em> <a href="http://api.vtiger.com/classsoap__server.html">http://api.vtiger.com/classsoap__server.html</a>
+</em> There is a public attribute-  $operations = array()</p>
+<p>soap_client2:
+* <a href="http://api.vtiger.com/classsoapclient2.html">http://api.vtiger.com/classsoapclient2.html</a></p>
+<p>=== WebForms ===</p>
+<ul>
+<li><a href="https://wiki.vtiger.com/index.php/Developers_How_To&#39;s#WebForms">https://wiki.vtiger.com/index.php/Developers_How_To&#39;s#WebForms</a></li>
+</ul>
+<p>= Smarty =</p>
+<h1>Smarty template - <a href="http://chriscant.phdcc.com/2009/09/starting-to-program-vtiger-crm.html">http://chriscant.phdcc.com/2009/09/starting-to-program-vtiger-crm.html</a></h1>
+<h2><a href="http://www.smarty.net/docs/en/">http://www.smarty.net/docs/en/</a></h2>
+<h2>Change list views - <a href="http://wiki.vtiger.com/index.php/Vtiger_CRM_5_Developer_Guide">http://wiki.vtiger.com/index.php/Vtiger_CRM_5_Developer_Guide</a></h2>
+<h2>/var/www/html/vtigercrm/Smarty/templates</h2>
+<h1>Data model - <a href="http://forums.vtiger.com/viewtopic.php?p=56568#56568">http://forums.vtiger.com/viewtopic.php?p=56568#56568</a></h1>
+<p>= Notes on datamodel research for sales orders and quotes =</p>
+<h1>check vtiger_fields</h1>
+<h1>check vtiger_crmentity</h1>
+<h1>check the file schema/DatabaseSchema.xml</h1>
+<h1>check modules/SalesOrder/DetailView.php</h1>
+<h1>check Smarty/Inventory</h1>
+<h1>found table vtiger_inventoryproduyctrel</h1>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Pentaho.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[Main_Page]]</p>
+<p>= Installation =</p>
+<ul>
+<li>Java - <a href="https://help.ubuntu.com/community/Java">https://help.ubuntu.com/community/Java</a></li>
+<li><a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk-6u31-download-1501634.html">http://www.oracle.com/technetwork/java/javase/downloads/jdk-6u31-download-1501634.html</a></li>
+</ul>
+<p><a href="https://github.com/flexiondotorg/oab-java6">https://github.com/flexiondotorg/oab-java6</a></p>
+<pre>
+cd ~/dwnl
+wget https://raw.github.com/flexiondotorg/oab-java6/master/oab-java6.sh -O oab-java6.sh
+chmod +x oab-java6.sh
+sudo ./oab-java6.sh
+</pre>
+
+
+<pre>
+sudo apt-cache search sun
+sudo apt-get install sun-java6-jdk
+
+
+sudo update-alternatives --config java
+</pre>
+
+<pre>
+wget http://downloads.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/3.10.0-stable/biserver-ce-3.10.0-stable.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpentaho%2Ffiles%2FBusiness%2520Intelligence%2520Server%2F3.10.0-stable%2F&ts=1330367621&use_mirror=ignum
+mv biserver-ce-3.10.0-stable.tar.gz?r=http:%2F%2Fsourceforge.net%2Fprojects%2Fpentaho%2Ffiles%2FBusiness%20Intelligence%20Server%2F3.10.0-stable%2F biserver-ce-3.10.0-stable.tar.gz
+gunzip biserver-ce-3.10.0-stable.tar.gz 
+mkdir pentaho
+cp biserver-ce-3.10.0-stable.tar pentaho/
+cd pentaho
+tar -xf biserver-ce-3.10.0-stable.tar 
+
+rm biserver-ce-3.10.0-stable.tar
+
+mv pentaho /opt/
+
+
+root@ec2-46-137-54-126:~/dwnl/pentaho/biserver-ce# java -version
+java version "1.6.0_20"
+OpenJDK Runtime Environment (IcedTea6 1.9.10) (6b20-1.9.10-0ubuntu1~10.04.2)
+OpenJDK Client VM (build 19.0-b09, mixed mode, sharing)
+
+cd /opt/pentaho/biserver-ce/
+
+sudo ./set-pentaho-env.sh
+
+root@ec2-46-137-54-126:/opt/pentaho/biserver-ce# sudo ./start-pentaho.sh 
+/opt/pentaho/biserver-ce
+/opt/pentaho/biserver-ce
+WARNING: Using java from path
+DEBUG: _PENTAHO_JAVA_HOME=
+DEBUG: _PENTAHO_JAVA=java
+--------------------------------------------------------------------------------------------
+The Pentaho BI Platform now contains a version checker that will notify you
+when newer versions of the software are available. The version checker is enabled by default.
+For information on what the version checker does, why it is beneficial, and how it works see:
+http://wiki.pentaho.com/display/ServerDoc2x/Version+Checker
+Press Enter to continue, or type cancel or Ctrl-C to prevent the server from starting.
+You will only be prompted once with this question.
+--------------------------------------------------------------------------------------------
+[OK]:
+Using CATALINA_BASE:   /opt/pentaho/biserver-ce/tomcat
+Using CATALINA_HOME:   /opt/pentaho/biserver-ce/tomcat
+Using CATALINA_TMPDIR: /opt/pentaho/biserver-ce/tomcat/temp
+Using JRE_HOME:        /usr
+Using CLASSPATH:       /opt/pentaho/biserver-ce/tomcat/bin/bootstrap.jar
+root@ec2-46-137-54-126:/opt/pentaho/biserver-ce#
+
+# change port in biserver-ce/tomcat/conf/server.xml
+
+# open http://sbx.gizurcloud.com:8080/pentaho/Login
+
+
+cd ../administration-console/
+root@ec2-46-137-54-126:/opt/pentaho/administration-console# sudo ./start-pac.sh 
+/opt/pentaho/administration-console
+/opt/pentaho/administration-console
+WARNING: Using java from path
+DEBUG: _PENTAHO_JAVA_HOME=
+DEBUG: _PENTAHO_JAVA=java
+18:59:04,995 INFO  [JettyServer] Console is starting
+18:59:05,047 INFO  [/] org.pentaho.pac.server.BrowserLocaleServlet-7668057: init
+18:59:05,048 INFO  [/] org.pentaho.pac.server.DefaultConsoleServlet-22894293: init
+18:59:05,048 INFO  [/] org.pentaho.pac.server.PacServiceImpl-13582581: init
+18:59:05,048 INFO  [/] org.pentaho.pac.server.SchedulerServiceImpl-5298332: init
+18:59:05,048 INFO  [/] org.pentaho.pac.server.SolutionRepositoryServiceImpl-22996593: init
+18:59:05,048 INFO  [/] org.pentaho.pac.server.SubscriptionServiceImpl-12926414: init
+18:59:05,048 INFO  [/] org.pentaho.pac.server.common.HibernateConfigurationServiceImpl-22710119: init
+18:59:05,048 INFO  [/] org.pentaho.pac.server.common.JdbcDriverDiscoveryServiceImpl-8548382: init
+18:59:05,078 INFO  [JettyServer] Console is now started. It can be accessed using http://ec2-46-137-54-126.eu-west-1.compute.amazonaws.com:8099 or http://10.224.119.102:8099
+
+# Edit security group on Scalrt role, open 8099
+# open http://sbx.gizurcloud.com:8099/
+# Login with admin/password
+
+</pre>
+
+
+<p>== Setup datasource ==</p>
+<h1>open <a href="http://sbx.gizurcloud.com:8099/">http://sbx.gizurcloud.com:8099/</a></h1>
+<h1>Login with admin/password</h1>
+<h1>Chose Database connections -&gt; +</h1>
+<h1>Choose driver org.gjt.mm.mysql.Driver</h1>
+<h1>URL: jdbc:mysql://localhost:3306/DATABASE_NAME</h1>
+<p>== Development of reports ==</p>
+<p>Collabtive uses unix timestamps for dates:
+<em> <a href="http://collabtive.o-dyn.de/forum/viewtopic.php?f=8&amp;t=4358">http://collabtive.o-dyn.de/forum/viewtopic.php?f=8&amp;t=4358</a>
+</em> <a href="http://www.unixtimestamp.com/index.php">http://www.unixtimestamp.com/index.php</a>
+* <a href="http://dev.mysql.com/doc/refman/5.5/en/date-and-time-functions.html#function_from-unixtime">http://dev.mysql.com/doc/refman/5.5/en/date-and-time-functions.html#function_from-unixtime</a></p>
+<p>Use FROM_UNIXTIME SQL function.</p>
+<p>Need to change the character set:
+SET SESSION CHARACTER_SET_RESULTS =latin1;</p>
+<p>== Change Admin password ==</p>
+<p>Change in Administration web interface</p>
+<p>Does not work</p>
+<pre>
+java -cp administration-console/lib/jetty-6.1.9.jar:administration-console/lib/jetty-util-6.1.9.jar org.mortbay.jetty.security.Password admin password1
+</pre>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+

@@ -1,0 +1,15 @@
+Yet another post
+
+[meta:author]: <> (Jonas Colmsjo)
+[meta:title]: <> (Virtual-server-with-dual-nics.md)
+[meta:date]: <> (2012-01-01)
+[meta:nested:key]: <> (Metadata value)
+
+##!!truncate
+
+
+[[Main_Page]]
+
+* http://www.virtualbox.org/manual/ch06.html
+* http://kovyrin.net/2008/01/14/small-tip-how-to-set-up-two-interface-xen-machine/
+* http://blogs.technet.com/b/josebda/archive/2010/09/03/using-the-multiple-nics-of-your-file-server-running-windows-server-2008-and-2008-r2.aspx

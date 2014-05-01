@@ -1,0 +1,43 @@
+{
+  "name": "wip",
+  "version": "0.0.1",
+  "description": "Work In Progress - my blog built with blacksmith.",
+  "author": {
+    "name": "Jonas Colmsjö",
+    "email": "jonas.colmsjo@gizur.com"
+  },
+  "repository": {
+    "type" : "git",
+    "url"  : "git://github.com/colmsjo/myblog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/colmsjo/myblog/issues"
+  },
+  "licenses": [
+    {
+      "type" : "MIT",
+      "url"  : "https://github.com/colmsjo/myblog/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "app.js",
+  "bin": {
+    "server": "./bin/server.sh"
+  },
+  "dependencies": {
+    "blacksmith": "1.1.3",
+    "http-server" : "0.5.x",
+    "colors": "*",
+    "optimist": "0.2.x",
+    "union": "0.1.x",
+    "ecstatic": "0.1.x",
+    "portfinder": "~0.2.1"
+  },
+  "engines": {
+    "node" : "0.10.x",
+    "npm"  : "1.1.x"
+  },
+  "devDependencies": {
+    "vows": "0.6.x"
+  }
+}
+

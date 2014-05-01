@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jonas Colmsjö's blog</title>
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Jonas Colmsjö">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/bs-styles.css"            rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"                 href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+ 
+        <div id="content" class="span8"><div class="article">
+  <div class="page-details">
+    <h1 class="title">Xen.md</h1>
+  </div>
+  <div class="content"><p>Yet another post</p>
+<p>[[Main_Page]] &gt; [[Cloud Solutions]]</p>
+<p>Articles
+<em> <a href="http://wiki.centos.org/HowTos/Xen/InstallingCentOSDomU">http://wiki.centos.org/HowTos/Xen/InstallingCentOSDomU</a>
+</em> <a href="http://www.virtuatopia.com/index.php/Building_a_Xen_Virtual_Guest_Filesystem_on_a_Disk_Image_(Cloning_Host_System">http://www.virtuatopia.com/index.php/Building_a_Xen_Virtual_Guest_Filesystem_on_a_Disk_Image_(Cloning_Host_System</a>)</p>
+<p>== Paravitualized drivers for Windows ==</p>
+<ul>
+<li><p><a href="http://www.linux-kvm.com/content/tip-how-setup-windows-guest-paravirtual-network-drivers">http://www.linux-kvm.com/content/tip-how-setup-windows-guest-paravirtual-network-drivers</a></p>
+</li>
+<li><p><a href="http://www.redhat.com/docs//en-US/Red_Hat_Enterprise_Linux/5.5/html/Virtualization_Guide/chap-Virtualization-KVM_Para_virtualized_Drivers.html">http://www.redhat.com/docs//en-US/Red_Hat_Enterprise_Linux/5.5/html/Virtualization_Guide/chap-Virtualization-KVM_Para_virtualized_Drivers.html</a></p>
+</li>
+<li><p><a href="http://www.windowsservercatalog.com/results.aspx?text=Red+Hat&amp;bCatID=1282&amp;avc=10&amp;ava=0&amp;OR=5&amp;=Go&amp;chtext=&amp;cstext=&amp;csttext=&amp;chbtext=">http://www.windowsservercatalog.com/results.aspx?text=Red+Hat&amp;bCatID=1282&amp;avc=10&amp;ava=0&amp;OR=5&amp;=Go&amp;chtext=&amp;cstext=&amp;csttext=&amp;chbtext=</a></p>
+</li>
+</ul>
+<p>== Notes ==</p>
+<p>Performance is best with partitions or LVM. File backed xen guest will have poo I/O performance:
+* <a href="https://www.centos.org/modules/newbb/viewtopic.php?topic_id=10592">https://www.centos.org/modules/newbb/viewtopic.php?topic_id=10592</a></p>
+<p>Create new vm:
+* location: nfs://jonas:pwd@192.168.1.8/gizur2/Install/Microsoft/Windows_Server/windowsserver_2003_R2_32bit_cd1.iso</p>
+<p>CentOS5.5 Installation:
+* Grub Boot load installed on /dev/hda</p>
+<p>== Create empty image ==</p>
+<pre>
+dd if=/dev/zero of=/srv/xen/mailserver.img oflag=direct bs=1M count=2048
+</pre>
+
+<p>== Using images with Xen ==</p>
+<pre>
+xm create -c centos.5-4.x86.xen3.pygrub.cfg
+nmap -sP 192.168.1.0/24
+ssh 192.168.122.XXX
+xm shutdown centos.5-4.x86 (from another shell)
+</pre>
+
+
+<p>== Mounting images ==</p>
+<ul>
+<li><a href="http://linuxwave.blogspot.com/2008/02/accessing-data-on-xen-lvm-guest-image.html">http://linuxwave.blogspot.com/2008/02/accessing-data-on-xen-lvm-guest-image.html</a></li>
+</ul>
+<p>Howto mount CentOS images (<a href="https://secure.stacklet.com/node/124">https://secure.stacklet.com/node/124</a>):</p>
+<pre>
+For the Xen 3 images, the mount command is simply:
+mount -o loop centos.5-4.x86.img /mnt/loop
+Of course the actual image file and mount directory can be changed. The Xen 3 images are ext3 vbd's. and do not require an offset in the mount command.
+For the qemu images an actual offset is needed:
+mount -o loop,offset=32256 ...
+The given offset should work for all stacklet images.
+For vmdk images, you need to mount them with the vmware tools which are not distributed with the free player unfortunately. Or convert it back to a qemu raw using the qemu-img tool
+</pre>
+
+
+
+<p>== Convert file based guest to LVM based guest ==</p>
+<ul>
+<li><a href="http://www.howtoforge.com/xen-how-to-convert-an-image-based-guest-to-an-lvm-based-guest">http://www.howtoforge.com/xen-how-to-convert-an-image-based-guest-to-an-lvm-based-guest</a></li>
+<li><a href="http://www.virtuatopia.com/index.php/Building_a_Xen_Virtual_Guest_Filesystem_using_Logical_Volume_Management_(LVM">http://www.virtuatopia.com/index.php/Building_a_Xen_Virtual_Guest_Filesystem_using_Logical_Volume_Management_(LVM</a>)</li>
+<li>Should use xvda instead of sda (xvdaX vs. sdX) - <a href="http://lists.xensource.com/archives/html/xen-users/2009-06/msg00786.html">http://lists.xensource.com/archives/html/xen-users/2009-06/msg00786.html</a></li>
+</ul>
+<pre>
+dd if=/vm/allan.img of=/dev/VolGroup00/allan
+
+vi /etx/xen/allan
+
+Change file:... to phy:...
+</pre>
+
+
+<p>== VNC/Runleve problem ==</p>
+<ul>
+<li>Problems connecting - <a href="http://www.realvnc.com/pipermail/vnc-list/2007-September/058139.html">http://www.realvnc.com/pipermail/vnc-list/2007-September/058139.html</a></li>
+</ul>
+<pre>
+
+init 3
+init 5
+
+Try to connect again
+</pre>
+
+<p>The root cause is that runlevel 5 isnt&#39; started. /etc/inittab controls this:
+* <a href="http://www.comptechdoc.org/os/linux/howlinuxworks/linux_hlrunlevels.html">http://www.comptechdoc.org/os/linux/howlinuxworks/linux_hlrunlevels.html</a></p>
+<pre>
+Start in runlevel 5
+...
+id:5:initdefault:
+...
+
+My inittab looks like this:
+...
+id:3:initdefault:
+...
+</pre>
+
+<p>I changed my inittab.</p>
+<p>== Problem installing WinXP ==</p>
+<p>Problems installing win xp:
+* <a href="http://lists.xensource.com/archives/cgi-bin/mesg.cgi?a=xen-users&amp;i=200607061110.34601.yuanjue@yuanjue.net">http://lists.xensource.com/archives/cgi-bin/mesg.cgi?a=xen-users&amp;i=200607061110.34601.yuanjue@yuanjue.net</a></p>
+<pre>
+About this freeze issue, that is mainly because the domU OS cannot get enough 
+memory as it wants, which is because dom0 gets too much memory (almost all) 
+from the computer.
+
+solutions:
+1. "xm mem-set 0 XXX" to set a suitable memory for dom0, and be sure that is 
+still enough memory left for domU, which could be checked by "xm info"
+
+2. if you don't wanna use "xm mem-set" everytime you boot up a domU, go to 
+change the /boot/grub/menu.lst, adding "dom0_mem=XXX" behind the "kernel" 
+line. Note that here the memory is measured by KB
+</pre>
+
+
+<p>== NIC Performance ==</p>
+<ul>
+<li><a href="http://bitsandchaos.wordpress.com/2008/02/23/red-hat-pv-drivers-made-a-huge-difference/">http://bitsandchaos.wordpress.com/2008/02/23/red-hat-pv-drivers-made-a-huge-difference/</a></li>
+<li><a href="http://www.redhat.com/docs/manuals/enterprise/RHEL-5-manual/en-US/RHEL510/pdf/Para-Virtualized_Drivers.pdf">http://www.redhat.com/docs/manuals/enterprise/RHEL-5-manual/en-US/RHEL510/pdf/Para-Virtualized_Drivers.pdf</a></li>
+</ul>
+<p>== Install PVM ==</p>
+<ul>
+<li><a href="http://wiki.centos.org/HowTos/Xen/InstallingCentOSDomU">http://wiki.centos.org/HowTos/Xen/InstallingCentOSDomU</a></li>
+</ul>
+<pre>
+virt-install -p --name=linux_server3 --location=http://mirror.nsc.liu.se/CentOS/5.5/isos/i386/CentOS-5.5-i386-bin-DVD.iso --bridge=xenbr0 --file=/dev/VolGroup00/linux_server3 --ram=1024
+
+</pre>
+
+
+<pre>
+kernel = "/mnt/linksys_gizur2/Install/Linux/CentOS-5.5/xen/i386/vmlinuz"
+ramdisk = "/mnt/linksys_gizur2/Install/Linux/CentOS-5.5/xen/i386/initrd.img"
+name = "linux_server3"
+memory = "512"
+disk = [ 'phy:/dev/VolGroup00/linux_server3,sda1,w', ]
+vif = [ 'bridge=xenbr0', ]
+vcpus=1
+on_reboot = 'destroy'
+on_crash = 'destroy'
+</pre>
+
+<p>Tried using this as the location for the files:
+<a href="http://mirrors.kernel.org/centos/5.5/os/i386/images/">http://mirrors.kernel.org/centos/5.5/os/i386/images/</a></p>
+<p>Seams to hang...
+NFS path using virt-manager: nfs:jonas:pwd@linksys:/gizur2/...</p>
+</div>
+</div></div>
+        
+        <div id="sidebar" class="span4">
+<div class="page-details">
+  <div class="author">
+    <h3>About the author</h3>
+  
+    
+  
+    <div>
+      <dl>
+        <dd class="name">Jonas Colmsjö</dd>
+      </dl>
+      <dl class="if-github">
+        <dd>
+          <a href="https://github.com/colmsjo" class="github">colmsjo</a>
+        </dd>
+      </dl>
+      <dl class="if-twitter">
+        <dd>
+          <a href="http://twitter.com/colmsjo" class="twitter">colmsjo</a>  
+        </dd>
+      </dl>
+      <dl class="if-location">
+        <dd class="location">Gothenburg, Sweden</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<div id="content" class="span4">
+
+  <div class="page-details">
+    <h3>About this article</h3>
+    <dl>
+      <dt>Date Released:</dt><dd class="date">Sunday, January 01, 2012</dd>
+    </dl>
+
+    
+  </div>
+
+</div><!--./span4 -->
+</div>
+
+      </div><!-- row -->
+
+
+        (c) Jonas Colmsjö 2012  <a href="https://twitter.com/colmsjo" class="twitter-follow-button" data-show-count="false">
+        Follow @colmsjo</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="http://se.linkedin.com/in/colmsjo" style="text-decoration:none;"><span style="font: 80% Arial,sans-serif; color:#0783B6;"><img src="http://www.linkedin.com/img/webpromo/btn_in_20x15.png" width="20" height="15" alt="View Jonas Colmsjö's LinkedIn profile" style="vertical-align:middle" border="0">View Jonas Colmsjö's profile</span></a>
+
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+
