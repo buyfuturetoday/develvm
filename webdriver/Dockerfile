@@ -32,7 +32,8 @@ npm install -g selenium-webdriver
 # Install PhantomJS
 RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2
 
-RUN java -jar /src/selenium-server-standalone-2.41.0.jar
+# Install Selenium WebDriver
+RUN wget http://selenium-release.storage.googleapis.com/2.41/selenium-server-standalone-2.41.0.jar
 
 
 EXPOSE
