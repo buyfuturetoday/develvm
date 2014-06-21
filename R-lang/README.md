@@ -41,6 +41,7 @@ if(require("RUnit", lib="./R-packages/")){
     print(paste("RUnit is loaded correctly. Version:", toString(packageVersion("RUnit"))))
 } else {
     print("trying to install RUnit")
+    dir.create(file.path(".", "R-packages"), showWarnings = FALSE)
     install.packages("RUnit", lib="./R-packages/", repos='http://cran.us.r-project.org')
     if(require("RUnit", lib="./R-packages/")){
         print(paste("RUnit is loaded correctly. Version:", toString(packageVersion("RUnit"))))
