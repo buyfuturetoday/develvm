@@ -1,3 +1,5 @@
+Executing scripts
+----------------
 
 Run R scripts like this:
 
@@ -12,4 +14,14 @@ Or like this:
 Or like this:
 	>R
 	>source("func.R", echo=TRUE)
+
+
+
+Install new packages
+-------------------
+
+Install directly from CRAN (also possible to download and install with R CMD INSTALL): 
+
+	> install.packages("runit", lib="./R-packages/")
+
 

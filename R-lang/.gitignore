@@ -1,0 +1,4 @@
+.RData
+R-packages
+*.Rout
+*.out
