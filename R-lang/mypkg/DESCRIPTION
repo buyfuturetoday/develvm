@@ -1,0 +1,11 @@
+Package: mypkg
+Title: My first package
+Version: 0.1
+Date: 2014-06-22
+Author: Jonas Colmsjö
+Maintainer: Jonas Colmsjö <jonas@gizur.com>
+Depends: R (>= 3.1.0)
+Suggests: knitr
+Description: This is a package
+License: MIT
+VignetteBuilder: knitr

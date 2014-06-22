@@ -1,0 +1,36 @@
+Example on howto use the class.R stuff
+-------------------------------------
+
+Some data to work with:
+
+```
+# Infant "data"
+age       = c(0, 3, 6, 12, 18, 24, 30, 36)
+male.wt   = c( 3.53,  6.39,  8.16, 10.46, 11.80, 12.74, 13.56, 14.33)
+female.wt = c( 3.40,  5.86,  7.45,  9.67, 11.09, 12.13, 13.04, 13.87)
+male.ht   = c(49.99, 62.08, 67.86, 76.11, 82.41, 87.66, 92.13, 95.45)
+female.ht = c(49.29, 60.46, 66.12, 74.40, 80.80, 86.20, 91.13, 94.43)
+```
+
+Example on howto use:
+
+```
+# Create infant objects
+x <- infant(1, "male", age, male.ht, male.wt)
+y <- infant(2, "female", age, female.ht, female.wt)
+
+# Show class for x and y
+class(x); class(y)
+
+# Print infant objects
+x; y
+
+# Plot infant objects
+plot(x); plot(y)
+
+# Possible to create invalid objects with S3 classes
+z <- infant(3, "male", c("0 mon", "3 mon"), c(49.99,62.08), c(3.53,6.39))
+```
+
+
+

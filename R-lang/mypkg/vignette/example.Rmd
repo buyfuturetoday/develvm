@@ -1,0 +1,10 @@
+Vignettes written in Markdown
+----------------------------
+
+Almost like any markdown but with support for inline R code.
+
+```{r chunkLabel}
+# R code
+```
+
+
