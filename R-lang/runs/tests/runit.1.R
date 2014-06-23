@@ -1,19 +1,6 @@
-## A simple test for the runs class
+## This is a very trivial demo  of
+## the RUnit test case execution system:
 ## ---------------------------------
-
-## Install runs p
-if(require("runs", lib="./R-packages/")){
-    print(paste("runs is loaded correctly. Version:", toString(packageVersion("runs"))))
-} else {
-    print("trying to install runs")
-    dir.create(file.path(".", "R-packages"), showWarnings = FALSE)
-    install.packages("runs", lib="./R-packages/", repos = NULL, type="source")
-    if(require("runs", lib="./R-packages/")){
-        print(paste("runs is loaded correctly. Version:", toString(packageVersion("runs"))))
-    } else {
-        stop("could not install runs")
-    }
-}
 
 ## functions to be tested (usually defined in a different
 ## file from where the test cases are located):

@@ -36,3 +36,11 @@ print(x)
 ```
 
 
+Check that the result is what we expected:
+
+```
+expected_result <- c(1,1,1,-1,-1,-1,-1,0,2,2,2,2,0,0,-2,-2,-2)
+
+x$runs == expected_result
+```
+
