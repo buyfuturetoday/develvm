@@ -5,7 +5,7 @@
 # Create a class object runs
 runs <- function(name, in_vector) {
      # The object only have two attributes
-     out <- list(name=name, vector=in_vector, runs=.runs(in_vector))
+     out <- list(name=name, vector=in_vector, runs=.calcRuns(in_vector))
 
      # Set the class the for this object
      class(out) <- "runs"
@@ -21,7 +21,7 @@ print.runs <- function(object) {
 }
 
 # Private function that calculates the runs
-.runs<-function(list, pos=0, neg=0, current=0) {
+.calcRuns<-function(list, pos=0, neg=0, current=0) {
   l = length(list);
   if(l<=1) {
      return( c() );
@@ -40,6 +40,6 @@ print.runs <- function(object) {
           if(current>=0) current = neg = neg - 1;
           v = neg;
      }
-     return( c( v, runs(t, pos, neg, current)) );
+     return( c( v, .calcRuns(t, pos, neg, current)) );
   }
 }
