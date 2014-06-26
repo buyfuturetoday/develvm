@@ -1,7 +1,7 @@
-runs - homemade package
------------------------
+runs - homemade package that calculates runs in a time series
+=============================================================
 
-Import like this:
+Import like this (in directory .. ):
 
 ```
 if(require("runs", lib="./R-packages/")){
@@ -43,4 +43,37 @@ expected_result <- c(1,1,1,-1,-1,-1,-1,0,2,2,2,2,0,0,-2,-2,-2)
 
 x$runs == expected_result
 ```
+
+
+
+Unit tests
+----------
+
+```
+## How to run the tests (do not uncomment in this file,
+## but execute the commands at the R prompt):
+## All you have to do is to adapt the directory locations.
+## ------------------------------------------------
+
+## define the test suite:
+testsuite.cf <- defineTestSuite("runs", dirs="./tests")
+
+## run test suite:
+testResult <- runTestSuite(testsuite.cf)
+
+## print text protocol to console:
+printTextProtocol(testResult)
+
+## print HTML version to a file:
+printHTMLProtocol(testResult, fileName="runsUnitTests.html")
+
+## In this case we also have a shortcut
+#runTestFile("directoryOfThisFile/runitcfConversion.r")
+```
+
+
+
+
+
+
 
