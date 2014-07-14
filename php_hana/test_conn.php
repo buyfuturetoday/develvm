@@ -6,8 +6,8 @@ $driver  	 = "HDBODBC64";               // 32 bit odbc drivers that come with th
 
 $servername  = "54.75.228.30:30015";      // Enter your external access server name
 $db_name 	 = "HDB";                     // This is the default name of your hana instance.
-$username	 = $_SYSTEM["HANA_USER"];        // This is the default username, do provide your username
-$password	 = $_SYSTEM["HANA_PWD"];         // This is the default password, do provide your own password.
+$username	 = $_SERVER["HANA_USER"];        // This is the default username, do provide your username
+$password	 = $_SERVER["HANA_PWD"];         // This is the default password, do provide your own password.
 
 $conn    	= odbc_connect("Driver=$driver;ServerNode=$servername;Database=$db_name;", $username, $password, SQL_CUR_USE_ODBC);
 
