@@ -1,0 +1,26 @@
+compversion-id: 01200615320200017866
+comptype: HDB_CLIENT
+keyname: HDB_CLIENT
+keycaption: SAP HANA CLIENT
+keyvendor: sap.com
+release: 1.00
+rev-number: 80
+rev-patchlevel: 00
+rev-changelist: 391861
+max_sps7_rev-number: 74
+max_sps7_patchlevel: 00
+sp-number: 80
+sp-patchlevel: 00
+makeid: 1558403
+date: 2014-05-23 12:45:10
+platform: linuxx86_64
+fullversion: 1.00.80.00 Build 0391861-1510
+auxversion: 0000.00.0
+changeinfo: P4 391861 (NewDB100_REL)
+compiletype: opt
+compilebranch: NewDB100_REL
+sapexe-version: 720
+sapexe-branch: 720_EXT_REL
+sapexe-changelist: 1330613
+compiler-version-full: gcc (SAP release 20130125, based on SUSE gcc43-4.3.4_20091019-0.22.17.5096.1.PTF.799300) 4.3.4 [gcc-4_3-branch revision 152973]
+compiler-version: GCC 4.3

@@ -1,7 +1,7 @@
 runs - homemade package
 -----------------------
 
-Import like this:
+Import like this (will also install in a local folder):
 
 ```
 if(require("runs", lib="./R-packages/")){

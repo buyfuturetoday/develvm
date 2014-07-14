@@ -1,0 +1,19 @@
+keyname: HDB_INSTALLER
+keycaption: SAP HANA DATABASE INSTALLER
+keyvendor: sap.com
+release: 1.00
+rev-number: 80
+rev-patchlevel: 00
+rev-changelist: 391861
+sp-number: 80
+sp-patchlevel: 00
+makeid: 1558403
+date: 2014-05-23 13:25:08
+platform: linuxx86_64
+fullversion: 1.00.80.00 Build 0391861-1510
+compilebranch: NewDB100_REL
+hdb_version: 0
+hdb_studio_version: 0
+hdb_client_version: 0
+hana_afl_version: 0
+lcapps_hdb_version: 0
