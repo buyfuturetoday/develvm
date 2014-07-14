@@ -2,6 +2,35 @@
 ## the RUnit test case execution system:
 ## ---------------------------------
 
+
+## Install RUnit
+if(require("RUnit", lib="./R-packages/")){
+    print(paste("RUnit is loaded correctly. Version:", toString(packageVersion("RUnit"))))
+} else {
+    print("trying to install RUnit")
+    dir.create(file.path(".", "R-packages"), showWarnings = FALSE)
+    install.packages("RUnit", lib="./R-packages/", repos='http://cran.us.r-project.org')
+    if(require("RUnit", lib="./R-packages/")){
+        print(paste("RUnit is loaded correctly. Version:", toString(packageVersion("RUnit"))))
+    } else {
+        stop("could not install RUnit")
+    }
+}
+
+# Install runs
+if(require("runs", lib="./R-packages/")){
+    print(paste("runs is loaded correctly. Version:", toString(packageVersion("runs"))))
+} else {
+    print("trying to install runs")
+    dir.create(file.path(".", "R-packages"), showWarnings = FALSE)
+    install.packages("../../runs", lib="./R-packages/", repos = NULL, type="source")
+    if(require("runs", lib="./R-packages/")){
+        print(paste("runs is loaded correctly. Version:", toString(packageVersion("runs"))))
+    } else {
+        stop("could not install runs")
+    }
+}
+
 ## functions to be tested (usually defined in a different
 ## file from where the test cases are located):
 
