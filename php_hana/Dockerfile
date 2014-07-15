@@ -5,6 +5,7 @@
 FROM     base
 MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
+RUN echo old-releases.ubuntu.com > /etc/apt/sources.list
 
 # Keep upstart from complaining
 RUN dpkg-divert --local --rename --add /sbin/initctl
@@ -70,7 +71,9 @@ RUN /src-mysql/mysql-setup.sh
 # THE HANA TEST
 #
 
-RUN apt-get install -y unixodbc
+RUN apt-get update
+
+RUN apt-get install -y unixodbc php5-odbc
 
 ADD ./sap_hana_linux64_client_rev80 /tmp
 RUN chmod +x /tmp/hdbinst; chmod +x /tmp/hdbsetup; chmod +x /tmp/hdbuninst; chmod +x /tmp/instruntime/sdbrun
