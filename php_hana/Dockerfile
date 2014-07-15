@@ -74,7 +74,7 @@ RUN a2enmod rewrite
 
 RUN apt-get update
 
-RUN apt-get install -y unixodbc php5-odbc
+RUN apt-get install -y unixodbc php5-odbc libaio1
 
 ADD ./sap_hana_linux64_client_rev80 /tmp
 RUN chmod +x /tmp/hdbinst; chmod +x /tmp/hdbsetup; chmod +x /tmp/hdbuninst; chmod +x /tmp/instruntime/sdbrun
