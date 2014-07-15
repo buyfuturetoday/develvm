@@ -5,7 +5,8 @@
 FROM     base
 MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
-RUN echo old-releases.ubuntu.com > /etc/apt/sources.list
+RUN echo "deb http://old-releases.ubuntu.com/ubuntu quantal main universe multiverse" > /etc/apt/sources.list
+
 
 # Keep upstart from complaining
 RUN dpkg-divert --local --rename --add /sbin/initctl
