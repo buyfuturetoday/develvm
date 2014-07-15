@@ -80,6 +80,7 @@ ADD ./sap_hana_linux64_client_rev80 /tmp
 RUN chmod +x /tmp/hdbinst; chmod +x /tmp/hdbsetup; chmod +x /tmp/hdbuninst; chmod +x /tmp/instruntime/sdbrun
 RUN sudo /tmp/hdbinst -b -a client
 
+ADD ./odbc.ini /etc/
 ADD ./test_conn.php /var/www/
 
 
