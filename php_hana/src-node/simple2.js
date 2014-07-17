@@ -3,8 +3,7 @@
  *
  * run like this: 
  *    >docker run -t -i <IMAGE ID> /bin/bash 
- *    >supervisord > /tmp/out.txt &
- *    >cd /src-node; node simple2.js
+ *    >cd /src-node; node simple2.js HANA_PASSWORD
  */
 
 var hdb    = require('hdb');
@@ -12,7 +11,7 @@ var client = hdb.createClient({
   host     : '54.75.228.30',
   port     : 30015,
   user     : 'SYSTEM',
-  password : 'Homeend02'
+  password : process.argv[1]
 });
 
 client.connect(function (err) {
