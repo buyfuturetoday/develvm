@@ -6,25 +6,50 @@
  *    >cd /src-node; node simple3.js
  */
 
+
+var util = require('util');
+
 /*
  * MySQL stuff
  */
 
 var mysql      = require('mysql');
+
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'myself',
   password : 'and I'
 });
+connection.connect();
 
 console.log('List of MySQL tables');
-
-connection.connect();
 connection.query('select * from information_schema.tables', function(err, rows, fields) {
   if (err) throw err;
 
   for(i=0; i<rows.length; i++) {
-    console.log('Table '+i+':'rows[i]);
+    console.log('Table '+i+':'+rows[i].TABLE_NAME);
+    //console.log(util.inspect(rows[i], {showHidden: false, depth: null}));
+  }
+
+});
+
+connection.end();
+
+
+connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'clab',
+  password : '48796e76'
+});
+connection.connect();
+
+console.log('List of MySQL tables');
+connection.query('select * from information_schema.tables', function(err, rows, fields) {
+  if (err) throw err;
+
+  for(i=0; i<rows.length; i++) {
+    console.log('Table '+i+':'+rows[i].TABLE_NAME);
+    //console.log(util.inspect(rows[i], {showHidden: false, depth: null}));
   }
 
 });
