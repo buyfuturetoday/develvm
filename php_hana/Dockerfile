@@ -32,13 +32,13 @@ RUN apt-get install -y apache2 php5 php5-curl php5-mysql php5-mcrypt
 RUN a2enmod rewrite
 
 # Bundle everything and install
-#ADD ./src-phpmyadmin /var/www
-#ADD ./conf/etc /etc
+ADD ./src-phpmyadmin /var/www
+ADD ./conf/etc /etc
 
-#RUN cd /var/www; tar -xzf phpMyAdmin-4.0.8-all-languages.tar.gz
-#RUN rm /var/www/index.html
+RUN cd /var/www; tar -xzf phpMyAdmin-4.0.8-all-languages.tar.gz
+RUN rm /var/www/index.html
 
-#ADD ./src-phpmyadmin/config.inc.php /var/www/phpMyAdmin-4.0.8-all-languages/config.inc.php
+ADD ./src-phpmyadmin/config.inc.php /var/www/phpMyAdmin-4.0.8-all-languages/config.inc.php
 
 
 #
@@ -53,26 +53,30 @@ RUN a2enmod rewrite
 #
 
 # Bundle everything
-#ADD ./src-mysql /src-mysql
+ADD ./src-mysql /src-mysql
 
-# Load wordpress SQL dump
+# Load SQL dumps
 #ADD ./sql-script/latest.sql /sql-script/latest.sql
+ADD ./sql-script/ /sql-script/
 
 # Install MySQL server
-#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Fix configuration
-#RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
 
 # Setup admin user
-#RUN /src-mysql/mysql-setup.sh
+RUN /src-mysql/mysql-setup.sh
+
+# Load data
+RUN /src-mysql/load-data.sh
 
 
 #
 # THE HANA TEST
 #
 
-RUN apt-get update
+#RUN apt-get update
 
 RUN apt-get install -y unixodbc php5-odbc libaio1
 
