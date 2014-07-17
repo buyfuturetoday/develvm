@@ -1,6 +1,27 @@
 #!/bin/sh
 
 #
+# MySQL needs to be started since docker runs each step isolated
+#
+
+/usr/sbin/mysqld &
+sleep 5
+
+#
+# create user
+#
+
+DBNAME="myself"
+DBUSER="myself"
+DBPASSWORD="and I"
+
+echo "create database $DBNAME; create user $DBUSER;" | mysql
+echo "grant usage on *.* to '$DBUSER'@'%' identified by '$DBPASSWORD'; FLUSH PRIVILEGES" | mysql
+echo "grant usage on *.* to '$DBUSER'@'localhost' identified by '$DBPASSWORD'; FLUSH PRIVILEGES" | mysql
+echo "grant all privileges on $DBNAME.* to '$DBUSER'@'%'; FLUSH PRIVILEGES" | mysql
+
+
+#
 # Load Wordpress database
 #
 

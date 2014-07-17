@@ -14,10 +14,11 @@ RUN ln -s /bin/true /sbin/initctl
 RUN echo "deb http://old-releases.ubuntu.com/ubuntu quantal main universe multiverse" > /etc/apt/sources.list
 RUN apt-get update
 
-RUN apt-get install -y wget nano
+RUN apt-get install -y wget nano curl git
+
 
 #
-# Install supervidord (used to handle processes)
+# Install supervisord (used to handle processes)
 #
 
 RUN apt-get install -y supervisor
@@ -73,11 +74,25 @@ RUN /src-mysql/load-data.sh
 
 
 #
-# THE HANA TEST
+# Install NodeJS
 #
 
-#RUN apt-get update
+# Download and install using npm
+# old RUN curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.11.1/install.sh | bash
+RUN echo "[ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh" > /.profile
+RUN /bin/bash -c "source /.profile && nvm install v0.11.2"
 
+# Install node for root user
+ADD ./src-node /src-node
+RUN /src-node/init-node.sh
+
+
+#
+# Install the SAP HANA driver
+#
+
+RUN apt-get update
 RUN apt-get install -y unixodbc php5-odbc libaio1
 
 ADD ./sap_hana_linux64_client_rev80 /tmp
@@ -85,8 +100,13 @@ RUN chmod +x /tmp/hdbinst; chmod +x /tmp/hdbsetup; chmod +x /tmp/hdbuninst; chmo
 RUN sudo /tmp/hdbinst -b -a client
 
 ADD ./odbc.ini /etc/
-ADD ./test_conn.php /var/www/
+#ADD ./test_conn.php /var/www/
+ADD ./src-php /var/www
 
+
+#
+# Start apache and mysql using supervisord
+#
 
 EXPOSE 3306 80 443
 CMD ["supervisord","-n"]
