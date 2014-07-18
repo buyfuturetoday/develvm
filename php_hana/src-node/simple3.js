@@ -1,83 +1,98 @@
+(function(exports) {
+
 /*
- * Trivial test that NodeJS and HANA package works
+ * 
  *
- * run like this: 
- *    >docker run -t -i <IMAGE ID> /bin/bash 
- *    >cd /src-node; node simple3.js
+ * use like this
+ * var s = require('./simple3.js').create().main();
  */
 
 
-var util = require('util');
+"use strict";
 
-/*
- * MySQL stuff
- */
+exports.create = function() {
 
-var mysql      = require('mysql');
+  return {
 
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'myself',
-  password : 'and I'
-});
-connection.connect();
+    _mysql_cred : {
+          host     : 'localhost',
+          user     : 'clab',
+          password : '48796e76'
+        },
+    _columns    : [],
+    _tables     : null,
 
-console.log('List of MySQL tables');
-connection.query('select * from information_schema.tables', function(err, rows, fields) {
-  if (err) throw err;
+    clone : function (a) {
+         return JSON.parse(JSON.stringify(a));
+    },
 
-  for(i=0; i<rows.length; i++) {
-    console.log('Table '+i+':'+rows[i].TABLE_NAME);
-    //console.log(util.inspect(rows[i], {showHidden: false, depth: null}));
-  }
+    getColumns : function(table_name, cb) {
+      var mysql      = require('mysql');
+      var connection = mysql.createConnection(this._mysql_cred);
 
-});
+      connection.query(
+        "select column_name, data_type from information_schema.columns where table_name = '"+table_name+"'", 
+        function(err, rows, fields) {
+          if (err) throw err;
 
-connection.end();
+          // save the columns
+          this._columns.push( { table_name : table_name, rows : this.clone(rows) });
 
+          connection.end();
 
-connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'clab',
-  password : '48796e76'
-});
-connection.connect();
-
-console.log('List of MySQL tables');
-connection.query('select * from information_schema.tables', function(err, rows, fields) {
-  if (err) throw err;
-
-  for(i=0; i<rows.length; i++) {
-    console.log('Table '+i+':'+rows[i].TABLE_NAME);
-    //console.log(util.inspect(rows[i], {showHidden: false, depth: null}));
-  }
-
-});
-
-connection.end();
+          cb(null, 'end of getColumns');
+        }.bind(this)
+      );
+    },
 
 
-/*
- * HANA Stuff
- */
+    getTables : function(cb) {
+      var mysql      = require('mysql');
+      var connection = mysql.createConnection(this._mysql_cred);
 
-var hdb    = require('hdb');
-var client = hdb.createClient({
-  host     : '54.75.228.30',
-  port     : 30015,
-  user     : 'SYSTEM',
-  password : 'Homeend02'
-});
+      connection.query(
+        'select table_name from information_schema.tables', 
+        function(err, rows, fields) {
+          if (err) throw err;
 
-client.connect(function (err) {
-  if (err) {
-    return console.error('Connect error', err);
-  } 
-  client.exec('select * from DUMMY', function (err, rows) {
-    client.end();
-    if (err) {
-      return console.error('Execute error:', err);
+          // save the array of tables
+          this._tables = this.clone(rows); 
+
+          connection.end();
+
+          cb(null, 'end of getTables');
+        }.bind(this)
+      );
+    },
+
+    main : function() {
+      var async = require('async');
+
+      async.series([
+        function(cb){
+          this.getTables(cb);
+        }.bind(this),
+
+        function(cb){
+          this.getColumns("vtiger_wsapp", cb);
+        }.bind(this),
+
+        function(cb){
+          console.log('List of MySQL tables');
+          console.log(JSON.stringify(this._tables));
+          console.log('Fetching columns for table tiger_wsapp');
+          console.log(JSON.stringify(this._columns));
+          cb(null, 'end')
+        }.bind(this)
+        ],
+        function(err, result){
+          console.log(JSON.stringify(result));
+        }
+
+      );
     }
-    console.log('Results:', rows);  
-  });
-});
+
+  };
+};
+
+}(typeof exports === 'undefined' ? this['simple']={} : exports));
