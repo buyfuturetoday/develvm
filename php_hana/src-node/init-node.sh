@@ -16,3 +16,4 @@ cd /src-node
 npm install mysql
 npm install hdb
 npm install async
+npm install underscore
