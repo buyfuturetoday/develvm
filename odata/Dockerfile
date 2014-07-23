@@ -8,6 +8,16 @@ FROM       ubuntu:latest
 # Format: MAINTAINER Name <email@addr.ess>
 MAINTAINER Jonas Colmsjö <jonas@gizur.com>
 
+RUN apt-get update
+RUN apt-get install -y curl
+
+#
+# Install supervidord (used to handle processes)
+#
+
+RUN apt-get install -y supervisor
+ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 
 #
 # Install MongoDB
@@ -51,10 +61,6 @@ RUN /init-node.sh
 # Start things up
 #
 
-# Expose port 27017 from the container to the host
-EXPOSE 27017
 
-# Set usr/bin/mongod as the dockerized entry-point application
-ENTRYPOINT usr/bin/mongod
-
-
+EXPOSE  27017 80 443
+CMD ["supervisord","-n"]
