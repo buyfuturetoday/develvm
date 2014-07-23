@@ -46,6 +46,10 @@ ADD ./etc-mongod.conf /etc/mongod.conf
 # Install NodeJS
 #
 
+ADD ./init-node.sh /
+ADD ./package.json /
+ADD ./server.js /
+
 # Download and install using npm
 # old RUN curl https://raw.github.com/creationix/nvm/master/install.sh | sh
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.11.1/install.sh | bash
@@ -53,9 +57,7 @@ RUN echo "[ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh" > /.profile
 RUN /bin/bash -c "source /.profile && nvm install v0.11.2"
 
 # Install node for root user
-ADD ./init-node.sh /
 RUN /init-node.sh
-
 
 #
 # Start things up
