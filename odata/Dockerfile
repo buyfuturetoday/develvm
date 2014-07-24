@@ -11,6 +11,8 @@ MAINTAINER Jonas Colmsjö <jonas@gizur.com>
 RUN apt-get update
 RUN apt-get install -y curl
 
+RUN echo "export HOME=/" > /.profile
+
 #
 # Install supervidord (used to handle processes)
 #
@@ -53,7 +55,7 @@ ADD ./server.js /src/
 # Download and install using npm
 # old RUN curl https://raw.github.com/creationix/nvm/master/install.sh | sh
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.11.1/install.sh | bash
-RUN echo "[ -s /.nvm/nvm.sh ] && . /.nvm/nvm.sh" > /.profile
+RUN echo "[ -s /.nvm/nvm.sh ] && . /.nvm/nvm.sh" >> /.profile
 RUN /bin/bash -c "source /.profile && nvm install v0.11.2"
 
 # Install node for root user together node jaydata etc.
