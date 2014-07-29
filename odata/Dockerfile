@@ -49,35 +49,24 @@ ADD ./etc-mongod.conf /etc/mongod.conf
 #
 
 ADD ./init-node.sh /src/
-ADD ./package.json /src/
-ADD ./server.js /src/
 
 # Download and install using npm
-# old RUN curl https://raw.github.com/creationix/nvm/master/install.sh | sh
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.11.1/install.sh | bash
 RUN echo "[ -s /.nvm/nvm.sh ] && . /.nvm/nvm.sh" >> /.profile
 RUN /bin/bash -c "source /.profile && nvm install v0.11.2"
 
 # Install node for root user together node jaydata etc.
-#RUN /src/init-node.sh
-
-# Install dependecies one by one (works better with docker)
-#RUN /bin/bash -c "source /.profile && nvm use v0.11.2 && npm install -g jaydata"
-#RUN /bin/bash -c "source /.profile && nvm use v0.11.2 && npm install -g mongodb"
-#RUN /bin/bash -c "source /.profile && nvm use v0.11.2 && npm install -g express"
-#RUN /bin/bash -c "source /.profile && nvm use v0.11.2 && npm install -g http"
-#RUN /bin/bash -c "source /.profile && nvm use v0.11.2 && npm install -g connect"
-#RUN /bin/bash -c "source /.profile && nvm use v0.11.2 && npm install -g q"
-#RUN /bin/bash -c "source /.profile && nvm use v0.11.2 && npm install -g bcrypt"
-#RUN /bin/bash -c "source /.profile && nvm use v0.11.2 && npm install -g xmldom"
-#RUN /bin/bash -c "source /.profile && nvm use v0.11.2 && npm install -g qs"
-#RUN /bin/bash -c "source /.profile && nvm use v0.11.2 && npm install -g node-uuid"
+RUN /src/init-node.sh
  
+# Fix a broken package.json (connect need to be exactly 2.0.0)
+ADD ./odata-server-package.json /.nvm/v0.11.2/lib/node_modules/odata-server/package.json
+RUN /bin/bash -c "source $HOME/.nvm/nvm.sh; nvm use v0.11.2; cd /.nvm/v0.11.2/lib/node_modules/odata-server; npm install ."
+
 
 #
 # Start things up
 #
 
 
-EXPOSE  27017 80 443 8080
+EXPOSE  27017 52999 80 443 8080
 CMD ["supervisord","-n"]
