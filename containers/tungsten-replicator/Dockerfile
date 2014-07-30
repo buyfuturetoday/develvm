@@ -103,10 +103,15 @@ RUN apt-get install -y rsync
 RUN  wget https://s3.amazonaws.com/files.continuent.com/builds/nightly/tungsten-2.0-snapshots/tungsten-replicator-2.1.0-346.tar.gz
 RUN tar -xzf tungsten-replicator-2.1.0-346.tar.gz
 
+
 #
 # Start things up
 # ---------------
 
 
-EXPOSE 80 443 8080 27017 3306 2112 10000 10001 
+# 2112, 10000 and 10001 are used by tungsten
+# 27017 is used by mongodb
+# 3306 is used by MySQL
+EXPOSE 80 443 8080 27017 3306 2112 10000 10001
+
 CMD ["supervisord","-n"]
