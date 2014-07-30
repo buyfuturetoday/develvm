@@ -69,12 +69,12 @@ RUN /bin/bash -c "source $HOME/.nvm/nvm.sh; nvm use v0.11.2; cd /.nvm/v0.11.2/li
 
 # Keep upstart from complaining
 RUN dpkg-divert --local --rename --add /sbin/initctl
-RUN ln -s /bin/true /sbin/initctl
+#RUN ln -s /bin/true /sbin/initctl
 
 RUN apt-get update
 
 # Bundle everything
-ADD ./mysql-setup.sh /src
+ADD ./mysql-setup.sh /src/
 
 # Install MySQL server
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -90,6 +90,8 @@ RUN /src/mysql-setup.sh
 # Tungsten replicator
 # --------------------
 
+RUN apt-get update
+
 # Install Java
 RUN apt-get install -y openjdk-7-jre
 
@@ -98,6 +100,12 @@ RUN apt-get install -y ruby1.9.1-full
 
 # Install rsync
 RUN apt-get install -y rsync
+
+# Install sshd
+RUN apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+RUN echo 'root:password' |chpasswd
+
 
 # Install tungsten
 RUN  wget https://s3.amazonaws.com/files.continuent.com/builds/nightly/tungsten-2.0-snapshots/tungsten-replicator-2.1.0-346.tar.gz
@@ -112,6 +120,7 @@ RUN tar -xzf tungsten-replicator-2.1.0-346.tar.gz
 # 2112, 10000 and 10001 are used by tungsten
 # 27017 is used by mongodb
 # 3306 is used by MySQL
-EXPOSE 80 443 8080 27017 3306 2112 10000 10001
+# 9001 is used by supervisord
+EXPOSE 22 80 443 8080 27017 3306 2112 10000 10001 9001
 
 CMD ["supervisord","-n"]
