@@ -11,7 +11,7 @@ MAINTAINER Jonas Colmsjö <jonas@gizur.com>
 RUN apt-get update
 RUN apt-get install -y curl wget nano
 
-RUN echo "export HOME=/" > /.profile
+RUN echo "export HOME=/root" > /.profile
 
 #
 # Install supervisord (used to handle processes)
@@ -104,8 +104,16 @@ RUN apt-get install -y rsync
 # Install sshd
 RUN apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
-RUN echo 'root:password' |chpasswd
+#RUN echo 'root:password' |chpasswd
 
+#
+# NOTE: Insecure, should not be used in production!!
+#
+ADD ./root-ssh-authorized_keys /root/.ssh/authorized_keys
+ADD ./root-ssh-id_rsa /root/.ssh/id_rsa
+ADD ./root-ssh-id_rsa.pub /root/.ssh/id_rsa.pub
+ADD ./etc-ssh-sshd_config /etc/ssh/sshd_config
+RUN chmod 700 /root/.ssh; chmod 600 /root/.ssh/**
 
 # Install tungsten
 RUN  wget https://s3.amazonaws.com/files.continuent.com/builds/nightly/tungsten-2.0-snapshots/tungsten-replicator-2.1.0-346.tar.gz
