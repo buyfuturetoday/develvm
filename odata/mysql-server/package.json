@@ -22,7 +22,6 @@
   "main": "main.js",
   "dependencies": {
     "xmldom": "*",
-    "jsdom": "*",
     "xmlhttprequest": "*"
   },
   "devDependencies" : {
