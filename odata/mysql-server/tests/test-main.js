@@ -1,29 +1,4 @@
-(function (window, undefined) {
-
-	var _initODataTests = function() {
-
-		var fs             = require('fs');
-	    var DOMParser      = require('xmldom').DOMParser;
-	    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-
-	    var scope = {
-	        XMLHttpRequest : XMLHttpRequest,
-	        DOMParser      : DOMParser,
-
-	        module         : function(dummy) {
-	        	return null;
-	        },
-
-	        execute : function(fileName) {
-	        	module.exports.module = module;
-	            var filedata = fs.readFileSync(fileName,'utf8');
-	            eval(filedata);
-	        }
-	    };
-
-	    scope.execute(__dirname+'/odata-atom-tests.js');
-
-	};
+(function (self, undefined) {
 
 	var main = function() {
 		console.log("Starting tests...");
@@ -35,8 +10,8 @@
 
 
 		console.log("Running tests...")
-		_initODataTests();
 
+		console.log("End of tests...")
 	};
 
 	// Exports

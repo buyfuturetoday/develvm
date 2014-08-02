@@ -1,4 +1,11 @@
-﻿// Copyright (c) Microsoft Open Technologies, Inc.  All rights reserved.
+﻿//
+// Jonas Colmsjö, 2014-08-02
+//
+// NOTE:
+// Change window into this at the end
+//
+
+// Copyright (c) Microsoft Open Technologies, Inc.  All rights reserved.
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
 // files (the "Software"), to deal  in the Software without restriction, including without limitation the rights  to use, copy,
 // modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the 
@@ -382,7 +389,7 @@
 
     // Disable caching to ensure that every test-related AJAX request is actually being sent,
     // and set up a default error handler
-    $.ajaxSetup({
+/*    $.ajaxSetup({
         cache: false,
         error: function (jqXHR, textStatus, errorThrown) {
             // Work around bug in IE-Mobile on Windows Phone 7
@@ -396,5 +403,5 @@
             }
             djstest.done();
         }
-    });
-})(window);
+    });*/
+})(this);
