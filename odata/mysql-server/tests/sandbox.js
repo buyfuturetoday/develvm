@@ -262,7 +262,7 @@ QUnit.module("Module B");
 QUnit.test( "hello test",  function(assert) {
         console.log("Starting tests...");
 
-        var t = require('../main2.js');
+        var t = require('../main.js');
         t.init();
         mysqlodata = t.mysqlodata;
         OData      = t.OData;

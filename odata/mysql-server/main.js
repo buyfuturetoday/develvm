@@ -1,6 +1,4 @@
-(function(exports) {
-
-// main.js
+// main2.js
 //------------------------------
 //
 // 2014-08-01, Jonas Colmsjö
@@ -41,81 +39,90 @@
 //------------------------------
 
 
-"use strict";
+(function (self, undefined) {
 
-exports.create = function() {
-
-  return {
-
-  	// Class Properties
-  	// ================
-
-  	// Mapping from MySQL primitive types to odata primitive types. Initilized in init()
-    _types            : [],
-    _datajs_scope     : {},
+  var mos    = self.mysqlodata || {};
+  var odata  = self.OData      || {};
+  var datajs = self.datajs     || {};
 
 
-  	// Helpers
-  	// ================
+  // Class Properties
+  // ================
 
-	// Import the datajs module. datajs is built for browsers so we need to fix DOMParser and XMLHttpRequest
-	// Using this approach: http://gokcergokdal.blogspot.se/2014/04/consuming-odata-services-from-node.html
-  	_initDatajs : function() {
-
-		var fs             = require('fs');
-	    var DOMParser      = require('xmldom').DOMParser;
-	    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-
-	    var scope = {
-	        XMLHttpRequest : XMLHttpRequest,
-	        DOMParser      : DOMParser,
-
-	        execute : function(fileName) {
-	            var filedata = fs.readFileSync(fileName,'utf8');
-	            eval(filedata);
-	        }
-	    };
-
-	    scope.execute(__dirname+'/datajs-1.1.2.min.js');
-
-	    // access to generated services from our custom scope
-	    module.exports.OData = scope.OData;
-	    module.exports.datajs = scope.datajs;
-
-	    this._datajs_scope = scope;
-
-	},
+  // Mapping from MySQL primitive types to odata primitive types. Initilized in init()
+  mos._types            = [];
 
 
-    // Class methods
-    // =============
+  // Helpers
+  // ================
+
+  // Import the datajs module. datajs is built for browsers so we need to fix DOMParser and XMLHttpRequest
+  // Using this approach: http://gokcergokdal.blogspot.se/2014/04/consuming-odata-services-from-node.html
+  var	_initDatajs = function() {
+
+    var fs             = require('fs');
+    var DOMParser      = require('xmldom').DOMParser;
+    var XMLSerializer  = require('xmldom').XMLSerializer;
+    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    var doc            = new DOMParser().parseFromString("<html><body></body></html>","text/html");
+
+    var scope = {
+        XMLHttpRequest : XMLHttpRequest,
+        DOMParser      : DOMParser,
+        document       : doc,
+        XMLSerializer  : XMLSerializer,
+
+        execute : function(fileName) {
+            var filedata = fs.readFileSync(fileName,'utf8');
+            eval(filedata);
+        }
+    };
+
+//    scope.execute(__dirname+'/datajs-1.1.2.min.js');
+    scope.execute(__dirname+'/datajs-1.1.2.js');
+
+    // access to generated services from our custom scope
+    odata  = scope.OData;
+    datajs = scope.datajs;
+	};
 
 
-    // Initialize object
-    // -----------------
+  // Class methods
+  // =============
 
-    init : function() {
+
+  // Initialize object
+  // -----------------
+
+  var init = function() {
 
     	// Setup mapping between MySQL and odata primitive types
-    	this._types["TINYINT"]   = "Int16";
-    	this._types["SMALLINT"]  = "Int16";
-    	this._types["MEDIUMINT"] = "Int16";
-    	this._types["INT"]       = "Int16";
-    	this._types["DECIMAL"]   = "Decimal";
-    	this._types["FLOAT"]     = "Single";
-    	this._types["DOUBLE"]    = "Double";
-    	this._types["DATETIME"]  = "DateTime";
-    	this._types["DATET"]     = "DateTime";
-    	this._types["YEAR"]      = "DateTime";
-    	this._types["TIME"]      = "Time";
-    	this._types["CHAR"]      = "String";
-    	this._types["VARCHAR"]   = "String";
+    	mos._types["TINYINT"]   = "Int16";
+    	mos._types["SMALLINT"]  = "Int16";
+    	mos._types["MEDIUMINT"] = "Int16";
+    	mos._types["INT"]       = "Int16";
+    	mos._types["DECIMAL"]   = "Decimal";
+    	mos._types["FLOAT"]     = "Single";
+    	mos._types["DOUBLE"]    = "Double";
+    	mos._types["DATETIME"]  = "DateTime";
+    	mos._types["DATET"]     = "DateTime";
+    	mos._types["YEAR"]      = "DateTime";
+    	mos._types["TIME"]      = "Time";
+    	mos._types["CHAR"]      = "String";
+    	mos._types["VARCHAR"]   = "String";
 
-    	this._initDatajs();
+    	_initDatajs();
 
-    }
 
+      module.exports.OData      = odata;
+      module.exports.datajs     = datajs;
   };
-};
 
-}(typeof exports === 'undefined' ? this['mysql_odata_server']={} : exports));
+
+  // Exports
+  // =======
+
+  module.exports.mysqlodata = mos;
+  module.exports.init       = init;
+
+})(this);
