@@ -97,19 +97,19 @@ exports.create = function() {
     init : function() {
 
     	// Setup mapping between MySQL and odata primitive types
-    	this._types["TINYINT"]   = "int16";
-    	this._types["SMALLINT"]  = "int16";
-    	this._types["MEDIUMINT"] = "int16";
-    	this._types["INT"]       = "int16";
-    	this._types["DECIMAL"]   = "decimal";
-    	this._types["FLOAT"]     = "single";
-    	this._types["DOUBLE"]    = "double";
+    	this._types["TINYINT"]   = "Int16";
+    	this._types["SMALLINT"]  = "Int16";
+    	this._types["MEDIUMINT"] = "Int16";
+    	this._types["INT"]       = "Int16";
+    	this._types["DECIMAL"]   = "Decimal";
+    	this._types["FLOAT"]     = "Single";
+    	this._types["DOUBLE"]    = "Double";
     	this._types["DATETIME"]  = "DateTime";
     	this._types["DATET"]     = "DateTime";
     	this._types["YEAR"]      = "DateTime";
-    	this._types["TIME"]      = "time";
-    	this._types["CHAR"]      = "string";
-    	this._types["VARCHAR"]   = "string";
+    	this._types["TIME"]      = "Time";
+    	this._types["CHAR"]      = "String";
+    	this._types["VARCHAR"]   = "String";
 
     	this._initDatajs();
 
@@ -118,4 +118,4 @@ exports.create = function() {
   };
 };
 
-}(typeof exports === 'undefined' ? this['odata-server-types']={} : exports));
+}(typeof exports === 'undefined' ? this['mysql_odata_server']={} : exports));
