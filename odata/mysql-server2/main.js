@@ -277,7 +277,7 @@
                     connection.query(sql, function(err, rows, fields) {
                         if (err) throw err;
 
-                        odataResult = rows[0].solution);
+                        odataResult = rows[0].solution;
                         connection.end();
 
                         console.log(odataResult);
