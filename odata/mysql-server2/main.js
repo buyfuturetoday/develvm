@@ -271,23 +271,23 @@
 
                     connection.connect();
 
-                    connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-                      if (err) throw err;
+                    var sql = mos.parseQuery(request.url),
+                        odataResult;
 
-                      console.log('The solution is: ', rows[0].solution);
+                    connection.query(sql, function(err, rows, fields) {
+                        if (err) throw err;
+
+                        odataResult = rows[0].solution);
+                        connection.end();
+
+                        console.log(odataResult);
+
+                        response.writeHead(200, {"Content-Type": "application/json"});
+                        response.write(JSON.stringify(odataResult));
+                        response.end();
+
                     });
 
-                    connection.end();
-
-
-                    
-                    var sql = mos.parseQuery(request.url);
-
-                    console.log(sql);
-
-                    response.writeHead(200, {"Content-Type": "application/json"});
-                    response.write('res: '+JSON.stringify(sql));
-                    response.end();
                 } catch(e) {
 
                     // Should return 406 when failing
