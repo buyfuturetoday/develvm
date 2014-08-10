@@ -22,7 +22,7 @@
   "main": "main.js",
   "dependencies": {
     "underscore": "*",
-    "express": "3.x"
+    "mysql":"*"
   },
   "devDependencies" : {
     "doccoh":"*",

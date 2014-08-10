@@ -7,6 +7,12 @@
 //
 // Simple OData server on top of MySQL.
 //
+// use like this:
+//
+//  >npm install
+//  >node
+//  >var s = require('./main.js');
+//  >s.start();
 //
 // Using Google JavaScript Style Guide - http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
 //
@@ -21,7 +27,7 @@
 
     // Default no of rows to return
     var defaultRowCount = 100;
-
+    var defaultPort     = 8081;
 
     //
     // Translate OData filter to SQL where expression
@@ -250,41 +256,57 @@
 
     }
 
+    mos.start = function () {
+        var http = require("http");
+
+        var server = http.createServer(function(request, response) {
+
+                try {
+                    var mysql      = require('mysql');
+                    var connection = mysql.createConnection({
+                      host     : 'localhost',
+                      user     : 'me',
+                      password : 'secret'
+                    });
+
+                    connection.connect();
+
+                    connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
+                      if (err) throw err;
+
+                      console.log('The solution is: ', rows[0].solution);
+                    });
+
+                    connection.end();
+
+
+                    
+                    var sql = mos.parseQuery(request.url);
+
+                    console.log(sql);
+
+                    response.writeHead(200, {"Content-Type": "application/json"});
+                    response.write('res: '+JSON.stringify(sql));
+                    response.end();
+                } catch(e) {
+
+                    // Should return 406 when failing
+                    // http://www.odata.org/documentation/odata-version-2-0/operations/
+                    response.writeHead(406, {"Content-Type": "application/json"});
+                    response.write(e.toString());
+                    response.end();
+                }
+            });
+
+            server.listen(defaultPort);
+            console.log("Server is listening");
+
+    }
+
 
     // Exports
     // =======
 
-    module.exports.mysqlodata = mos;
+    module.exports = mos;
 
 })(this);
-
-
-// Trivial way of testing, will be changed soon
-// --------------------------------------------
-
-// Incorrect URLs
-var ic = [];
-ic.push('http://localhost/xyz/schema/table?$select=col1,col2&$filter=co1 eq "help"&$orderby=col2');
-ic.push('http://localhost/schema/table(2)');
-
-// Correct URLs
-var c = [];
-c.push('http://localhost/schema/table?$select=col1,col2&$filter=co1 eq "help"&$orderby=col2&$skip=10');
-c.push('http://localhost/schema/table');
-c.push('http://localhost/schema/table?$select=col1,col2&$filter=Price add 5 gt 10&$orderby=col2');
-
-for (var i=0; i<c.length; i++ ) {
-    console.log("url: "+c[i]);
-    var o = this.mysqlodata.parseQuery(c[i]);
-    console.log("Parsed URL: "+JSON.stringify(o,0,4));
-}
-
-for (var i=0; i<ic.length; i++ ) {
-    console.log("url: "+ic[i]);
-    try {
-        var o = this.mysqlodata.parseQuery(ic[i]);
-        console.log("Parsed URL: "+JSON.stringify(o,0,4));
-    } catch(e) {
-        console.log(e);
-    }
-}

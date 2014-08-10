@@ -44,6 +44,40 @@ exports['test_odatamysql'] = {
 
 	'testing odatamysql': function(test) {
 
+		var mysqlodata = require('../main.js')
+
+		// Incorrect URLs
+		var ic = [];
+		ic.push('http://localhost/xyz/schema/table?$select=col1,col2&$filter=co1 eq "help"&$orderby=col2');
+		ic.push('http://localhost/schema/table(2)');
+
+		// Correct URLs
+		var c = [];
+		c.push('http://localhost/schema/table?$select=col1,col2&$filter=co1 eq "help"&$orderby=col2&$skip=10');
+		c.push('http://localhost/schema/table');
+		c.push('http://localhost/schema/table?$select=col1,col2&$filter=Price add 5 gt 10&$orderby=col2');
+
+		for (var i=0; i<c.length; i++ ) {
+		    console.log("url: "+c[i]);
+		    var o = mysqlodata.parseQuery(c[i]);
+		    console.log("Parsed URL: "+JSON.stringify(o,0,4));
+		}
+
+		for (var i=0; i<ic.length; i++ ) {
+		    console.log("url: "+ic[i]);
+		    try {
+		        var o = mysqlodata.parseQuery(ic[i]);
+		        console.log("Parsed URL: "+JSON.stringify(o,0,4));
+		    } catch(e) {
+		        console.log(e);
+		    }
+		}
+
+		test.done();
+
+/*		
+		EXMAPLE OF ASYNC TESTS
+
 		var redis        = require("redis"),
 			redis_client = redis.createClient(),
 			dns          = require('dns'),
@@ -81,7 +115,7 @@ exports['test_odatamysql'] = {
 		redis_client.on("error", function (err) {
 			console.log("Redis error: " + err);
 		});
-		
+*/		
 	}
 
 };
