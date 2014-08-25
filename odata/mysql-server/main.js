@@ -29,10 +29,13 @@
 //
 // use like this:
 //
-//	>npm install
-//	>node
-//	>var s = require('./main.js').create();
-//	>s.init();
+//         var t = require('../main.js');
+//        t.init();
+//
+//        // exports for easy access
+//        mysqlodata = t.mysqlodata;
+//        OData      = t.OData;
+//        datajs     = t.datajs;
 //
 // Using Google JavaScript Style Guide - http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
 //

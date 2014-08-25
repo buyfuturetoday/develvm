@@ -14,6 +14,15 @@
 //------------------------------
 
 
+// Helpers
+// =================
+
+
+var pd = require('pretty-data').pd;
+var logJSON = function(h, s) { console.log(h+":\n"+JSON.stringify(s,0,2)); };
+var logXML = function(h, x) { console.log(h+":\n"+pd.xml(x)); };
+
+
 // From datajs/tests
 // =================
 
@@ -258,30 +267,45 @@ QUnit.test( "hello test", function( assert ) {
 });
 
 // Some tests
-QUnit.module("Module B");
-QUnit.test( "hello test",  function(assert) {
-        console.log("Starting tests...");
+QUnit.module("Module B", {
+    setup: function () {
+        // do some initial stuff before every test for this module
+        console.log("Setup...");
 
         var t = require('../main.js');
         t.init();
+
+        // exports for easy access
         mysqlodata = t.mysqlodata;
         OData      = t.OData;
         datajs     = t.datajs;
 
-        console.log("datajs initilized: "+JSON.stringify(mysqlodata) );
+        console.log("datajs initilized");
 
-        console.log("Running tests...")
+    },
+    teardown: function () {
+        // do some stuff after every test for this module
+    }
+});
+
+QUnit.test( "OData.atomHandler.write on customerSampleMetadataText",  function(assert) {
+
+        console.log("Running OData.atomHandler.write on customerSampleMetadataText...")
 
         var metadata = parseMetadataHelper(customerSampleMetadataText);
         var data = { __metadata: { type: "Ns.Customer" }, Name: "Name", LastName: "Last Name", Address: { Street: "Street Value", City: "City Value" }, FavoriteNumber: 123 };
         var request = { data: data, headers: { "Content-Type": "application/atom+xml"} };
+
+        logJSON("metadata",metadata);
+        logJSON("request",request);
         OData.atomHandler.write(request, { metadata: metadata });
+        logXML("request.body after write",request.body);
 
         assert.ok(request.body !== null, "request.body !== null");
         assert.ok(request.body.indexOf("<a:summary type=\"xhtml\">Name</a:summary>") !== -1, 'request.body.indexOf("<a:summary>Name</a:summary>") !== -1');
         assert.ok(request.body.indexOf('baz="Last Name"') !== -1, 'request.body.indexOf(baz="Last Name") !== -1');
         assert.ok(request.body.indexOf('city="City Value"') !== -1, 'request.body.indexOf(city="City Value") !== -1');
-  //      assert.ok(request.body.indexOf('<prefix:foo ') !== -1, "request.body.indexOf('<prefix:foo ') !== -1");
+//        assert.ok(request.body.indexOf('<prefix:foo ') !== -1, "request.body.indexOf('<prefix:foo ') !== -1");
         assert.ok(request.body.indexOf('term="Ns.Customer"') !== -1, "request.body.indexOf(term='Ns.Customer') !== -1");
         assert.ok(request.body.indexOf('>123</') !== -1, "request.body.indexOf(>123</) !== -1");
 
@@ -302,11 +326,11 @@ QUnit.test( "hello test",  function(assert) {
         request.data.FavoriteNumber = 123;
         request.data.Address = null;
         request.body = null;
-        OData.atomHandler.write(request, { metadata: metadata });
+/*        OData.atomHandler.write(request, { metadata: metadata });
         assert.ok(request.body.indexOf('Street') === -1, "request.body.indexOf(Street) === -1");
         assert.ok(request.body.indexOf('m:null="true"') !== -1, "request.body.indexOf(m:null=true) !== -1");
-
-        console.log("End of tests...")
+*/
+        console.log("End of OData.atomHandler.write on customerSampleMetadataText ...")
 });
 
 
