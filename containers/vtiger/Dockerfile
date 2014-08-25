@@ -33,15 +33,15 @@ RUN apt-get install -y apache2 php5 php5-curl php5-mysql php5-mcrypt
 RUN a2enmod rewrite
 
 # Bundle everything and install
-ADD ./src-phpmyadmin /var/www/html
+ADD ./src-phpmyadmin/phpMyAdmin-4.0.8-all-languages.tar.gz /var/www/html/
 ADD ./conf/etc /etc
 
 #RUN cd /var/www/html; tar -xzf phpMyAdmin-4.0.8-all-languages.tar.gz
 RUN rm /var/www/html/index.html
 
-ADD ./src-phpmyadmin/config.inc.php /var/www/html/phpMyAdmin-4.0.8-all-languages/config.inc.php
+#ADD ./src-phpmyadmin/config.inc.php /var/www/html/phpMyAdmin-4.0.8-all-languages/config.inc.php
 
-ADD ./vtigercrm-5.4.0.tar.gz /var/www/html
+ADD ./vtigercrm-5.4.0.tar.gz /var/www/html/
 #RUN cd /var/www/html; tar -xzf vtigercrm-5.4.0.tar.gz
 
 
