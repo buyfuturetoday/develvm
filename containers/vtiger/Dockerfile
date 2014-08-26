@@ -29,7 +29,6 @@ RUN php5enmod imap
 ADD ./etc-apache2-mods-available-status.conf /etc/apache2/mods-available/status.conf
 ADD ./etc-php5-apache2-php.ini /etc/php5/apache2/php.ini
 RUN rm /var/www/html/index.html
-RUN chown -R www-data:www-data /var/www/html
 RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
 
 # Install phpMyAdmin
@@ -38,6 +37,18 @@ ADD ./src-phpmyadmin/config.inc.php /var/www/html/phpMyAdmin-4.0.8-all-languages
 
 # Install vTiger
 ADD ./vtigercrm-5.4.0.tar.gz /var/www/html/
+
+
+#
+# Change PHP version
+#
+
+RUN curl -L -O https://github.com/phpbrew/phpbrew/raw/master/phpbrew
+RUN chmod +x phpbrew
+RUN mv phpbrew /usr/bin/phpbrew
+RUN sudo apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev pear
+RUN phpbrew install 5.3.28 +default+openssl
+RUN phpbrew use php-5.3.28
 
 
 #
@@ -56,10 +67,13 @@ RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysq
 # Setup admin user and load data
 RUN /src-mysql/mysql-setup.sh
 
-
 #
 # Start apache and mysql using supervisord
 #
+
+# Fix permissions
+RUN chown -R www-data:www-data /var/www/html
+
 
 ADD ./start.sh /
 
