@@ -5,6 +5,7 @@
 FROM     ubuntu:latest
 MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
+RUN echo "export HOME=/root" >> /root/.profile
 
 RUN apt-get update
 RUN apt-get install -y wget nano curl git
@@ -16,6 +17,21 @@ RUN apt-get install -y wget nano curl git
 
 RUN apt-get install -y supervisor
 ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+#
+# Change PHP version
+#
+
+RUN apt-get update
+RUN curl -L -O https://github.com/phpbrew/phpbrew/raw/master/phpbrew
+RUN chmod +x phpbrew
+RUN mv phpbrew /usr/bin/phpbrew
+RUN sudo apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev php-pear libssl-dev libsslcommon2-dev libreadline-dev make
+RUN phpbrew install 5.3.28 +default+openssl
+RUN phpbrew init
+#RUN echo "source ~/.phpbrew/bashrc" >> ~/.bashrc
+#RUN phpbrew use php-5.3.28
+
 
 
 #
@@ -37,18 +53,6 @@ ADD ./src-phpmyadmin/config.inc.php /var/www/html/phpMyAdmin-4.0.8-all-languages
 
 # Install vTiger
 ADD ./vtigercrm-5.4.0.tar.gz /var/www/html/
-
-
-#
-# Change PHP version
-#
-
-RUN curl -L -O https://github.com/phpbrew/phpbrew/raw/master/phpbrew
-RUN chmod +x phpbrew
-RUN mv phpbrew /usr/bin/phpbrew
-RUN sudo apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev pear
-RUN phpbrew install 5.3.28 +default+openssl
-RUN phpbrew use php-5.3.28
 
 
 #

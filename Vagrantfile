@@ -250,4 +250,11 @@ end
 # Jonas C. Forward port 8080 to port 80 (used by hipache in jacc)
 Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, guest: 80, host: 8080, auto_correct: true
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1024
+    v.cpus = 2
+  end
+
 end
+
