@@ -46,21 +46,14 @@ ADD ./vtigercrm-5.4.0.tar.gz /var/www/html/
 # Bundle everything
 ADD ./src-mysql /src-mysql
 
-# Load SQL dumps
-#ADD ./sql-script/latest.sql /sql-script/latest.sql
-ADD ./sql-script/ /sql-script/
-
 # Install MySQL server
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Fix configuration
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
 
-# Setup admin user
+# Setup admin user and load data
 RUN /src-mysql/mysql-setup.sh
-
-# Load data
-RUN /src-mysql/load-data.sh
 
 
 #
