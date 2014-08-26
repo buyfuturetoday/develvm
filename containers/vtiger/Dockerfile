@@ -29,6 +29,7 @@ RUN php5enmod imap
 ADD ./etc-apache2-mods-available-status.conf /etc/apache2/mods-available/status.conf
 ADD ./etc-php5-apache2-php.ini /etc/php5/apache2/php.ini
 RUN rm /var/www/html/index.html
+RUN chown -R www-data:www-data /var/www/html
 RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
 
 # Install phpMyAdmin

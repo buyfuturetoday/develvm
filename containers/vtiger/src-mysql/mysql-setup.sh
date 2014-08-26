@@ -35,4 +35,4 @@ echo "create database $DBNAME; create user $DBUSER;" | mysql
 echo "grant usage on *.* to '$DBUSER'@'%' identified by '$DBPASSWORD'; FLUSH PRIVILEGES" | mysql
 echo "grant usage on *.* to '$DBUSER'@'localhost' identified by '$DBPASSWORD'; FLUSH PRIVILEGES" | mysql
 echo "grant all privileges on $DBNAME.* to '$DBUSER'@'%'; FLUSH PRIVILEGES" | mysql
-mysql -u$DBUSER -p$DBPASSWORD $DBNAME < /sql-script/$SQLFILE
+mysql -u$DBUSER -p$DBPASSWORD $DBNAME < /src-mysql/$SQLFILE
