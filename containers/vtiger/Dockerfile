@@ -22,10 +22,10 @@ ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Install Apache and PHP
 #
 
-RUN apt-get install -y apache2 php5 php5-curl php5-mysql php5-mcrypt
+RUN apt-get install -y apache2 php5 php5-curl php5-mysql php5-mcrypt php5-gd php5-imap
 RUN a2enmod rewrite
 RUN a2enmod status
-#ADD ./conf/etc /etc
+RUN php5enmod imap
 ADD ./etc-apache2-mods-available-status.conf /etc/apache2/mods-available/status.conf
 RUN rm /var/www/html/index.html
 RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
