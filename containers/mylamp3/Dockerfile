@@ -55,6 +55,7 @@ RUN apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev libssl-
 # Add one script per PHP version and update 
 
 RUN cd /opt; git clone git://git.code.sf.net/p/phpfarm/code phpfarm
+ADD ./options.sh /opt/phpfarm/src/
 RUN cd /opt/phpfarm/src; ./compile.sh 5.3.27
 ADD ./var-www-html-cgibin-phpcgi-5.3.27 /var/www/html/cgibin/phpcgi-5.3.27
 #ADD ./etc-php5-cgi-php.ini /etc/php5/cgi/php.ini 
