@@ -82,6 +82,7 @@ configoptions="\
 --with-xsl=/usr \
 --with-zip \
 --enable-zip \
+--with-xpm-dir=/usr \
 $gcov"
 
 echo $version $vmajor $vminor $vpatch
