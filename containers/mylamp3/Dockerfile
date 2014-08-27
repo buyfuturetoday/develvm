@@ -46,8 +46,7 @@ RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
 #
 
 RUN apt-get update
-RUN apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev libssl-dev libsslcommon2-dev libapr1-dev libaprutil1-dev libreadline-dev make libcurl4-openssl-dev
-RUN apt-get install -y libjpeg-dev libpng12-dev libfreetype6-dev libxpm-dev libgd-dev libxpm4 t1lib-bin libtidy-dev
+RUN apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev libssl-dev libsslcommon2-dev libapr1-dev libaprutil1-dev libreadline-dev make libcurl4-openssl-dev libjpeg-dev libpng12-dev libfreetype6-dev libxpm-dev libgd-dev libxpm4 t1lib-bin libtidy-dev
 
 #
 # Use phpfarm to manage PHP versions
@@ -55,10 +54,11 @@ RUN apt-get install -y libjpeg-dev libpng12-dev libfreetype6-dev libxpm-dev libg
 # Add one script per PHP version and update 
 
 RUN cd /opt; git clone git://git.code.sf.net/p/phpfarm/code phpfarm
-ADD ./options.sh /opt/phpfarm/src/options.sh.new
+ADD ./options.sh /opt/phpfarm/src/options.sh
 RUN cd /opt/phpfarm/src; ./compile.sh 5.3.27
 ADD ./var-www-html-cgibin-phpcgi-5.3.27 /var/www/html/cgibin/phpcgi-5.3.27
 #ADD ./etc-php5-cgi-php.ini /etc/php5/cgi/php.ini 
+ADD ./opt-phpfarm-inst-php-5.3.27-lib-php.ini /opt/phpfarm/inst/php-5.3.27/lib/php.ini 
 
 # RUN sed -i -e"s/^error_reporting\s*=\s*/error_reporting=E_ALL & ~E_NOTICE & ~E_DEPRECATED/" /opt/phpfarm/inst/php-5.3.27/lib/php.ini
 
