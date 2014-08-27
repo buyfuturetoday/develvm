@@ -25,7 +25,21 @@ RUN apt-get install -y supervisor
 ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 
--------------
+#
+# Install Apache
+#
+# RUN apt-get install -y apache2 php5 php5-curl php5-mysql php5-mcrypt php5-gd php5-imap
+
+RUN apt-get install -y apache2
+RUN a2enmod rewrite status
+ADD ./etc-apache2-mods-available-status.conf /etc/apache2/mods-available/status.conf
+
+#RUN php5enmod imap
+#ADD ./etc-php5-apache2-php.ini /etc/php5/apache2/php.ini
+
+RUN rm /var/www/html/index.html
+RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
+
 
 #
 # Preparations
@@ -38,63 +52,23 @@ RUN apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev libssl-
 #
 # Use phpfarm to manage PHP versions
 #
+# Add one script per PHP version and update 
 
 RUN cd /opt; git clone git://git.code.sf.net/p/phpfarm/code phpfarm
-RUN cd /opt/phpfarm/src; ./compile.sh 5.3.2
+RUN cd /opt/phpfarm/src; ./compile.sh 5.3.27
+ADD ./var-www-html-cgibin-phpcgi-5.3.27 /var/www/html/cgibin/phpcgi-5.3.27
+#ADD ./etc-php5-cgi-php.ini /etc/php5/cgi/php.ini 
+
+# RUN sed -i -e"s/^error_reporting\s*=\s*/error_reporting=E_ALL & ~E_NOTICE & ~E_DEPRECATED/" /opt/phpfarm/inst/php-5.3.27/lib/php.ini
 
 
-#
-# Manage PHP versions in Apache using FastCGI
-#
-
-RUN apt-get install -y libapache2-mod-fastcgi apache2-mpm-worker apache2-suexec
-RUN a2enmod actions fastcgi suexec
 
 
--------------
-
-#
-# Preparations
-#
-
-RUN apt-get update
-RUN apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev libssl-dev libsslcommon2-dev libapr1-dev libaprutil1-dev libreadline-dev make
-
-
-#
-# Compile Apache2
-#
-
-RUN wget http://apache.mirrors.spacedump.net//httpd/httpd-2.4.10.tar.gz
-RUn wget http://apache.mirrors.spacedump.net//httpd/httpd-2.2.27.tar.gz
-RUN tar -xzf httpd-2.2.27.tar.gz
-RUN cd httpd-2.2.27; ./configure --enable-so; make; make install; 
-
-
-#
-# Compile PHP
-#
-
-
-RUN wget -O php-5.3.28.tar.gz http://se1.php.net/get/php-5.3.28.tar.gz/from/this/mirror
-RUN tar -xzf php-5.3.28.tar.gz
-RUN cd php-5.3.28; ./configure --with-apxs2=/usr/local/apache2/bin/apxs --with-mysql; make; make install
-
-RUN cd /cd php-5.3.28; cp php.ini-development /usr/local/lib/php.ini
-
-
-#
-# Install Apache and PHP
-#
-
-RUN apt-get install -y apache2 php5 php5-curl php5-mysql php5-mcrypt php5-gd php5-imap
-RUN a2enmod rewrite
-RUN a2enmod status
-RUN php5enmod imap
-ADD ./etc-apache2-mods-available-status.conf /etc/apache2/mods-available/status.conf
-ADD ./etc-php5-apache2-php.ini /etc/php5/apache2/php.ini
-RUN rm /var/www/html/index.html
-RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
+# Manage PHP versions in Apache using FastCGI - old libapache2-mod-fastcgi 
+RUN apt-get install -y apache2-mpm-worker apache2-suexec libapache2-mod-fcgid
+RUN a2enmod actions fcgid suexec
+#ADD ./etc-apache2-conf-phpcgisetup.conf /etc/apache2/conf-enabled/phpcgisetup.conf
+ADD ./etc-apache2-sites-available-000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Install phpMyAdmin
 ADD ./src-phpmyadmin/phpMyAdmin-4.0.8-all-languages.tar.gz /var/www/html/

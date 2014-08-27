@@ -5,7 +5,7 @@
 FROM     ubuntu:latest
 MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
-RUN echo "export HOME=/root" >> /root/.profile
+#RUN echo "export HOME=/root" >> /root/.profile
 
 RUN apt-get update
 RUN apt-get install -y wget nano curl git
@@ -26,11 +26,12 @@ RUN apt-get update
 RUN curl -L -O https://github.com/phpbrew/phpbrew/raw/master/phpbrew
 RUN chmod +x phpbrew
 RUN mv phpbrew /usr/bin/phpbrew
-RUN sudo apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev php-pear libssl-dev libsslcommon2-dev libreadline-dev make
-RUN phpbrew install 5.3.28 +default+openssl
+RUN sudo apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev php-pear libssl-dev libsslcommon2-dev libreadline-dev make apache2-prefork-dev libltdl-dev
+#RUN phpbrew install 5.3.22 +default+openssl+apxs2 +apxs2=/usr/bin/apxs2
+RUN phpbrew install 5.3.28 +default+openssl+apxs2
 RUN phpbrew init
-#RUN echo "source ~/.phpbrew/bashrc" >> ~/.bashrc
-#RUN phpbrew use php-5.3.28
+RUN echo "source /.phpbrew/bashrc" >> /root/.profile
+RUN /bin/bash -c "source /.phpbrew/bashrc; phpbrew switch php-5.3.28"
 
 
 
