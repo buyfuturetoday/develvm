@@ -32,7 +32,7 @@ ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 #
 
 RUN apt-get update
-RUN apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev libssl-dev libsslcommon2-dev libapr1-dev libaprutil1-dev libreadline-dev make
+RUN apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev libssl-dev libsslcommon2-dev libapr1-dev libaprutil1-dev libreadline-dev make libcurl4-openssl-dev
 
 
 #
