@@ -1,11 +1,17 @@
 # MySQL Server with Apache and phpmyadmin
 #
 # VERSION               0.0.1
+#
+# Docs: 
+# - http://cweiske.de/tagebuch/Running%20Apache%20with%20a%20dozen%20PHP%20versions.htm
+# - http://cweiske.de/tagebuch/Introducing%20phpfarm.htm
+#
+
 
 FROM     ubuntu:latest
 MAINTAINER Jonas Colmsjö "jonas@gizur.com"
 
-#RUN echo "export HOME=/root" >> /root/.profile
+RUN echo "export HOME=/root" >> /root/.profile
 
 RUN apt-get update
 RUN apt-get install -y wget nano curl git
@@ -18,35 +24,56 @@ RUN apt-get install -y wget nano curl git
 RUN apt-get install -y supervisor
 ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+
 #
-# Change PHP version
+# Install Apache
+#
+# RUN apt-get install -y apache2 php5 php5-curl php5-mysql php5-mcrypt php5-gd php5-imap
+
+RUN apt-get install -y apache2
+RUN a2enmod rewrite status
+ADD ./etc-apache2-mods-available-status.conf /etc/apache2/mods-available/status.conf
+
+#RUN php5enmod imap
+#ADD ./etc-php5-apache2-php.ini /etc/php5/apache2/php.ini
+
+RUN rm /var/www/html/index.html
+RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
+
+
+#
+# Preparations
 #
 
 RUN apt-get update
-RUN curl -L -O https://github.com/phpbrew/phpbrew/raw/master/phpbrew
-RUN chmod +x phpbrew
-RUN mv phpbrew /usr/bin/phpbrew
-RUN sudo apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev php-pear libssl-dev libsslcommon2-dev libreadline-dev make apache2-prefork-dev libltdl-dev
-#RUN phpbrew install 5.3.22 +default+openssl+apxs2 +apxs2=/usr/bin/apxs2
-RUN phpbrew install 5.3.28 +default+openssl+apxs2
-RUN phpbrew init
-RUN echo "source /.phpbrew/bashrc" >> /root/.profile
-RUN /bin/bash -c "source /.phpbrew/bashrc; phpbrew switch php-5.3.28"
+RUN apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev libssl-dev libsslcommon2-dev libapr1-dev libaprutil1-dev libreadline-dev make libcurl4-openssl-dev libjpeg-dev libpng12-dev libfreetype6-dev libxpm-dev libgd-dev libxpm4 t1lib-bin libtidy-dev
 
+# Fix problemw ith lib in wrong place
+RUN ln -s /usr/lib/x86_64-linux-gnu/libXpm.so /usr/lib/libXpm.so 
 
 
 #
-# Install Apache and PHP
+# Use phpfarm to manage PHP versions
 #
+# Add one script per PHP version and update 
 
-RUN apt-get install -y apache2 php5 php5-curl php5-mysql php5-mcrypt php5-gd php5-imap
-RUN a2enmod rewrite
-RUN a2enmod status
-RUN php5enmod imap
-ADD ./etc-apache2-mods-available-status.conf /etc/apache2/mods-available/status.conf
-ADD ./etc-php5-apache2-php.ini /etc/php5/apache2/php.ini
-RUN rm /var/www/html/index.html
-RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
+RUN cd /opt; git clone git://git.code.sf.net/p/phpfarm/code phpfarm
+ADD ./options.sh /opt/phpfarm/src/options.sh
+RUN cd /opt/phpfarm/src; ./compile.sh 5.3.27
+ADD ./var-www-html-cgibin-phpcgi-5.3.27 /var/www/html/cgibin/phpcgi-5.3.27
+#ADD ./etc-php5-cgi-php.ini /etc/php5/cgi/php.ini 
+ADD ./opt-phpfarm-inst-php-5.3.27-lib-php.ini /opt/phpfarm/inst/php-5.3.27/lib/php.ini 
+
+# RUN sed -i -e"s/^error_reporting\s*=\s*/error_reporting=E_ALL & ~E_NOTICE & ~E_DEPRECATED/" /opt/phpfarm/inst/php-5.3.27/lib/php.ini
+
+
+
+
+# Manage PHP versions in Apache using FastCGI - old libapache2-mod-fastcgi 
+RUN apt-get install -y apache2-mpm-worker apache2-suexec libapache2-mod-fcgid
+RUN a2enmod actions fcgid suexec
+#ADD ./etc-apache2-conf-phpcgisetup.conf /etc/apache2/conf-enabled/phpcgisetup.conf
+ADD ./etc-apache2-sites-available-000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Install phpMyAdmin
 ADD ./src-phpmyadmin/phpMyAdmin-4.0.8-all-languages.tar.gz /var/www/html/
