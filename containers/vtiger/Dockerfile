@@ -72,7 +72,9 @@ ADD ./src-phpmyadmin/phpMyAdmin-4.0.8-all-languages.tar.gz /var/www/html/
 ADD ./src-phpmyadmin/config.inc.php /var/www/html/phpMyAdmin-4.0.8-all-languages/config.inc.php
 
 # Install vTiger
-ADD ./vtigercrm-5.4.0.tar.gz /var/www/html/
+#ADD ./vtigercrm-5.4.0.tar.gz /var/www/html/
+ADD ./vtigercrm-installed.tgz /var/www/html/
+ADD ./src-vtiger/config.inc.php /var/www/html/vtigercrm/
 
 
 #
