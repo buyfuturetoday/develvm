@@ -28,14 +28,10 @@ ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 #
 # Install Apache
 #
-# RUN apt-get install -y apache2 php5 php5-curl php5-mysql php5-mcrypt php5-gd php5-imap
 
 RUN apt-get install -y apache2
 RUN a2enmod rewrite status
 ADD ./etc-apache2-mods-available-status.conf /etc/apache2/mods-available/status.conf
-
-#RUN php5enmod imap
-#ADD ./etc-php5-apache2-php.ini /etc/php5/apache2/php.ini
 
 RUN rm /var/www/html/index.html
 RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
@@ -46,10 +42,12 @@ RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
 #
 
 RUN apt-get update
-RUN apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev libssl-dev libsslcommon2-dev libapr1-dev libaprutil1-dev libreadline-dev make libcurl4-openssl-dev libjpeg-dev libpng12-dev libfreetype6-dev libxpm-dev libgd-dev libxpm4 t1lib-bin libtidy-dev
+RUN apt-get install -y libxml2-dev libbz2-dev libmcrypt-dev libxslt1-dev libssl-dev libsslcommon2-dev libapr1-dev libaprutil1-dev libreadline-dev make libcurl4-openssl-dev libjpeg-dev libpng12-dev libfreetype6-dev libxpm-dev libgd-dev libxpm4 t1lib-bin libtidy-dev libc-client-dev
 
-# Fix problemw ith lib in wrong place
-RUN ln -s /usr/lib/x86_64-linux-gnu/libXpm.so /usr/lib/libXpm.so 
+# Fix problem with libs in wrong place
+RUN ln -s /usr/lib/x86_64-linux-gnu/libXpm* /usr/lib/
+RUN ln -s /usr/lib/x86_64-linux-gnu/libkrb5* /usr/lib/
+RUN ln -s /usr/lib/x86_64-linux-gnu/libfreetype* /usr/lib/
 
 
 #
@@ -61,18 +59,12 @@ RUN cd /opt; git clone git://git.code.sf.net/p/phpfarm/code phpfarm
 ADD ./options.sh /opt/phpfarm/src/options.sh
 RUN cd /opt/phpfarm/src; ./compile.sh 5.3.27
 ADD ./var-www-html-cgibin-phpcgi-5.3.27 /var/www/html/cgibin/phpcgi-5.3.27
-#ADD ./etc-php5-cgi-php.ini /etc/php5/cgi/php.ini 
 ADD ./opt-phpfarm-inst-php-5.3.27-lib-php.ini /opt/phpfarm/inst/php-5.3.27/lib/php.ini 
-
-# RUN sed -i -e"s/^error_reporting\s*=\s*/error_reporting=E_ALL & ~E_NOTICE & ~E_DEPRECATED/" /opt/phpfarm/inst/php-5.3.27/lib/php.ini
-
-
 
 
 # Manage PHP versions in Apache using FastCGI - old libapache2-mod-fastcgi 
 RUN apt-get install -y apache2-mpm-worker apache2-suexec libapache2-mod-fcgid
 RUN a2enmod actions fcgid suexec
-#ADD ./etc-apache2-conf-phpcgisetup.conf /etc/apache2/conf-enabled/phpcgisetup.conf
 ADD ./etc-apache2-sites-available-000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Install phpMyAdmin
@@ -105,6 +97,10 @@ RUN /src-mysql/mysql-setup.sh
 
 # Fix permissions
 RUN chown -R www-data:www-data /var/www/html
+
+# Create a volume
+RUN mkdir /volume
+VOLUME ["/volume"]
 
 
 ADD ./start.sh /

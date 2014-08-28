@@ -20,7 +20,7 @@ Development environemnet
 
 Login to phpMyAdmin at: `http://localhost:PORT/phpMyAdmin-4.0.8-all-languages`
 
-Monitoring is enabled and accessable from the networj 172.0.0.0/8 (change this is status.conf if your network 
+Monitoring is enabled and accessable from the network 172.0.0.0/8 (change this is status.conf if your network 
 settings differ).
 
 Install lynx and start:
