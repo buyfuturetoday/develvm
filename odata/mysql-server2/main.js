@@ -256,6 +256,16 @@
 
     }
 
+    var writeError = function(response, err) {
+        // Should return 406 when failing
+        // http://www.odata.org/documentation/odata-version-2-0/operations/
+        response.writeHead(406, {"Content-Type": "application/json"});
+        response.write(err.toString());
+        response.end();
+
+        console.log(err.toString());
+    }
+
     mos.start = function () {
         var http = require("http");
 
@@ -275,9 +285,14 @@
                         odataResult;
 
                     connection.query(sql, function(err, rows, fields) {
-                        if (err) throw err;
+                        if (err) {
+                            writeError(response, "MySQL: "+err);
+                            return;
+                        }
 
-                        odataResult = rows[0].solution;
+                        console.log('connected as id ' + connection.threadId);
+
+                        odataResult = rows[0];
                         connection.end();
 
                         console.log(odataResult);
@@ -289,12 +304,7 @@
                     });
 
                 } catch(e) {
-
-                    // Should return 406 when failing
-                    // http://www.odata.org/documentation/odata-version-2-0/operations/
-                    response.writeHead(406, {"Content-Type": "application/json"});
-                    response.write(e.toString());
-                    response.end();
+                    writeError(response, e);
                 }
             });
 
