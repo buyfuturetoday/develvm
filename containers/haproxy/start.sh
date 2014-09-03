@@ -1,4 +1,4 @@
 #!/bin/bash
-supervisord
+supervisord &
 sleep 5
-tail -f /var/log/haproxy.log
+tail -f /var/log/haproxy.log -f /var/log/haproxy0.log
