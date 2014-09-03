@@ -22,8 +22,8 @@ RUN apt-get install -y apache2
 RUN a2enmod rewrite status
 #ADD ./etc-apache2-mods-available-status.conf /etc/apache2/mods-available/status.conf
 
-RUN rm /var/www/html/index.html
-RUN echo "<?php\nphpinfo();\n " > /var/www/html/info.php
+#RUN rm /var/www/html/index.html
+RUN echo "<html><body><h1>Hello world!</h1></body></html>" > /var/www/html/hello.html
 
 
 #

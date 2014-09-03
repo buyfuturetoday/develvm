@@ -24,16 +24,21 @@ ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 
 #
-# Install haproxy
+# Install haproxy and rsyslog
 #
 
-RUN apt-get install -y haproxy
+RUN apt-get install -y haproxy rsyslog
 
 # Move default configuration out
 RUN mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.original
 
 # Add out own configuration
 ADD ./etc-haproxy-haproxy.cfg /etc/haproxy/haproxy.cfg
+
+ADD ./etc-rsyslog.conf /etc/rsyslog.conf
+ADD ./etc-rsyslog.d-50-default.conf /etc/rsyslog.d/50-default.conf
+
+RUN rm /etc/rsyslog.d/haproxy.conf
 
 # Create a volume
 RUN mkdir /volume
