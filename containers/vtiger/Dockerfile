@@ -58,7 +58,8 @@ RUN ln -s /usr/lib/x86_64-linux-gnu/libfreetype* /usr/lib/
 RUN cd /opt; git clone git://git.code.sf.net/p/phpfarm/code phpfarm
 ADD ./options.sh /opt/phpfarm/src/options.sh
 RUN cd /opt/phpfarm/src; ./compile.sh 5.3.27
-ADD ./var-www-html-cgibin-phpcgi-5.3.27 /var/www/html/cgibin/phpcgi-5.3.27
+#ADD ./var-www-html-cgibin-phpcgi-5.3.27 /var/www/html/cgibin/phpcgi-5.3.27
+ADD ./var-www-html-cgibin-phpcgi-5.3.27 /var/www/cgibin/phpcgi-5.3.27
 ADD ./opt-phpfarm-inst-php-5.3.27-lib-php.ini /opt/phpfarm/inst/php-5.3.27/lib/php.ini 
 
 
