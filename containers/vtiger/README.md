@@ -38,10 +38,3 @@ lynx http://localhost/server-status
 It is usefull to connect with a shell when debugging: `docker run -t -i --rm -p 80:80 -v /volume/volume [IMAGE ID] /bin/bash`
 
 Then start things up with: `supervisord &> /tmp/out.txt &`
-
-
-
-
-
-
-
