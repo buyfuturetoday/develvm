@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<script src="openui5-runtime-1/resources/sap-ui-core.js"
+				id="sap-ui-bootstrap"
+				data-sap-ui-libs="sap.ui.commons, sap.ui.ux3"
+				data-sap-ui-theme="sap_goldreflection">
+		</script>
+		<!-- add sap.ui.table,sap.ui.ux3 and/or other libraries to 'data-sap-ui-libs' if required -->
+
+		<script>
+
+			sap.ui.jsview("ui5nav.V1", {
+
+				/** Specifies the Controller belonging to this View. 
+				* In the case that it is not implemented, or that "null" is returned, this View does not have a Controller.
+				* @memberOf ui5nav.V1
+				*/ 
+				getControllerName : function() {
+					return "ui5nav.V1";
+				},
+
+				/** Is initially called once after the Controller has been instantiated. It is the place where the UI is constructed. 
+				* Since the Controller is given to this method, its event handlers can be attached right away. 
+				* @memberOf ui5nav.V1
+				*/ 
+				createContent : function(oController) {
+				
+					
+					//userModel = new sap.ui.model.json.JSONModel();  
+					
+					
+					var button = new sap.ui.commons.Button(
+							 { "text": "Forward",
+								 press : function() {
+								// sap.ui.localResources("ui5nav");
+								// var view2 = sap.ui.view({id:"idV12", viewName:"ui5nav.V2", type:sap.ui.core.mvc.ViewType.JS});
+								//var view1 = sap.ui.view({id:"idV11", viewName:"ui5nav.V1", type:sap.ui.core.mvc.ViewType.JS});
+								 sap.ui.getCore().byId("shell").removeAllWorksetItems();
+								 sap.ui.getCore().byId("shell").setContent(sap.ui.getCore().byId("idV21"),true);
+								
+								 //userModel.setData(oTextField_FName);
+								 
+								
+								 
+								 alert('Alert from Forward button' );
+								 }
+								 });
+					 return button; 
+
+				}
+
+			});
+
+
+			sap.ui.localResources("ui5nav");
+			var view1 = sap.ui.view({id:"idV11", viewName:"ui5nav.V1", type:sap.ui.core.mvc.ViewType.JS});
+			var view2 = sap.ui.view({id:"idV21", viewName:"ui5nav.V2", type:sap.ui.core.mvc.ViewType.JS});
+			var oShell = new sap.ui.ux3.Shell({  
+                id: "shell",  
+                }); 
+			oShell.addContent(sap.ui.getCore().byId("idV11")); 
+			oShell.placeAt("content");  
+			//view.placeAt("content");
+		</script>
+
+	</head>
+	<body class="sapUiBody" role="application">
+		<div id="content"></div>
+	</body>
+</html>
