@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test NeDB persistence in the browser</title>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet"/>
+</head>
+<body>
+  <div id="log">nothing yet</div>
+
+  <script src="./node_modules/nedb/browser-version/out/nedb.min.js"></script>
+  <script type="text/javascript">
+  	window.onload = function() {
+		var _doc = { hello: 'world'
+		               , n: 5
+		               , today: new Date()
+		               , nedbIsAwesome: true
+		               , notthere: null
+		               , notToBeSaved: undefined  // Will not be saved
+		               , fruits: [ 'apple', 'orange', 'pear' ]
+		               , infos: { name: 'nedb' }
+		               };
+
+		var _docs =  [
+		 { _id: 'id1', planet: 'Mars', system: 'solar', inhabited: false, satellites: ['Phobos', 'Deimos'] },
+		 { _id: 'id2', planet: 'Earth', system: 'solar', inhabited: true, humans: { genders: 2, eyes: true } },
+		 { _id: 'id3', planet: 'Jupiter', system: 'solar', inhabited: false },
+		 { _id: 'id4', planet: 'Omicron Persei 8', system: 'futurama', inhabited: true, humans: { genders: 7 } },
+		 { _id: 'id5', completeData: { planets: [ { name: 'Earth', number: 3 }, { name: 'Mars', number: 2 }, { name: 'Pluton', number: 9 } ] } }
+		 ];
+
+		console.log("Beginning tests");
+		console.log("Please note these tests work on Chrome latest, might not work on other browsers due to discrepancies in how local storage works for the file:// protocol");
+
+		function testsFailed () {
+		  document.getElementById("log").innerHTML = "TESTS FAILED";
+		}
+
+		localStorage.removeItem('test');
+		var db = new Nedb({ filename: 'test', autoload: true });
+//		db.insert({ hello: 'world' }, function (err) {
+		db.insert(_doc, function (err) {
+
+	  console.log("In db.insert");
+
+		  if (err) {
+		    testsFailed();
+		    return;
+		  } 
+
+		    document.getElementById("log").innerHTML = "BROWSER PERSISTENCE TEST PASSED";
+
+		});
+
+
+
+//	db.insert(doc, function (err, newDoc) {   // Callback is optional
+		db.insert( 
+					{ hello: 'world'
+		               , n: 5
+		               , today: new Date()
+		               , nedbIsAwesome: true
+		               , notthere: null
+		               , notToBeSaved: undefined  // Will not be saved
+		               , fruits: [ 'apple', 'orange', 'pear' ]
+		               , infos: { name: 'nedb' }
+		               }, 
+		               function (err) {
+
+	  // newDoc is the newly inserted document, including its _id
+	  // newDoc has no key called notToBeSaved since its value was undefined
+
+	  console.log("In db.insert");
+	  if(err) {
+	  	console.log("Error inserring doc: " + err);
+	  } else {
+	  	console.log("Insert into nedb ok: " + JSON.stringify(newDoc) );  	
+	  }
+	});
+
+
+	// Finding all planets in the solar system
+	db.find({ system: 'solar' }, function (err, docs) {
+	  // docs is an array containing documents Mars, Earth, Jupiter
+	  // If no document is found, docs is equal to []
+	  if (err) {
+	  	console.log("Error: " + err);
+	  } else {
+	  	console.log("Found these documents: " + JSON.stringify(docs ) );  	
+	  }
+	});
+
+	};
+  </script>
+</body>
+</html>
