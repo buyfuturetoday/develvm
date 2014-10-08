@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test IndexDB persistence in the browser</title>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet"/>
+</head>
+<body>
+  <div id="log">Nothing yet<br/></div>
+
+	<script src="http://cdn.jsdelivr.net/pouchdb/3.0.6/pouchdb.min.js"></script>
+
+	<!-- In case the browser does not have IndexDB support -->
+	<script src="http://axemclion.github.com/IndexedDBShim/dist/IndexedDBShim.min.js"></script>
+
+
+
+	<script type="text/javascript">
+		var _doc = {     _id: 'id1'
+					   , hello: 'world'
+		               , n: 5
+		               , today: new Date()
+		               , nedbIsAwesome: true
+		               , notthere: null
+		               , notToBeSaved: undefined  // Will not be saved
+		               , fruits: [ 'apple', 'orange', 'pear' ]
+		               , infos: { name: 'nedb' }
+		               };
+
+		var _docs =  [
+		 { _id: 'id1', planet: 'Mars', system: 'solar', inhabited: false, satellites: ['Phobos', 'Deimos'] },
+		 { _id: 'id2', planet: 'Earth', system: 'solar', inhabited: true, humans: { genders: 2, eyes: true } },
+		 { _id: 'id3', planet: 'Jupiter', system: 'solar', inhabited: false },
+		 { _id: 'id4', planet: 'Omicron Persei 8', system: 'futurama', inhabited: true, humans: { genders: 7 } },
+		 { _id: 'id5', completeData: { planets: [ { name: 'Earth', number: 3 }, { name: 'Mars', number: 2 }, { name: 'Pluton', number: 9 } ] } }
+		 ];
+
+		function log(msg) {
+		  document.getElementById("log").innerHTML += msg + "<br/>";
+		  console.log(msg);
+		}
+
+		var html5rocks = {};
+		html5rocks.indexedDB = {};
+		html5rocks.indexedDB.db = null;
+
+		log("Beginning tests");
+
+		html5rocks.indexedDB.open = function() {
+
+			if (!window.indexedDB) {
+			    log("Your browser doesn't support a stable version of IndexedDB. Trying to use a experimental version.");
+		    	window.indexedDB = window.indexedDB || window.mozIndexedDB || 
+		    						window.webkitIndexedDB || window.msIndexedDB;
+
+				window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+				window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+				if (!window.indexedDB) {
+					log('Experimental version of IndexDB not available. App will exit.')
+				    return;
+				  }
+			}
+
+			var version = 1;
+			var request = window.indexedDB.open("todos", version);
+
+			// We can only create Object stores in a versionchange transaction.
+			request.onupgradeneeded = function(e) {
+				log('In onupgradeneeded');
+
+				var db = e.target.result;
+
+				// A versionchange transaction is started automatically.
+				e.target.transaction.onerror = html5rocks.indexedDB.onerror;
+
+				if(db.objectStoreNames.contains("todo")) {
+					db.deleteObjectStore("todo");
+				}
+
+				var store = db.createObjectStore("todo",
+					{keyPath: "timeStamp"});
+			};
+
+			request.onsuccess = function(e) {
+				log('In onsuccess');
+				html5rocks.indexedDB.db = e.target.result;
+
+				var db      = html5rocks.indexedDB.db;
+				var trans   = db.transaction(["todo"], "readwrite");
+				var store   = trans.objectStore("todo");
+
+				var request = store.put({
+					"text": "todoText",
+					"timeStamp" : new Date().getTime()
+				});
+
+				trans.oncomplete = function(e) {
+					// Re-render all the todo's
+					log('Transaction complete');
+
+					var todos = 'New todo item!'
+
+					var db = html5rocks.indexedDB.db;
+					var trans = db.transaction(["todo"], "readwrite");
+					var store = trans.objectStore("todo");
+
+					// Get everything in the store;
+					var keyRange      = IDBKeyRange.lowerBound(0);
+					var cursorRequest = store.openCursor(keyRange);
+
+					cursorRequest.onsuccess = function(e) {
+						var result = e.target.result;
+
+						if(!!result == false) {
+							return;
+						}
+
+						log('Result: ' + JSON.stringify(result.value) );
+
+						var id = result.value.timeStamp;
+						log('Deleting: ' + id);
+						
+						var db    = html5rocks.indexedDB.db;
+						var trans = db.transaction(["todo"], "readwrite");
+						var store = trans.objectStore("todo");
+
+						var request = store.delete(id);
+
+						trans.oncomplete = function(e) {
+							log('Finished delete');
+						};
+
+						request.onerror = function(e) {
+							log('Error deleteing: ' + e);
+						};
+
+
+						result.continue();
+					};
+
+					cursorRequest.onerror = html5rocks.indexedDB.onerror;
+
+				};
+
+				request.onerror = function(e) {
+					log('Error: ' + e.value);
+				};
+			};
+
+			request.onerror = html5rocks.indexedDB.onerror;
+
+		};
+
+
+		function init() {
+		  html5rocks.indexedDB.open(); // open displays the data previously saved
+		}
+
+		window.addEventListener("DOMContentLoaded", init, false);
+
+  </script>
+</body>
+</html>

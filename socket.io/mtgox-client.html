@@ -1,0 +1,31 @@
+<html>
+
+<body>
+
+<h1>Socket.io sandbox</h1>
+
+<h2>server output</h2>
+
+<div id="message">No message yet</div>
+
+
+<script src="/lib/socket.io.js"></script>
+<script>
+  window.onload = function(){
+
+    var conn = io.connect('https://socketio.mtgox.com/mtgox');
+    conn.on('message', function(data) {
+        // Handle incoming data object.
+      document.getElementById('message').innerHTML = document.getElementById('message').innerHTML + "<br/>" + (JSON.stringify(data));
+    });
+  };
+
+</script>
+
+<!-- <script src="https://socketio.mtgox.com/socket.io/socket.io.js"></script> -->
+<script>
+</script>
+
+
+</body>
+</html>

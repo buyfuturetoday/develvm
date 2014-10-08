@@ -1,0 +1,320 @@
+<http>
+	<head>
+
+		<!-- from https://bitbucket.org/nitrous/mtgox-api/src/58901f35054f7635ef9eda1db6b049b5ffcf9f65/socket/ws.client.html?at=master-->
+
+		<title>WebSocket Client</title>
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="https://socketio.mtgox.com/socket.io/socket.io.js"></script>
+		<script>
+			// pretty printer from https://gist.github.com/knowtheory/913112
+			function pp(object, depth, embedded) { 
+			  typeof(depth) == "number" || (depth = 0)
+			  typeof(embedded) == "boolean" || (embedded = false)
+			  var newline = false
+			  var spacer = function(depth) { var spaces = ""; for (var i=0;i<depth;i++) { spaces += "  "}; return spaces }
+			  var pretty = ""
+			  if (      typeof(object) == "undefined" ) { pretty += "undefined" }
+			  else if ( typeof(object) == "boolean" || 
+			            typeof(object) == "number" ) {    pretty += object.toString() } 
+			  else if ( typeof(object) == "string" ) {    pretty += "\"" + object + "\"" } 
+			  else if (        object  == null) {         pretty += "null" } 
+			  else if ( object instanceof(Array) ) {
+			    if ( object.length > 0 ) {
+			      if (embedded) { newline = true }
+			      var content = ""
+			      for (var item in object) { content += pp(item, depth+1) + ",\n" + spacer(depth+1) }
+			      content = content.replace(/,\n\s*$/, "").replace(/^\s*/,"")
+			      pretty += "[ " + content + "\n" + spacer(depth) + "]"
+			    } else { pretty += "[]" }
+			  } 
+			  else if (typeof(object) == "object") {
+			    if ( Object.keys(object).length > 0 ){
+			      if (embedded) { newline = true }
+			      var content = ""
+			      for (var key in object) { 
+			        content += spacer(depth + 1) + key.toString() + ": " + pp(object[key], depth+2, true) + ",\n" 
+			      }
+			      content = content.replace(/,\n\s*$/, "").replace(/^\s*/,"")
+			      pretty += "{ " + content + "\n" + spacer(depth) + "}"
+			    } else { pretty += "{}"}
+			  }
+			  else { pretty += object.toString() }
+			  return ((newline ? "\n" + spacer(depth) : "") + pretty)
+			}
+
+
+			// for history and indexing messages
+			i=j=k=ii=0;
+			h=[];
+
+			// for socket connections
+			con=null; // the socket.io connection object
+			dis=null; // a timer to disconnect after connection timeout
+
+			// add a message to the log
+			// set plain=true to display as text rather than pretty printing as javascript
+			function logsock(type, n, data, plain) {
+				if (plain !== true)
+					data = pp(data)
+				line = $('<p>')
+					.append($('<span>').text('>>> '+type+' '+n+' - '+new Date().toLocaleString()+': '))
+					.append($('<pre>').text(data));
+				log = $('#log').append(line);
+				if ($('#auto').prop('checked'))
+					log.scrollTop(log[0].scrollHeight);
+			}
+
+			// connect to the server specified in the textbox, only set discon
+			// if you want to disconnect the active connection instead of connect,
+			// recommended to do connect(false) to disconnect, or connect() to connect
+			function connect(discon) {
+				if (con==null && discon==undefined) {
+					//connect
+					dis=setTimeout(function(){
+						logsock('Notice', ++k, "Connection timeout", true);
+						connect(false);
+					}, 5000);
+					address = $('#server').val();
+					con=io.connect(address, {'force new connection': true});
+					con.on('connect', connected);
+					con.on('disconnect', disconnect);
+					con.on('error', confail);
+					con.on('message', server);
+					$('#server').attr('disabled', 'disabled');
+					$('#conbtn').text('Disconnect');
+				} else {
+					//disconnect
+					if (con!=null) con.disconnect();
+				}
+			}
+
+			// soket.io on connect => clear timeout timer
+			function connected(data) {
+				logsock('Notice', ++k, "Connected", true);
+				clearTimeout(dis);
+			}
+
+			// socket.io on message => display
+			function server(data) {
+				logsock('Server', ++j, data);
+			}
+
+			// socket.io on disconnect => tidy up
+			function disconnect(data) {
+				logsock('Notice', ++k, "Disconnected", true);
+				if (data != undefined)
+					server(data)
+				delete con;
+				window.con = null;
+				$('#server').removeAttr('disabled');
+				$('#conbtn').text('Connect!');
+			}
+
+			// socket.io on error => disconnect
+			function confail(data) {
+				logsock('Notice', ++k, "Error:", true);
+				logsock('Notice', k, data);
+				logsock('Notice', k, "Disconnecting...", true);
+				connect(false);
+			}
+
+			// clear the log
+			function cls() {
+				$('#log').text('');
+			}
+
+			// display and send the message
+			function send(msg) {
+				if (msg == undefined)
+					msg = $('#msg').val();
+				h[i] = msg;
+				var dec;
+				try { dec = $.parseJSON(msg); }
+				catch(e) { dec = msg; }
+				logsock('Client', ++i, dec);
+				if (con != null)
+					con.send(msg);
+				else
+					logsock('Notice', ++k, "Cannot send message - disconnected", true);
+				ii=i;
+			}
+
+			// show history when pressing up/down in message textbox,
+			// history(+1) when going down, history(-1) when going up
+			function history(d) {
+				if (i==ii)
+					h[i] = $('#msg').val();
+				if (ii+d>i || ii+d<0) return;
+				ii+=d;
+				$('#msg').val(h[ii]);
+			}
+
+			// setup dynamic behaviour of buttons, inputs, etc
+			$(document).ready(function(){
+				// textboxs: on enter, up, down
+				$("#server").keyup(function(e){
+					if(e.keyCode == 13)
+						$("#conbtn").click();
+				});
+				$("#msg").keyup(function(e){
+					switch(e.keyCode) {
+						case 13: $("#msgbtn").click(); break;
+						case 38: history(-1); break;
+						case 40: history(+1); break;
+					}
+				});
+
+				// button methods
+				$("#conbtn").click(function(e){
+					connect();
+				});
+				$("#msgbtn").click(function(e){
+					send();
+				});
+				$("#clrbtn").click(function(e){
+					cls();
+				});
+				$("#autbtn").click(function(e){
+					$("#auto").click();
+				});
+
+				// default values
+			    $("input[type=text]").focus(function() {
+			        if ($(this).val() == $(this)[0].title) {
+			            $(this).removeClass("default");
+			            $(this).val("");
+			        }
+			    }).blur(function() {
+			        if ($(this).val() == "") {
+			            $(this).addClass("default");
+			            $(this).val($(this)[0].title);
+			        }
+			    }).blur();
+			})
+		</script>
+		<style>
+			div {
+				width: 1000px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			body {
+				font-family: futura;
+				font-size: 13px;
+			}
+			input, button {
+				border: 1px solid #ddf;
+				height: 30px;
+				margin: 0;
+				padding: 0 5px;
+				font-size: 18px;
+				background-color: #f0f7ff;
+			}
+			#auto {
+				width: auto;
+				margin: 0;
+				padding: 0;
+				height: 18px;
+				width: 18px;
+			}
+			input:hover, input:active, button:hover, button:active {
+				border-color: #00f;
+				color: #00f;
+			}
+			button {
+				position: relative;
+				top: -1px;
+				width: 115px;
+			}
+			h1 {
+				margin: 0;
+				padding: 10px 0 0 0;
+				text-align: center;
+				height: 30px;
+			}
+			#header {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 95px;
+			}
+			#footer {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				height: 90px;
+			}
+			#log {
+				position: absolute;
+				height: auto;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				margin-top: 95px;
+				margin-bottom: 90px;
+				word-wrap: break-word;
+				overflow: scroll;
+				font-size: 11px;
+				border: 1px solid #ddf;
+			}
+			#log span {
+				font-weight: bold;
+			}
+			#log pre {
+				font-family: menlo;
+			}
+			#donations {
+				text-align: center;
+				font-size: 11px;
+			}
+			#donations span {
+				font-weight: bold;
+			}
+			#footer p {
+				text-align: center;
+				/*margin: 10px;*/
+			}
+			#header p {
+				text-align: center;
+			}
+			input.default {
+				color: #bbf;
+				text-align: center;
+			}
+			#msg {
+				width: 850px;
+			}
+			#server {
+				width: 615px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			<h1>-------[ Generic WebSocket Client ]-------</h1>
+			<p>
+				<input type="text" id="server" title="Server" />
+				<button id="conbtn">Connect!</button>
+				<button id="clrbtn">Clear Log</button>
+				<button id="autbtn">
+					<span>Scroll?</span>
+					<input id="auto" type="checkbox" checked />
+				</button>
+			</p>
+		</div>
+		<div id="log"></div>
+		<div id="footer">
+			<p>
+				<input type="text" id="msg" title="Message" />
+				<button id="msgbtn">Send!</button>
+			</p>
+			<p id="donations">
+				<span>Donations:</span> 1GfwKioWJ6qjfYGH37wmgjRifF2DaqT4U6
+			</p>
+		</div>
+	</body>
+</http>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test Pouchdb persistence in the browser</title>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet"/>
+</head>
+<body>
+  <div id="log">Nothing yet<br/></div>
+
+	<script src="http://cdn.jsdelivr.net/pouchdb/3.0.6/pouchdb.min.js"></script>
+
+	<script type="text/javascript">
+  	window.onload = function() {
+		var _doc = {     _id: 'id1'
+					   , hello: 'world'
+		               , n: 5
+		               , today: new Date()
+		               , nedbIsAwesome: true
+		               , notthere: null
+		               , notToBeSaved: undefined  // Will not be saved
+		               , fruits: [ 'apple', 'orange', 'pear' ]
+		               , infos: { name: 'nedb' }
+		               };
+
+		var _docs =  [
+		 { _id: 'id1', planet: 'Mars', system: 'solar', inhabited: false, satellites: ['Phobos', 'Deimos'] },
+		 { _id: 'id2', planet: 'Earth', system: 'solar', inhabited: true, humans: { genders: 2, eyes: true } },
+		 { _id: 'id3', planet: 'Jupiter', system: 'solar', inhabited: false },
+		 { _id: 'id4', planet: 'Omicron Persei 8', system: 'futurama', inhabited: true, humans: { genders: 7 } },
+		 { _id: 'id5', completeData: { planets: [ { name: 'Earth', number: 3 }, { name: 'Mars', number: 2 }, { name: 'Pluton', number: 9 } ] } }
+		 ];
+
+		function log(msg) {
+		  document.getElementById("log").innerHTML += msg + "<br/>";
+		  console.log(msg);
+		}
+
+		log("Beginning tests");
+
+		var db = new PouchDB('pouchdb');
+		var remoteCouch = false;
+
+		db.get(_doc._id, function(err, doc) { 
+
+			if(!err) {
+				log('Document exists: ' + JSON.stringify(doc) + '. Will remove.');
+
+				db.remove(doc, function(err, result) {
+					if(err) {
+						log('Could not remove document: ' + err + '. Exiting.');
+						return;
+					}
+					log(_doc._id + ' has been removed. ' + JSON.stringify(result));
+				});
+
+			}
+
+			db.put(_doc, function callback(err, result) {
+				if (err) {
+					log('Error putting to db: ' + err + '. Continue anyway.');
+				}
+
+				log('Posted to database: ' + JSON.stringify(result));
+
+				db.allDocs({include_docs: true, descending: true}, function(err, doc) {
+					if (err) {
+						log('Error fetching: ' + err);
+						return;
+					}
+
+					log('Found these docs while searching: ' + JSON.stringify(doc.rows) );
+				});
+			});
+		});
+
+	};
+  </script>
+</body>
+</html>

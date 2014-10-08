@@ -1,0 +1,32 @@
+<html>
+
+<body>
+
+<h1>MtGox socket.io client sandbox</h1>
+
+<h2>MtGox output</h2>
+
+<div id="message">No message yet</div>
+
+
+<script src="../bower_components/socket.io-client/dist/socket.io.min.js"></script>
+
+<script>
+  window.onload = function(){
+
+
+		var MTGOX_SOCKET_URL = 'https://socketio.mtgox.com:80/mtgox';
+
+		var socket = io.connect(MTGOX_SOCKET_URL);
+
+  };
+
+</script>
+
+<!-- <script src="https://socketio.mtgox.com/socket.io/socket.io.js"></script> -->
+<script>
+</script>
+
+
+</body>
+</html>
