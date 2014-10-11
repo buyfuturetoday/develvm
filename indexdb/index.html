@@ -31,25 +31,6 @@
 
 
 	<script type="text/javascript">
-		var _doc = {     _id: 'id1'
-					   , hello: 'world'
-		               , n: 5
-		               , today: new Date()
-		               , nedbIsAwesome: true
-		               , notthere: null
-		               , notToBeSaved: undefined  // Will not be saved
-		               , fruits: [ 'apple', 'orange', 'pear' ]
-		               , infos: { name: 'nedb' }
-		               };
-
-		var _docs =  [
-		 { _id: 'id1', planet: 'Mars', system: 'solar', inhabited: false, satellites: ['Phobos', 'Deimos'] },
-		 { _id: 'id2', planet: 'Earth', system: 'solar', inhabited: true, humans: { genders: 2, eyes: true } },
-		 { _id: 'id3', planet: 'Jupiter', system: 'solar', inhabited: false },
-		 { _id: 'id4', planet: 'Omicron Persei 8', system: 'futurama', inhabited: true, humans: { genders: 7 } },
-		 { _id: 'id5', completeData: { planets: [ { name: 'Earth', number: 3 }, { name: 'Mars', number: 2 }, { name: 'Pluton', number: 9 } ] } }
-		 ];
-
 		
 		// Define Mobile DB wrapper over IndexDB
 		// =====================================
@@ -59,8 +40,8 @@
 		mdb.indexedDB    = {};
 		mdb.indexedDB.db = null;
 
-		var _dbName      = 'mdb';
-		var _keyPath     = "timeStamp";
+		mdb._tableName   = null;
+		mdb._keyPath     = null;
 
 
 		// Exports
@@ -73,8 +54,8 @@
 		// ================================
 
 		var log = function (msg) {
-		  document.getElementById("log").innerHTML += msg + "<br/>";
-		  console.log(msg);
+			document.getElementById("log").innerHTML += msg + "<br/>";
+			console.log(msg);
 		}
 
 		var checkForIndexDBSUpport = function() {
@@ -84,6 +65,7 @@
 		    						window.webkitIndexedDB || window.msIndexedDB;
 
 				window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+
 				window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
 				if (!window.indexedDB) {
@@ -106,12 +88,12 @@
 			log('In mdb.put');
 
 			// everything is performed in transactions
-			var trans   = mdb.indexedDB.db.transaction([_dbName], "readwrite");
+			var trans   = mdb.indexedDB.db.transaction([mdb._tableName], "readwrite");
 
 			// set callback to use when finsihed
 			trans.oncomplete = oncomplete;
 
-			var store   = trans.objectStore(_dbName);
+			var store   = trans.objectStore(mdb._tableName);
 			var request = store.put(value);
 
 			request.onerror = function(e) {
@@ -124,10 +106,10 @@
 		// --------------------------------------------
 
 		mdb.processAll = function(fn) {
-			log('In mdb.getAll');
+			log('In mdb.processAll');
 
-			var trans = mdb.indexedDB.db.transaction([_dbName], "readwrite");
-			var store = trans.objectStore(_dbName);
+			var trans = mdb.indexedDB.db.transaction([mdb._tableName], "readwrite");
+			var store = trans.objectStore(mdb._tableName);
 
 			// Get everything in the store;
 			var keyRange      = IDBKeyRange.lowerBound(0);
@@ -140,7 +122,7 @@
 					return;
 				}
 
-				log('In mdb.getAll - result: ' + JSON.stringify(result.value) );
+				log('In mdb.processAll - result: ' + JSON.stringify(result.value) );
 
 				fn(result.value)
 
@@ -157,8 +139,8 @@
 		mdb.delete = function(id) {
 			log('In mdb.delete - deleting: ' + id);
 			
-			var trans = mdb.indexedDB.db.transaction([_dbName], "readwrite");
-			var store = trans.objectStore(_dbName);
+			var trans = mdb.indexedDB.db.transaction([mdb._tableName], "readwrite");
+			var store = trans.objectStore(mdb._tableName);
 
 			var request = store.delete(id);
 
@@ -181,7 +163,7 @@
 				return;
 
 			var version = 1;
-			var request = window.indexedDB.open(_dbName, version);
+			var request = window.indexedDB.open(mdb._tableName, version);
 
 			// We can only create Object stores in a versionchange transaction.
 			request.onupgradeneeded = function(e) {
@@ -193,12 +175,13 @@
 				e.target.transaction.onerror = mdb.indexedDB.onerror;
 
 				// Delete the object store if it exists
-				if(db.objectStoreNames.contains(_dbName)) {
-					db.deleteObjectStore(_dbName);
+				if(db.objectStoreNames.contains(mdb._tableName)) {
+					log('In mdb.indexedDB.open - ' + mdb._tableName + ' exists. Deleting.');
+					db.deleteObjectStore(mdb._tableName);
 				}
 
-				var store = db.createObjectStore(_dbName,
-					{keyPath: _keyPath});
+				var store = db.createObjectStore(mdb._tableName,
+					{keyPath: mdb._keyPath});
 			};
 
 			request.onsuccess = function(e) {
@@ -213,11 +196,15 @@
 
 		};
 
-		// Initialize IndexDB
-		// ------------------
+		// Init transaction
+		// ----------------
 
-		mdb.init = function(fn) {
-		  mdb.indexedDB.open(fn);
+		mdb.initTrans = function(fn, tableName, keyPath) {
+			log('In mdb.initTrans -  initializing: ' + tableName + ' with keyPath: ' + keyPath);
+
+			mdb._tableName    = tableName;
+			mdb._keyPath      = keyPath;
+			mdb.indexedDB.open(fn);
 		};
 
 
@@ -244,8 +231,9 @@
 			);
 		}
 
-		window.addEventListener("DOMContentLoaded", mdb.init(fn), false);
+		// Start things when the DOM is loaded
+		window.addEventListener('DOMContentLoaded', mdb.initTrans(fn, 'table1', 'timeStamp'), false);
 
-  </script>
+	</script>
 </body>
 </html>
