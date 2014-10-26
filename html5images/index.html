@@ -1,0 +1,63 @@
+<html>
+
+<body>
+
+    <h1>This is the image that is loaded on DOMContentLoaded</h1>
+    <img id="one"></img>
+
+
+    <h1>Log</h2>
+    <div id="log">Nothing yet<br/></div>
+
+
+    <script type="text/javascript">
+
+        var log = function (msg) {
+            document.getElementById("log").innerHTML += msg + "<br/>";
+            console.log(msg);
+        }
+
+
+        function start() {
+            log('encoding image');
+            getBase64FromImageUrl("http://www.gizur.com/img/projektledning_w767.png");
+        }
+
+        function getBase64FromImageUrl(URL) {
+            var img = new Image();
+            img.src = URL;
+
+            img.onload = function () {
+                log('In img.onload');
+
+                var canvas    = document.createElement("canvas");
+                log(canvas.width+':'+canvas.height);
+                canvas.width  = this.width;
+                canvas.height = this.height;
+
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(this, 0, 0);
+
+                log('Before toDataURL');
+                var dataURL = canvas.toDataURL("image/jpeg");
+//                var dataURL = canvas.toDataURL();
+                log("dataUrl"+dataURL);
+                log('After toDataURL');
+
+
+                //alert( dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+
+                //log(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+
+                //document.getElementById("one").src = "http://www.gizur.com/img/projektledning_w767.png";
+
+            }
+        }
+
+        // Start things when the DOM is loaded
+        window.addEventListener('DOMContentLoaded', start(), false);
+
+    </script>
+
+</body>
+</html>
