@@ -25,11 +25,8 @@
     <h1>Log</h2>
     <div id="log">Nothing yet<br/></div>
 
-    <script src="http://cdn.jsdelivr.net/pouchdb/3.0.6/pouchdb.min.js"></script>
-
     <!-- In case the browser does not have IndexDB support -->
     <script src="http://axemclion.github.com/IndexedDBShim/dist/IndexedDBShim.min.js"></script>
-
 
 
     <script type="text/javascript">
@@ -49,8 +46,6 @@
 
                 var ctx = canvas.getContext("2d");
                 ctx.drawImage(this, 0, 0);
-
-                //document.getElementById("one").src = canvas.toDataURL();
 
                 cb(canvas.toDataURL());
             }
