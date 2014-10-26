@@ -66,6 +66,8 @@
             request
                 // read the data in the stream, if there is any
                 .on('data', function (chunk) {
+
+                	// Perhaps I can save chunk by chunk in the db?
                     data += chunk;
                 })
                 // request closed, process it
@@ -76,6 +78,9 @@
                         // parse data and prepare insert for POST requests
                         if (request.method == 'POST') {
                         	//log(data);
+
+                        	// This is where the data should be saved into leveldb, in not chunk bny chunk
+
                         	log('finished receiving data..doing nothing right now');
 
                 	        response.writeHead(200, {"Content-Type": "application/json"});
