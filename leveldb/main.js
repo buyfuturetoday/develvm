@@ -3,9 +3,19 @@
 //
 //
 
+//
+// npm install levelup
+// npm install leveldown
+//
+// NOTE: npm install level seams broken. It is using a older version of leveldb than leveldown
+//
+
+
+
 (function (self, undefined) {
 
     var mos    = self.mysqlodata || {};
+    var u      = require('underscore');
 
     // change to false to stop this logging
     var debug        = true,
@@ -13,6 +23,13 @@
         noLogging    = false;
 
     var defaultPort     = 80;
+
+	var levelup = require('level')
+
+	// 1) Create our database, supply location and options.
+	//    This will create or open the underlying LevelDB store.
+	var leveldb = levelup('./mydb')
+
 
     //
     // Helpers
@@ -29,6 +46,71 @@
     var log = function(text) {
         if(!noLogging) console.log(text);
     }
+
+
+	// a - the number to convert 
+	// b - number of resulting characters
+    var pad = function(a,b) {
+    	return(1e15+a+"").slice(-b);
+    }
+
+
+    //
+    // Leveldb
+    // =======
+    //
+    // Store data/blobs in chunks in the database. Keys have the following form: key~rev#~chunk#
+    // rev# and chunk# are 9 digits key~000000001~000000001
+    //
+
+    // maximum 999.999.999 revisions and 999.999.999 chunks
+    var readKeys = function(keyPrefix, cb) {
+
+		var keyStream = leveldb.createReadStream({
+		    start     : keyPrefix + '~000000000'
+		  , end       : keyPrefix + '~999999999'
+		  , limit     : 999999999
+		  , reverse   : false
+		  , keys      : true
+		  , values    : false
+		});
+
+		var keys = [];
+
+		keyStream.on('data', function (data) {
+			keys.push(data);
+		});
+
+		keyStream.on('error', function(err) {
+			log('Error reading leveldb stream: '+ err);
+		});
+
+		keyStream.on('close', function () {
+			cb(keys);
+		});
+	}
+
+	// Get the last revison of a key that is stored in the database
+	var getCurrentRev = function(keyPrefix, cb) {
+		readKeys(keyPrefix, function(keys) {
+			if(keys.length == 0) {
+				cb( 0 );
+				return;
+			}
+
+			var revs = u.map(
+				keys
+			  , function(key) { return key.slice(keyPrefix.length+1, keyPrefix.length+1+9); }
+			);
+
+			cb( parseInt( u.max(revs, function(rev) { return parseInt(rev); } ) ) );
+		});
+	}
+
+	var formatKey = function(key, revNum, chunkNum) {
+		return key+'~'+pad(revNum,9)+'~'+pad(chunkNum,9);
+
+	}
 
     //
     // HTTP Server helpers
@@ -61,40 +143,76 @@
 
 
             // save input from POST and PUT here
-            var data = '';
+            var data    = '', 
+                counter = 0;
 
-            request
-                // read the data in the stream, if there is any
-                .on('data', function (chunk) {
+            getCurrentRev(request.url, function(rev) {
 
-                	// Perhaps I can save chunk by chunk in the db?
-                    data += chunk;
-                })
-                // request closed, process it
-                .on('end', function () {
+            	if (request.method == 'POST') rev = rev + 1;
 
-                    try {
+	            request
+	                // read the data in the stream, if there is any
+	                .on('data', function (chunk) {
 
-                        // parse data and prepare insert for POST requests
-                        if (request.method == 'POST') {
-                        	//log(data);
+	                        // parse data and prepare insert for POST requests
+	                        if (request.method == 'POST') {
 
-                        	// This is where the data should be saved into leveldb, in not chunk bny chunk
+			                	var key = formatKey(request.url, rev, ++counter);
 
-                        	log('finished receiving data..doing nothing right now');
+								leveldb.put(key, chunk, function (err) {
+									if (err) return console.log('Ooops!', err);
+								});
 
-                	        response.writeHead(200, {"Content-Type": "application/json"});
-					        response.write('{status: ok}');
-					        response.end();
+						}
 
-                        }
+	                })
+	                // request closed, process it
+	                .on('end', function () {
+
+	                    try {
+
+	                        // parse data and prepare insert for POST requests
+	                        if (request.method == 'GET') {
+
+	                        	var key = formatKey(request.url, rev, 1);
+
+	                        	log('Fetching: ' + key);
+
+								leveldb.get(key, function (err, value) {
+
+									// likely the key was not found
+									if (err) return log('Ooops!', err) 
+
+									log('Sending a chunk...');
+
+		                	        response.writeHead(200, {"Content-Type": "application/json"});
+							        response.write(value);
+							        response.end();
+
+								})
+		  					}
+
+	                        // parse data and prepare insert for POST requests
+	                        if (request.method == 'POST') {
+
+	                	        response.writeHead(200, {"Content-Type": "application/json"});
+						        response.write('{status: ok}');
+						        response.end();
+
+						        getCurrentRev(request.url, function(rev) {
+						        	log('Finished saving: ' + request.url + ', new revision: ' 
+						        		+ rev + ', number of chunks: ' + counter);
+						        });
+
+	                        }
 
 
-                    } catch(e) {
-                        writeError(response, e);
-                    }
+	                    } catch(e) {
+	                        writeError(response, e);
+	                    }
 
-                });
+	                });
+			});
 
         });
 

@@ -36,13 +36,15 @@ exports['test_leveldb'] = {
 
 	setUp: function(done) {
 
+
 		// setup finished
 		done();
 	},
 
 	'testing POST': function(test) {
 
-		test.expect(1);
+		test.expect(2);
+
 
 		fs = require('fs');
 		var readStream = fs.createReadStream('./projektledning_w767.png');
@@ -58,7 +60,8 @@ exports['test_leveldb'] = {
 				port: 80,
 				headers : {
 					user: 'wp',
-					password: 'wp'
+					password: 'wp',
+					'content-type': 'application/octet-stream'
 				}
 			};
 
@@ -68,12 +71,12 @@ exports['test_leveldb'] = {
 	        var data = '';
 
 			console.log('before http.request: '+JSON.stringify(this.options));
+
 			var req = http.request(this.options, function(res) {
 				console.log('in http.request...');
 				res.setEncoding('utf8');
 
 				test.ok(true, 'Did not receive what we expected.');
-				test.done();
 
 				res.on('data', function (chunk) {
 					data += chunk;
@@ -86,6 +89,48 @@ exports['test_leveldb'] = {
 
 			req.on('close', function() {
 				console.log('POST received: ' + data);
+				console.log('Now testing to GET the data');
+
+				var data = '';
+
+				// path and method is set in each test
+				var options2 = {
+					hostname: 'localhost',
+					port: 80,
+					method: 'GET',
+					path: '/image1',
+					headers : {
+						user: 'wp',
+						password: 'wp'
+					}
+				};
+
+				console.log(JSON.stringify(options2));
+
+				var req2 = http.request(options2, function(res) {
+					console.log('in http.request...');
+					res.setEncoding('utf8');
+
+					test.ok(true, 'Did not receive what we expected.');
+
+					res.on('data', function (chunk) {
+						data += chunk;
+					});
+				});
+
+				req2.on('error', function(e) {
+					console.log('problem with request: ' + e.message);
+				});
+
+				req2.on('close', function() {
+					console.log('GET received: ' + data);
+					test.done();
+				});
+
+				console.log('before end...');
+
+				req2.end();
+
 			});
 
 			// This just pipes the read stream to the response object (which goes to the client)
@@ -98,8 +143,6 @@ exports['test_leveldb'] = {
 			console.log('Error: '+err);
 		});
 
-//		req.write(JSON.stringify(wpLink));
-//		req.end();
 	}
 
 };
