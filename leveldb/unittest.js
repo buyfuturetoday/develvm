@@ -91,7 +91,7 @@ exports['test_leveldb'] = {
 				console.log('POST received: ' + data);
 				console.log('Now testing to GET the data');
 
-				var data = '';
+				var data = '', counter = 0;
 
 				// path and method is set in each test
 				var options2 = {
@@ -115,6 +115,7 @@ exports['test_leveldb'] = {
 
 					res.on('data', function (chunk) {
 						data += chunk;
+						counter++;
 					});
 				});
 
@@ -123,7 +124,7 @@ exports['test_leveldb'] = {
 				});
 
 				req2.on('close', function() {
-					console.log('GET received: ' + data);
+					console.log('Number of chunks received: ' + counter);
 					test.done();
 				});
 
