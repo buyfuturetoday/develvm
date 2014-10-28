@@ -90,6 +90,33 @@
 		});
 	}
 
+    // maximum 999.999.999 revisions and 999.999.999 chunks
+    var readValue = function(keyPrefix, rev, cbData, cbEnd) {
+
+    	rev = pad(rev,9);
+
+		var keyStream = leveldb.createReadStream({
+		    start     : keyPrefix + '~' + rev + '~000000000'
+		  , end       : keyPrefix + '~' + rev + '~999999999'
+		  , limit     : 999999999
+		  , reverse   : false
+		  , keys      : false
+		  , values    : true
+		});
+
+		keyStream.on('data', function (data) {
+			cbData(data);
+		});
+
+		keyStream.on('error', function(err) {
+			log('Error reading leveldb stream: '+ err);
+		});
+
+		keyStream.on('close', function () {
+			cbEnd();
+		});
+	}
+
 	// Get the last revison of a key that is stored in the database
 	var getCurrentRev = function(keyPrefix, cb) {
 		readKeys(keyPrefix, function(keys) {
@@ -174,22 +201,21 @@
 	                        // parse data and prepare insert for POST requests
 	                        if (request.method == 'GET') {
 
-	                        	var key = formatKey(request.url, rev, 1);
+	                        	var counter2 = 0;
 
-	                        	log('Fetching: ' + key);
+	                        	log('Fetching: ' + request.url);
 
-								leveldb.get(key, function (err, value) {
+	                	        response.writeHead(200, {"Content-Type": "application/json"});
 
-									// likely the key was not found
-									if (err) return log('Ooops!', err) 
-
-									log('Sending a chunk...');
-
-		                	        response.writeHead(200, {"Content-Type": "application/json"});
+	                        	readValue(request.url, rev, 
+	                        	function(value) {
+									counter2++;
 							        response.write(value);
+								},
+								function(){
+									log('Finished reading: ' +request.url+', revision: '+rev+', number of chunks sent: '+counter2);
 							        response.end();
-
-								})
+								});
 		  					}
 
 	                        // parse data and prepare insert for POST requests
@@ -205,7 +231,6 @@
 						        });
 
 	                        }
-
 
 	                    } catch(e) {
 	                        writeError(response, e);

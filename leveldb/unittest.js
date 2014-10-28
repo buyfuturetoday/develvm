@@ -45,13 +45,10 @@ exports['test_leveldb'] = {
 
 		test.expect(2);
 
-
 		fs = require('fs');
 		var readStream = fs.createReadStream('./projektledning_w767.png');
 
 		readStream.on('open', function () {
-			console.log('Piping...hoping the pipe will do req.end...');
-
 			var http = require('http');
 
 			// path and method is set in each test
@@ -61,7 +58,7 @@ exports['test_leveldb'] = {
 				headers : {
 					user: 'wp',
 					password: 'wp',
-					'content-type': 'application/octet-stream'
+//					'content-type': 'application/octet-stream'
 				}
 			};
 
@@ -70,10 +67,7 @@ exports['test_leveldb'] = {
 
 	        var data = '';
 
-			console.log('before http.request: '+JSON.stringify(this.options));
-
 			var req = http.request(this.options, function(res) {
-				console.log('in http.request...');
 				res.setEncoding('utf8');
 
 				test.ok(true, 'Did not receive what we expected.');
@@ -88,9 +82,6 @@ exports['test_leveldb'] = {
 			});
 
 			req.on('close', function() {
-				console.log('POST received: ' + data);
-				console.log('Now testing to GET the data');
-
 				var data = '', counter = 0;
 
 				// path and method is set in each test
@@ -105,10 +96,7 @@ exports['test_leveldb'] = {
 					}
 				};
 
-				console.log(JSON.stringify(options2));
-
 				var req2 = http.request(options2, function(res) {
-					console.log('in http.request...');
 					res.setEncoding('utf8');
 
 					test.ok(true, 'Did not receive what we expected.');
@@ -127,8 +115,6 @@ exports['test_leveldb'] = {
 					console.log('Number of chunks received: ' + counter);
 					test.done();
 				});
-
-				console.log('before end...');
 
 				req2.end();
 
